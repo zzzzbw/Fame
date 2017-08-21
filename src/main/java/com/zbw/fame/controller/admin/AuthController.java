@@ -4,6 +4,7 @@ import com.zbw.fame.controller.BaseController;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.model.Users;
 import com.zbw.fame.service.UsersService;
+import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -47,6 +48,7 @@ public class AuthController extends BaseController {
         }
         try {
             Users user = usersService.login(username, password);
+            request.getSession().setAttribute(FameConsts.USER_SESSION_KEY, user);
         } catch (Exception e) {
             String msg = "登陆失败";
             if (e instanceof TipException) {

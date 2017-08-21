@@ -1,7 +1,18 @@
 package com.zbw.fame.controller;
 
+import com.zbw.fame.model.Articles;
+import com.zbw.fame.service.ArticlesService;
+import com.zbw.fame.util.RestResponse;
+import com.zbw.fame.util.Types;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * 博客前台 Controller
@@ -12,5 +23,45 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("api")
 public class IndexController extends BaseController {
+
+    private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
+
+    @Autowired
+    private ArticlesService articlesService;
+
+    /**
+     * 首页
+     */
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public RestResponse index() {
+        return this.index(1);
+    }
+
+    /**
+     * 文章列表
+     *
+     * @param page
+     * @return
+     */
+    @RequestMapping(value = "/article/index/{page}", method = RequestMethod.GET)
+    public RestResponse index(@PathVariable Integer page) {
+        List<Articles> articles = articlesService.getContents(page);
+        return RestResponse.ok(articles);
+    }
+
+    /**
+     * 文章内容页
+     *
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/article/content/{id}")
+    public RestResponse content(@PathVariable Integer id) {
+        Articles article = articlesService.get(id);
+        if (null == article || Types.DRAFT.equals(article.getStatus())) {
+            return this.error_404();
+        }
+        return RestResponse.ok(article);
+    }
 
 }

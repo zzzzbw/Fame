@@ -35,6 +35,8 @@ public class UsersServiceImpl implements UsersService {
         if (user == null) {
             throw new TipException("用户名或者密码错误");
         }
+        //清空密码
+        user.setPassword_md5(null);
         return user;
     }
 }

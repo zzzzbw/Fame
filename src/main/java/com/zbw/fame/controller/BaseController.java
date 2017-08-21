@@ -2,6 +2,7 @@ package com.zbw.fame.controller;
 
 import com.zbw.fame.model.Users;
 import com.zbw.fame.util.FameUtil;
+import com.zbw.fame.util.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,4 +22,11 @@ public abstract class BaseController {
         return FameUtil.getLoginUser();
     }
 
+    protected RestResponse error_404() {
+        return RestResponse.fail("访问的页面不存在");
+    }
+
+    protected RestResponse error_nullParam() {
+        return RestResponse.fail("必要参数未传输");
+    }
 }
