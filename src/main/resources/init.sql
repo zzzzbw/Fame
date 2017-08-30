@@ -1,3 +1,4 @@
+DROP DATABASE IF EXISTS fame;
 CREATE DATABASE fame;
 USE fame;
 
@@ -26,8 +27,8 @@ CREATE TABLE articles (
 );
 
 CREATE TABLE metas (
-  id   INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  name VARCHAR(255)    NOT NULL,
-  type VARCHAR(45)     NOT NULL,
-  aId  INT
-)
+  id         INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  name       VARCHAR(255)    NOT NULL,
+  type       VARCHAR(45)     NOT NULL,
+  article_id INT             NOT NULL
+);

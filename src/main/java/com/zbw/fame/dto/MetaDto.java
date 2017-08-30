@@ -1,21 +1,16 @@
-package com.zbw.fame.model;
+package com.zbw.fame.dto;
 
 /**
- * 属性(分类和标签) Model
+ * 属性 Dto
  *
  * @auther zbw
- * @create 2017/8/28 23:04
+ * @create 2017/8/30 15:15
  */
-public class Metas extends BaseEntity {
+public class MetaDto {
 
-    //属性名
     private String name;
-
-    //属性类型
     private String type;
-
-    //归属文章id
-    private Integer articleId;
+    private Integer articleCount;
 
     public String getName() {
         return name;
@@ -33,20 +28,20 @@ public class Metas extends BaseEntity {
         this.type = type;
     }
 
-    public Integer getArticleId() {
-        return articleId;
+    public Integer getArticleCount() {
+        return articleCount;
     }
 
-    public void setArticleId(Integer articleId) {
-        this.articleId = articleId;
+    public void setArticleCount(Integer articleCount) {
+        this.articleCount = articleCount;
     }
 
     @Override
     public String toString() {
-        return "Metas{" +
+        return "MetaDto{" +
                 "name='" + name + '\'' +
                 ", type='" + type + '\'' +
-                ", articleId=" + articleId +
+                ", articleCount=" + articleCount +
                 '}';
     }
 }

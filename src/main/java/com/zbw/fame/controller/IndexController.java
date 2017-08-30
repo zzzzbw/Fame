@@ -7,10 +7,7 @@ import com.zbw.fame.util.Types;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -43,8 +40,8 @@ public class IndexController extends BaseController {
      * @param page
      * @return
      */
-    @RequestMapping(value = "/article/index/{page}", method = RequestMethod.GET)
-    public RestResponse index(@PathVariable Integer page) {
+    @RequestMapping(value = "/article", method = RequestMethod.GET)
+    public RestResponse index(@RequestParam Integer page) {
         List<Articles> articles = articlesService.getContents(page);
         return RestResponse.ok(articles);
     }
@@ -55,7 +52,7 @@ public class IndexController extends BaseController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/article/content/{id}")
+    @RequestMapping(value = "/article/{id}")
     public RestResponse content(@PathVariable Integer id) {
         Articles article = articlesService.get(id);
         if (null == article || Types.DRAFT.equals(article.getStatus())) {

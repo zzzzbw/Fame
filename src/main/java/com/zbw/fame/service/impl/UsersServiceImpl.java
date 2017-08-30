@@ -30,13 +30,13 @@ public class UsersServiceImpl implements UsersService {
     public Users login(String username, String password) {
         Users temp = new Users();
         temp.setUsername(username);
-        temp.setPassword_md5(password);
+        temp.setPasswordMd5(password);
         Users user = usersMapper.selectOne(temp);
         if (user == null) {
             throw new TipException("用户名或者密码错误");
         }
         //清空密码
-        user.setPassword_md5(null);
+        user.setPasswordMd5(null);
         return user;
     }
 }

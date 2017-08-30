@@ -5,6 +5,7 @@ import com.zbw.fame.exception.TipException;
 import com.zbw.fame.mapper.ArticlesMapper;
 import com.zbw.fame.model.Articles;
 import com.zbw.fame.service.ArticlesService;
+import com.zbw.fame.service.MetasService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.Types;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ public class ArticlesServiceImpl implements ArticlesService {
 
     @Autowired
     private ArticlesMapper articlesMapper;
+
+    @Autowired
+    private MetasService metasService;
 
     @Override
     public List<Articles> getArticles(Integer page) {
@@ -66,30 +70,40 @@ public class ArticlesServiceImpl implements ArticlesService {
         if (article.getContent().length() > FameConsts.MAX_CONTENT_COUNT) {
             throw new TipException("文章内容字数不能超过" + FameConsts.MAX_CONTENT_COUNT);
         }
-        if (null == article.getAuthor_id()) {
+        if (null == article.getAuthorId()) {
             throw new TipException("请先登陆后发布文章");
         }
 
         article.setCreated(new Date());
         article.setModified(new Date());
 
-        Integer id;
         if (null != article.getId()) {
-            id = articlesMapper.updateByPrimaryKey(article);
+            articlesMapper.updateByPrimaryKey(article);
         } else {
-            id = articlesMapper.insert(article);
+            articlesMapper.insert(article);
         }
 
-
+        Integer id = article.getId();
         //存储分类和标签
-        //metasService.saveMetas(cid, tags, Types.TAG);
-        //metasService.saveMetas(cid, categories, Types.CATEGORY);
+        metasService.saveOrRemoveMetas(article.getCategory(), Types.CATEGORY, id);
+        metasService.saveOrRemoveMetas(article.getTags(), Types.TAG, id);
         return id;
     }
 
     @Override
     public boolean deleteArticle(Integer id) {
-        return articlesMapper.deleteByPrimaryKey(id) > 0;
+        Articles articles = articlesMapper.selectByPrimaryKey(id);
+        if (null == articles) {
+            throw new TipException("没有id为" + id + "的文章");
+        }
+
+        if (articlesMapper.deleteByPrimaryKey(id) > 0) {
+            //传空的属性，则移除该文章关联的属性
+            metasService.saveOrRemoveMetas("", Types.CATEGORY, articles.getId());
+            metasService.saveOrRemoveMetas("", Types.TAG, articles.getId());
+            return true;
+        }
+        return false;
     }
 
 }

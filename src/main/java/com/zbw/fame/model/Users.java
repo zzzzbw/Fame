@@ -14,13 +14,13 @@ public class Users extends BaseEntity{
     private String username;
 
     //用户密码 md5存储
-    private String password_md5;
+    private String passwordMd5;
 
     //用户邮箱
     private String email;
 
     //用户显示名称
-    private String screen_name;
+    private String screenName;
 
     //用户创建时间
     private Date created;
@@ -36,12 +36,12 @@ public class Users extends BaseEntity{
         this.username = username;
     }
 
-    public String getPassword_md5() {
-        return password_md5;
+    public String getPasswordMd5() {
+        return passwordMd5;
     }
 
-    public void setPassword_md5(String password_md5) {
-        this.password_md5 = password_md5;
+    public void setPasswordMd5(String passwordMd5) {
+        this.passwordMd5 = passwordMd5;
     }
 
     public String getEmail() {
@@ -52,12 +52,12 @@ public class Users extends BaseEntity{
         this.email = email;
     }
 
-    public String getScreen_name() {
-        return screen_name;
+    public String getScreenName() {
+        return screenName;
     }
 
-    public void setScreen_name(String screen_name) {
-        this.screen_name = screen_name;
+    public void setScreenName(String screenName) {
+        this.screenName = screenName;
     }
 
     public Date getCreated() {
@@ -74,5 +74,17 @@ public class Users extends BaseEntity{
 
     public void setLogged(Date logged) {
         this.logged = logged;
+    }
+
+    @Override
+    public String toString() {
+        return "Users{" +
+                "username='" + username + '\'' +
+                ", passwordMd5='" + passwordMd5 + '\'' +
+                ", email='" + email + '\'' +
+                ", screenName='" + screenName + '\'' +
+                ", created=" + created +
+                ", logged=" + logged +
+                '}';
     }
 }

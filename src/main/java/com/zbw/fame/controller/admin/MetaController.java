@@ -1,20 +1,15 @@
 package com.zbw.fame.controller.admin;
 
 import com.zbw.fame.controller.BaseController;
-import com.zbw.fame.model.Metas;
 import com.zbw.fame.service.MetasService;
 import com.zbw.fame.util.RestResponse;
-import com.zbw.fame.util.Types;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * 属性(标签和分类)管理 Controller
@@ -36,24 +31,9 @@ public class MetaController extends BaseController {
      *
      * @return
      */
-    @RequestMapping(value = "/metas", method = RequestMethod.GET)
-    public RestResponse getAll(String type) {
-        if (StringUtils.isEmpty(type)) {
-            return this.error_nullParam();
-        }
-        List<Metas> metas;
-        switch (type) {
-            case Types.CATEGORY:
-                metas = metasService.getMetas(Types.CATEGORY);
-                break;
-            case Types.TAG:
-                metas = metasService.getMetas(Types.TAG);
-                break;
-            default:
-                return this.error_nullParam();
-        }
-
-        return RestResponse.ok(metas);
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public RestResponse getAll(@RequestParam String type) {
+        return RestResponse.ok(metasService.getMetaDtos(type));
     }
 
     /**
@@ -62,9 +42,9 @@ public class MetaController extends BaseController {
      * @param name
      * @return
      */
-    @RequestMapping(value = "/category/{name}", method = RequestMethod.DELETE)
-    public RestResponse deleteCategory(@PathVariable String name) {
-        if (metasService.deleteMetas(name, Types.CATEGORY)) {
+    @RequestMapping(value = "", method = RequestMethod.DELETE)
+    public RestResponse deleteMeta(@RequestParam String name, @RequestParam String type) {
+        if (metasService.deleteMeta(name, type)) {
             return RestResponse.ok();
         }
         return RestResponse.fail();
@@ -74,12 +54,11 @@ public class MetaController extends BaseController {
      * 添加一个分类
      *
      * @param name
-     * @param aId
      * @return
      */
-    @RequestMapping(value = "/category", method = RequestMethod.POST)
-    public RestResponse saveCategory(String name, Integer aId) {
-        if (metasService.saveMetas(name, Types.CATEGORY, aId)) {
+    @RequestMapping(value = "", method = RequestMethod.POST)
+    public RestResponse saveMeta(@RequestParam String name, @RequestParam String type) {
+        if (metasService.saveMeta(name, type)) {
             return RestResponse.ok();
         }
         return RestResponse.fail();

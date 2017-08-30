@@ -23,7 +23,7 @@ public class Articles extends BaseEntity {
     private String content;
 
     //内容所属用户id
-    private Integer author_id;
+    private Integer authorId;
 
     //点击量
     private Integer hits;
@@ -38,7 +38,7 @@ public class Articles extends BaseEntity {
     private String status;
 
     // 是否允许评论
-    private Boolean allow_comment;
+    private Boolean allowComment;
 
     public String getTitle() {
         return title;
@@ -72,12 +72,12 @@ public class Articles extends BaseEntity {
         this.content = content;
     }
 
-    public Integer getAuthor_id() {
-        return author_id;
+    public Integer getAuthorId() {
+        return authorId;
     }
 
-    public void setAuthor_id(Integer author_id) {
-        this.author_id = author_id;
+    public void setAuthorId(Integer authorId) {
+        this.authorId = authorId;
     }
 
     public Integer getHits() {
@@ -112,11 +112,27 @@ public class Articles extends BaseEntity {
         this.status = status;
     }
 
-    public Boolean getAllow_comment() {
-        return allow_comment;
+    public Boolean getAllowComment() {
+        return allowComment;
     }
 
-    public void setAllow_comment(Boolean allow_comment) {
-        this.allow_comment = allow_comment;
+    public void setAllowComment(Boolean allowComment) {
+        this.allowComment = allowComment;
+    }
+
+    @Override
+    public String toString() {
+        return "Articles{" +
+                "title='" + title + '\'' +
+                ", created=" + created +
+                ", modified=" + modified +
+                ", content='" + content + '\'' +
+                ", authorId=" + authorId +
+                ", hits=" + hits +
+                ", tags='" + tags + '\'' +
+                ", category='" + category + '\'' +
+                ", status='" + status + '\'' +
+                ", allowComment=" + allowComment +
+                '}';
     }
 }
