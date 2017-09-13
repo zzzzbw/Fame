@@ -22,6 +22,9 @@ public class Articles extends BaseEntity {
     //内容
     private String content;
 
+    //预览内容
+    private String pre;
+
     //内容所属用户id
     private Integer authorId;
 
@@ -70,6 +73,14 @@ public class Articles extends BaseEntity {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getPre() {
+        return pre;
+    }
+
+    public void setPre(String pre) {
+        this.pre = pre;
     }
 
     public Integer getAuthorId() {
@@ -127,6 +138,7 @@ public class Articles extends BaseEntity {
                 ", created=" + created +
                 ", modified=" + modified +
                 ", content='" + content + '\'' +
+                ", pre='" + pre + '\'' +
                 ", authorId=" + authorId +
                 ", hits=" + hits +
                 ", tags='" + tags + '\'' +

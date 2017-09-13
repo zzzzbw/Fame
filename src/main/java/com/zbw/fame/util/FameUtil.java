@@ -1,6 +1,8 @@
 package com.zbw.fame.util;
 
 import com.zbw.fame.model.Users;
+import org.pegdown.PegDownProcessor;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -51,5 +53,20 @@ public class FameUtil {
     public static HttpServletRequest getRequest() {
         ServletRequestAttributes attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         return attrs.getRequest();
+    }
+
+    /**
+     * markdown转html
+     *
+     * @param md
+     * @return
+     */
+    public static String mdToHtml(String md) {
+        if (StringUtils.isEmpty(md)) {
+            return "";
+        }
+
+        PegDownProcessor pdp = new PegDownProcessor(Integer.MAX_VALUE);
+        return pdp.markdownToHtml(md);
     }
 }

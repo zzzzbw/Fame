@@ -2,6 +2,7 @@ package com.zbw.fame.controller;
 
 import com.zbw.fame.model.Articles;
 import com.zbw.fame.service.ArticlesService;
+import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.RestResponse;
 import com.zbw.fame.util.Types;
 import org.slf4j.Logger;
@@ -43,6 +44,9 @@ public class IndexController extends BaseController {
     @RequestMapping(value = "/article", method = RequestMethod.GET)
     public RestResponse index(@RequestParam Integer page) {
         List<Articles> articles = articlesService.getContents(page);
+        for (Articles a : articles) {
+            this.transformContent(a);
+        }
         return RestResponse.ok(articles);
     }
 
@@ -58,7 +62,19 @@ public class IndexController extends BaseController {
         if (null == article || Types.DRAFT.equals(article.getStatus())) {
             return this.error_404();
         }
+        this.transformContent(article);
         return RestResponse.ok(article);
     }
+
+    /**
+     * 文章内容转为html
+     *
+     * @param article
+     */
+    private void transformContent(Articles article) {
+        String html = FameUtil.mdToHtml(article.getContent());
+        article.setContent(html);
+    }
+
 
 }

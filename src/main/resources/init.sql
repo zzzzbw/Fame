@@ -18,6 +18,7 @@ CREATE TABLE articles (
   created       DATETIME,
   modified      DATETIME,
   content       TEXT,
+  pre           TEXT,
   author_id     INT,
   hits          INT,
   tags          VARCHAR(255),
