@@ -69,4 +69,17 @@ public class FameUtil {
         PegDownProcessor pdp = new PegDownProcessor(Integer.MAX_VALUE);
         return pdp.markdownToHtml(md);
     }
+
+    /**
+     * 忽略大小写的indexOf
+     *
+     * @param str
+     * @param flag
+     * @return
+     */
+    public static int ignoreCaseIndexOf(String str, String flag) {
+        str = str.toUpperCase();
+        flag = flag.toUpperCase();
+        return str.indexOf(flag);
+    }
 }

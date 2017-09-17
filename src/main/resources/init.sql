@@ -18,7 +18,6 @@ CREATE TABLE articles (
   created       DATETIME,
   modified      DATETIME,
   content       TEXT,
-  pre           TEXT,
   author_id     INT,
   hits          INT,
   tags          VARCHAR(255),
@@ -31,5 +30,10 @@ CREATE TABLE metas (
   id         INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
   name       VARCHAR(255)    NOT NULL,
   type       VARCHAR(45)     NOT NULL,
-  article_id INT             NOT NULL
 );
+
+CREATE TABLE MIDDLES (
+  id   INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  a_id INT             NOT NULL,
+  m_id INT             NOT NULL
+)

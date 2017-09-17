@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @create 2017/8/28 23:16
  */
 @RestController
-@RequestMapping("/api/admin/meta")
+@RequestMapping("/admin/meta")
 public class MetaController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(MetaController.class);

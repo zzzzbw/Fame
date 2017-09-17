@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @create 2017/7/8 10:25
  */
 @RestController("admin")
-@RequestMapping("/api/admin")
+@RequestMapping("/admin")
 public class IndexController extends BaseController {
 
 

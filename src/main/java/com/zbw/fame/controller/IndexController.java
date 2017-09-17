@@ -2,6 +2,7 @@ package com.zbw.fame.controller;
 
 import com.zbw.fame.model.Articles;
 import com.zbw.fame.service.ArticlesService;
+import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.RestResponse;
 import com.zbw.fame.util.Types;
@@ -19,7 +20,7 @@ import java.util.List;
  * @create 2017/7/15 18:29
  */
 @RestController
-@RequestMapping("api")
+@RequestMapping("")
 public class IndexController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
@@ -45,7 +46,7 @@ public class IndexController extends BaseController {
     public RestResponse index(@RequestParam Integer page) {
         List<Articles> articles = articlesService.getContents(page);
         for (Articles a : articles) {
-            this.transformContent(a);
+            this.transformPreView(a);
         }
         return RestResponse.ok(articles);
     }
@@ -66,6 +67,11 @@ public class IndexController extends BaseController {
         return RestResponse.ok(article);
     }
 
+    public RestResponse tags(){
+
+        return null;
+    }
+
     /**
      * 文章内容转为html
      *
@@ -73,6 +79,20 @@ public class IndexController extends BaseController {
      */
     private void transformContent(Articles article) {
         String html = FameUtil.mdToHtml(article.getContent());
+        article.setContent(html);
+    }
+
+
+    private void transformPreView(Articles article) {
+        String content = article.getContent();
+        int index = FameUtil.ignoreCaseIndexOf(content,FameConsts.PREVIEW_FLAG);
+        String html;
+        if (-1 == index) {
+            index = content.length() > FameConsts.MAX_PREVIEW_COUNT ? FameConsts.MAX_PREVIEW_COUNT : content.length();
+            html = FameUtil.mdToHtml(content.substring(0, index));
+        } else {
+            html = FameUtil.mdToHtml(content.substring(0, index));
+        }
         article.setContent(html);
     }
 

@@ -4,8 +4,10 @@ import com.zbw.fame.dto.MetaDto;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.mapper.ArticlesMapper;
 import com.zbw.fame.mapper.MetasMapper;
+import com.zbw.fame.mapper.MiddlesMapper;
 import com.zbw.fame.model.Articles;
 import com.zbw.fame.model.Metas;
+import com.zbw.fame.model.Middles;
 import com.zbw.fame.service.MetasService;
 import com.zbw.fame.util.Types;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,9 @@ import java.util.Set;
 public class MetasServiceImpl implements MetasService {
 
     @Autowired
+    private MiddlesMapper middlesMapper;
+
+    @Autowired
     private MetasMapper metasMapper;
 
     @Autowired
@@ -40,16 +45,14 @@ public class MetasServiceImpl implements MetasService {
 
     @Override
     public boolean deleteMeta(String name, String type) {
-        Metas meta = new Metas();
         type = verifyType(type);
-        meta.setName(name);
-        meta.setType(type);
-        List<Metas> metasList = metasMapper.select(meta);
-        if (metasList.size() == 0) {
+        Metas meta = metasMapper.selectOne(new Metas(name, type));
+        if (null == meta) {
             throw new TipException("没有该名称的属性");
         }
-        for (Metas m : metasList) {
-            Articles articles = articlesMapper.selectByPrimaryKey(m.getArticleId());
+        List<Middles> middles = middlesMapper.select(new Middles(null, meta.getId()));
+        for (Middles middle : middles) {
+            Articles articles = articlesMapper.selectByPrimaryKey(middle.getaId());
             if (null != articles) {
                 if (type.equals(Types.CATEGORY)) {
                     articles.setCategory("");
@@ -61,7 +64,9 @@ public class MetasServiceImpl implements MetasService {
             }
         }
 
-        return metasMapper.delete(meta) > 0;
+        middlesMapper.delete(new Middles(null, meta.getId()));
+        metasMapper.delete(meta);
+        return true;
     }
 
     @Override

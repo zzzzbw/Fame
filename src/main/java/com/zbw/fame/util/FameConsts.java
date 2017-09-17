@@ -10,7 +10,9 @@ public class FameConsts {
 
     public static String USER_SESSION_KEY = "login_user";
 
-
+    /**
+     * 默认分页大小
+     */
     public static Integer PAGE_SIZE = 10;
 
     /**
@@ -22,4 +24,15 @@ public class FameConsts {
      * 文章内容最大字数
      */
     public static Integer MAX_CONTENT_COUNT = 200000;
+
+    /**
+     * 默认预览字数
+     */
+    public static Integer MAX_PREVIEW_COUNT = 255;
+
+    /**
+     * 默认预览标记
+     */
+    public static String PREVIEW_FLAG = "<!--read more-->";
+
 }

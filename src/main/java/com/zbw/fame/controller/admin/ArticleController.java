@@ -19,7 +19,7 @@ import java.util.List;
  * @create 2017/7/11 19:52
  */
 @RestController
-@RequestMapping("/api/admin/article")
+@RequestMapping("/admin/article")
 public class ArticleController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(ArticleController.class);

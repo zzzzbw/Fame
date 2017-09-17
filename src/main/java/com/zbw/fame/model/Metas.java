@@ -14,8 +14,13 @@ public class Metas extends BaseEntity {
     //属性类型
     private String type;
 
-    //归属文章id
-    private Integer articleId;
+    public Metas() {
+    }
+
+    public Metas(String name, String type) {
+        this.name = name;
+        this.type = type;
+    }
 
     public String getName() {
         return name;
@@ -33,20 +38,11 @@ public class Metas extends BaseEntity {
         this.type = type;
     }
 
-    public Integer getArticleId() {
-        return articleId;
-    }
-
-    public void setArticleId(Integer articleId) {
-        this.articleId = articleId;
-    }
-
     @Override
     public String toString() {
         return "Metas{" +
                 "name='" + name + '\'' +
                 ", type='" + type + '\'' +
-                ", articleId=" + articleId +
                 '}';
     }
 }

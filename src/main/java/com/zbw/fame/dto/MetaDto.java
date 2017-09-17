@@ -1,47 +1,43 @@
 package com.zbw.fame.dto;
 
+import com.zbw.fame.model.Articles;
+import com.zbw.fame.model.Metas;
+
+import java.util.List;
+
 /**
  * 属性 Dto
  *
  * @auther zbw
  * @create 2017/8/30 15:15
  */
-public class MetaDto {
+public class MetaDto extends Metas{
 
-    private String name;
-    private String type;
-    private Integer articleCount;
+    private Integer count;
 
-    public String getName() {
-        return name;
+    private List<Articles> articles;
+
+    public Integer getCount() {
+        return count;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setCount(Integer count) {
+        this.count = count;
     }
 
-    public String getType() {
-        return type;
+    public List<Articles> getArticles() {
+        return articles;
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public Integer getArticleCount() {
-        return articleCount;
-    }
-
-    public void setArticleCount(Integer articleCount) {
-        this.articleCount = articleCount;
+    public void setArticles(List<Articles> articles) {
+        this.articles = articles;
     }
 
     @Override
     public String toString() {
         return "MetaDto{" +
-                "name='" + name + '\'' +
-                ", type='" + type + '\'' +
-                ", articleCount=" + articleCount +
+                "count=" + count +
+                ", articles=" + articles +
                 '}';
     }
 }
