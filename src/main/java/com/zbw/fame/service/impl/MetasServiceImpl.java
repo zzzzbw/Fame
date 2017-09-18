@@ -87,14 +87,11 @@ public class MetasServiceImpl implements MetasService {
         if (null == articleId) {
             throw new TipException("关联文章id不能为空");
         }
-        //names为空直接删除该文章下的相关属性
+
         if (StringUtils.isEmpty(names)) {
-            Metas condition = new Metas();
-            condition.setType(type);
-            condition.setArticleId(articleId);
-            metasMapper.delete(condition);
-            return true;
+            middlesMapper.delete(new Middles(articleId, null));
         }
+
         removeMetas(names, type, articleId);
         saveMetas(names, type, articleId);
         return true;
@@ -108,14 +105,22 @@ public class MetasServiceImpl implements MetasService {
      * @param articleId
      */
     private void saveMetas(String names, String type, Integer articleId) {
+        List<Metas> metas = metasMapper.selectByArticles(articleId, type);
+        Set<String> metaSet = new HashSet<>();
+        for (Metas meta : metas) {
+            metaSet.add(meta.getName());
+        }
         String[] nameArr = names.split(",");
-        for (String n : nameArr) {
-            Metas meta = new Metas();
-            meta.setName(n);
-            meta.setType(type);
-            meta.setArticleId(articleId);
-            if (null == metasMapper.selectOne(meta)) {
-                metasMapper.insert(meta);
+        for (String name : nameArr) {
+            if (!metaSet.contains(name)) {
+                Metas newMeta = new Metas(name, type);
+                Metas meta = metasMapper.selectOne(newMeta);
+                if (null == meta) {
+                    metasMapper.insert(newMeta);
+                } else {
+                    newMeta = meta;
+                }
+                middlesMapper.insert(new Middles(articleId, newMeta.getId()));
             }
         }
     }
@@ -128,17 +133,15 @@ public class MetasServiceImpl implements MetasService {
      * @param articleId
      */
     private void removeMetas(String names, String type, Integer articleId) {
-        Metas condition = new Metas();
-        condition.setArticleId(articleId);
-        condition.setType(type);
-        List<Metas> metas = metasMapper.select(condition);
         String[] nameArr = names.split(",");
         Set<String> nameSet = new HashSet<>(Arrays.asList(nameArr));
-        for (Metas m : metas) {
-            if (!nameSet.contains(m.getName())) {
-                metasMapper.delete(m);
+        List<Metas> metas = metasMapper.selectByArticles(articleId, type);
+        for (Metas meta : metas) {
+            if (!nameSet.contains(meta.getName())) {
+                middlesMapper.delete(new Middles(articleId, meta.getId()));
             }
         }
+
     }
 
 
