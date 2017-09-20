@@ -11,6 +11,7 @@ import com.zbw.fame.util.Types;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
 import java.util.List;
@@ -33,8 +34,7 @@ public class ArticlesServiceImpl implements ArticlesService {
     @Override
     public List<Articles> getArticles(Integer page) {
         PageHelper.startPage(page, FameConsts.PAGE_SIZE);
-        List<Articles> articles = articlesMapper.selectAll();
-        return articles;
+        return articlesMapper.selectAll();
     }
 
     @Override
@@ -42,8 +42,7 @@ public class ArticlesServiceImpl implements ArticlesService {
         PageHelper.startPage(page, FameConsts.PAGE_SIZE);
         Articles article = new Articles();
         article.setStatus(Types.PUBLISH);
-        List<Articles> articles = articlesMapper.select(article);
-        return articles;
+        return articlesMapper.select(article);
     }
 
     @Override

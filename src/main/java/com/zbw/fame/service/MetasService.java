@@ -1,6 +1,7 @@
 package com.zbw.fame.service;
 
 import com.zbw.fame.dto.MetaDto;
+import com.zbw.fame.model.Metas;
 
 import java.util.List;
 
@@ -13,9 +14,11 @@ import java.util.List;
 public interface MetasService {
     List<MetaDto> getMetaDtos(String type);
 
+    List<Metas> getMetas(String type);
+
     boolean deleteMeta(String name, String type);
 
-    boolean saveMeta(String name,String type);
+    boolean saveMeta(String name, String type);
 
     boolean saveOrRemoveMetas(String names, String type, Integer articleId);
 }

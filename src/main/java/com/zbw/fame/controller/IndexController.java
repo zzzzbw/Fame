@@ -1,7 +1,9 @@
 package com.zbw.fame.controller;
 
+import com.zbw.fame.dto.MetaDto;
 import com.zbw.fame.model.Articles;
 import com.zbw.fame.service.ArticlesService;
+import com.zbw.fame.service.MetasService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.RestResponse;
@@ -27,6 +29,9 @@ public class IndexController extends BaseController {
 
     @Autowired
     private ArticlesService articlesService;
+
+    @Autowired
+    private MetasService metasService;
 
     /**
      * 首页
@@ -67,9 +72,26 @@ public class IndexController extends BaseController {
         return RestResponse.ok(article);
     }
 
-    public RestResponse tags(){
+    /**
+     * 标签页
+     *
+     * @return
+     */
+    @RequestMapping(value = "/tag")
+    public RestResponse tags() {
+        List<MetaDto> metaDtos = metasService.getMetaDtos(Types.TAG);
+        return RestResponse.ok(metaDtos);
+    }
 
-        return null;
+    /**
+     * 分类页
+     *
+     * @return
+     */
+    @RequestMapping(value = "/category")
+    public RestResponse category() {
+        List<MetaDto> metaDtos = metasService.getMetaDtos(Types.CATEGORY);
+        return RestResponse.ok(metaDtos);
     }
 
     /**
@@ -85,7 +107,7 @@ public class IndexController extends BaseController {
 
     private void transformPreView(Articles article) {
         String content = article.getContent();
-        int index = FameUtil.ignoreCaseIndexOf(content,FameConsts.PREVIEW_FLAG);
+        int index = FameUtil.ignoreCaseIndexOf(content, FameConsts.PREVIEW_FLAG);
         String html;
         if (-1 == index) {
             index = content.length() > FameConsts.MAX_PREVIEW_COUNT ? FameConsts.MAX_PREVIEW_COUNT : content.length();

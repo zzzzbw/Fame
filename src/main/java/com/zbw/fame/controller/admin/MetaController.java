@@ -33,7 +33,7 @@ public class MetaController extends BaseController {
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
     public RestResponse getAll(@RequestParam String type) {
-        return RestResponse.ok(metasService.getMetaDtos(type));
+        return RestResponse.ok(metasService.getMetas(type));
     }
 
     /**
