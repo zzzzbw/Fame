@@ -56,6 +56,20 @@ public class FameUtil {
     }
 
     /**
+     * 获取文章预览
+     *
+     * @return
+     */
+    public static String getPreView(String content) {
+        int index = FameUtil.ignoreCaseIndexOf(content, FameConsts.PREVIEW_FLAG);
+        if (-1 == index) {
+            index = content.length() > FameConsts.MAX_PREVIEW_COUNT ? FameConsts.MAX_PREVIEW_COUNT : content.length();
+        }
+        return content.substring(0, index);
+    }
+
+
+    /**
      * markdown转html
      *
      * @param md

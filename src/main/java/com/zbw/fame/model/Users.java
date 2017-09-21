@@ -8,7 +8,7 @@ import java.util.Date;
  * @auther zbw
  * @create 2017/7/9 22:09
  */
-public class Users extends BaseEntity{
+public class Users extends BaseEntity {
 
     //账号
     private String username;

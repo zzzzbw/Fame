@@ -1,5 +1,6 @@
 package com.zbw.fame.model;
 
+import javax.persistence.OrderBy;
 import java.util.Date;
 
 /**
@@ -14,6 +15,7 @@ public class Articles extends BaseEntity {
     private String title;
 
     //内容生成时间
+    @OrderBy("desc")
     private Date created;
 
     //内容修改时间
