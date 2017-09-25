@@ -16,7 +16,8 @@ public enum ErrorCode {
     BAD_REQUEST(400, "Bad Request"),
     METHOD_BOT_ALLOWED(405, "Method Not Allowed"),
     NOT_ACCEPTABLE(406, "Not Acceptable"),
-    INTERNAL_SERVER_ERROR(500, "Internal Server Error");
+    INTERNAL_SERVER_ERROR(500, "Internal Server Error"),
+    NOT_LOGIN(999,"Not Login");
 
     private final int code;
     private final String msg;

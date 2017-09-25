@@ -96,6 +96,7 @@ public class MetasServiceImpl implements MetasService {
 
         if (StringUtils.isEmpty(names)) {
             middlesMapper.delete(new Middles(articleId, null));
+            return true;
         }
 
         removeMetas(names, type, articleId);

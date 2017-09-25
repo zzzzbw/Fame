@@ -1,0 +1,26 @@
+#app {
+  font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.move-enter-active, .move-leave-active {
+  transition: opacity .3s;
+}
+
+.move-enter, .move-leave {
+  opacity: 0;
+}
+
+.flow-enter-active, .flow-leave-active {
+  transition: all .5s;
+}
+
+.flow-enter, .flow-leave {
+  transform: translateY(-20px);
+  opacity: 0;
+}

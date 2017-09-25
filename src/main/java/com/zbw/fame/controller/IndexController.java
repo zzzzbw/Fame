@@ -36,14 +36,6 @@ public class IndexController extends BaseController {
     private MetasService metasService;
 
     /**
-     * 首页
-     */
-    @RequestMapping(value = "", method = RequestMethod.GET)
-    public RestResponse index() {
-        return this.index(1);
-    }
-
-    /**
      * 文章列表
      *
      * @param page
