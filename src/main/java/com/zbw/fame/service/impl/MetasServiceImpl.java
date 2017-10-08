@@ -44,9 +44,9 @@ public class MetasServiceImpl implements MetasService {
     }
 
 
-    public List<Metas> getMetas(String type) {
+    public List<MetaDto> getMetaDto(String type) {
         type = verifyType(type);
-        return metasMapper.select(new Metas(null, type));
+        return metasMapper.selectMetasDto(type);
     }
 
     @Override
@@ -88,6 +88,17 @@ public class MetasServiceImpl implements MetasService {
     }
 
     @Override
+    public boolean updateMeta(Integer id, String name, String type) {
+        type = verifyType(type);
+        Metas meta = metasMapper.selectByPrimaryKey(id);
+        if(null==meta){
+            throw new TipException("没有该属性");
+        }
+
+        return false;
+    }
+
+    @Override
     public boolean saveOrRemoveMetas(String names, String type, Integer articleId) {
         type = verifyType(type);
         if (null == articleId) {
@@ -103,6 +114,7 @@ public class MetasServiceImpl implements MetasService {
         saveMetas(names, type, articleId);
         return true;
     }
+
 
     /**
      * 添加names新加的属性到数据库

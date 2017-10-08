@@ -6,10 +6,7 @@ import com.zbw.fame.util.RestResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 属性(标签和分类)管理 Controller
@@ -33,7 +30,7 @@ public class MetaController extends BaseController {
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
     public RestResponse getAll(@RequestParam String type) {
-        return RestResponse.ok(metasService.getMetas(type));
+        return RestResponse.ok(metasService.getMetaDto(type));
     }
 
     /**
@@ -59,6 +56,22 @@ public class MetaController extends BaseController {
     @RequestMapping(value = "", method = RequestMethod.POST)
     public RestResponse saveMeta(@RequestParam String name, @RequestParam String type) {
         if (metasService.saveMeta(name, type)) {
+            return RestResponse.ok();
+        }
+        return RestResponse.fail();
+    }
+
+    /**
+     * 根据id修改分类
+     *
+     * @param id
+     * @param name
+     * @param type
+     * @return
+     */
+    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+    public RestResponse updateMeta(@PathVariable Integer id, @RequestParam String name, @RequestParam String type) {
+        if (metasService.updateMeta(id, name, type)) {
             return RestResponse.ok();
         }
         return RestResponse.fail();

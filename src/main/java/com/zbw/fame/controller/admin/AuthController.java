@@ -38,4 +38,15 @@ public class AuthController extends BaseController {
 
         return RestResponse.ok();
     }
+
+    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    public RestResponse logout() {
+        Users user = this.user();
+        if (null == user) {
+            return RestResponse.fail("没有用户登陆");
+        }
+
+        request.getSession().removeAttribute(FameConsts.USER_SESSION_KEY);
+        return RestResponse.ok();
+    }
 }

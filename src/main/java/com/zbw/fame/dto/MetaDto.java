@@ -11,7 +11,7 @@ import java.util.List;
  * @auther zbw
  * @create 2017/8/30 15:15
  */
-public class MetaDto extends Metas{
+public class MetaDto extends Metas {
 
     private Integer count;
 

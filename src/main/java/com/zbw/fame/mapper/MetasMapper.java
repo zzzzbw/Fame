@@ -21,13 +21,11 @@ public interface MetasMapper extends MyMapper<Metas> {
 
     @Select("select * from fame.metas meta where meta.type = #{type}")
     @Results({
-            @Result(id = true, column = "meta.id", property = "id"),
+            @Result(id = true, column = "id", property = "id"),
             @Result(column = "meta.name", property = "name"),
             @Result(column = "meta.type", property = "type"),
             @Result(column = "id", property = "count",
-                    one = @One(select = "com.zbw.fame.mapper.ArticlesMapper.selectCountByMetas")),
-            @Result(column = "id", property = "articles",
-                    many = @Many(select = "com.zbw.fame.mapper.ArticlesMapper.selectByMetas"))
+                    one = @One(select = "com.zbw.fame.mapper.ArticlesMapper.selectCountByMetas"))
     })
     List<MetaDto> selectMetasDto(@Param("type") String type);
 
