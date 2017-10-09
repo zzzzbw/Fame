@@ -35,7 +35,6 @@ public class LoginInterceptor implements HandlerInterceptor {
             response.addHeader("Access-Control-Max-Age", "3600");
         }
 
-
         //若url为不拦截的url，则直接return true
         boolean flag = false;
         String url = request.getRequestURI();

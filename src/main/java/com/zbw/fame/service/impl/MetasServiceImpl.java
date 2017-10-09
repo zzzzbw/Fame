@@ -91,11 +91,31 @@ public class MetasServiceImpl implements MetasService {
     public boolean updateMeta(Integer id, String name, String type) {
         type = verifyType(type);
         Metas meta = metasMapper.selectByPrimaryKey(id);
-        if(null==meta){
+        if (null == meta) {
             throw new TipException("没有该属性");
         }
-
-        return false;
+        List<Articles> articles = articlesMapper.selectByMetas(id);
+        for (Articles article : articles) {
+            String metas;
+            if (type.equals(Types.CATEGORY)) {
+                metas = article.getCategory();
+                String newMetas = metas.replace(meta.getName(), name);
+                if (!newMetas.equals(metas)) {
+                    article.setCategory(newMetas);
+                    articlesMapper.updateByPrimaryKey(article);
+                }
+            }
+            if (type.equals(Types.TAG)) {
+                metas = article.getTags();
+                String newMetas = metas.replace(meta.getName(), name);
+                if (!newMetas.equals(metas)) {
+                    article.setTags(newMetas);
+                    articlesMapper.updateByPrimaryKey(article);
+                }
+            }
+        }
+        meta.setName(name);
+        return metasMapper.updateByPrimaryKey(meta) > 0;
     }
 
     @Override
