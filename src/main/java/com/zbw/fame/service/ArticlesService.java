@@ -20,5 +20,7 @@ public interface ArticlesService {
 
     Integer saveArticle(Articles article);
 
+    boolean updateArticle(Articles articles);
+
     boolean deleteArticle(Integer id);
 }

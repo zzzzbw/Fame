@@ -3,6 +3,7 @@ package com.zbw.fame.controller;
 import com.zbw.fame.model.Users;
 import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.RestResponse;
+import com.zbw.fame.util.SystemCache;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 public abstract class BaseController {
     @Autowired
     protected HttpServletRequest request;
+
+    protected SystemCache cache = SystemCache.instance();
 
 
     public Users user() {

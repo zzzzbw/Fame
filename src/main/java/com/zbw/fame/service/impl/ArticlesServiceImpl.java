@@ -89,6 +89,14 @@ public class ArticlesServiceImpl implements ArticlesService {
     }
 
     @Override
+    public boolean updateArticle(Articles articles) {
+        if (null == articles) {
+            throw new TipException("文章不能为空");
+        }
+        return articlesMapper.updateByPrimaryKeySelective(articles) > 0;
+    }
+
+    @Override
     public boolean deleteArticle(Integer id) {
         Articles articles = articlesMapper.selectByPrimaryKey(id);
         if (null == articles) {

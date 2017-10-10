@@ -12,4 +12,8 @@ public interface Types {
 
     String CATEGORY = "category";
     String TAG = "tag";
+
+
+    String CACHE_ARTICLE_HITS = "cache_article_hits";
+
 }

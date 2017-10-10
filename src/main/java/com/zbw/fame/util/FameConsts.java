@@ -35,4 +35,10 @@ public class FameConsts {
      */
     public static String PREVIEW_FLAG = "<!--read more-->";
 
+
+    /**
+     * 文章点击量缓存数
+     */
+    public static Integer CACHE_ARTICLE_HITS_SAVE = 10;
+
 }

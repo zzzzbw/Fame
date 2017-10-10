@@ -5,6 +5,7 @@ import com.zbw.fame.dto.MetaDto;
 import com.zbw.fame.model.Articles;
 import com.zbw.fame.service.ArticlesService;
 import com.zbw.fame.service.MetasService;
+import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.RestResponse;
 import com.zbw.fame.util.Types;
@@ -63,8 +64,30 @@ public class IndexController extends BaseController {
             return this.error_404();
         }
         this.transformContent(article);
+        this.updateHits(article.getId(), article.getHits());
         return RestResponse.ok(article);
     }
+
+    /**
+     * 点击量添加
+     *
+     * @param articleId
+     * @param hits
+     */
+    private void updateHits(Integer articleId, Integer hits) {
+        Integer cHits = cache.get(Types.CACHE_ARTICLE_HITS, articleId.toString());
+        cHits = null == cHits ? 1 : cHits + 1;
+        if (cHits >= FameConsts.CACHE_ARTICLE_HITS_SAVE) {
+            Articles temp = new Articles();
+            temp.setId(articleId);
+            temp.setHits(hits + cHits);
+            articlesService.updateArticle(temp);
+            cache.put(Types.CACHE_ARTICLE_HITS, articleId.toString(), 1);
+        } else {
+            cache.put(Types.CACHE_ARTICLE_HITS, articleId.toString(), cHits);
+        }
+    }
+
 
     /**
      * 标签页
