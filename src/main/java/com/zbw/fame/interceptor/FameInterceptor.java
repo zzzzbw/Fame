@@ -2,9 +2,14 @@ package com.zbw.fame.interceptor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zbw.fame.model.Users;
+import com.zbw.fame.service.LogsService;
 import com.zbw.fame.util.ErrorCode;
 import com.zbw.fame.util.FameConsts;
+import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.RestResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -15,14 +20,21 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 
 /**
- * 登陆拦截器
+ * Fame 拦截器
  *
  * @auther zbw
- * @create 2017/9/25 22:57
+ * @create 2017/10/11 14:10
  */
-public class LoginInterceptor implements HandlerInterceptor {
+public class FameInterceptor implements HandlerInterceptor {
+
+    private static final String AUTH_URIS = "/admin";
 
     private static final String[] IGNORE_URIS = {"/admin/login"};
+
+    private static final Logger logger = LoggerFactory.getLogger(FameInterceptor.class);
+
+    @Autowired
+    private LogsService logsService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -35,24 +47,30 @@ public class LoginInterceptor implements HandlerInterceptor {
             response.addHeader("Access-Control-Max-Age", "3600");
         }
 
-        //若url为不拦截的url，则直接return true
-        boolean flag = false;
         String url = request.getRequestURI();
-        for (String param : IGNORE_URIS) {
-            if (StringUtils.endsWithIgnoreCase(url, param)) {
-                flag = true;
-                return flag;
-            }
-        }
+        String ip = FameUtil.getIp();
 
-        if (!flag) {
-            Users user = (Users) request.getSession().getAttribute(FameConsts.USER_SESSION_KEY);
-            if (null == user) {
-                PrintWriter out = response.getWriter();
-                ObjectMapper mapper = new ObjectMapper();
-                out.print(mapper.writeValueAsString(RestResponse.fail(ErrorCode.NOT_LOGIN.getCode(), ErrorCode.NOT_LOGIN.getMsg())));
-                out.flush();
-                return false;
+        logger.info("用户访问地址: {}, 来源地址: {}", url, ip);
+
+
+        if (url.contains(AUTH_URIS)) {
+            boolean auth = true;
+            //登录拦截忽略url
+            for (String param : IGNORE_URIS) {
+                if (StringUtils.endsWithIgnoreCase(url, param)) {
+                    auth = false;
+                }
+            }
+            //登录拦截
+            if (auth) {
+                Users user = (Users) request.getSession().getAttribute(FameConsts.USER_SESSION_KEY);
+                if (null == user) {
+                    PrintWriter out = response.getWriter();
+                    ObjectMapper mapper = new ObjectMapper();
+                    out.print(mapper.writeValueAsString(RestResponse.fail(ErrorCode.NOT_LOGIN.getCode(), ErrorCode.NOT_LOGIN.getMsg())));
+                    out.flush();
+                    return false;
+                }
             }
         }
 
@@ -64,6 +82,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception e) throws Exception {
+
     }
 }

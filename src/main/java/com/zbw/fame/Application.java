@@ -1,6 +1,6 @@
 package com.zbw.fame;
 
-import com.zbw.fame.interceptor.LoginInterceptor;
+import com.zbw.fame.interceptor.FameInterceptor;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -37,7 +37,7 @@ public class Application {
             //拦截器
             @Override
             public void addInterceptors(InterceptorRegistry registry) {
-                registry.addInterceptor(new LoginInterceptor()).addPathPatterns("/admin/**");
+                registry.addInterceptor(new FameInterceptor()).addPathPatterns("/**");
             }
 
         };

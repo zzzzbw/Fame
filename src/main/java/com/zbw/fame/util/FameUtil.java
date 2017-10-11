@@ -56,6 +56,25 @@ public class FameUtil {
     }
 
     /**
+     * 获取ip
+     *
+     * @return
+     */
+    public static String getIp() {
+        String ip = getRequest().getHeader("x-forwarded-for");
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = getRequest().getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = getRequest().getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = getRequest().getRemoteAddr();
+        }
+        return ip;
+    }
+
+    /**
      * 获取文章预览
      *
      * @return

@@ -1,5 +1,6 @@
 package com.zbw.fame.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.zbw.fame.model.Articles;
 import com.zbw.fame.model.Metas;
 
@@ -15,6 +16,7 @@ public class MetaDto extends Metas {
 
     private Integer count;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private List<Articles> articles;
 
     public Integer getCount() {

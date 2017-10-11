@@ -1,6 +1,7 @@
 package com.zbw.fame.controller.admin;
 
 import com.zbw.fame.controller.BaseController;
+import com.zbw.fame.exception.TipException;
 import com.zbw.fame.service.MetasService;
 import com.zbw.fame.util.RestResponse;
 import org.slf4j.Logger;
@@ -30,7 +31,8 @@ public class MetaController extends BaseController {
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
     public RestResponse getAll(@RequestParam String type) {
-        return RestResponse.ok(metasService.getMetaDto(type));
+        throw new TipException("1234");
+        //return RestResponse.ok(metasService.getMetaDto(type));
     }
 
     /**

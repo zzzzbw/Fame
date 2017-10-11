@@ -75,16 +75,16 @@ public class IndexController extends BaseController {
      * @param hits
      */
     private void updateHits(Integer articleId, Integer hits) {
-        Integer cHits = cache.get(Types.CACHE_ARTICLE_HITS, articleId.toString());
+        Integer cHits = cache.get(FameConsts.CACHE_ARTICLE_HITS, articleId.toString());
         cHits = null == cHits ? 1 : cHits + 1;
         if (cHits >= FameConsts.CACHE_ARTICLE_HITS_SAVE) {
             Articles temp = new Articles();
             temp.setId(articleId);
             temp.setHits(hits + cHits);
             articlesService.updateArticle(temp);
-            cache.put(Types.CACHE_ARTICLE_HITS, articleId.toString(), 1);
+            cache.put(FameConsts.CACHE_ARTICLE_HITS, articleId.toString(), 1);
         } else {
-            cache.put(Types.CACHE_ARTICLE_HITS, articleId.toString(), cHits);
+            cache.put(FameConsts.CACHE_ARTICLE_HITS, articleId.toString(), cHits);
         }
     }
 

@@ -13,7 +13,8 @@ public interface Types {
     String CATEGORY = "category";
     String TAG = "tag";
 
+    String LOG_TYPE_FORE = "fore";
+    String LOG_TYPE_ADMIN = "admin";
 
-    String CACHE_ARTICLE_HITS = "cache_article_hits";
 
 }

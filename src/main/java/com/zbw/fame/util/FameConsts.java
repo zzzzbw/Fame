@@ -37,6 +37,11 @@ public class FameConsts {
 
 
     /**
+     * 文章缓存key
+     */
+    public static String CACHE_ARTICLE_HITS = "cache_article_hits";
+
+    /**
      * 文章点击量缓存数
      */
     public static Integer CACHE_ARTICLE_HITS_SAVE = 10;
