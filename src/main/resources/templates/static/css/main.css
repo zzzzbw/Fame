@@ -24,3 +24,38 @@
   transform: translateY(-20px);
   opacity: 0;
 }
+
+.chip {
+  box-shadow: 0 0 1px rgba(14, 14, 14, 0.3);
+  align-items: center;
+  color: #727e96;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -ms-flex-align: center;
+  height: 1.2rem;
+  margin: .2rem;
+  max-width: 100%;
+  padding: .1rem .5rem;
+  text-decoration: none;
+  vertical-align: middle;
+}
+
+.divider {
+  border-top: .05rem solid #e7e9ed;
+  height: .05rem;
+  margin: .4rem 0;
+  display: block;
+  position: relative;
+}
+
+.text-primary {
+  color: #5764c6;
+}
+
+.text-italic {
+  font-style: italic;
+}
+
+.text-bold {
+  font-weight: bold;
+}

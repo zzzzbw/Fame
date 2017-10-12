@@ -2,6 +2,7 @@ package com.zbw.fame;
 
 import com.zbw.fame.interceptor.FameInterceptor;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +26,11 @@ public class Application {
     //springmvc配置
     @Bean
     public WebMvcConfigurer WebMvcConfigurerAdapter() {
+
         return new WebMvcConfigurerAdapter() {
+
+            @Autowired
+            private FameInterceptor fameInterceptor;
 
             //跨域请求配置
             @Override
@@ -37,7 +42,7 @@ public class Application {
             //拦截器
             @Override
             public void addInterceptors(InterceptorRegistry registry) {
-                registry.addInterceptor(new FameInterceptor()).addPathPatterns("/**");
+                registry.addInterceptor(fameInterceptor).addPathPatterns("/**");
             }
 
         };

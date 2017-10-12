@@ -46,4 +46,14 @@ public class FameConsts {
      */
     public static Integer CACHE_ARTICLE_HITS_SAVE = 10;
 
+    /**
+     * 访问量缓存key
+     */
+    public static String CACHE_ROUTE_VISIT = "cache_route_hits";
+
+    /**
+     * 访问量缓存数
+     */
+    public static Integer CACHE_ROUTE_VISIT_SAVE = 50;
+
 }

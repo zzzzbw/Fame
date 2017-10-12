@@ -4,7 +4,10 @@ import com.zbw.fame.controller.BaseController;
 import com.zbw.fame.model.Articles;
 import com.zbw.fame.model.Users;
 import com.zbw.fame.service.ArticlesService;
+import com.zbw.fame.service.LogsService;
+import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.RestResponse;
+import com.zbw.fame.util.Types;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,9 @@ public class ArticleController extends BaseController {
     @Autowired
     private ArticlesService articlesService;
 
+    @Autowired
+    private LogsService logsService;
+
 
     /**
      * 文章信息列表
@@ -35,7 +41,7 @@ public class ArticleController extends BaseController {
      * @return
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public RestResponse index(@RequestParam Integer page) {
+    public RestResponse index(@RequestParam(required = false, defaultValue = "1") Integer page) {
         List<Articles> articles = articlesService.getArticles(page);
         return RestResponse.ok(articles);
     }
@@ -81,10 +87,16 @@ public class ArticleController extends BaseController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public RestResponse deleteArticle(@PathVariable Integer id) {
         if (articlesService.deleteArticle(id)) {
+            logsService.save(Types.LOG_ACTION_DELETE, "id:" + id, Types.LOG_MESSAGE_DELETE_ARTICLE, Types.LOG_TYPE_OPERATE, FameUtil.getIp());
             return RestResponse.ok();
         } else {
             return RestResponse.fail();
         }
+    }
+
+    @RequestMapping(value = "/count",method = RequestMethod.GET)
+    public RestResponse count(){
+        return RestResponse.ok(articlesService.count());
     }
 
 }

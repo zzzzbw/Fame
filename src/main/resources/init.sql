@@ -38,6 +38,17 @@ CREATE TABLE middles (
   m_id INT             NOT NULL
 );
 
+CREATE TABLE logs (
+  id      INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  action  VARCHAR(255),
+  data    VARCHAR(255),
+  message VARCHAR(255),
+  type    VARCHAR(255),
+  ip      VARCHAR(255),
+  user_id  INT,
+  created TIMESTAMP       NOT NULL DEFAULT current_timestamp
+);
+
 
 INSERT INTO users (username, password_md5, email, screen_name) VALUES ('zbw', '123', '920049380@qq.com', 'zzzzbw');
 

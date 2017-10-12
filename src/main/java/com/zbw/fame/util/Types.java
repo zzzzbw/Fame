@@ -13,8 +13,13 @@ public interface Types {
     String CATEGORY = "category";
     String TAG = "tag";
 
-    String LOG_TYPE_FORE = "fore";
-    String LOG_TYPE_ADMIN = "admin";
+    String LOG_ACTION_VISIT = "访问页面";
+    String LOG_MESSAGE_VISIT = "页面访问量增加";
+    String LOG_ACTION_DELETE = "删除";
+    String LOG_MESSAGE_DELETE_ARTICLE = "删除文章";
+
+    String LOG_TYPE_VISIT = "visit";
+    String LOG_TYPE_OPERATE = "operate";
 
 
 }

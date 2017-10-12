@@ -1,5 +1,7 @@
 package com.zbw.fame.model;
 
+import java.util.Date;
+
 /**
  * 日志 Model
  *
@@ -24,10 +26,10 @@ public class Logs extends BaseEntity {
     private String ip;
 
     // 操作人
-    private Integer user_id;
+    private Integer userId;
 
     // 操作时间
-    private Integer created;
+    private Date created;
 
     public String getAction() {
         return action;
@@ -69,19 +71,19 @@ public class Logs extends BaseEntity {
         this.ip = ip;
     }
 
-    public Integer getUser_id() {
-        return user_id;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUser_id(Integer user_id) {
-        this.user_id = user_id;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
-    public Integer getCreated() {
+    public Date getCreated() {
         return created;
     }
 
-    public void setCreated(Integer created) {
+    public void setCreated(Date created) {
         this.created = created;
     }
 
@@ -93,7 +95,7 @@ public class Logs extends BaseEntity {
                 ", message='" + message + '\'' +
                 ", type='" + type + '\'' +
                 ", ip='" + ip + '\'' +
-                ", user_id=" + user_id +
+                ", userId=" + userId +
                 ", created=" + created +
                 '}';
     }

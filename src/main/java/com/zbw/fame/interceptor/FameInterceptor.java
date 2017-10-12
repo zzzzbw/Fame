@@ -3,14 +3,12 @@ package com.zbw.fame.interceptor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zbw.fame.model.Users;
 import com.zbw.fame.service.LogsService;
-import com.zbw.fame.util.ErrorCode;
-import com.zbw.fame.util.FameConsts;
-import com.zbw.fame.util.FameUtil;
-import com.zbw.fame.util.RestResponse;
+import com.zbw.fame.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,6 +23,7 @@ import java.io.PrintWriter;
  * @auther zbw
  * @create 2017/10/11 14:10
  */
+@Component
 public class FameInterceptor implements HandlerInterceptor {
 
     private static final String AUTH_URIS = "/admin";
@@ -33,11 +32,15 @@ public class FameInterceptor implements HandlerInterceptor {
 
     private static final Logger logger = LoggerFactory.getLogger(FameInterceptor.class);
 
+    private SystemCache cache = SystemCache.instance();
+
     @Autowired
     private LogsService logsService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        //Thread.sleep(1500);
+
         //要设置跨域,不然拦截器会把跨域信息覆盖掉
         if (request.getHeader(HttpHeaders.ORIGIN) != null) {
             response.addHeader("Access-Control-Allow-Origin", "http://localhost:8010");
@@ -50,8 +53,11 @@ public class FameInterceptor implements HandlerInterceptor {
         String url = request.getRequestURI();
         String ip = FameUtil.getIp();
 
-        logger.info("用户访问地址: {}, 来源地址: {}", url, ip);
+        logger.info("用户访问地址: {}, ip地址: {}", url, ip);
 
+        if (request.getMethod().toUpperCase().equals("GET")) {
+            this.updateClick(url);
+        }
 
         if (url.contains(AUTH_URIS)) {
             boolean auth = true;
@@ -84,5 +90,22 @@ public class FameInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception e) throws Exception {
 
+    }
+
+    /**
+     * 更新访问量
+     *
+     * @param url
+     */
+    private void updateClick(String url) {
+        String route = url.split("/")[1];
+        if (route.equals("admin")) return;
+        Integer chits = cache.get(FameConsts.CACHE_ROUTE_VISIT, route);
+        chits = null == chits ? 1 : chits + 1;
+        if (chits >= FameConsts.CACHE_ROUTE_VISIT_SAVE) {
+            logsService.save(Types.LOG_ACTION_VISIT, chits.toString(), route + Types.LOG_MESSAGE_VISIT, Types.LOG_TYPE_VISIT);
+        } else {
+            cache.put(FameConsts.CACHE_ROUTE_VISIT, route, chits);
+        }
     }
 }

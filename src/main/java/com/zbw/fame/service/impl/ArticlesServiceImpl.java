@@ -72,12 +72,13 @@ public class ArticlesServiceImpl implements ArticlesService {
             throw new TipException("请先登陆后发布文章");
         }
 
-        article.setCreated(new Date());
-        article.setModified(new Date());
 
+        article.setModified(new Date());
         if (null != article.getId()) {
             articlesMapper.updateByPrimaryKey(article);
         } else {
+            article.setCreated(new Date());
+            article.setHits(0);
             articlesMapper.insert(article);
         }
 
@@ -110,6 +111,11 @@ public class ArticlesServiceImpl implements ArticlesService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public Integer count() {
+        return articlesMapper.selectCount(new Articles());
     }
 
 }

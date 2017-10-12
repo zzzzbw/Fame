@@ -43,7 +43,7 @@ public class IndexController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/article", method = RequestMethod.GET)
-    public RestResponse index(@RequestParam Integer page) {
+    public RestResponse index(@RequestParam(required = false, defaultValue = "1") Integer page) {
         List<Articles> articles = articlesService.getContents(page);
         for (Articles a : articles) {
             this.transformPreView(a);
@@ -117,7 +117,7 @@ public class IndexController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/archive", method = RequestMethod.GET)
-    public RestResponse archive(@RequestParam Integer page) {
+    public RestResponse archive(@RequestParam(required = false, defaultValue = "1") Integer page) {
         List<Articles> articles = articlesService.getContents(page);
         List<Archives> archives = new ArrayList<>();
         String current = "";

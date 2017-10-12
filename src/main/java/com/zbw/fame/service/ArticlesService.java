@@ -23,4 +23,6 @@ public interface ArticlesService {
     boolean updateArticle(Articles articles);
 
     boolean deleteArticle(Integer id);
+
+    Integer count();
 }
