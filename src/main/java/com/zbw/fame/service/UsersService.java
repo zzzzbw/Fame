@@ -17,4 +17,6 @@ public interface UsersService {
      * @return
      */
     Users login(String username, String password);
+
+    boolean reset(String username, String oldPassword, String newPassword);
 }

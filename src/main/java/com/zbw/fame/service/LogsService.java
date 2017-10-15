@@ -19,6 +19,4 @@ public interface LogsService {
     void save(String action, String data, String message, String type, String ip, Integer user_id);
 
     List<Logs> getLogs(Integer page);
-
-    Integer getVisit();
 }

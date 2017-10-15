@@ -1,6 +1,7 @@
 package com.zbw.fame.controller;
 
 import com.zbw.fame.model.Users;
+import com.zbw.fame.util.ErrorCode;
 import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.RestResponse;
 import com.zbw.fame.util.SystemCache;
@@ -26,6 +27,6 @@ public abstract class BaseController {
     }
 
     protected RestResponse error_404() {
-        return RestResponse.fail("访问的页面不存在");
+        return RestResponse.fail(ErrorCode.NOT_FOUND.getCode(), ErrorCode.NOT_FOUND.getMsg());
     }
 }

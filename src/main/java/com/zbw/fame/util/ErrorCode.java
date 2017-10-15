@@ -14,10 +14,11 @@ public enum ErrorCode {
     NO_SUCH_METHOD(1004, "NoSuchMethodException"),
     INDEX_OUTOF_BOUNDS(1005, "IndexOutOfBoundsException"),
     BAD_REQUEST(400, "Bad Request"),
+    NOT_FOUND(404, "Not Found"),
     METHOD_BOT_ALLOWED(405, "Method Not Allowed"),
     NOT_ACCEPTABLE(406, "Not Acceptable"),
     INTERNAL_SERVER_ERROR(500, "Internal Server Error"),
-    NOT_LOGIN(999,"Not Login");
+    NOT_LOGIN(999, "Not Login");
 
     private final int code;
     private final String msg;

@@ -7,6 +7,8 @@ import com.zbw.fame.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 /**
  * User Service 层实现类
  *
@@ -35,8 +37,28 @@ public class UsersServiceImpl implements UsersService {
         if (user == null) {
             throw new TipException("用户名或者密码错误");
         }
+        user.setLogged(new Date());
+        usersMapper.updateByPrimaryKey(user);
         //清空密码
         user.setPasswordMd5(null);
         return user;
+    }
+
+    @Override
+    public boolean reset(String username, String oldPassword, String newPassword) {
+        Users record = new Users();
+        record.setUsername(username);
+        Users user = usersMapper.selectOne(record);
+        if (null == user) {
+            throw new TipException("该用户名不存在");
+        }
+
+        if (!user.getPasswordMd5().equals(oldPassword)) {
+            throw new TipException("原密码错误");
+        }
+
+        user.setPasswordMd5(newPassword);
+        int a=usersMapper.updateByPrimaryKey(user);
+        return a > 0;
     }
 }

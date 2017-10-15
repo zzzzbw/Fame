@@ -49,4 +49,25 @@ public class AuthController extends BaseController {
         request.getSession().removeAttribute(FameConsts.USER_SESSION_KEY);
         return RestResponse.ok();
     }
+
+    @RequestMapping(value = "/reset", method = RequestMethod.POST)
+    public RestResponse resetPassword(@RequestParam String username, @RequestParam String oldPassword, @RequestParam String newPassword) {
+        if (!username.equals(this.user().getUsername())) {
+            return RestResponse.fail("用户名与登陆的不符合");
+        }
+
+        boolean result = usersService.reset(username, oldPassword, newPassword);
+        return RestResponse.ok(result);
+    }
+
+    @RequestMapping(value = "/username", method = RequestMethod.GET)
+    public RestResponse username() {
+        Users user = this.user();
+        if (null == user) {
+            return RestResponse.fail("没有用户登陆");
+        }
+
+        return RestResponse.ok(user.getUsername());
+    }
+
 }

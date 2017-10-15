@@ -5,7 +5,6 @@ import com.zbw.fame.mapper.LogsMapper;
 import com.zbw.fame.model.Logs;
 import com.zbw.fame.service.LogsService;
 import com.zbw.fame.util.FameConsts;
-import com.zbw.fame.util.Types;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,10 +50,4 @@ public class LogsServiceImpl implements LogsService {
         return logsMapper.selectAll();
     }
 
-    @Override
-    public Integer getVisit() {
-        Logs condition = new Logs();
-        condition.setType(Types.LOG_TYPE_VISIT);
-        return logsMapper.select(condition).size() * FameConsts.CACHE_ROUTE_VISIT_SAVE;
-    }
 }

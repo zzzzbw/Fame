@@ -56,4 +56,25 @@ public class FameConsts {
      */
     public static Integer CACHE_ROUTE_VISIT_SAVE = 50;
 
+
+    /**
+     * 网站设置缓存key
+     */
+    public static String CACHE_SITESTATIC = "cache_sitestatic";
+
+    /**
+     * 网站默认title
+     */
+    public static String SITESTATIC_DEFAULT_TITLE = "Fame博客";
+
+    /**
+     * 网站默认description
+     */
+    public static String SITESTATIC_DEFAULT_DESCRIPTION = "Fame博客";
+
+    /**
+     * 网站默认keywords
+     */
+    public static String SITESTATIC_DEFAULT_KEYWORDS = "Fame,blog,博客";
+
 }

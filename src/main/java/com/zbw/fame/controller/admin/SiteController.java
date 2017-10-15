@@ -3,6 +3,7 @@ package com.zbw.fame.controller.admin;
 import com.zbw.fame.controller.BaseController;
 import com.zbw.fame.model.Logs;
 import com.zbw.fame.service.LogsService;
+import com.zbw.fame.service.SiteService;
 import com.zbw.fame.util.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,9 @@ public class SiteController extends BaseController {
     @Autowired
     private LogsService logsService;
 
+    @Autowired
+    private SiteService siteService;
+
     @RequestMapping(value = "/logs")
     public RestResponse getLogs(@RequestParam(defaultValue = "1") Integer page) {
         List<Logs> logs = logsService.getLogs(page);
@@ -38,8 +42,32 @@ public class SiteController extends BaseController {
      */
     @RequestMapping(value = "/visit", method = RequestMethod.GET)
     public RestResponse visit() {
-        Integer visit = logsService.getVisit();
+        Integer visit = siteService.getVisit();
         return RestResponse.ok(visit);
+    }
+
+    /**
+     * 获取网站设置缓存
+     *
+     * @return
+     */
+    @RequestMapping(value = "/static", method = RequestMethod.GET)
+    public RestResponse getSiteStatic() {
+        return RestResponse.ok(siteService.getSiteStatic());
+    }
+
+    /**
+     * 保存网站设置缓存
+     *
+     * @param title
+     * @param description
+     * @param keywords
+     * @return
+     */
+    @RequestMapping(value = "/static", method = RequestMethod.POST)
+    public RestResponse getSiteStatic(@RequestParam String title, @RequestParam String description, @RequestParam String keywords) {
+        siteService.saveSiteStatic(title, description, keywords);
+        return RestResponse.ok();
     }
 
 
