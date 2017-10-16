@@ -1,7 +1,7 @@
 package com.zbw.fame.dto;
 
 /**
- * 网站设置
+ * 网站设置 Dto
  *
  * @auther zbw
  * @create 2017/10/15 21:48

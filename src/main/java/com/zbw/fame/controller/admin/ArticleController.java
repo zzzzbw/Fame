@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * 后台文章管理 Controller
  *
- * @auther zbw
+ * @author zbw
  * @create 2017/7/11 19:52
  */
 @RestController

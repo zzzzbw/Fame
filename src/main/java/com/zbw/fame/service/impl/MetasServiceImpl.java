@@ -43,7 +43,7 @@ public class MetasServiceImpl implements MetasService {
         return metasMapper.selectMetasDtoPublish(type);
     }
 
-
+    @Override
     public List<MetaDto> getMetaDto(String type) {
         type = verifyType(type);
         return metasMapper.selectMetasDto(type);

@@ -39,9 +39,8 @@ public class FameInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        //Thread.sleep(1500);
 
-        //要设置跨域,不然拦截器会把跨域信息覆盖掉
+        // 要设置跨域,不然拦截器会把跨域信息覆盖掉
         if (request.getHeader(HttpHeaders.ORIGIN) != null) {
             response.addHeader("Access-Control-Allow-Origin", "http://localhost:8010");
             response.addHeader("Access-Control-Allow-Credentials", "true");
@@ -99,7 +98,9 @@ public class FameInterceptor implements HandlerInterceptor {
      */
     private void updateClick(String url) {
         String route = url.split("/")[1];
-        if (route.equals("admin")) return;
+        if ("admin".equals(route)){
+            return;
+        }
         Integer chits = cache.get(FameConsts.CACHE_ROUTE_VISIT, route);
         chits = null == chits ? 1 : chits + 1;
         if (chits >= FameConsts.CACHE_ROUTE_VISIT_SAVE) {

@@ -13,6 +13,9 @@ public interface Types {
     String CATEGORY = "category";
     String TAG = "tag";
 
+    String POST = "post";
+    String PAGE = "page";
+
     String LOG_ACTION_VISIT = "访问页面";
     String LOG_MESSAGE_VISIT = "页面访问量增加";
     String LOG_ACTION_DELETE = "删除";

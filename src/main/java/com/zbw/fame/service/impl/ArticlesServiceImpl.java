@@ -1,6 +1,7 @@
 package com.zbw.fame.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.zbw.fame.dto.Page;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.mapper.ArticlesMapper;
 import com.zbw.fame.model.Articles;
@@ -33,7 +34,9 @@ public class ArticlesServiceImpl implements ArticlesService {
     @Override
     public List<Articles> getArticles(Integer page) {
         PageHelper.startPage(page, FameConsts.PAGE_SIZE);
-        return articlesMapper.selectAll();
+        Articles record = new Articles();
+        record.setType(Types.POST);
+        return articlesMapper.select(record);
     }
 
     @Override
@@ -41,6 +44,7 @@ public class ArticlesServiceImpl implements ArticlesService {
         PageHelper.startPage(page, FameConsts.PAGE_SIZE);
         Articles article = new Articles();
         article.setStatus(Types.PUBLISH);
+        article.setType(Types.POST);
         return articlesMapper.select(article);
     }
 
@@ -74,11 +78,13 @@ public class ArticlesServiceImpl implements ArticlesService {
 
 
         article.setModified(new Date());
+
         if (null != article.getId()) {
             articlesMapper.updateByPrimaryKey(article);
         } else {
             article.setCreated(new Date());
             article.setHits(0);
+            article.setType(Types.POST);
             articlesMapper.insert(article);
         }
 
@@ -114,8 +120,16 @@ public class ArticlesServiceImpl implements ArticlesService {
     }
 
     @Override
+    public List<Page> getPages(Integer page) {
+        PageHelper.startPage(page, FameConsts.PAGE_SIZE);
+        return articlesMapper.selectPages();
+    }
+
+    @Override
     public Integer count() {
-        return articlesMapper.selectCount(new Articles());
+        Articles record = new Articles();
+        record.setType(Types.POST);
+        return articlesMapper.selectCount(record);
     }
 
 }

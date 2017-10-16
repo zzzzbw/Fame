@@ -23,6 +23,7 @@ CREATE TABLE articles (
   tags          VARCHAR(255),
   category      VARCHAR(255),
   status        VARCHAR(32),
+  type        VARCHAR(32),
   allow_comment BOOLEAN
 );
 
