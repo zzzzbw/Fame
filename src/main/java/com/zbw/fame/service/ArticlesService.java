@@ -1,6 +1,5 @@
 package com.zbw.fame.service;
 
-import com.zbw.fame.dto.Page;
 import com.zbw.fame.model.Articles;
 
 import java.util.List;
@@ -25,9 +24,13 @@ public interface ArticlesService {
 
     boolean deleteArticle(Integer id);
 
-    List<Page> getPages(Integer page);
+    List<Articles> getPages(Integer page);
 
-    Page getPage(String title);
+    Articles getPage(Integer id);
+
+    Integer savePage(Articles page);
+
+    boolean deletePage(Integer id);
 
     Integer count();
 

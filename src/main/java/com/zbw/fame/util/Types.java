@@ -20,6 +20,7 @@ public interface Types {
     String LOG_MESSAGE_VISIT = "页面访问量增加";
     String LOG_ACTION_DELETE = "删除";
     String LOG_MESSAGE_DELETE_ARTICLE = "删除文章";
+    String LOG_MESSAGE_DELETE_PAGE = "删除自定义页面";
 
     String LOG_TYPE_VISIT = "visit";
     String LOG_TYPE_OPERATE = "operate";

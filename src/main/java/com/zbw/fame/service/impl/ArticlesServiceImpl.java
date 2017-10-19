@@ -1,7 +1,6 @@
 package com.zbw.fame.service.impl;
 
 import com.github.pagehelper.PageHelper;
-import com.zbw.fame.dto.Page;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.mapper.ArticlesMapper;
 import com.zbw.fame.model.Articles;
@@ -80,7 +79,9 @@ public class ArticlesServiceImpl implements ArticlesService {
         article.setModified(new Date());
 
         if (null != article.getId()) {
-            articlesMapper.updateByPrimaryKey(article);
+            //设置为空保证点击数不被人为更新
+            article.setHits(null);
+            articlesMapper.updateByPrimaryKeySelective(article);
         } else {
             article.setCreated(new Date());
             article.setHits(0);
@@ -105,7 +106,10 @@ public class ArticlesServiceImpl implements ArticlesService {
 
     @Override
     public boolean deleteArticle(Integer id) {
-        Articles articles = articlesMapper.selectByPrimaryKey(id);
+        Articles record = new Articles();
+        record.setId(id);
+        record.setType(Types.POST);
+        Articles articles = articlesMapper.selectOne(record);
         if (null == articles) {
             throw new TipException("没有id为" + id + "的文章");
         }
@@ -120,9 +124,72 @@ public class ArticlesServiceImpl implements ArticlesService {
     }
 
     @Override
-    public List<Page> getPages(Integer page) {
+    public List<Articles> getPages(Integer page) {
         PageHelper.startPage(page, FameConsts.PAGE_SIZE);
-        return articlesMapper.selectPages();
+        Articles record = new Articles();
+        record.setType(Types.PAGE);
+        return articlesMapper.select(record);
+    }
+
+    @Override
+    public Articles getPage(Integer id) {
+        Articles record = new Articles();
+        record.setId(id);
+        record.setType(Types.PAGE);
+        return articlesMapper.selectOne(record);
+    }
+
+    @Override
+    public Integer savePage(Articles page) {
+        if (null == page) {
+            throw new TipException("自定义页面对象为空");
+        }
+        if (StringUtils.isEmpty(page.getTitle())) {
+            throw new TipException("自定义页面标题不能为空");
+        }
+        if (page.getTitle().length() > FameConsts.MAX_TITLE_COUNT) {
+            throw new TipException("自定义页面标题字数不能超过" + FameConsts.MAX_TITLE_COUNT);
+        }
+
+        if (StringUtils.isEmpty(page.getContent())) {
+            throw new TipException("自定义页面内容不能为空");
+        }
+        if (page.getContent().length() > FameConsts.MAX_CONTENT_COUNT) {
+            throw new TipException("自定义页面容字数不能超过" + FameConsts.MAX_CONTENT_COUNT);
+        }
+        if (null == page.getAuthorId()) {
+            throw new TipException("请先登陆");
+        }
+
+
+        page.setModified(new Date());
+        // 清空不需要的属性
+        page.setTags(null);
+        page.setCategory(null);
+        page.setHits(null);
+
+        if (null != page.getId()) {
+            articlesMapper.updateByPrimaryKey(page);
+        } else {
+            page.setCreated(new Date());
+            page.setType(Types.PAGE);
+            articlesMapper.insert(page);
+        }
+
+        return page.getId();
+    }
+
+    @Override
+    public boolean deletePage(Integer id) {
+        Articles record = new Articles();
+        record.setId(id);
+        record.setType(Types.PAGE);
+        Articles page = articlesMapper.selectOne(record);
+        if (null == page) {
+            throw new TipException("没有id为" + id + "的自定义页面");
+        }
+
+        return articlesMapper.deleteByPrimaryKey(id) > 0;
     }
 
     @Override
