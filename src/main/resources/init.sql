@@ -23,7 +23,7 @@ CREATE TABLE articles (
   tags          VARCHAR(255),
   category      VARCHAR(255),
   status        VARCHAR(32),
-  type        VARCHAR(32),
+  type          VARCHAR(32),
   allow_comment BOOLEAN
 );
 
@@ -46,14 +46,14 @@ CREATE TABLE logs (
   message VARCHAR(255),
   type    VARCHAR(255),
   ip      VARCHAR(255),
-  user_id  INT,
+  user_id INT,
   created TIMESTAMP       NOT NULL DEFAULT current_timestamp
 );
 
 
 INSERT INTO users (username, password_md5, email, screen_name) VALUES ('zbw', '123', '920049380@qq.com', 'zzzzbw');
 
-INSERT INTO articles (title, created, modified, content, author_id, hits, tags, category, status)
+INSERT INTO articles (title, created, modified, content, author_id, hits, tags, category, status, type)
 VALUES ('Hello world', now(), now(), 'Welcome to [Hexo](https://hexo.io/)! This is your very first post. Check [documentation](https://hexo.io/docs/) for more info. If you get any problems when using Hexo, you can find the answer in [troubleshooting](https://hexo.io/docs/troubleshooting.html) or you can ask me on [GitHub](https://github.com/hexojs/hexo/issues).
 
 ## Quick Start
@@ -88,7 +88,7 @@ More info: [Generating](https://hexo.io/docs/generating.html)
 $ hexo deploy
 ```
 
-More info: [Deployment](https://hexo.io/docs/deployment.html)', 1, 0, 'First', 'New', 'publish');
+More info: [Deployment](https://hexo.io/docs/deployment.html)', 1, 0, 'First', 'New', 'publish', 'post');
 
 INSERT INTO metas (name, type) VALUES ('First', 'tag');
 INSERT INTO metas (name, type) VALUES ('New', 'category');

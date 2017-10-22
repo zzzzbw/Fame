@@ -11,6 +11,7 @@ import com.zbw.fame.util.Types;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -64,17 +65,39 @@ public class ArticleController extends BaseController {
     /**
      * 保存文章
      *
-     * @param article
+     * @param id
+     * @param title
+     * @param content
+     * @param tags
+     * @param category
+     * @param status
+     * @param allowComment
      * @return
      */
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public RestResponse saveArticle(Articles article) {
+    public RestResponse saveArticle(@RequestParam(value = "id", required = false) Integer id,
+                                    @RequestParam(value = "title") String title,
+                                    @RequestParam(value = "content") String content,
+                                    @RequestParam(value = "tags") String tags,
+                                    @RequestParam(value = "category") String category,
+                                    @RequestParam(value = "status", defaultValue = Types.DRAFT) String status,
+                                    @RequestParam(value = "allowComment", defaultValue = "false") Boolean allowComment) {
         Users user = this.user();
         if (null == user) {
             return RestResponse.fail("未登陆，请先登陆");
         }
+        Articles article = new Articles();
+        if (!StringUtils.isEmpty(id)) {
+            article.setId(id);
+        }
+        article.setTitle(title);
+        article.setContent(content);
+        article.setTags(tags);
+        article.setCategory(category);
+        article.setStatus(status);
+        article.setAllowComment(allowComment);
         article.setAuthorId(user.getId());
-        Integer id = articlesService.saveArticle(article);
+        articlesService.saveArticle(article);
         return RestResponse.ok("保存文章成功");
     }
 
@@ -88,14 +111,14 @@ public class ArticleController extends BaseController {
     public RestResponse deleteArticle(@PathVariable Integer id) {
         if (articlesService.deleteArticle(id)) {
             logsService.save(Types.LOG_ACTION_DELETE, "id:" + id, Types.LOG_MESSAGE_DELETE_ARTICLE, Types.LOG_TYPE_OPERATE, FameUtil.getIp());
-            return RestResponse.ok();
+            return RestResponse.ok("删除文章成功");
         } else {
             return RestResponse.fail();
         }
     }
 
-    @RequestMapping(value = "/count",method = RequestMethod.GET)
-    public RestResponse count(){
+    @RequestMapping(value = "/count", method = RequestMethod.GET)
+    public RestResponse count() {
         return RestResponse.ok(articlesService.count());
     }
 

@@ -79,8 +79,6 @@ public class ArticlesServiceImpl implements ArticlesService {
         article.setModified(new Date());
 
         if (null != article.getId()) {
-            //设置为空保证点击数不被人为更新
-            article.setHits(null);
             articlesMapper.updateByPrimaryKeySelective(article);
         } else {
             article.setCreated(new Date());
@@ -163,10 +161,6 @@ public class ArticlesServiceImpl implements ArticlesService {
 
 
         page.setModified(new Date());
-        // 清空不需要的属性
-        page.setTags(null);
-        page.setCategory(null);
-        page.setHits(null);
 
         if (null != page.getId()) {
             articlesMapper.updateByPrimaryKey(page);

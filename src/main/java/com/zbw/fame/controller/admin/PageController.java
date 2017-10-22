@@ -9,6 +9,7 @@ import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.RestResponse;
 import com.zbw.fame.util.Types;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -59,17 +60,30 @@ public class PageController extends BaseController {
     /**
      * 保存自定义页面
      *
-     * @param page
+     * @param id
+     * @param title
+     * @param content
+     * @param status
      * @return
      */
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public RestResponse saveArticle(Articles page) {
+    public RestResponse savePage(@RequestParam(value = "id", required = false) Integer id,
+                                    @RequestParam(value = "title") String title,
+                                    @RequestParam(value = "content") String content,
+                                    @RequestParam(value = "status", defaultValue = Types.DRAFT) String status) {
         Users user = this.user();
         if (null == user) {
             return RestResponse.fail("未登陆，请先登陆");
         }
+        Articles page = new Articles();
+        if (!StringUtils.isEmpty(id)) {
+            page.setId(id);
+        }
+        page.setTitle(title);
+        page.setContent(content);
+        page.setStatus(status);
         page.setAuthorId(user.getId());
-        Integer id = articlesService.savePage(page);
+        articlesService.savePage(page);
         return RestResponse.ok("保存文章成功");
     }
 
@@ -83,7 +97,7 @@ public class PageController extends BaseController {
     public RestResponse deletePage(@PathVariable Integer id) {
         if (articlesService.deletePage(id)) {
             logsService.save(Types.LOG_ACTION_DELETE, "id:" + id, Types.LOG_MESSAGE_DELETE_PAGE, Types.LOG_TYPE_OPERATE, FameUtil.getIp());
-            return RestResponse.ok();
+            return RestResponse.ok("删除自定义页面成功");
         } else {
             return RestResponse.fail();
         }
