@@ -1,7 +1,9 @@
 package com.zbw.fame.controller;
 
+import com.github.pagehelper.Page;
 import com.zbw.fame.dto.Archives;
 import com.zbw.fame.dto.MetaDto;
+import com.zbw.fame.dto.Pagination;
 import com.zbw.fame.model.Articles;
 import com.zbw.fame.service.ArticlesService;
 import com.zbw.fame.service.MetasService;
@@ -21,7 +23,7 @@ import java.util.List;
 /**
  * 博客前台 Controller
  *
- * @auther zbw
+ * @author zbw
  * @create 2017/7/15 18:29
  */
 @RestController
@@ -43,12 +45,13 @@ public class IndexController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/article", method = RequestMethod.GET)
-    public RestResponse index(@RequestParam(required = false, defaultValue = "1") Integer page) {
-        List<Articles> articles = articlesService.getContents(page);
+    public RestResponse index(@RequestParam(required = false, defaultValue = "1") Integer page,
+                              @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
+        Page<Articles> articles = articlesService.getContents(page, limit);
         for (Articles a : articles) {
             this.transformPreView(a);
         }
-        return RestResponse.ok(articles);
+        return RestResponse.ok(new Pagination<Articles>(articles));
     }
 
     /**
@@ -117,8 +120,9 @@ public class IndexController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/archive", method = RequestMethod.GET)
-    public RestResponse archive(@RequestParam(required = false, defaultValue = "1") Integer page) {
-        List<Articles> articles = articlesService.getContents(page);
+    public RestResponse archive() {
+        Integer maxLimit = 9999;
+        List<Articles> articles = articlesService.getContents(1, maxLimit);
         List<Archives> archives = new ArrayList<>();
         String current = "";
         for (Articles article : articles) {

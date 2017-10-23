@@ -1,14 +1,12 @@
 package com.zbw.fame.service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.zbw.fame.mapper.LogsMapper;
 import com.zbw.fame.model.Logs;
 import com.zbw.fame.service.LogsService;
-import com.zbw.fame.util.FameConsts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * 日志 Service 实现类
@@ -45,9 +43,8 @@ public class LogsServiceImpl implements LogsService {
     }
 
     @Override
-    public List<Logs> getLogs(Integer page) {
-        PageHelper.startPage(page, FameConsts.PAGE_SIZE);
-        return logsMapper.selectAll();
+    public Page<Logs> getLogs(Integer page, Integer limit) {
+        return PageHelper.startPage(page, limit).doSelectPage(() -> logsMapper.selectAll());
     }
 
 }

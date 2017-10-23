@@ -1,18 +1,19 @@
 package com.zbw.fame.controller.admin;
 
+import com.github.pagehelper.Page;
 import com.zbw.fame.controller.BaseController;
+import com.zbw.fame.dto.Pagination;
 import com.zbw.fame.model.Articles;
 import com.zbw.fame.model.Users;
 import com.zbw.fame.service.ArticlesService;
 import com.zbw.fame.service.LogsService;
+import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.RestResponse;
 import com.zbw.fame.util.Types;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * 自定义页面管理 Controller
@@ -37,9 +38,10 @@ public class PageController extends BaseController {
      * @return
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public RestResponse index(@RequestParam(required = false, defaultValue = "1") Integer page) {
-        List<Articles> pages = articlesService.getPages(page);
-        return RestResponse.ok(pages);
+    public RestResponse index(@RequestParam(required = false, defaultValue = "1") Integer page,
+                              @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
+        Page<Articles> pages = articlesService.getPages(page,limit);
+        return RestResponse.ok(new Pagination<Articles>(pages));
     }
 
     /**
@@ -68,9 +70,9 @@ public class PageController extends BaseController {
      */
     @RequestMapping(value = "", method = RequestMethod.POST)
     public RestResponse savePage(@RequestParam(value = "id", required = false) Integer id,
-                                    @RequestParam(value = "title") String title,
-                                    @RequestParam(value = "content") String content,
-                                    @RequestParam(value = "status", defaultValue = Types.DRAFT) String status) {
+                                 @RequestParam(value = "title") String title,
+                                 @RequestParam(value = "content") String content,
+                                 @RequestParam(value = "status", defaultValue = Types.DRAFT) String status) {
         Users user = this.user();
         if (null == user) {
             return RestResponse.fail("未登陆，请先登陆");

@@ -1,8 +1,7 @@
 package com.zbw.fame.service;
 
+import com.github.pagehelper.Page;
 import com.zbw.fame.model.Articles;
-
-import java.util.List;
 
 /**
  * 文章 Service 接口
@@ -12,9 +11,9 @@ import java.util.List;
  */
 public interface ArticlesService {
 
-    List<Articles> getArticles(Integer page);
+    Page<Articles> getArticles(Integer page, Integer limit);
 
-    List<Articles> getContents(Integer page);
+    Page<Articles> getContents(Integer page, Integer limit);
 
     Articles get(Integer id);
 
@@ -24,7 +23,7 @@ public interface ArticlesService {
 
     boolean deleteArticle(Integer id);
 
-    List<Articles> getPages(Integer page);
+    Page<Articles> getPages(Integer page, Integer limit);
 
     Articles getPage(Integer id);
 

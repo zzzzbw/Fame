@@ -1,6 +1,8 @@
 package com.zbw.fame.service.impl;
 
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.mapper.ArticlesMapper;
 import com.zbw.fame.model.Articles;
@@ -18,7 +20,7 @@ import java.util.List;
 /**
  * 文章 Service 实现类
  *
- * @auther zbw
+ * @author zbw
  * @create 2017/8/21 22:02
  */
 @Service("articlesService")
@@ -31,20 +33,18 @@ public class ArticlesServiceImpl implements ArticlesService {
     private MetasService metasService;
 
     @Override
-    public List<Articles> getArticles(Integer page) {
-        PageHelper.startPage(page, FameConsts.PAGE_SIZE);
+    public Page<Articles> getArticles(Integer page, Integer limit) {
         Articles record = new Articles();
         record.setType(Types.POST);
-        return articlesMapper.select(record);
+        return PageHelper.startPage(page, limit).doSelectPage(() -> articlesMapper.select(record));
     }
 
     @Override
-    public List<Articles> getContents(Integer page) {
-        PageHelper.startPage(page, FameConsts.PAGE_SIZE);
-        Articles article = new Articles();
-        article.setStatus(Types.PUBLISH);
-        article.setType(Types.POST);
-        return articlesMapper.select(article);
+    public Page<Articles> getContents(Integer page,Integer limit) {
+        Articles record = new Articles();
+        record.setStatus(Types.PUBLISH);
+        record.setType(Types.POST);
+        return PageHelper.startPage(page,limit).doSelectPage(()->articlesMapper.select(record));
     }
 
     @Override
@@ -122,11 +122,10 @@ public class ArticlesServiceImpl implements ArticlesService {
     }
 
     @Override
-    public List<Articles> getPages(Integer page) {
-        PageHelper.startPage(page, FameConsts.PAGE_SIZE);
+    public Page<Articles> getPages(Integer page, Integer limit) {
         Articles record = new Articles();
         record.setType(Types.PAGE);
-        return articlesMapper.select(record);
+        return PageHelper.startPage(page, limit).doSelectPage(() -> articlesMapper.select(record));
     }
 
     @Override

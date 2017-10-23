@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * 文章 Model
  *
- * @auther zbw
+ * @author zbw
  * @create 2017/7/8 9:29
  */
 public class Articles extends BaseEntity {

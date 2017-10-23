@@ -8,73 +8,73 @@ package com.zbw.fame.util;
  */
 public class FameConsts {
 
-    public static String USER_SESSION_KEY = "login_user";
+    public static final String USER_SESSION_KEY = "login_user";
 
     /**
      * 默认分页大小
      */
-    public static Integer PAGE_SIZE = 10;
+    public static final String PAGE_SIZE = "10";
 
     /**
      * 文章标题最大字数
      */
-    public static Integer MAX_TITLE_COUNT = 255;
+    public static final Integer MAX_TITLE_COUNT = 255;
 
     /**
      * 文章内容最大字数
      */
-    public static Integer MAX_CONTENT_COUNT = 200000;
+    public static final Integer MAX_CONTENT_COUNT = 200000;
 
     /**
      * 默认预览字数
      */
-    public static Integer MAX_PREVIEW_COUNT = 255;
+    public static final Integer MAX_PREVIEW_COUNT = 255;
 
     /**
      * 默认预览标记
      */
-    public static String PREVIEW_FLAG = "<!--read more-->";
+    public static final String PREVIEW_FLAG = "<!--read more-->";
 
 
     /**
      * 文章缓存key
      */
-    public static String CACHE_ARTICLE_HITS = "cache_article_hits";
+    public static final String CACHE_ARTICLE_HITS = "cache_article_hits";
 
     /**
      * 文章点击量缓存数
      */
-    public static Integer CACHE_ARTICLE_HITS_SAVE = 10;
+    public static final Integer CACHE_ARTICLE_HITS_SAVE = 10;
 
     /**
      * 访问量缓存key
      */
-    public static String CACHE_ROUTE_VISIT = "cache_route_hits";
+    public static final String CACHE_ROUTE_VISIT = "cache_route_hits";
 
     /**
      * 访问量缓存数
      */
-    public static Integer CACHE_ROUTE_VISIT_SAVE = 50;
+    public static final Integer CACHE_ROUTE_VISIT_SAVE = 50;
 
 
     /**
      * 网站设置缓存key
      */
-    public static String CACHE_SITESTATIC = "cache_sitestatic";
+    public static final String CACHE_SITESTATIC = "cache_sitestatic";
 
     /**
      * 网站默认title
      */
-    public static String SITESTATIC_DEFAULT_TITLE = "Fame博客";
+    public static final String SITESTATIC_DEFAULT_TITLE = "Fame博客";
 
     /**
      * 网站默认description
      */
-    public static String SITESTATIC_DEFAULT_DESCRIPTION = "Fame博客";
+    public static final String SITESTATIC_DEFAULT_DESCRIPTION = "Fame博客";
 
     /**
      * 网站默认keywords
      */
-    public static String SITESTATIC_DEFAULT_KEYWORDS = "Fame,blog,博客";
+    public static final String SITESTATIC_DEFAULT_KEYWORDS = "Fame,blog,博客";
 
 }

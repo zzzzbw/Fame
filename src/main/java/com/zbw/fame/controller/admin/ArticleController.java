@@ -1,10 +1,13 @@
 package com.zbw.fame.controller.admin;
 
+import com.github.pagehelper.Page;
 import com.zbw.fame.controller.BaseController;
+import com.zbw.fame.dto.Pagination;
 import com.zbw.fame.model.Articles;
 import com.zbw.fame.model.Users;
 import com.zbw.fame.service.ArticlesService;
 import com.zbw.fame.service.LogsService;
+import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.RestResponse;
 import com.zbw.fame.util.Types;
@@ -13,8 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * 后台文章管理 Controller
@@ -42,9 +43,10 @@ public class ArticleController extends BaseController {
      * @return
      */
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public RestResponse index(@RequestParam(required = false, defaultValue = "1") Integer page) {
-        List<Articles> articles = articlesService.getArticles(page);
-        return RestResponse.ok(articles);
+    public RestResponse index(@RequestParam(required = false, defaultValue = "1") Integer page,
+                              @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
+        Page<Articles> articles = articlesService.getArticles(page, limit);
+        return RestResponse.ok(new Pagination<Articles>(articles));
     }
 
     /**

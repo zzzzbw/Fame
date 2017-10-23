@@ -1,17 +1,18 @@
 package com.zbw.fame.controller.admin;
 
+import com.github.pagehelper.Page;
 import com.zbw.fame.controller.BaseController;
+import com.zbw.fame.dto.Pagination;
 import com.zbw.fame.model.Logs;
 import com.zbw.fame.service.LogsService;
 import com.zbw.fame.service.SiteService;
+import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * 网站信息 Controller
@@ -30,9 +31,10 @@ public class SiteController extends BaseController {
     private SiteService siteService;
 
     @RequestMapping(value = "/logs")
-    public RestResponse getLogs(@RequestParam(defaultValue = "1") Integer page) {
-        List<Logs> logs = logsService.getLogs(page);
-        return RestResponse.ok(logs);
+    public RestResponse getLogs(@RequestParam(defaultValue = "1") Integer page,
+                                @RequestParam(defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
+        Page<Logs> logs = logsService.getLogs(page, limit);
+        return RestResponse.ok(new Pagination<Logs>(logs));
     }
 
     /**
