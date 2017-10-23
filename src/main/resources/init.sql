@@ -95,3 +95,14 @@ INSERT INTO metas (name, type) VALUES ('New', 'category');
 
 INSERT INTO middles (a_id, m_id) VALUES (1, 1);
 INSERT INTO middles (a_id, m_id) VALUES (1, 2);
+
+INSERT INTO articles (title, created, modified, content, author_id, hits, tags, category, status, type)
+VALUES ('About', now(), now(), '# About me
+### Hello word
+这是关于我的页面
+
+* [Github](https://github.com/)
+* [知乎](https://www.zhihu.com/)
+
+### 也可以设置别的页面
+* 比如友链页面', 1, NULL, NULL, NULL, 'publish', 'page')

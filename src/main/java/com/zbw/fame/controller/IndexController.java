@@ -147,6 +147,22 @@ public class IndexController extends BaseController {
         return RestResponse.ok(archives);
     }
 
+    /**
+     * 自定义页面
+     *
+     * @param title
+     * @return
+     */
+    @RequestMapping(value = "/page/{title}", method = RequestMethod.GET)
+    public RestResponse page(@PathVariable String title) {
+        Articles page = articlesService.page(title);
+        if (null == page) {
+            return error_404();
+        }
+        transformContent(page);
+        return RestResponse.ok(page);
+    }
+
 
     /**
      * 文章内容转为html

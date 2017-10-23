@@ -129,6 +129,15 @@ public class ArticlesServiceImpl implements ArticlesService {
     }
 
     @Override
+    public Articles page(String title) {
+        Articles record = new Articles();
+        record.setTitle(title);
+        record.setType(Types.PAGE);
+        record.setStatus(Types.PUBLISH);
+        return articlesMapper.selectOne(record);
+    }
+
+    @Override
     public Articles getPage(Integer id) {
         Articles record = new Articles();
         record.setId(id);
@@ -162,7 +171,7 @@ public class ArticlesServiceImpl implements ArticlesService {
         page.setModified(new Date());
 
         if (null != page.getId()) {
-            articlesMapper.updateByPrimaryKey(page);
+            articlesMapper.updateByPrimaryKeySelective(page);
         } else {
             page.setCreated(new Date());
             page.setType(Types.PAGE);

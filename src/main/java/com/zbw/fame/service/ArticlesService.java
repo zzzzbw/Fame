@@ -23,6 +23,8 @@ public interface ArticlesService {
 
     boolean deleteArticle(Integer id);
 
+    Articles page(String title);
+
     Page<Articles> getPages(Integer page, Integer limit);
 
     Articles getPage(Integer id);

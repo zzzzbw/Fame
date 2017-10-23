@@ -98,13 +98,14 @@ public class FameInterceptor implements HandlerInterceptor {
      */
     private void updateClick(String url) {
         String route = url.split("/")[1];
-        if ("admin".equals(route)){
+        if ("admin".equals(route)) {
             return;
         }
         Integer chits = cache.get(FameConsts.CACHE_ROUTE_VISIT, route);
         chits = null == chits ? 1 : chits + 1;
         if (chits >= FameConsts.CACHE_ROUTE_VISIT_SAVE) {
             logsService.save(Types.LOG_ACTION_VISIT, chits.toString(), route + Types.LOG_MESSAGE_VISIT, Types.LOG_TYPE_VISIT);
+            cache.del(FameConsts.CACHE_ROUTE_VISIT, route);
         } else {
             cache.put(FameConsts.CACHE_ROUTE_VISIT, route, chits);
         }

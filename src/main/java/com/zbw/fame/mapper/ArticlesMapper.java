@@ -17,7 +17,7 @@ import java.util.List;
 public interface ArticlesMapper extends MyMapper<Articles> {
 
     @Select("SELECT * FROM fame.articles WHERE id IN (SELECT a_id FROM fame.middles WHERE m_id = #{metaId}) " +
-            "AND fame.articles.type = '" + Types.POST + "'")
+            "AND fame.articles.type = '" + Types.POST + "' order by created desc")
     List<Articles> selectByMetas(@Param("metaId") Integer metaId);
 
     @Select("SELECT count(*) FROM fame.articles WHERE id IN (SELECT a_id FROM fame.middles WHERE m_id = #{metaId}) " +
@@ -26,7 +26,7 @@ public interface ArticlesMapper extends MyMapper<Articles> {
 
     @Select("SELECT * FROM fame.articles WHERE id " +
             "IN (SELECT a_id FROM fame.middles WHERE m_id = #{metaId}) " +
-            "AND fame.articles.status = '" + Types.PUBLISH + "' AND fame.articles.type = '" + Types.POST + "'")
+            "AND fame.articles.status = '" + Types.PUBLISH + "' AND fame.articles.type = '" + Types.POST + "' order by created desc")
     List<Articles> selectPublishByMetas(@Param("metaId") Integer metaId);
 
     @Select("SELECT count(*) FROM fame.articles WHERE id " +
