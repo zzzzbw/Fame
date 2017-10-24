@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * 属性(标签和分类)管理 Controller
  *
- * @auther zbw
+ * @author zbw
  * @create 2017/8/28 23:16
  */
 @RestController

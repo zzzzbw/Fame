@@ -8,19 +8,19 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 数据缓存
  *
- * @auther zbw
+ * @author zbw
  * @create 2017/10/10 16:19
  */
 public class SystemCache {
 
     private static final int MAX_CACHE = 2048;
 
-    private static final SystemCache instance = new SystemCache();
+    private static final SystemCache INSTANCE = new SystemCache();
 
     private Map<String, Object> cache;
 
     public static SystemCache instance() {
-        return instance;
+        return INSTANCE;
     }
 
     private SystemCache() {

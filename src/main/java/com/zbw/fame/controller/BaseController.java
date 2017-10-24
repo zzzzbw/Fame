@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * 公共类 Controller
  *
- * @auther zbw
+ * @author zbw
  * @create 2017/7/8 10:25
  */
 public abstract class BaseController {
@@ -26,7 +26,7 @@ public abstract class BaseController {
         return FameUtil.getLoginUser();
     }
 
-    protected RestResponse error_404() {
+    protected RestResponse error404() {
         return RestResponse.fail(ErrorCode.NOT_FOUND.getCode(), ErrorCode.NOT_FOUND.getMsg());
     }
 }

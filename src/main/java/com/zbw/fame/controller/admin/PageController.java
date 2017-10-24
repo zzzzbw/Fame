@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * 自定义页面管理 Controller
  *
- * @auther zbw
+ * @author zbw
  * @create 2017/10/17 12:28
  */
 @RestController
@@ -54,7 +54,7 @@ public class PageController extends BaseController {
     public RestResponse showPage(@PathVariable Integer id) {
         Articles page = articlesService.getPage(id);
         if (null == page) {
-            return this.error_404();
+            return this.error404();
         }
         return RestResponse.ok(page);
     }

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 网站信息 Controller
  *
- * @auther zbw
+ * @author zbw
  * @create 2017/10/12 20:27
  */
 @RestController

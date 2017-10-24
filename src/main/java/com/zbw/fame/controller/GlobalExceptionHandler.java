@@ -20,12 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/**
- * 全局异常处理 Controller
- *
- * @auther zbw
- * @create 2017/8/30 12:25
- */
 
 /**
  * 常见异常处理并返回相应错误码
@@ -40,6 +34,12 @@ import java.io.IOException;
  * TypeMismatchException                   400 (Bad Request)
  * HttpMessageNotReadableException         400 (Bad Request)
  * MissingServletRequestParameterException 400 (Bad Request)
+ */
+/**
+ * 全局异常处理 Controller
+ *
+ * @author zbw
+ * @create 2017/8/30 12:25
  */
 @RestController
 @ControllerAdvice

@@ -22,7 +22,7 @@ import java.util.Set;
 /**
  * 属性 Service 实现类
  *
- * @auther zbw
+ * @author zbw
  * @create 2017/8/28 23:33
  */
 @Service("metasService")

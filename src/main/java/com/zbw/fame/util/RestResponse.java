@@ -3,7 +3,7 @@ package com.zbw.fame.util;
 /**
  * json通用返回类
  *
- * @auther zbw
+ * @author zbw
  * @create 2017/7/12 19:59
  */
 public class RestResponse<T> {

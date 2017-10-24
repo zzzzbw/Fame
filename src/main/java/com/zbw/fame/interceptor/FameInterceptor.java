@@ -20,7 +20,7 @@ import java.io.PrintWriter;
 /**
  * Fame 拦截器
  *
- * @auther zbw
+ * @author zbw
  * @create 2017/10/11 14:10
  */
 @Component
@@ -54,7 +54,8 @@ public class FameInterceptor implements HandlerInterceptor {
 
         logger.info("用户访问地址: {}, ip地址: {}", url, ip);
 
-        if (request.getMethod().toUpperCase().equals("GET")) {
+        final String getMethod = "GET";
+        if (getMethod.equals(request.getMethod().toUpperCase())) {
             this.updateClick(url);
         }
 
@@ -98,7 +99,8 @@ public class FameInterceptor implements HandlerInterceptor {
      */
     private void updateClick(String url) {
         String route = url.split("/")[1];
-        if ("admin".equals(route)) {
+        final String adminRoute = "admin";
+        if (adminRoute.equals(route)) {
             return;
         }
         Integer chits = cache.get(FameConsts.CACHE_ROUTE_VISIT, route);

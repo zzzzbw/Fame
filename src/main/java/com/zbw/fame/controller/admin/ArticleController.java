@@ -59,7 +59,7 @@ public class ArticleController extends BaseController {
     public RestResponse showArticle(@PathVariable Integer id) {
         Articles article = articlesService.get(id);
         if (null == article) {
-            return this.error_404();
+            return this.error404();
         }
         return RestResponse.ok(article);
     }

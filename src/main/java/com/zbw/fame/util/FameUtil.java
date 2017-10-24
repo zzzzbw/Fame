@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 /**
  * 公用工具类
  *
- * @auther zbw
+ * @author zbw
  * @create 2017/7/9 22:08
  */
 public class FameUtil {
@@ -62,13 +62,14 @@ public class FameUtil {
      */
     public static String getIp() {
         String ip = getRequest().getHeader("x-forwarded-for");
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        String unknown = "unknown";
+        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
             ip = getRequest().getHeader("Proxy-Client-IP");
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
             ip = getRequest().getHeader("WL-Proxy-Client-IP");
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
             ip = getRequest().getRemoteAddr();
         }
         return ip;

@@ -3,7 +3,7 @@ package com.zbw.fame.exception;
 /**
  * Tip 提示异常
  *
- * @auther zbw
+ * @author zbw
  * @create 2017/7/12 21:29
  */
 public class TipException extends RuntimeException{

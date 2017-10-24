@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 /**
  * 日志 Service 实现类
  *
- * @auther zbw
+ * @author zbw
  * @create 2017/10/11 10:42
  */
 @Service("logsService")

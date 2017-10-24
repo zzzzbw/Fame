@@ -3,18 +3,24 @@ package com.zbw.fame.dto;
 /**
  * 网站设置 Dto
  *
- * @auther zbw
+ * @author zbw
  * @create 2017/10/15 21:48
  */
 public class SiteStatic {
 
-    //网站title
+    /**
+     * 网站title
+     */
     private String title;
 
-    //网站描述
+    /**
+     * 网站描述
+     */
     private String description;
 
-    //网站keywords
+    /**
+     * 网站keywords
+     */
     private String keywords;
 
     public String getTitle() {

@@ -3,15 +3,19 @@ package com.zbw.fame.model;
 /**
  * 属性(分类和标签) Model
  *
- * @auther zbw
+ * @author zbw
  * @create 2017/8/28 23:04
  */
 public class Metas extends BaseEntity {
 
-    //属性名
+    /**
+     * 属性名
+     */
     private String name;
 
-    //属性类型
+    /**
+     * 属性类型
+     */
     private String type;
 
     public Metas() {

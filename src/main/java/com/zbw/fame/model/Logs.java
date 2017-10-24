@@ -5,30 +5,44 @@ import java.util.Date;
 /**
  * 日志 Model
  *
- * @auther zbw
+ * @author zbw
  * @create 2017/10/11 9:57
  */
 public class Logs extends BaseEntity {
 
-    // 操作动作
+    /**
+     * 操作动作
+     */
     private String action;
 
-    // 操作数据
+    /**
+     * 操作数据
+     */
     private String data;
 
-    // 操作信息
+    /**
+     * 操作信息
+     */
     private String message;
 
-    // 操作类型
+    /**
+     * 操作类型
+     */
     private String type;
 
-    // ip地址
+    /**
+     * ip地址
+     */
     private String ip;
 
-    // 操作人
+    /**
+     * 操作人
+     */
     private Integer userId;
 
-    // 操作时间
+    /**
+     * 操作时间
+     */
     private Date created;
 
     public String getAction() {

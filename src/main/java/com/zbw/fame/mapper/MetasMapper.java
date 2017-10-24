@@ -10,15 +10,27 @@ import java.util.List;
 /**
  * Metas Mapper
  *
- * @auther zbw
+ * @author zbw
  * @create 2017/8/28 23:40
  */
 public interface MetasMapper extends MyMapper<Metas> {
 
-
+    /**
+     * 根据文章id获取该文章下的属性
+     *
+     * @param articleId 文章id
+     * @param type      属性类型
+     * @return List<Metas>
+     */
     @Select("SELECT * FROM fame.metas WHERE type = #{type} AND id IN (SELECT m_id FROM fame.middles WHERE a_id = #{articleId})")
     List<Metas> selectByArticles(@Param("articleId") Integer articleId, @Param("type") String type);
 
+    /**
+     * 获取属性以及属性下的文章
+     *
+     * @param type 属性类型
+     * @return List<MetaDto>
+     */
     @Select("select * from fame.metas meta where meta.type = #{type}")
     @Results({
             @Result(id = true, column = "id", property = "id"),
@@ -29,6 +41,12 @@ public interface MetasMapper extends MyMapper<Metas> {
     })
     List<MetaDto> selectMetasDto(@Param("type") String type);
 
+    /**
+     * 获取属性以及属性下的已发布文章
+     *
+     * @param type 属性类型
+     * @return List<MetaDto>
+     */
     @Select("select * from fame.metas meta where meta.type = #{type}")
     @Results({
             @Result(id = true, column = "meta.id", property = "id"),
@@ -41,6 +59,12 @@ public interface MetasMapper extends MyMapper<Metas> {
     })
     List<MetaDto> selectMetasDtoPublish(@Param("type") String type);
 
+    /**
+     * 获取所有属性
+     *
+     * @param type 属性类型
+     * @return List<MetaDto>
+     */
     @Select("SELECT name, type ,count(*) as articleCount FROM fame.metas WHERE type = #{type} GROUP BY name")
     List<MetaDto> selectMetasDistinct(@Param("type") String type);
 

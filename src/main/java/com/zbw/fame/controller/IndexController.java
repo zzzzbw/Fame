@@ -64,7 +64,7 @@ public class IndexController extends BaseController {
     public RestResponse content(@PathVariable Integer id) {
         Articles article = articlesService.get(id);
         if (null == article || Types.DRAFT.equals(article.getStatus())) {
-            return this.error_404();
+            return this.error404();
         }
         this.transformContent(article);
         this.updateHits(article.getId(), article.getHits());
@@ -155,9 +155,9 @@ public class IndexController extends BaseController {
      */
     @RequestMapping(value = "/page/{title}", method = RequestMethod.GET)
     public RestResponse page(@PathVariable String title) {
-        Articles page = articlesService.page(title);
+        Articles page = articlesService.getPage(title);
         if (null == page) {
-            return error_404();
+            return error404();
         }
         transformContent(page);
         return RestResponse.ok(page);

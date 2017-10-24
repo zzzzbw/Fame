@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * 后台用户验证 Controller
  *
- * @auther zbw
+ * @author zbw
  * @create 2017/7/11 20:15
  */
 @RestController
@@ -29,7 +29,7 @@ public class AuthController extends BaseController {
 
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public RestResponse login(HttpServletResponse response, @RequestParam String username, @RequestParam String password, String remember_me) {
+    public RestResponse login(HttpServletResponse response, @RequestParam String username, @RequestParam String password, String rememberMe) {
         if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
             return RestResponse.fail("用户名和密码不能为空");
         }

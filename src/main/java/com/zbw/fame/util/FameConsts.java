@@ -3,7 +3,7 @@ package com.zbw.fame.util;
 /**
  * 常量工具类
  *
- * @auther zbw
+ * @author zbw
  * @create 2017/7/9 22:21
  */
 public class FameConsts {

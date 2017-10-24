@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Middles Mapper
  *
- * @auther zbw
+ * @author zbw
  * @create 2017/9/18 15:24
  */
 public interface MiddlesMapper extends MyMapper<Middles>{

@@ -11,8 +11,12 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+
 /**
- * Created by zbw on 2017/7/5.
+ * Spring boot
+ *
+ * @author zbw
+ * @create 2017/7/5.
  */
 @SpringBootApplication
 @MapperScan(basePackages = "com.zbw.fame.mapper")
@@ -25,7 +29,7 @@ public class Application {
 
     //springmvc配置
     @Bean
-    public WebMvcConfigurer WebMvcConfigurerAdapter() {
+    public WebMvcConfigurer webMvcConfigurerAdapter() {
 
         return new WebMvcConfigurerAdapter() {
 

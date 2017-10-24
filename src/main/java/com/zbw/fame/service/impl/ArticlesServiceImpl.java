@@ -122,6 +122,13 @@ public class ArticlesServiceImpl implements ArticlesService {
     }
 
     @Override
+    public Integer count() {
+        Articles record = new Articles();
+        record.setType(Types.POST);
+        return articlesMapper.selectCount(record);
+    }
+
+    @Override
     public Page<Articles> getPages(Integer page, Integer limit) {
         Articles record = new Articles();
         record.setType(Types.PAGE);
@@ -129,7 +136,7 @@ public class ArticlesServiceImpl implements ArticlesService {
     }
 
     @Override
-    public Articles page(String title) {
+    public Articles getPage(String title) {
         Articles record = new Articles();
         record.setTitle(title);
         record.setType(Types.PAGE);
@@ -194,11 +201,5 @@ public class ArticlesServiceImpl implements ArticlesService {
         return articlesMapper.deleteByPrimaryKey(id) > 0;
     }
 
-    @Override
-    public Integer count() {
-        Articles record = new Articles();
-        record.setType(Types.POST);
-        return articlesMapper.selectCount(record);
-    }
 
 }
