@@ -4,6 +4,7 @@ import com.zbw.fame.exception.TipException;
 import com.zbw.fame.mapper.UsersMapper;
 import com.zbw.fame.model.Users;
 import com.zbw.fame.service.UsersService;
+import com.zbw.fame.util.FameUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,10 +31,11 @@ public class UsersServiceImpl implements UsersService {
      */
     @Override
     public Users login(String username, String password) {
-        Users temp = new Users();
-        temp.setUsername(username);
-        temp.setPasswordMd5(password);
-        Users user = usersMapper.selectOne(temp);
+        Users record = new Users();
+        record.setUsername(username);
+        String md5 = FameUtil.getMd5(password);
+        record.setPasswordMd5(md5);
+        Users user = usersMapper.selectOne(record);
         if (user == null) {
             throw new TipException("用户名或者密码错误");
         }
@@ -53,12 +55,12 @@ public class UsersServiceImpl implements UsersService {
             throw new TipException("该用户名不存在");
         }
 
-        if (!user.getPasswordMd5().equals(oldPassword)) {
+        if (!user.getPasswordMd5().equals(FameUtil.getMd5(oldPassword))) {
             throw new TipException("原密码错误");
         }
 
-        user.setPasswordMd5(newPassword);
-        int a=usersMapper.updateByPrimaryKey(user);
+        user.setPasswordMd5(FameUtil.getMd5(newPassword));
+        int a = usersMapper.updateByPrimaryKey(user);
         return a > 0;
     }
 }

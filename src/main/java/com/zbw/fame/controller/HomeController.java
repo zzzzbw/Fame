@@ -28,9 +28,9 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("")
-public class IndexController extends BaseController {
+public class HomeController extends BaseController {
 
-    private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
+    private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
     @Autowired
     private ArticlesService articlesService;
@@ -45,7 +45,7 @@ public class IndexController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/article", method = RequestMethod.GET)
-    public RestResponse index(@RequestParam(required = false, defaultValue = "1") Integer page,
+    public RestResponse home(@RequestParam(required = false, defaultValue = "1") Integer page,
                               @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
         Page<Articles> articles = articlesService.getContents(page, limit);
         for (Articles a : articles) {

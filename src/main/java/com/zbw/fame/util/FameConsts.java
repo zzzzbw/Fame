@@ -8,7 +8,15 @@ package com.zbw.fame.util;
  */
 public class FameConsts {
 
+    /**
+     * 登陆用户session key
+     */
     public static final String USER_SESSION_KEY = "login_user";
+
+    /**
+     * md5加密盐值
+     */
+    public static final String MD5_SLAT = "riopwhjrv123bnopiw234q2ec";
 
     /**
      * 默认分页大小

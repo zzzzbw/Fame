@@ -2,6 +2,7 @@ package com.zbw.fame.util;
 
 import com.zbw.fame.model.Users;
 import org.pegdown.PegDownProcessor;
+import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -73,6 +74,17 @@ public class FameUtil {
             ip = getRequest().getRemoteAddr();
         }
         return ip;
+    }
+
+    /**
+     * 获取字符串md5值(加盐)
+     *
+     * @param str
+     * @return
+     */
+    public static String getMd5(String str) {
+        String base = str + FameConsts.MD5_SLAT;
+        return DigestUtils.md5DigestAsHex(base.getBytes());
     }
 
     /**
