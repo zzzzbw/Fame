@@ -40,15 +40,6 @@ public class FameInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        // 要设置跨域,不然拦截器会把跨域信息覆盖掉
-        if (request.getHeader(HttpHeaders.ORIGIN) != null) {
-            response.addHeader("Access-Control-Allow-Origin", "http://localhost:8010");
-            response.addHeader("Access-Control-Allow-Credentials", "true");
-            response.addHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT, HEAD");
-            response.addHeader("Access-Control-Allow-Headers", "Content-Type");
-            response.addHeader("Access-Control-Max-Age", "3600");
-        }
-
         String url = request.getRequestURI();
         String ip = FameUtil.getIp();
 
@@ -71,6 +62,14 @@ public class FameInterceptor implements HandlerInterceptor {
             if (auth) {
                 Users user = (Users) request.getSession().getAttribute(FameConsts.USER_SESSION_KEY);
                 if (null == user) {
+                    // 要设置跨域，不然输出信息没有
+                    if (request.getHeader(HttpHeaders.ORIGIN) != null) {
+                        response.setHeader("Access-Control-Allow-Origin",request.getHeader("Origin"));
+                        response.setHeader("Access-Control-Allow-Credentials", "true");
+                        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+                        response.setHeader("Access-Control-Max-Age", "3600");
+                        response.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+                    }
                     PrintWriter out = response.getWriter();
                     ObjectMapper mapper = new ObjectMapper();
                     out.print(mapper.writeValueAsString(RestResponse.fail(ErrorCode.NOT_LOGIN.getCode(), ErrorCode.NOT_LOGIN.getMsg())));

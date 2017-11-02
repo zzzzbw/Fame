@@ -39,7 +39,7 @@ public class Application {
             //跨域请求配置
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("http://localhost:8010");
+                registry.addMapping("/**").allowedOrigins("*");
                 registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "DELETE");
             }
 
