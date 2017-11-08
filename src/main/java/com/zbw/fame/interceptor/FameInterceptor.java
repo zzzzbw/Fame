@@ -1,6 +1,5 @@
 package com.zbw.fame.interceptor;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zbw.fame.model.Users;
 import com.zbw.fame.service.LogsService;
 import com.zbw.fame.util.*;
@@ -15,7 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.PrintWriter;
 
 /**
  * Fame 拦截器
@@ -39,7 +37,6 @@ public class FameInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-
         String url = request.getRequestURI();
         String ip = FameUtil.getIp();
 
@@ -64,16 +61,13 @@ public class FameInterceptor implements HandlerInterceptor {
                 if (null == user) {
                     // 要设置跨域，不然输出信息没有
                     if (request.getHeader(HttpHeaders.ORIGIN) != null) {
-                        response.setHeader("Access-Control-Allow-Origin",request.getHeader("Origin"));
-                        response.setHeader("Access-Control-Allow-Credentials", "true");
-                        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
-                        response.setHeader("Access-Control-Max-Age", "3600");
-                        response.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+                        response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, request.getHeader(HttpHeaders.ORIGIN));
+                        response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
+                        response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, "POST, GET, OPTIONS, DELETE");
+                        response.setHeader(HttpHeaders.ACCESS_CONTROL_MAX_AGE, "3600");
+                        response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "x-requested-with");
                     }
-                    PrintWriter out = response.getWriter();
-                    ObjectMapper mapper = new ObjectMapper();
-                    out.print(mapper.writeValueAsString(RestResponse.fail(ErrorCode.NOT_LOGIN.getCode(), ErrorCode.NOT_LOGIN.getMsg())));
-                    out.flush();
+                    response.setStatus(ErrorCode.NOT_LOGIN.getCode());
                     return false;
                 }
             }
@@ -97,7 +91,7 @@ public class FameInterceptor implements HandlerInterceptor {
      * @param url
      */
     private void updateClick(String url) {
-        String route = url.split("/")[1];
+        String route = url.split("/")[2];
         final String adminRoute = "admin";
         if (adminRoute.equals(route)) {
             return;

@@ -51,7 +51,7 @@ CREATE TABLE logs (
 );
 
 
-INSERT INTO users (username, password_md5, email, screen_name) VALUES ('zbw', '3e6693e83d186225b85b09e71c974d2d', '920049380@qq.com', 'zzzzbw');
+INSERT INTO users (username, password_md5, email, screen_name) VALUES ('fame', '3e6693e83d186225b85b09e71c974d2d', '', 'admin');
 
 INSERT INTO articles (title, created, modified, content, author_id, hits, tags, category, status, type)
 VALUES ('Hello world', now(), now(), 'Welcome to [Hexo](https://hexo.io/)! This is your very first post. Check [documentation](https://hexo.io/docs/) for more info. If you get any problems when using Hexo, you can find the answer in [troubleshooting](https://hexo.io/docs/troubleshooting.html) or you can ask me on [GitHub](https://github.com/hexojs/hexo/issues).
@@ -105,4 +105,4 @@ VALUES ('About', now(), now(), '# About me
 * [知乎](https://www.zhihu.com/)
 
 ### 也可以设置别的页面
-* 比如友链页面', 1, NULL, NULL, NULL, 'publish', 'page')
+* 比如友链页面', 1, NULL, NULL, NULL, 'publish', 'page');

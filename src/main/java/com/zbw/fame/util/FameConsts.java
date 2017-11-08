@@ -1,5 +1,7 @@
 package com.zbw.fame.util;
 
+import com.zbw.fame.exception.TipException;
+
 /**
  * 常量工具类
  *
@@ -7,6 +9,13 @@ package com.zbw.fame.util;
  * @create 2017/7/9 22:21
  */
 public class FameConsts {
+
+    /**
+     * 禁止实例化
+     */
+    private FameConsts() {
+        throw new TipException("Constructor not allow");
+    }
 
     /**
      * 登陆用户session key

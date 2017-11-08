@@ -27,7 +27,7 @@ import java.util.List;
  * @create 2017/7/15 18:29
  */
 @RestController
-@RequestMapping("")
+@RequestMapping("/api")
 public class HomeController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(HomeController.class);

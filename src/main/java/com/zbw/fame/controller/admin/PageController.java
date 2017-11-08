@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
  * @create 2017/10/17 12:28
  */
 @RestController
-@RequestMapping("/admin/page")
+@RequestMapping("/api/admin/page")
 public class PageController extends BaseController {
 
     @Autowired

@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
  * @create 2017/7/11 19:52
  */
 @RestController
-@RequestMapping("/admin/article")
+@RequestMapping("/api/admin/article")
 public class ArticleController extends BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(ArticleController.class);

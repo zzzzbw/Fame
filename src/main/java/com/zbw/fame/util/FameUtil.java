@@ -1,5 +1,6 @@
 package com.zbw.fame.util;
 
+import com.zbw.fame.exception.TipException;
 import com.zbw.fame.model.Users;
 import org.pegdown.PegDownProcessor;
 import org.springframework.util.DigestUtils;
@@ -17,6 +18,14 @@ import javax.servlet.http.HttpSession;
  * @create 2017/7/9 22:08
  */
 public class FameUtil {
+
+    /**
+     * 禁止实例化
+     */
+    private FameUtil() {
+        throw new TipException("Constructor not allow");
+    }
+
 
     /**
      * 获取session中的users对象

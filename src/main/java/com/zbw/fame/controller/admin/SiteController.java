@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @create 2017/10/12 20:27
  */
 @RestController
-@RequestMapping("/admin/site")
+@RequestMapping("/api/admin/site")
 public class SiteController extends BaseController {
 
     @Autowired

@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
  * @create 2017/7/11 20:15
  */
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/api/admin")
 public class AuthController extends BaseController {
 
     @Autowired
