@@ -7,6 +7,7 @@ import com.zbw.fame.model.Logs;
 import com.zbw.fame.service.LogsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 日志 Service 实现类

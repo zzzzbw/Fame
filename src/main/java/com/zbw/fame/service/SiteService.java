@@ -11,13 +11,6 @@ import com.zbw.fame.dto.SiteStatic;
 public interface SiteService {
 
     /**
-     * 获取网站访问量
-     *
-     * @return Integer
-     */
-    Integer getVisit();
-
-    /**
      * 获取网站静态属性
      *
      * @return SiteStatic

@@ -1,11 +1,11 @@
 package com.zbw.fame.interceptor;
 
 import com.zbw.fame.model.Users;
-import com.zbw.fame.service.LogsService;
-import com.zbw.fame.util.*;
+import com.zbw.fame.util.ErrorCode;
+import com.zbw.fame.util.FameConsts;
+import com.zbw.fame.util.FameUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -30,22 +30,12 @@ public class FameInterceptor implements HandlerInterceptor {
 
     private static final Logger logger = LoggerFactory.getLogger(FameInterceptor.class);
 
-    private SystemCache cache = SystemCache.instance();
-
-    @Autowired
-    private LogsService logsService;
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String url = request.getRequestURI();
         String ip = FameUtil.getIp();
 
         logger.info("用户访问地址: {}, ip地址: {}", url, ip);
-
-        final String getMethod = "GET";
-        if (getMethod.equals(request.getMethod().toUpperCase())) {
-            this.updateClick(url);
-        }
 
         if (url.contains(AUTH_URIS)) {
             boolean auth = true;
@@ -83,26 +73,5 @@ public class FameInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception e) throws Exception {
 
-    }
-
-    /**
-     * 更新访问量
-     *
-     * @param url
-     */
-    private void updateClick(String url) {
-        String route = url.split("/")[2];
-        final String adminRoute = "admin";
-        if (adminRoute.equals(route)) {
-            return;
-        }
-        Integer chits = cache.get(FameConsts.CACHE_ROUTE_VISIT, route);
-        chits = null == chits ? 1 : chits + 1;
-        if (chits >= FameConsts.CACHE_ROUTE_VISIT_SAVE) {
-            logsService.save(Types.LOG_ACTION_VISIT, chits.toString(), route + Types.LOG_MESSAGE_VISIT, Types.LOG_TYPE_VISIT);
-            cache.del(FameConsts.CACHE_ROUTE_VISIT, route);
-        } else {
-            cache.put(FameConsts.CACHE_ROUTE_VISIT, route, chits);
-        }
     }
 }

@@ -38,17 +38,6 @@ public class SiteController extends BaseController {
     }
 
     /**
-     * 获取网站访问量
-     *
-     * @return
-     */
-    @RequestMapping(value = "/visit", method = RequestMethod.GET)
-    public RestResponse visit() {
-        Integer visit = siteService.getVisit();
-        return RestResponse.ok(visit);
-    }
-
-    /**
      * 获取网站设置缓存
      *
      * @return

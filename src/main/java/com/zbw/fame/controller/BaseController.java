@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
  * @create 2017/7/8 10:25
  */
 public abstract class BaseController {
+
     @Autowired
     protected HttpServletRequest request;
 

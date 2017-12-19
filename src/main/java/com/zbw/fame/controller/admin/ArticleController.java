@@ -11,8 +11,6 @@ import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.RestResponse;
 import com.zbw.fame.util.Types;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +24,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/admin/article")
 public class ArticleController extends BaseController {
-
-    private static final Logger logger = LoggerFactory.getLogger(ArticleController.class);
 
     @Autowired
     private ArticlesService articlesService;

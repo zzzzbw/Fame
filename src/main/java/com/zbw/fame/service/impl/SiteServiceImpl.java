@@ -2,15 +2,11 @@ package com.zbw.fame.service.impl;
 
 import com.zbw.fame.dto.SiteStatic;
 import com.zbw.fame.mapper.LogsMapper;
-import com.zbw.fame.model.Logs;
 import com.zbw.fame.service.SiteService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.SystemCache;
-import com.zbw.fame.util.Types;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * 网站设置 Service 实现类
@@ -23,23 +19,6 @@ public class SiteServiceImpl implements SiteService {
 
     @Autowired
     private LogsMapper logsMapper;
-
-
-    @Override
-    public Integer getVisit() {
-        Logs condition = new Logs();
-        condition.setType(Types.LOG_TYPE_VISIT);
-        List<Logs> logs = logsMapper.select(condition);
-        Integer visit = 0;
-        try {
-            for (Logs log : logs) {
-                visit += Integer.parseInt(log.getData());
-            }
-        } catch (NumberFormatException e) {
-            visit = logs.size() * FameConsts.CACHE_ROUTE_VISIT_SAVE;
-        }
-        return visit;
-    }
 
     @Override
     public SiteStatic getSiteStatic() {
