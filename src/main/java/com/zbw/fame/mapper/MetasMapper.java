@@ -34,8 +34,8 @@ public interface MetasMapper extends MyMapper<Metas> {
     @Select("select * from fame.metas meta where meta.type = #{type}")
     @Results({
             @Result(id = true, column = "id", property = "id"),
-            @Result(column = "meta.name", property = "name"),
-            @Result(column = "meta.type", property = "type"),
+            @Result(column = "name", property = "name"),
+            @Result(column = "type", property = "type"),
             @Result(column = "id", property = "count",
                     one = @One(select = "com.zbw.fame.mapper.ArticlesMapper.selectCountByMetas"))
     })
@@ -49,9 +49,9 @@ public interface MetasMapper extends MyMapper<Metas> {
      */
     @Select("select * from fame.metas meta where meta.type = #{type}")
     @Results({
-            @Result(id = true, column = "meta.id", property = "id"),
-            @Result(column = "meta.name", property = "name"),
-            @Result(column = "meta.type", property = "type"),
+            @Result(id = true, column = "id", property = "id"),
+            @Result(column = "name", property = "name"),
+            @Result(column = "type", property = "type"),
             @Result(column = "id", property = "count",
                     one = @One(select = "com.zbw.fame.mapper.ArticlesMapper.selectPublishCountByMetas")),
             @Result(column = "id", property = "articles",
