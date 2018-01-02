@@ -24,7 +24,7 @@ public class MetaController extends BaseController {
      *
      * @return
      */
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    @GetMapping
     public RestResponse getAll(@RequestParam String type) {
         return RestResponse.ok(metasService.getMetaDto(type));
     }
@@ -35,7 +35,7 @@ public class MetaController extends BaseController {
      * @param name
      * @return
      */
-    @RequestMapping(value = "", method = RequestMethod.DELETE)
+    @DeleteMapping
     public RestResponse deleteMeta(@RequestParam String name, @RequestParam String type) {
         if (metasService.deleteMeta(name, type)) {
             return RestResponse.ok();
@@ -49,7 +49,7 @@ public class MetaController extends BaseController {
      * @param name
      * @return
      */
-    @RequestMapping(value = "", method = RequestMethod.POST)
+    @PostMapping
     public RestResponse saveMeta(@RequestParam String name, @RequestParam String type) {
         if (metasService.saveMeta(name, type)) {
             return RestResponse.ok();
@@ -65,7 +65,7 @@ public class MetaController extends BaseController {
      * @param type
      * @return
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+    @PostMapping("{id}")
     public RestResponse updateMeta(@PathVariable Integer id, @RequestParam String name, @RequestParam String type) {
         if (metasService.updateMeta(id, name, type)) {
             return RestResponse.ok();

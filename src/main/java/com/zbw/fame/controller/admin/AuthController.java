@@ -7,10 +7,7 @@ import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -27,8 +24,7 @@ public class AuthController extends BaseController {
     @Autowired
     private UsersService usersService;
 
-
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @PostMapping("login")
     public RestResponse login(HttpServletResponse response, @RequestParam String username, @RequestParam String password, String rememberMe) {
         if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
             return RestResponse.fail("用户名和密码不能为空");
@@ -39,7 +35,7 @@ public class AuthController extends BaseController {
         return RestResponse.ok();
     }
 
-    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    @PostMapping("logout")
     public RestResponse logout() {
         Users user = this.user();
         if (null == user) {
@@ -50,7 +46,7 @@ public class AuthController extends BaseController {
         return RestResponse.ok();
     }
 
-    @RequestMapping(value = "/reset", method = RequestMethod.POST)
+    @PostMapping("reset")
     public RestResponse resetPassword(@RequestParam String username, @RequestParam String oldPassword, @RequestParam String newPassword) {
         if (!username.equals(this.user().getUsername())) {
             return RestResponse.fail("用户名与登陆的不符合");
@@ -60,7 +56,7 @@ public class AuthController extends BaseController {
         return RestResponse.ok(result);
     }
 
-    @RequestMapping(value = "/username", method = RequestMethod.GET)
+    @GetMapping("username")
     public RestResponse username() {
         Users user = this.user();
         if (null == user) {

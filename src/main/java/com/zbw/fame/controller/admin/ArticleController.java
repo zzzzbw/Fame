@@ -38,7 +38,7 @@ public class ArticleController extends BaseController {
      * @param page
      * @return
      */
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    @GetMapping
     public RestResponse index(@RequestParam(required = false, defaultValue = "1") Integer page,
                               @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
         Page<Articles> articles = articlesService.getArticles(page, limit);
@@ -51,7 +51,7 @@ public class ArticleController extends BaseController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/{id}")
+    @GetMapping("{id}")
     public RestResponse showArticle(@PathVariable Integer id) {
         Articles article = articlesService.get(id);
         if (null == article) {
@@ -72,7 +72,7 @@ public class ArticleController extends BaseController {
      * @param allowComment
      * @return
      */
-    @RequestMapping(value = "", method = RequestMethod.POST)
+    @PostMapping
     public RestResponse saveArticle(@RequestParam(value = "id", required = false) Integer id,
                                     @RequestParam(value = "title") String title,
                                     @RequestParam(value = "content") String content,
@@ -105,7 +105,7 @@ public class ArticleController extends BaseController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @DeleteMapping("{id}")
     public RestResponse deleteArticle(@PathVariable Integer id) {
         if (articlesService.deleteArticle(id)) {
             logsService.save(Types.LOG_ACTION_DELETE, "id:" + id, Types.LOG_MESSAGE_DELETE_ARTICLE, Types.LOG_TYPE_OPERATE, FameUtil.getIp());
@@ -115,7 +115,7 @@ public class ArticleController extends BaseController {
         }
     }
 
-    @RequestMapping(value = "/count", method = RequestMethod.GET)
+    @GetMapping("count")
     public RestResponse count() {
         return RestResponse.ok(articlesService.count());
     }

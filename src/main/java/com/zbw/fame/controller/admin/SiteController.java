@@ -9,10 +9,7 @@ import com.zbw.fame.service.SiteService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 网站信息 Controller
@@ -30,7 +27,7 @@ public class SiteController extends BaseController {
     @Autowired
     private SiteService siteService;
 
-    @RequestMapping(value = "/logs")
+    @GetMapping("logs")
     public RestResponse getLogs(@RequestParam(defaultValue = "1") Integer page,
                                 @RequestParam(defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
         Page<Logs> logs = logsService.getLogs(page, limit);
@@ -42,7 +39,7 @@ public class SiteController extends BaseController {
      *
      * @return
      */
-    @RequestMapping(value = "/static", method = RequestMethod.GET)
+    @GetMapping("static")
     public RestResponse getSiteStatic() {
         return RestResponse.ok(siteService.getSiteStatic());
     }
@@ -55,7 +52,7 @@ public class SiteController extends BaseController {
      * @param keywords
      * @return
      */
-    @RequestMapping(value = "/static", method = RequestMethod.POST)
+    @PostMapping("static")
     public RestResponse getSiteStatic(@RequestParam String title, @RequestParam String description, @RequestParam String keywords) {
         siteService.saveSiteStatic(title, description, keywords);
         return RestResponse.ok();

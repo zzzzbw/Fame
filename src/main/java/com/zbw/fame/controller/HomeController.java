@@ -40,7 +40,7 @@ public class HomeController extends BaseController {
      * @param page
      * @return
      */
-    @RequestMapping(value = "/article", method = RequestMethod.GET)
+    @GetMapping("article")
     public RestResponse home(@RequestParam(required = false, defaultValue = "1") Integer page,
                               @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
         Page<Articles> articles = articlesService.getContents(page, limit);
@@ -56,7 +56,7 @@ public class HomeController extends BaseController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/article/{id}", method = RequestMethod.GET)
+    @GetMapping("article/{id}")
     public RestResponse content(@PathVariable Integer id) {
         Articles article = articlesService.get(id);
         if (null == article || Types.DRAFT.equals(article.getStatus())) {
@@ -93,7 +93,7 @@ public class HomeController extends BaseController {
      *
      * @return
      */
-    @RequestMapping(value = "/tag", method = RequestMethod.GET)
+    @GetMapping("tag")
     public RestResponse tag() {
         List<MetaDto> metaDtos = metasService.getMetaDtos(Types.TAG);
         return RestResponse.ok(metaDtos);
@@ -104,7 +104,7 @@ public class HomeController extends BaseController {
      *
      * @return
      */
-    @RequestMapping(value = "/category", method = RequestMethod.GET)
+    @GetMapping("/category")
     public RestResponse category() {
         List<MetaDto> metaDtos = metasService.getMetaDtos(Types.CATEGORY);
         return RestResponse.ok(metaDtos);
@@ -115,7 +115,7 @@ public class HomeController extends BaseController {
      *
      * @return
      */
-    @RequestMapping(value = "/archive", method = RequestMethod.GET)
+    @GetMapping("archive")
     public RestResponse archive() {
         Integer maxLimit = 9999;
         List<Articles> articles = articlesService.getContents(1, maxLimit);
@@ -149,7 +149,7 @@ public class HomeController extends BaseController {
      * @param title
      * @return
      */
-    @RequestMapping(value = "/page/{title}", method = RequestMethod.GET)
+    @GetMapping("page/{title}")
     public RestResponse page(@PathVariable String title) {
         Articles page = articlesService.getPage(title);
         if (null == page) {
