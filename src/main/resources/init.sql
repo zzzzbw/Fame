@@ -54,41 +54,16 @@ CREATE TABLE logs (
 INSERT INTO users (username, password_md5, email, screen_name) VALUES ('fame', '3e6693e83d186225b85b09e71c974d2d', '', 'admin');
 
 INSERT INTO articles (title, created, modified, content, author_id, hits, tags, category, status, type)
-VALUES ('Hello world', now(), now(), 'Welcome to [Hexo](https://hexo.io/)! This is your very first post. Check [documentation](https://hexo.io/docs/) for more info. If you get any problems when using Hexo, you can find the answer in [troubleshooting](https://hexo.io/docs/troubleshooting.html) or you can ask me on [GitHub](https://github.com/hexojs/hexo/issues).
+VALUES ('Hello world', now(), now(), '
+欢迎使用[Fame](https://github.com/zzzzbw/Fame)! 这是你的第一篇博客。快点来写点什么吧
 
-## Quick Start
-
-### Create a new post
-
-``` bash
-$ hexo new "My New Post"
-```
-<!--read more-->
-More info: [Writing](https://hexo.io/docs/writing.html)
-
-### Run server
-
-``` bash
-$ hexo server
+```java
+public static void main(Stringp[] args){
+    System.out.println("Hello world");
+}
 ```
 
-More info: [Server](https://hexo.io/docs/server.html)
-
-### Generate static files
-
-``` bash
-$ hexo generate
-```
-
-More info: [Generating](https://hexo.io/docs/generating.html)
-
-### Deploy to remote sites
-
-``` bash
-$ hexo deploy
-```
-
-More info: [Deployment](https://hexo.io/docs/deployment.html)', 1, 0, 'First', 'New', 'publish', 'post');
+> 想要了解更多详细信息，可以查看[文档](https://github.com/zzzzbw/Fame/blob/master/README.md)。', 1, 0, 'First', 'New', 'publish', 'post');
 
 INSERT INTO metas (name, type) VALUES ('First', 'tag');
 INSERT INTO metas (name, type) VALUES ('New', 'category');
