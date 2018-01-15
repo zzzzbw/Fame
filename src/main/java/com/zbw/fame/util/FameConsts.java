@@ -52,6 +52,26 @@ public class FameConsts {
      */
     public static final String PREVIEW_FLAG = "<!--read more-->";
 
+    /**
+     * 评论最大字数
+     */
+    public static final Integer MAX_COMMENT_CONTENT_COUNT = 1000;
+
+    /**
+     * 评论名称最大字数
+     */
+    public static final Integer MAX_COMMENT_NAME_COUNT = 255;
+
+    /**
+     * 评论邮件最大字数
+     */
+    public static final Integer MAX_COMMENT_EMAIL_COUNT = 255;
+
+    /**
+     * 评论网址最大字数
+     */
+    public static final Integer MAX_COMMENT_WEBSITE_COUNT = 255;
+
 
     /**
      * 文章缓存key

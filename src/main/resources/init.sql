@@ -8,7 +8,7 @@ CREATE TABLE users (
   password_md5 VARCHAR(45)     NOT NULL,
   email        VARCHAR(45),
   screen_name  VARCHAR(45),
-  created      TIMESTAMP,
+  created      TIMESTAMP       NOT NULL DEFAULT current_timestamp,
   logged       TIMESTAMP       NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp
 );
 
@@ -25,6 +25,21 @@ CREATE TABLE articles (
   status        VARCHAR(32),
   type          VARCHAR(32),
   allow_comment BOOLEAN
+);
+
+CREATE TABLE comments (
+  id         INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  article_id INT             NOT NULL,
+  p_id       INT,
+  content    TEXT            NOT NULL,
+  name       VARCHAR(255),
+  email      VARCHAR(255),
+  website    VARCHAR(255),
+  agree      INT             NOT NULL DEFAULT 0,
+  disagree   INT             NOT NULL DEFAULT 0,
+  ip         VARCHAR(255),
+  agent      VARCHAR(255),
+  created    TIMESTAMP       NOT NULL DEFAULT current_timestamp
 );
 
 CREATE TABLE metas (
@@ -51,7 +66,8 @@ CREATE TABLE logs (
 );
 
 
-INSERT INTO users (username, password_md5, email, screen_name) VALUES ('fame', '3e6693e83d186225b85b09e71c974d2d', '', 'admin');
+INSERT INTO users (username, password_md5, email, screen_name)
+VALUES ('fame', '3e6693e83d186225b85b09e71c974d2d', '', 'admin');
 
 INSERT INTO articles (title, created, modified, content, author_id, hits, tags, category, status, type)
 VALUES ('Hello world', now(), now(), '
@@ -64,6 +80,9 @@ public static void main(Stringp[] args){
 ```
 
 > 想要了解更多详细信息，可以查看[文档](https://github.com/zzzzbw/Fame/blob/master/README.md)。', 1, 0, 'First', 'New', 'publish', 'post');
+
+INSERT INTO comments (article_id, content, name, email, website, agree, disagree, ip, agent) VALUES ('1', '## 测试评论
+这是我的网址[Fame](http://zzzzbw.cn)', 'zzzzbw', '920049380@qq.com', 'http://zzzzbw.cn', '1', '0', '0.0.0.1', '');
 
 INSERT INTO metas (name, type) VALUES ('First', 'tag');
 INSERT INTO metas (name, type) VALUES ('New', 'category');

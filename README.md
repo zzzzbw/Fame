@@ -1,5 +1,7 @@
 ## Fame 博客
 
+![logo](https://zzzzbw.github.io/Fame/images/Fame_logo.png)
+
 一个基于Spring Boot开发的博客后端。该项目前端：[Fame-default](https://github.com/zzzzbw/Fame-default)
 
 演示站点：http://zzzzbw.cn

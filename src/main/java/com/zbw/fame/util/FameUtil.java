@@ -3,6 +3,8 @@ package com.zbw.fame.util;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.model.Users;
 import org.pegdown.PegDownProcessor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpRequest;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -83,6 +85,15 @@ public class FameUtil {
             ip = getRequest().getRemoteAddr();
         }
         return ip;
+    }
+
+    /**
+     * 获取agent
+     * @return
+     */
+    public static String getAgent() {
+        return getRequest().getHeader(HttpHeaders.USER_AGENT);
+
     }
 
     /**

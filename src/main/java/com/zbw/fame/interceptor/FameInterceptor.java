@@ -2,7 +2,6 @@ package com.zbw.fame.interceptor;
 
 import com.zbw.fame.model.Users;
 import com.zbw.fame.util.ErrorCode;
-import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +25,7 @@ public class FameInterceptor implements HandlerInterceptor {
 
     private static final String AUTH_URIS = "/admin";
 
-    private static final String[] IGNORE_URIS = {"/admin/login"};
+    private static final String[] IGNORE_URIS = {"/admin/login", "/admin/logout"};
 
     private static final Logger logger = LoggerFactory.getLogger(FameInterceptor.class);
 
@@ -35,7 +34,7 @@ public class FameInterceptor implements HandlerInterceptor {
         String url = request.getRequestURI();
         String ip = FameUtil.getIp();
 
-        logger.info("用户访问地址: {}, ip地址: {}", url, ip);
+        logger.info("用户访问地址: {}, Http类型: {}, ip地址: {}", url, request.getMethod(), ip);
 
         if (url.contains(AUTH_URIS)) {
             boolean auth = true;
@@ -47,7 +46,7 @@ public class FameInterceptor implements HandlerInterceptor {
             }
             //登录拦截
             if (auth) {
-                Users user = (Users) request.getSession().getAttribute(FameConsts.USER_SESSION_KEY);
+                Users user = FameUtil.getLoginUser();
                 if (null == user) {
                     // 要设置跨域，不然输出信息没有
                     if (request.getHeader(HttpHeaders.ORIGIN) != null) {

@@ -5,7 +5,9 @@ import com.zbw.fame.dto.Archives;
 import com.zbw.fame.dto.MetaDto;
 import com.zbw.fame.dto.Pagination;
 import com.zbw.fame.model.Articles;
+import com.zbw.fame.model.Comments;
 import com.zbw.fame.service.ArticlesService;
+import com.zbw.fame.service.CommentsService;
 import com.zbw.fame.service.MetasService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
@@ -34,6 +36,9 @@ public class HomeController extends BaseController {
     @Autowired
     private MetasService metasService;
 
+    @Autowired
+    private CommentsService commentsService;
+
     /**
      * 文章列表
      *
@@ -42,7 +47,7 @@ public class HomeController extends BaseController {
      */
     @GetMapping("article")
     public RestResponse home(@RequestParam(required = false, defaultValue = "1") Integer page,
-                              @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
+                             @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
         Page<Articles> articles = articlesService.getContents(page, limit);
         for (Articles a : articles) {
             this.transformPreView(a);
@@ -157,6 +162,65 @@ public class HomeController extends BaseController {
         }
         transformContent(page);
         return RestResponse.ok(page);
+    }
+
+    /**
+     * 获取文章的评论
+     *
+     * @param articleId
+     * @param page
+     * @param limit
+     * @return
+     */
+    @GetMapping("comment")
+    public RestResponse getArticleComment(@RequestParam Integer articleId, @RequestParam(required = false, defaultValue = "1") Integer page,
+                                          @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
+        Page<Comments> comments = commentsService.getCommentsByArticleId(articleId, page, limit);
+        for (Comments comment : comments) {
+            comment.setContent(FameUtil.mdToHtml(comment.getContent()));
+        }
+        return RestResponse.ok(new Pagination<Comments>(comments));
+    }
+
+
+    /**
+     * 发表评论
+     *
+     * @param articleId
+     * @param pId
+     * @param content
+     * @param name
+     * @param website
+     * @return
+     */
+    @PostMapping("comment")
+    public RestResponse postComment(@RequestParam Integer articleId, @RequestParam(required = false) Integer pId,
+                                    @RequestParam String content, @RequestParam String name,
+                                    @RequestParam(required = false) String email, @RequestParam(required = false) String website) {
+        Comments comments = new Comments();
+        comments.setArticleId(articleId);
+        comments.setpId(pId);
+        comments.setContent(content);
+        comments.setName(name);
+        comments.setEmail(email);
+        comments.setWebsite(website);
+        comments.setIp(FameUtil.getIp());
+        comments.setAgent(FameUtil.getAgent());
+        commentsService.save(comments);
+        return RestResponse.ok();
+    }
+
+    /**
+     * 顶或踩评论
+     *
+     * @param commentId
+     * @param assess
+     * @return
+     */
+    @PostMapping("comment/{commentId}/assess")
+    public RestResponse assessComment(@PathVariable Integer commentId, @RequestParam String assess) {
+        commentsService.assessComment(commentId, assess);
+        return RestResponse.ok();
     }
 
 
