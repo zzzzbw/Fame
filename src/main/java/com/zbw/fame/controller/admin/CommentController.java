@@ -25,6 +25,13 @@ public class CommentController extends BaseController {
     @Autowired
     private CommentsService commentsService;
 
+    /**
+     * 获取所有评论
+     *
+     * @param page
+     * @param limit
+     * @return
+     */
     @GetMapping
     public RestResponse index(@RequestParam(required = false, defaultValue = "1") Integer page,
                               @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
@@ -32,6 +39,12 @@ public class CommentController extends BaseController {
         return RestResponse.ok(new Pagination<Comments>(comments));
     }
 
+    /**
+     * 获取评论详情
+     *
+     * @param id
+     * @return
+     */
     @GetMapping("{id}")
     public RestResponse detail(@PathVariable Integer id) {
         CommentDto comment = commentsService.getCommentDetail(id);
@@ -45,6 +58,12 @@ public class CommentController extends BaseController {
         return RestResponse.ok(comment);
     }
 
+    /**
+     * 删除评论
+     *
+     * @param id
+     * @return
+     */
     @DeleteMapping("{id}")
     public RestResponse delete(@PathVariable Integer id) {
         if (commentsService.deleteComment(id)) {
@@ -53,6 +72,16 @@ public class CommentController extends BaseController {
         } else {
             return RestResponse.fail("删除评论失败");
         }
+    }
+
+    /**
+     * 获取评论数量
+     *
+     * @return
+     */
+    @GetMapping("count")
+    public RestResponse count() {
+        return RestResponse.ok(commentsService.count());
     }
 
 }

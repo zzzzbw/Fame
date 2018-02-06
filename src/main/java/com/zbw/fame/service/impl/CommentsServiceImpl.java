@@ -119,4 +119,9 @@ public class CommentsServiceImpl implements CommentsService {
         commentsMapper.updateByPrimaryKey(comment);
     }
 
+    @Override
+    public Integer count() {
+        return commentsMapper.selectCount(new Comments());
+    }
+
 }

@@ -60,4 +60,11 @@ public interface CommentsService {
      * @param assess
      */
     void assessComment(Integer commentId, String assess);
+
+    /**
+     * 评论数量
+     *
+     * @return
+     */
+    Integer count();
 }
