@@ -4,7 +4,6 @@ import com.zbw.fame.exception.TipException;
 import com.zbw.fame.model.Users;
 import org.pegdown.PegDownProcessor;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpRequest;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -73,8 +72,12 @@ public class FameUtil {
      * @return
      */
     public static String getIp() {
-        String ip = getRequest().getHeader("x-forwarded-for");
         String unknown = "unknown";
+        // nginx反向代理IP
+        String ip = getRequest().getHeader("X-Real-IP");
+        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
+            ip = getRequest().getHeader("x-forwarded-for");
+        }
         if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
             ip = getRequest().getHeader("Proxy-Client-IP");
         }
@@ -89,6 +92,7 @@ public class FameUtil {
 
     /**
      * 获取agent
+     *
      * @return
      */
     public static String getAgent() {
