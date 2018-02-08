@@ -1,32 +1,39 @@
 ## Fame 博客
 
-![logo](https://zzzzbw.github.io/Fame/images/Fame_logo.png)
+基于Spring Boot开发的博客服务器端。
 
-一个基于Spring Boot开发的博客后端。该项目前端：[Fame-default](https://github.com/zzzzbw/Fame-default)
+博客前端:[Fame-front](https://github.com/zzzzbw/Fame-front)
+
+博客后台:[Fame-admin](https://github.com/zzzzbw/Fame-admin)
 
 演示站点：http://zzzzbw.cn
 
-![spring boot](https://img.shields.io/badge/spring%20boot-v1.5.9-green.svg)![MIT](https://img.shields.io/github/license/mashape/apistatus.svg)![Maven](https://img.shields.io/badge/maven-v3.3.9-red.svg)
+![travis](https://travis-ci.org/zzzzbw/Fame.svg?branch=master) ![MIT](https://img.shields.io/github/license/zzzzbw/Fame.svg) ![spring boot](https://img.shields.io/badge/spring%20boot-v1.5.9-green.svg) ![Maven](https://img.shields.io/badge/maven-v3.3.9-red.svg)
 
 [API文档](https://zzzzbw.github.io/Fame/swagger-ui/index.html)
 
-### 依赖
+### 环境
 
-* JAVA 1.8+
+* JAVA 8
 * MAVEN 3.3.X
 * MYSQL 5.7.X
 
+### 依赖
 
-###  特性
+* [spring-boot](https://github.com/spring-projects/spring-boot)
+* [mybatis-3](https://github.com/mybatis/mybatis-3)
+* [Mapper](https://github.com/abel533/Mapper)
+* [Mybatis-PageHelper](https://github.com/pagehelper/Mybatis-PageHelper)
+* [pegdown](https://github.com/sirthias/pegdown)
+
+### 特性
 
 * 基于Spring-boot开发，配置和部署简单
 * 前后端完全分离
 * Restful风格Api
-* 支持Markdown解析
+* 自带Markdown解析
 
-## 快速开始
-
-### 服务端
+### 快速开始
 
 1. `git clone https://github.com/zzzzbw/Fame.git`或直接下载代码到本地
 
@@ -41,8 +48,6 @@
    spring.datasource.username=root
    spring.datasource.password=root
    ```
-
-   ​
 
 5. 在IDE中启动Application程序中执行main方法。
 
@@ -70,35 +75,8 @@
    }
    ```
 
-7. 可以使用[默认主题](https://github.com/zzzzbw/Fame-default)或者根据api文档开发自己的博客页面!
+7. 配合[博客前台](https://github.com/zzzzbw/Fame-front)和[管理后台](https://github.com/zzzzbw/Fame-admin)使用。或者根据api文档开发自己的博客页面!
 
-### 客户端
+### 开源协议
 
-1. 到[Fame-default](https://github.com/zzzzbw/Fame-default)项目中，确保电脑中有node环境
-
-2. `git https://github.com/zzzzbw/Fame-default.git`或直接下载代码到本地
-
-3. 进入项目文件夹,执行命令
-
-   ```
-   npm install
-
-   npm run dev
-   ```
-
-4.访问[localhost:8010](http://localhost:8010/)。若看到博客首页，代表部署成功！
-
-## 部分截图（[默认主题](https://github.com/zzzzbw/Fame-default)）
-
-![images](https://zzzzbw.github.io/Fame/images/index.png)
-
-![images](https://zzzzbw.github.io/Fame/images/article.png)
-
-
-
-![images](https://zzzzbw.github.io/Fame/images/Dashboard.png)
-
-![images](https://zzzzbw.github.io/Fame/images/admin_article_edit.png)
-
-![images](https://zzzzbw.github.io/Fame/images/admin_meta_list.png)
-
+[MIT](https://github.com/zzzzbw/Fame/blob/master/License)
