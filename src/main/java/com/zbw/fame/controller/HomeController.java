@@ -2,18 +2,21 @@ package com.zbw.fame.controller;
 
 import com.github.pagehelper.Page;
 import com.zbw.fame.dto.Archives;
+import com.zbw.fame.dto.CommentDto;
 import com.zbw.fame.dto.MetaDto;
 import com.zbw.fame.dto.Pagination;
 import com.zbw.fame.model.Articles;
 import com.zbw.fame.model.Comments;
 import com.zbw.fame.service.ArticlesService;
 import com.zbw.fame.service.CommentsService;
+import com.zbw.fame.service.EmailService;
 import com.zbw.fame.service.MetasService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.RestResponse;
 import com.zbw.fame.util.Types;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -38,6 +41,9 @@ public class HomeController extends BaseController {
 
     @Autowired
     private CommentsService commentsService;
+
+    @Autowired
+    private EmailService emailService;
 
     /**
      * 文章列表
@@ -207,6 +213,13 @@ public class HomeController extends BaseController {
         comments.setIp(FameUtil.getIp());
         comments.setAgent(FameUtil.getAgent());
         commentsService.save(comments);
+
+        //发送邮件提醒
+        CommentDto commentDetail = commentsService.getCommentDetail(comments.getId());
+        emailService.sendEmailToAdmin(commentDetail);
+        if (null != commentDetail.getpComment() && !StringUtils.isEmpty(commentDetail.getpComment().getEmail())) {
+            emailService.sendEmailToUser(commentDetail, commentDetail.getpComment().getEmail());
+        }
         return RestResponse.ok();
     }
 

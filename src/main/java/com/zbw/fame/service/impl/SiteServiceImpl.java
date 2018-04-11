@@ -28,16 +28,13 @@ public class SiteServiceImpl implements SiteService {
             siteStatic.setTitle(FameConsts.SITESTATIC_DEFAULT_TITLE);
             siteStatic.setDescription(FameConsts.SITESTATIC_DEFAULT_DESCRIPTION);
             siteStatic.setKeywords(FameConsts.SITESTATIC_DEFAULT_KEYWORDS);
+            siteStatic.setEmailSend(false);
         }
         return siteStatic;
     }
 
     @Override
-    public void saveSiteStatic(String title, String description, String keywords) {
-        SiteStatic siteStatic = new SiteStatic();
-        siteStatic.setTitle(title);
-        siteStatic.setDescription(description);
-        siteStatic.setKeywords(keywords);
+    public void saveSiteStatic(SiteStatic siteStatic) {
         SystemCache.instance().put(FameConsts.CACHE_SITESTATIC, siteStatic);
     }
 }

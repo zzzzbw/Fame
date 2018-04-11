@@ -109,7 +109,7 @@ public class CommentsServiceImpl implements CommentsService {
             throw new TipException("没有该评论");
         }
 
-        if (Types.ADREE.equals(assess)) {
+        if (Types.AGREE.equals(assess)) {
             comment.setAgree(comment.getAgree() + 1);
         } else if (Types.DISAGREE.equals(assess)) {
             comment.setDisagree(comment.getDisagree() + 1);

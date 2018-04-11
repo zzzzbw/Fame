@@ -21,8 +21,6 @@ public class TransactionConfig {
     @Autowired
     private DataSourceTransactionManager transactionManager;
 
-    // 创建事务通知
-
     @Bean(name = "txAdvice")
     public TransactionInterceptor getAdvisor() throws Exception {
         Properties properties = new Properties();

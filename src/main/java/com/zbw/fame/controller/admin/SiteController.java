@@ -3,6 +3,7 @@ package com.zbw.fame.controller.admin;
 import com.github.pagehelper.Page;
 import com.zbw.fame.controller.BaseController;
 import com.zbw.fame.dto.Pagination;
+import com.zbw.fame.dto.SiteStatic;
 import com.zbw.fame.model.Logs;
 import com.zbw.fame.service.LogsService;
 import com.zbw.fame.service.SiteService;
@@ -53,8 +54,22 @@ public class SiteController extends BaseController {
      * @return
      */
     @PostMapping("static")
-    public RestResponse getSiteStatic(@RequestParam String title, @RequestParam String description, @RequestParam String keywords) {
-        siteService.saveSiteStatic(title, description, keywords);
+    public RestResponse getSiteStatic(@RequestParam String title, @RequestParam String description,
+                                      @RequestParam String keywords, @RequestParam Boolean emailSend,
+                                      @RequestParam(required = false) String emailHost, @RequestParam(required = false) Integer emailPort,
+                                      @RequestParam(required = false) String emailUsername, @RequestParam(required = false) String emailPassword) {
+        SiteStatic siteStatic = new SiteStatic();
+        siteStatic.setTitle(title);
+        siteStatic.setDescription(description);
+        siteStatic.setKeywords(keywords);
+        siteStatic.setEmailSend(emailSend);
+        if (emailSend) {
+            siteStatic.setEmailHost(emailHost);
+            siteStatic.setEmailPort(emailPort);
+            siteStatic.setEmailUsername(emailUsername);
+            siteStatic.setEmailPassword(emailPassword);
+        }
+        siteService.saveSiteStatic(siteStatic);
         return RestResponse.ok();
     }
 

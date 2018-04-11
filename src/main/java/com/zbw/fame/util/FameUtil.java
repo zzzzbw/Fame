@@ -67,6 +67,16 @@ public class FameUtil {
     }
 
     /**
+     * 获取域名
+     *
+     * @return
+     */
+    public static String getDomain() {
+        StringBuffer url = getRequest().getRequestURL();
+        return url.delete(url.length() - getRequest().getRequestURI().length(), url.length()).append("/").toString();
+    }
+
+    /**
      * 获取ip
      *
      * @return

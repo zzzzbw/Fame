@@ -57,7 +57,7 @@ CREATE TABLE middles (
 CREATE TABLE logs (
   id      INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
   action  VARCHAR(255),
-  data    VARCHAR(255),
+  data    TEXT,
   message VARCHAR(255),
   type    VARCHAR(255),
   ip      VARCHAR(255),

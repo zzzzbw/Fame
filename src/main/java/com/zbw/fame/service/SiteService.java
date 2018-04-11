@@ -20,9 +20,7 @@ public interface SiteService {
     /**
      * 保存网站静态属性
      *
-     * @param title 网站title
-     * @param description 网站description
-     * @param keywords 网站keywords
+     * @param siteStatic 网站静态属性
      */
-    void saveSiteStatic(String title, String description, String keywords);
+    void saveSiteStatic(SiteStatic siteStatic);
 }
