@@ -92,7 +92,7 @@ public class HomeController extends BaseController {
             temp.setId(articleId);
             temp.setHits(hits + cHits);
             articlesService.updateArticle(temp);
-            cache.put(FameConsts.CACHE_ARTICLE_HITS, articleId.toString(), 1);
+            cache.put(FameConsts.CACHE_ARTICLE_HITS, articleId.toString(), 0);
         } else {
             cache.put(FameConsts.CACHE_ARTICLE_HITS, articleId.toString(), cHits);
         }
