@@ -60,9 +60,23 @@
 
         <!-- markdown解析 -->
         <dependency>
-            <groupId>org.pegdown</groupId>
-            <artifactId>pegdown</artifactId>
-            <version>1.6.0</version>
+            <groupId>com.vladsch.flexmark</groupId>
+            <artifactId>flexmark-all</artifactId>
+            <version>0.34.4</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.vladsch.flexmark</groupId>
+                    <artifactId>flexmark-pdf-converter</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.vladsch.flexmark</groupId>
+                    <artifactId>flexmark-youtrack-converter</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.vladsch.flexmark</groupId>
+                    <artifactId>flexmark-jira-converter</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- thymeleaf 主要用于发送模板邮件 -->

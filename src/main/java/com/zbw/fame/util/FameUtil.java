@@ -1,8 +1,10 @@
 package com.zbw.fame.util;
 
+import com.vladsch.flexmark.ast.Node;
+import com.vladsch.flexmark.html.HtmlRenderer;
+import com.vladsch.flexmark.parser.Parser;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.model.Users;
-import org.pegdown.PegDownProcessor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
@@ -19,6 +21,16 @@ import javax.servlet.http.HttpSession;
  * @create 2017/7/9 22:08
  */
 public class FameUtil {
+
+    /**
+     * markdown 解析器
+     */
+    private static final Parser PARSER = Parser.builder().build();
+
+    /**
+     * markdown html 解析器
+     */
+    private static final HtmlRenderer HTML_RENDER = HtmlRenderer.builder().build();
 
     /**
      * 禁止实例化
@@ -146,8 +158,8 @@ public class FameUtil {
             return "";
         }
 
-        PegDownProcessor pdp = new PegDownProcessor(Integer.MAX_VALUE);
-        return pdp.markdownToHtml(md);
+        Node document = PARSER.parse(md);
+        return HTML_RENDER.render(document);
     }
 
     /**
