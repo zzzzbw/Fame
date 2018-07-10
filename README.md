@@ -8,7 +8,7 @@
 
 演示站点：http://zzzzbw.cn
 
-![travis](https://travis-ci.org/zzzzbw/Fame.svg?branch=master) ![MIT](https://img.shields.io/github/license/zzzzbw/Fame.svg) ![spring boot](https://img.shields.io/badge/spring%20boot-v1.5.9-green.svg) ![Maven](https://img.shields.io/badge/maven-v3.3.9-red.svg)
+![travis](https://travis-ci.org/zzzzbw/Fame.svg?branch=master) ![MIT](https://img.shields.io/github/license/zzzzbw/Fame.svg) ![spring boot](https://img.shields.io/badge/spring%20boot-2.0.0.RELEASE-green.svg) ![Maven](https://img.shields.io/badge/maven-v3.3.9-red.svg)
 
 [API文档](https://zzzzbw.github.io/Fame/swagger-ui/index.html)
 
@@ -24,7 +24,7 @@
 * [mybatis-3](https://github.com/mybatis/mybatis-3)
 * [Mapper](https://github.com/abel533/Mapper)
 * [Mybatis-PageHelper](https://github.com/pagehelper/Mybatis-PageHelper)
-* [pegdown](https://github.com/sirthias/pegdown)
+* [flexmark](https://github.com/vsch/flexmark-java)
 
 ### 特性
 
