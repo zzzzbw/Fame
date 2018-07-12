@@ -7,6 +7,7 @@ import com.zbw.fame.service.UsersService;
 import com.zbw.fame.util.FameUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -17,6 +18,7 @@ import java.util.Date;
  * @create 2017/7/12 21:24
  */
 @Service("usersService")
+@Transactional(rollbackFor = Throwable.class)
 public class UsersServiceImpl implements UsersService {
 
     @Autowired

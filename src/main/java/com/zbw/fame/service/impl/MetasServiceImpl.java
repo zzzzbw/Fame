@@ -27,6 +27,7 @@ import java.util.Set;
  * @create 2017/8/28 23:33
  */
 @Service("metasService")
+@Transactional(rollbackFor = Throwable.class)
 public class MetasServiceImpl implements MetasService {
 
     @Autowired

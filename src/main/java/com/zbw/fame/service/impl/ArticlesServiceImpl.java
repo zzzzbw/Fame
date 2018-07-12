@@ -12,6 +12,7 @@ import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.Types;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.Date;
@@ -24,6 +25,7 @@ import java.util.List;
  * @create 2017/8/21 22:02
  */
 @Service("articlesService")
+@Transactional(rollbackFor = Throwable.class)
 public class ArticlesServiceImpl implements ArticlesService {
 
     @Autowired
@@ -40,11 +42,11 @@ public class ArticlesServiceImpl implements ArticlesService {
     }
 
     @Override
-    public Page<Articles> getContents(Integer page,Integer limit) {
+    public Page<Articles> getContents(Integer page, Integer limit) {
         Articles record = new Articles();
         record.setStatus(Types.PUBLISH);
         record.setType(Types.POST);
-        return PageHelper.startPage(page,limit).doSelectPage(()->articlesMapper.select(record));
+        return PageHelper.startPage(page, limit).doSelectPage(() -> articlesMapper.select(record));
     }
 
     @Override
@@ -200,6 +202,4 @@ public class ArticlesServiceImpl implements ArticlesService {
 
         return articlesMapper.deleteByPrimaryKey(id) > 0;
     }
-
-
 }

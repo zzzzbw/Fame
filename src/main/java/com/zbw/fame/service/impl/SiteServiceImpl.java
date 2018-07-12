@@ -7,6 +7,7 @@ import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.SystemCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 网站设置 Service 实现类
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
  * @create 2017/10/15 22:00
  */
 @Service("siteService")
+@Transactional(rollbackFor = Throwable.class)
 public class SiteServiceImpl implements SiteService {
 
     @Autowired

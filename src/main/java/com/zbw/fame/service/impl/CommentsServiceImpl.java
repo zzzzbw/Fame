@@ -14,6 +14,7 @@ import com.zbw.fame.util.Types;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 /**
@@ -23,6 +24,7 @@ import org.springframework.util.StringUtils;
  * @create 2018/1/19 16:57
  */
 @Service("commentsService")
+@Transactional(rollbackFor = Throwable.class)
 public class CommentsServiceImpl implements CommentsService {
 
     @Autowired

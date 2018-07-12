@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @create 2017/10/11 10:42
  */
 @Service("logsService")
+@Transactional(rollbackFor = Throwable.class)
 public class LogsServiceImpl implements LogsService {
 
     @Autowired
