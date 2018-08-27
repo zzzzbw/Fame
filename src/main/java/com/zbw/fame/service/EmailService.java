@@ -6,7 +6,7 @@ import com.zbw.fame.model.Comments;
  * 发送邮件 Service 接口
  *
  * @author zbw
- * @create 2018/4/9 15:51
+ * @since 2018/4/9 15:51
  */
 public interface EmailService {
 

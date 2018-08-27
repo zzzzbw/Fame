@@ -9,7 +9,7 @@ import javax.persistence.Id;
  * BaseModel类
  *
  * @author zbw
- * @create 2017/7/5 23:59
+ * @since 2017/7/5 23:59
  */
 public class BaseEntity {
 

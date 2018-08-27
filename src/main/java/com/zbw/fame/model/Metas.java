@@ -4,7 +4,7 @@ package com.zbw.fame.model;
  * 属性(分类和标签) Model
  *
  * @author zbw
- * @create 2017/8/28 23:04
+ * @since 2017/8/28 23:04
  */
 public class Metas extends BaseEntity {
 

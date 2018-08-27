@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
  * 日志 Service 实现类
  *
  * @author zbw
- * @create 2017/10/11 10:42
+ * @since 2017/10/11 10:42
  */
 @Service("logsService")
 @Transactional(rollbackFor = Throwable.class)

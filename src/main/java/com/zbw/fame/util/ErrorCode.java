@@ -4,7 +4,7 @@ package com.zbw.fame.util;
  * 错误返回信息 Enum
  *
  * @author zbw
- * @create 2017/8/30 16:00
+ * @since 2017/8/30 16:00
  */
 public enum ErrorCode {
     /**

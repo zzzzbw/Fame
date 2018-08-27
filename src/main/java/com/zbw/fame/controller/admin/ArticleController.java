@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
  * 后台文章管理 Controller
  *
  * @author zbw
- * @create 2017/7/11 19:52
+ * @since 2017/7/11 19:52
  */
 @RestController
 @RequestMapping("/api/admin/article")
@@ -35,8 +35,9 @@ public class ArticleController extends BaseController {
     /**
      * 文章信息列表
      *
-     * @param page
-     * @return
+     * @param page  第几页
+     * @param limit 每页数量
+     * @return {@see Pagination<Articles>}
      */
     @GetMapping
     public RestResponse index(@RequestParam(required = false, defaultValue = "1") Integer page,
@@ -48,8 +49,8 @@ public class ArticleController extends BaseController {
     /**
      * 单个文章信息
      *
-     * @param id
-     * @return
+     * @param id 文章id
+     * @return {@see Articles}
      */
     @GetMapping("{id}")
     public RestResponse showArticle(@PathVariable Integer id) {
@@ -61,16 +62,16 @@ public class ArticleController extends BaseController {
     }
 
     /**
-     * 保存文章
+     * 新建或修改文章
      *
-     * @param id
-     * @param title
-     * @param content
-     * @param tags
-     * @param category
-     * @param status
-     * @param allowComment
-     * @return
+     * @param id           文章id
+     * @param title        文章标题
+     * @param content      文章内容
+     * @param tags         文章标签
+     * @param category     文章分类
+     * @param status       {@link Types#DRAFT},{@link Types#PUBLISH}
+     * @param allowComment 是否允许评论
+     * @return {@see RestResponse.ok()}
      */
     @PostMapping
     public RestResponse saveArticle(@RequestParam(value = "id", required = false) Integer id,
@@ -102,8 +103,8 @@ public class ArticleController extends BaseController {
     /**
      * 删除文章
      *
-     * @param id
-     * @return
+     * @param id 文章id
+     * @return {@see RestResponse.ok()}
      */
     @DeleteMapping("{id}")
     public RestResponse deleteArticle(@PathVariable Integer id) {
@@ -115,6 +116,11 @@ public class ArticleController extends BaseController {
         }
     }
 
+    /**
+     * 已发布文章数量
+     *
+     * @return {@see Integer}
+     */
     @GetMapping("count")
     public RestResponse count() {
         return RestResponse.ok(articlesService.count());

@@ -11,7 +11,7 @@ import java.util.List;
  * Metas Mapper
  *
  * @author zbw
- * @create 2017/8/28 23:40
+ * @since 2017/8/28 23:40
  */
 public interface MetasMapper extends MyMapper<Metas> {
 

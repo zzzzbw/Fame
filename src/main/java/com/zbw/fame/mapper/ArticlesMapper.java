@@ -12,7 +12,7 @@ import java.util.List;
  * Articles Mapper
  *
  * @author zbw
- * @create 2017/7/8 10:39
+ * @since 2017/7/8 10:39
  */
 public interface ArticlesMapper extends MyMapper<Articles> {
 

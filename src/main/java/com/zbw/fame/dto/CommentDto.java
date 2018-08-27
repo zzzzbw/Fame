@@ -7,7 +7,7 @@ import com.zbw.fame.model.Comments;
  * 评论 Dto
  *
  * @author zbw
- * @create 2018/1/21 16:08
+ * @since 2018/1/21 16:08
  */
 public class CommentDto extends Comments {
 

@@ -15,19 +15,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Fame 拦截器
+ * 管理后台 拦截器
  *
  * @author zbw
- * @create 2017/10/11 14:10
+ * @since 2017/10/11 14:10
  */
 @Component
-public class FameInterceptor implements HandlerInterceptor {
+public class AdminInterceptor implements HandlerInterceptor {
 
     private static final String AUTH_URIS = "/admin";
 
     private static final String[] IGNORE_URIS = {"/admin/login", "/admin/logout"};
 
-    private static final Logger logger = LoggerFactory.getLogger(FameInterceptor.class);
+    private static final Logger logger = LoggerFactory.getLogger(AdminInterceptor.class);
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {

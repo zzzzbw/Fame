@@ -4,7 +4,7 @@ package com.zbw.fame.util;
  * 常量工具类
  *
  * @author zbw
- * @create 2017/7/9 22:21
+ * @since 2017/7/9 22:21
  */
 public interface FameConsts {
 

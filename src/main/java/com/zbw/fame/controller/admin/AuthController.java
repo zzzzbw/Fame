@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  * 后台用户验证 Controller
  *
  * @author zbw
- * @create 2017/7/11 20:15
+ * @since 2017/7/11 20:15
  */
 @RestController
 @RequestMapping("/api/admin")
@@ -24,6 +24,15 @@ public class AuthController extends BaseController {
     @Autowired
     private UsersService usersService;
 
+    /**
+     * 后台登录
+     *
+     * @param response   {@link HttpServletResponse}
+     * @param username   用户名
+     * @param password   密码
+     * @param rememberMe 是否记住
+     * @return {@see RestResponse.ok()}
+     */
     @PostMapping("login")
     public RestResponse login(HttpServletResponse response, @RequestParam String username, @RequestParam String password, String rememberMe) {
         if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
@@ -35,6 +44,11 @@ public class AuthController extends BaseController {
         return RestResponse.ok();
     }
 
+    /**
+     * 登出
+     *
+     * @return {@see RestResponse.ok()}
+     */
     @PostMapping("logout")
     public RestResponse logout() {
         Users user = this.user();
@@ -46,6 +60,14 @@ public class AuthController extends BaseController {
         return RestResponse.ok();
     }
 
+    /**
+     * 重置密码
+     *
+     * @param username    用户名
+     * @param oldPassword 旧密码
+     * @param newPassword 新密码
+     * @return {@see Boolean}
+     */
     @PostMapping("reset")
     public RestResponse resetPassword(@RequestParam String username, @RequestParam String oldPassword, @RequestParam String newPassword) {
         if (!username.equals(this.user().getUsername())) {
@@ -56,6 +78,11 @@ public class AuthController extends BaseController {
         return RestResponse.ok(result);
     }
 
+    /**
+     * 获取用户名
+     *
+     * @return {@see String}
+     */
     @GetMapping("username")
     public RestResponse username() {
         Users user = this.user();

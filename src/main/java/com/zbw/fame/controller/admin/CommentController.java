@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
  * 后台评论管理 Controller
  *
  * @author zbw
- * @create 2018/1/21 10:47
+ * @since 2018/1/21 10:47
  */
 @RestController
 @RequestMapping("/api/admin/comment")
@@ -28,9 +28,9 @@ public class CommentController extends BaseController {
     /**
      * 获取所有评论
      *
-     * @param page
-     * @param limit
-     * @return
+     * @param page  第几页
+     * @param limit 每页数量
+     * @return {@see Pagination<Comments>}
      */
     @GetMapping
     public RestResponse index(@RequestParam(required = false, defaultValue = "1") Integer page,
@@ -42,8 +42,8 @@ public class CommentController extends BaseController {
     /**
      * 获取评论详情
      *
-     * @param id
-     * @return
+     * @param id 评论id
+     * @return {@see CommentDto}
      */
     @GetMapping("{id}")
     public RestResponse detail(@PathVariable Integer id) {
@@ -61,8 +61,8 @@ public class CommentController extends BaseController {
     /**
      * 删除评论
      *
-     * @param id
-     * @return
+     * @param id 评论id
+     * @return {@see RestResponse.ok()}
      */
     @DeleteMapping("{id}")
     public RestResponse delete(@PathVariable Integer id) {
@@ -77,7 +77,7 @@ public class CommentController extends BaseController {
     /**
      * 获取评论数量
      *
-     * @return
+     * @return {@see Integer}
      */
     @GetMapping("count")
     public RestResponse count() {

@@ -4,7 +4,7 @@ package com.zbw.fame.model;
  * 关联标签和文章的中间 Model
  *
  * @author zbw
- * @create 2017/9/17 23:37
+ * @since 2017/9/17 23:37
  */
 public class Middles extends BaseEntity {
 

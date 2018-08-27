@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
  * 公用工具类
  *
  * @author zbw
- * @create 2017/7/9 22:08
+ * @since 2017/7/9 22:08
  */
 public class FameUtil {
 
@@ -43,7 +43,7 @@ public class FameUtil {
     /**
      * 获取session中的users对象
      *
-     * @return
+     * @return session中的用户
      */
     public static Users getLoginUser() {
         HttpSession session = getSession();
@@ -57,7 +57,7 @@ public class FameUtil {
     /**
      * 获取session
      *
-     * @return
+     * @return {@link HttpSession}
      */
     public static HttpSession getSession() {
         HttpSession session = null;
@@ -71,7 +71,7 @@ public class FameUtil {
     /**
      * 获取request
      *
-     * @return
+     * @return {@link HttpServletRequest}
      */
     public static HttpServletRequest getRequest() {
         ServletRequestAttributes attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -81,7 +81,7 @@ public class FameUtil {
     /**
      * 获取域名
      *
-     * @return
+     * @return 域名字符串
      */
     public static String getDomain() {
         StringBuffer url = getRequest().getRequestURL();
@@ -91,7 +91,7 @@ public class FameUtil {
     /**
      * 获取ip
      *
-     * @return
+     * @return 访问ip
      */
     public static String getIp() {
         String unknown = "unknown";
@@ -115,7 +115,7 @@ public class FameUtil {
     /**
      * 获取agent
      *
-     * @return
+     * @return User-Agent信息
      */
     public static String getAgent() {
         return getRequest().getHeader(HttpHeaders.USER_AGENT);
@@ -125,8 +125,8 @@ public class FameUtil {
     /**
      * 获取字符串md5值(加盐)
      *
-     * @param str
-     * @return
+     * @param str 字符串
+     * @return 加密的字符串
      */
     public static String getMd5(String str) {
         String base = str + FameConsts.MD5_SLAT;
@@ -136,7 +136,7 @@ public class FameUtil {
     /**
      * 获取文章预览
      *
-     * @return
+     * @return 截取的预览字符串
      */
     public static String getPreView(String content) {
         int index = FameUtil.ignoreCaseIndexOf(content, FameConsts.PREVIEW_FLAG);
@@ -150,8 +150,8 @@ public class FameUtil {
     /**
      * markdown转html
      *
-     * @param md
-     * @return
+     * @param md markdown字符串
+     * @return html字符串
      */
     public static String mdToHtml(String md) {
         if (StringUtils.isEmpty(md)) {
@@ -165,9 +165,9 @@ public class FameUtil {
     /**
      * 忽略大小写的indexOf
      *
-     * @param str
-     * @param flag
-     * @return
+     * @param str  被匹配的字符串
+     * @param flag 匹配字符串
+     * @return 所在的位置, 没有匹配返回-1
      */
     public static int ignoreCaseIndexOf(String str, String flag) {
         str = str.toUpperCase();

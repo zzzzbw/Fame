@@ -10,7 +10,7 @@ import java.util.Properties;
  * Mapper插件Config
  *
  * @author zbw
- * @create 2018/1/19 15:27
+ * @since 2018/1/19 15:27
  */
 @Configuration
 public class MapperConfig {

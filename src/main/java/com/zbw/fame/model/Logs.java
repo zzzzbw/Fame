@@ -6,7 +6,7 @@ import java.util.Date;
  * 日志 Model
  *
  * @author zbw
- * @create 2017/10/11 9:57
+ * @since 2017/10/11 9:57
  */
 public class Logs extends BaseEntity {
 

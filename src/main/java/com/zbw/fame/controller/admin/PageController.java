@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
  * 自定义页面管理 Controller
  *
  * @author zbw
- * @create 2017/10/17 12:28
+ * @since 2017/10/17 12:28
  */
 @RestController
 @RequestMapping("/api/admin/page")
@@ -34,21 +34,22 @@ public class PageController extends BaseController {
     /**
      * 自定义页面列表
      *
-     * @param page
-     * @return
+     * @param page  第几页
+     * @param limit 每页数量
+     * @return {@see Pagination<Articles>}
      */
     @GetMapping
     public RestResponse index(@RequestParam(required = false, defaultValue = "1") Integer page,
                               @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
-        Page<Articles> pages = articlesService.getPages(page,limit);
+        Page<Articles> pages = articlesService.getPages(page, limit);
         return RestResponse.ok(new Pagination<Articles>(pages));
     }
 
     /**
      * 获取自定义页面信息
      *
-     * @param id
-     * @return
+     * @param id 自定义页面id
+     * @return {@see Articles}
      */
     @GetMapping("{id}")
     public RestResponse showPage(@PathVariable Integer id) {
@@ -60,13 +61,13 @@ public class PageController extends BaseController {
     }
 
     /**
-     * 保存自定义页面
+     * 新建或修改自定义页面
      *
-     * @param id
-     * @param title
-     * @param content
-     * @param status
-     * @return
+     * @param id      自定义页面id
+     * @param title   标题
+     * @param content 内容
+     * @param status  {@link Types#DRAFT},{@link Types#PUBLISH}
+     * @return {@see String}
      */
     @PostMapping
     public RestResponse savePage(@RequestParam(value = "id", required = false) Integer id,
@@ -90,10 +91,10 @@ public class PageController extends BaseController {
     }
 
     /**
-     * 删除文章
+     * 删除自定义页面
      *
-     * @param id
-     * @return
+     * @param id 自定义页面id
+     * @return {@see String}
      */
     @DeleteMapping("{id}")
     public RestResponse deletePage(@PathVariable Integer id) {

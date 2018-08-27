@@ -4,7 +4,7 @@ package com.zbw.fame.dto;
  * 网站设置 Dto
  *
  * @author zbw
- * @create 2017/10/15 21:48
+ * @since 2017/10/15 21:48
  */
 public class SiteStatic {
 

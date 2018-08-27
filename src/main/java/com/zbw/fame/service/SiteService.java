@@ -6,7 +6,7 @@ import com.zbw.fame.dto.SiteStatic;
  * 网站设置 Service 接口
  *
  * @author zbw
- * @create 2017/10/15 22:00
+ * @since 2017/10/15 22:00
  */
 public interface SiteService {
 

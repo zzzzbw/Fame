@@ -27,7 +27,7 @@ import java.util.List;
  * 博客前台 Controller
  *
  * @author zbw
- * @create 2017/7/15 18:29
+ * @since 2017/7/15 18:29
  */
 @RestController
 @RequestMapping("/api")
@@ -48,8 +48,9 @@ public class HomeController extends BaseController {
     /**
      * 文章列表
      *
-     * @param page
-     * @return
+     * @param page  第几页
+     * @param limit 每页数量
+     * @return {@see Pagination<Articles>}
      */
     @GetMapping("article")
     public RestResponse home(@RequestParam(required = false, defaultValue = "1") Integer page,
@@ -64,8 +65,8 @@ public class HomeController extends BaseController {
     /**
      * 文章内容页
      *
-     * @param id
-     * @return
+     * @param id 文章id
+     * @return {@see Articles}
      */
     @GetMapping("article/{id}")
     public RestResponse content(@PathVariable Integer id) {
@@ -81,8 +82,8 @@ public class HomeController extends BaseController {
     /**
      * 点击量添加
      *
-     * @param articleId
-     * @param hits
+     * @param articleId 文章id
+     * @param hits      当前点击量
      */
     private void updateHits(Integer articleId, Integer hits) {
         Integer cHits = cache.get(FameConsts.CACHE_ARTICLE_HITS, articleId.toString());
@@ -102,7 +103,7 @@ public class HomeController extends BaseController {
     /**
      * 标签页
      *
-     * @return
+     * @return {@see List<MetaDto>}
      */
     @GetMapping("tag")
     public RestResponse tag() {
@@ -113,7 +114,7 @@ public class HomeController extends BaseController {
     /**
      * 分类页
      *
-     * @return
+     * @return {@see List<MetaDto>}
      */
     @GetMapping("/category")
     public RestResponse category() {
@@ -124,7 +125,7 @@ public class HomeController extends BaseController {
     /**
      * 归档页
      *
-     * @return
+     * @return {@see List<Archives>}
      */
     @GetMapping("archive")
     public RestResponse archive() {
@@ -157,8 +158,8 @@ public class HomeController extends BaseController {
     /**
      * 自定义页面
      *
-     * @param title
-     * @return
+     * @param title 页面标题
+     * @return {@see Articles}
      */
     @GetMapping("page/{title}")
     public RestResponse page(@PathVariable String title) {
@@ -173,10 +174,10 @@ public class HomeController extends BaseController {
     /**
      * 获取文章的评论
      *
-     * @param articleId
-     * @param page
-     * @param limit
-     * @return
+     * @param articleId 文章id
+     * @param page      第几页
+     * @param limit     每页数量
+     * @return {@see Pagination<Comments>}
      */
     @GetMapping("comment")
     public RestResponse getArticleComment(@RequestParam Integer articleId, @RequestParam(required = false, defaultValue = "1") Integer page,
@@ -192,12 +193,13 @@ public class HomeController extends BaseController {
     /**
      * 发表评论
      *
-     * @param articleId
-     * @param pId
-     * @param content
-     * @param name
-     * @param website
-     * @return
+     * @param articleId 文章id
+     * @param pId       父评论id
+     * @param content   评论内容
+     * @param name      评论用户名
+     * @param email     评论用户email
+     * @param website   评论用户网址
+     * @return {@see RestResponse.ok()}
      */
     @PostMapping("comment")
     public RestResponse postComment(@RequestParam Integer articleId, @RequestParam(required = false) Integer pId,
@@ -226,9 +228,9 @@ public class HomeController extends BaseController {
     /**
      * 顶或踩评论
      *
-     * @param commentId
-     * @param assess
-     * @return
+     * @param commentId 评论id
+     * @param assess    {@link Types#AGREE},{@link Types#DISAGREE}
+     * @return {@see RestResponse.ok()}
      */
     @PostMapping("comment/{commentId}/assess")
     public RestResponse assessComment(@PathVariable Integer commentId, @RequestParam String assess) {
@@ -240,7 +242,7 @@ public class HomeController extends BaseController {
     /**
      * 文章内容转为html
      *
-     * @param article
+     * @param article 文章实体类
      */
     private void transformContent(Articles article) {
         String html = FameUtil.mdToHtml(article.getContent());
@@ -250,7 +252,7 @@ public class HomeController extends BaseController {
     /**
      * 文章内容转为预览html
      *
-     * @param article
+     * @param article 文章实体类
      */
     private void transformPreView(Articles article) {
         String html = FameUtil.mdToHtml(FameUtil.getPreView(article.getContent()));

@@ -7,7 +7,7 @@ import com.zbw.fame.model.Logs;
  * 日志 Service 接口
  *
  * @author zbw
- * @create 2017/10/11 10:42
+ * @since 2017/10/11 10:42
  */
 public interface LogsService {
 

@@ -7,7 +7,7 @@ import com.zbw.fame.model.Articles;
  * 文章 Service 接口
  *
  * @author zbw
- * @create 2017/8/21 22:01
+ * @since 2017/8/21 22:01
  */
 public interface ArticlesService {
 

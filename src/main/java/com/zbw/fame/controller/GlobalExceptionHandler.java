@@ -21,25 +21,26 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 
-/**
- * 常见异常处理并返回相应错误码
- * SpringMVC自定义异常对应的status code
- * Exception                               HTTP Status Code
- * ConversionNotSupportedException         500 (Internal Server Error)
- * HttpMessageNotWritableException         500 (Internal Server Error)
- * HttpMediaTypeNotSupportedException      415 (Unsupported Media Type)
- * HttpMediaTypeNotAcceptableException     406 (Not Acceptable)
- * HttpRequestMethodNotSupportedException  405 (Method Not Allowed)
- * NoSuchRequestHandlingMethodException    404 (Not Found)
- * TypeMismatchException                   400 (Bad Request)
- * HttpMessageNotReadableException         400 (Bad Request)
- * MissingServletRequestParameterException 400 (Bad Request)
+/*
+  常见异常处理并返回相应错误码
+  SpringMVC自定义异常对应的status code
+  Exception                               HTTP Status Code
+  ConversionNotSupportedException         500 (Internal Server Error)
+  HttpMessageNotWritableException         500 (Internal Server Error)
+  HttpMediaTypeNotSupportedException      415 (Unsupported Media Type)
+  HttpMediaTypeNotAcceptableException     406 (Not Acceptable)
+  HttpRequestMethodNotSupportedException  405 (Method Not Allowed)
+  NoSuchRequestHandlingMethodException    404 (Not Found)
+  TypeMismatchException                   400 (Bad Request)
+  HttpMessageNotReadableException         400 (Bad Request)
+  MissingServletRequestParameterException 400 (Bad Request)
  */
+
 /**
  * 全局异常处理 Controller
  *
  * @author zbw
- * @create 2017/8/30 12:25
+ * @since 2017/8/30 12:25
  */
 @RestController
 @ControllerAdvice
@@ -50,23 +51,22 @@ public class GlobalExceptionHandler {
     /**
      * Tip异常返回
      *
-     * @param req
-     * @param e
-     * @return
-     * @throws Exception
+     * @param req {@link HttpServletRequest}
+     * @param e   {@link Exception}
+     * @return {@link RestResponse}
      */
     @ExceptionHandler(value = TipException.class)
-    public RestResponse tipErrorHandler(HttpServletRequest req, Exception e) throws Exception {
+    public RestResponse tipErrorHandler(HttpServletRequest req, Exception e) {
         return RestResponse.fail(e.getMessage());
     }
 
     /**
      * 运行时异常
      *
-     * @param req
-     * @param rep
-     * @param re
-     * @return
+     * @param req {@link HttpServletRequest}
+     * @param rep {@link HttpServletResponse}
+     * @param re  {@link RuntimeException}
+     * @return {@link RestResponse}
      */
     @ExceptionHandler(RuntimeException.class)
     public RestResponse runtimeExceptionHandler(HttpServletRequest req, HttpServletResponse rep, RuntimeException re) {
@@ -79,10 +79,10 @@ public class GlobalExceptionHandler {
     /**
      * 空指针异常
      *
-     * @param req
-     * @param rep
-     * @param ex
-     * @return
+     * @param req {@link HttpServletRequest}
+     * @param rep {@link HttpServletResponse}
+     * @param ex  {@link NullPointerException}
+     * @return {@link RestResponse}
      */
     @ExceptionHandler(NullPointerException.class)
     public RestResponse nullPointerExceptionHandler(HttpServletRequest req, HttpServletResponse rep, NullPointerException ex) {
@@ -95,10 +95,10 @@ public class GlobalExceptionHandler {
     /**
      * 类型转换异常
      *
-     * @param req
-     * @param rep
-     * @param ex
-     * @return
+     * @param req {@link HttpServletRequest}
+     * @param rep {@link HttpServletResponse}
+     * @param ex  {@link ClassCastException}
+     * @return {@link RestResponse}
      */
     @ExceptionHandler(ClassCastException.class)
     public RestResponse classCastExceptionHandler(HttpServletRequest req, HttpServletResponse rep, ClassCastException ex) {
@@ -111,10 +111,10 @@ public class GlobalExceptionHandler {
     /**
      * IO异常
      *
-     * @param req
-     * @param rep
-     * @param ex
-     * @return
+     * @param req {@link HttpServletRequest}
+     * @param rep {@link HttpServletResponse}
+     * @param ex  {@link IOException}
+     * @return {@link RestResponse}
      */
     @ExceptionHandler(IOException.class)
     public RestResponse classCastExceptionHandler(HttpServletRequest req, HttpServletResponse rep, IOException ex) {
@@ -127,10 +127,10 @@ public class GlobalExceptionHandler {
     /**
      * 未知方法异常
      *
-     * @param req
-     * @param rep
-     * @param ex
-     * @return
+     * @param req {@link HttpServletRequest}
+     * @param rep {@link HttpServletResponse}
+     * @param ex  {@link NoSuchMethodException}
+     * @return {@link RestResponse}
      */
     @ExceptionHandler(NoSuchMethodException.class)
     public RestResponse noSuchMethodExceptionHandler(HttpServletRequest req, HttpServletResponse rep, NoSuchMethodException ex) {
@@ -143,10 +143,10 @@ public class GlobalExceptionHandler {
     /**
      * 数组越界异常
      *
-     * @param req
-     * @param rep
-     * @param ex
-     * @return
+     * @param req {@link HttpServletRequest}
+     * @param rep {@link HttpServletResponse}
+     * @param ex  {@link IndexOutOfBoundsException}
+     * @return {@link RestResponse}
      */
     @ExceptionHandler(IndexOutOfBoundsException.class)
     public RestResponse indexOutOfBoundsExceptionHandler(HttpServletRequest req, HttpServletResponse rep, IndexOutOfBoundsException ex) {
@@ -159,9 +159,9 @@ public class GlobalExceptionHandler {
     /**
      * 400相关异常
      *
-     * @param rep
-     * @param ex
-     * @return
+     * @param rep {@link HttpServletResponse}
+     * @param ex  {@link Exception}
+     * @return {@link RestResponse}
      */
     @ExceptionHandler({HttpMessageNotReadableException.class, TypeMismatchException.class, MissingServletRequestParameterException.class})
     public RestResponse request400(HttpServletResponse rep, Exception ex) {
@@ -172,9 +172,9 @@ public class GlobalExceptionHandler {
     /**
      * 405相关异常
      *
-     * @param rep
-     * @param ex
-     * @return
+     * @param rep {@link HttpServletResponse}
+     * @param ex  {@link Exception}
+     * @return {@link RestResponse}
      */
     @ExceptionHandler({HttpRequestMethodNotSupportedException.class})
     public RestResponse request405(HttpServletResponse rep, Exception ex) {
@@ -185,9 +185,9 @@ public class GlobalExceptionHandler {
     /**
      * 406相关异常
      *
-     * @param rep
-     * @param ex
-     * @return
+     * @param rep {@link HttpServletResponse}
+     * @param ex  {@link Exception}
+     * @return {@link RestResponse}
      */
     @ExceptionHandler({HttpMediaTypeNotAcceptableException.class})
     public RestResponse request406(HttpServletResponse rep, Exception ex) {
@@ -198,9 +198,9 @@ public class GlobalExceptionHandler {
     /**
      * 500相关异常
      *
-     * @param rep
-     * @param ex
-     * @return
+     * @param rep {@link HttpServletResponse}
+     * @param ex  {@link Exception}
+     * @return {@link RestResponse}
      */
     @ExceptionHandler({ConversionNotSupportedException.class, HttpMessageNotWritableException.class})
     public RestResponse server500(HttpServletResponse rep, Exception ex) {
@@ -211,13 +211,12 @@ public class GlobalExceptionHandler {
     /**
      * 全局异常返回
      *
-     * @param req
-     * @param e
-     * @return
-     * @throws Exception
+     * @param req {@link HttpServletRequest}
+     * @param e   {@link HttpServletResponse}
+     * @return {@link Exception}
      */
     @ExceptionHandler(value = Exception.class)
-    public RestResponse defaultErrorHandler(HttpServletRequest req, HttpServletResponse rep, Exception e) throws Exception {
+    public RestResponse defaultErrorHandler(HttpServletRequest req, HttpServletResponse rep, Exception e) {
         logger.error("---DefaultException Handler---Host {}, invokes url {}, ERROR TYPE: {},  ERROR: {}", req.getRemoteHost(), req.getRequestURL(), e.getClass(), e.getMessage());
         e.printStackTrace();
         return RestResponse.fail(e.getMessage());

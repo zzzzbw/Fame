@@ -7,7 +7,7 @@ import java.util.Date;
  * 评论 Model
  *
  * @author zbw
- * @create 2018/1/19 16:27
+ * @since 2018/1/19 16:27
  */
 public class Comments extends BaseEntity {
 

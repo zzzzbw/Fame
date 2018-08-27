@@ -1,6 +1,6 @@
 package com.zbw.fame.config;
 
-import com.zbw.fame.interceptor.FameInterceptor;
+import com.zbw.fame.interceptor.AdminInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * web 配置
  *
  * @author zbw
- * @create 2017/12/19 11:11
+ * @since 2017/12/19 11:11
  */
 @Configuration
 public class WebConfig {
@@ -21,7 +21,7 @@ public class WebConfig {
     public WebMvcConfigurer webMvcConfigurer() {
         return new WebMvcConfigurer() {
             @Autowired
-            private FameInterceptor fameInterceptor;
+            private AdminInterceptor adminInterceptor;
 
             //跨域请求配置
             @Override
@@ -35,7 +35,7 @@ public class WebConfig {
             //拦截器
             @Override
             public void addInterceptors(InterceptorRegistry registry) {
-                registry.addInterceptor(fameInterceptor).addPathPatterns("/api/**");
+                registry.addInterceptor(adminInterceptor).addPathPatterns("/api/**");
             }
         };
     }

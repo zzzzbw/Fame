@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
  * 网站信息 Controller
  *
  * @author zbw
- * @create 2017/10/12 20:27
+ * @since 2017/10/12 20:27
  */
 @RestController
 @RequestMapping("/api/admin/site")
@@ -28,6 +28,13 @@ public class SiteController extends BaseController {
     @Autowired
     private SiteService siteService;
 
+    /**
+     * 获取日志列表
+     *
+     * @param page  第几页
+     * @param limit 每页数量
+     * @return {@see Pagination<Logs>}
+     */
     @GetMapping("logs")
     public RestResponse getLogs(@RequestParam(defaultValue = "1") Integer page,
                                 @RequestParam(defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
@@ -38,7 +45,7 @@ public class SiteController extends BaseController {
     /**
      * 获取网站设置缓存
      *
-     * @return
+     * @return {@see SiteStatic}
      */
     @GetMapping("static")
     public RestResponse getSiteStatic() {
@@ -48,10 +55,15 @@ public class SiteController extends BaseController {
     /**
      * 保存网站设置缓存
      *
-     * @param title
-     * @param description
-     * @param keywords
-     * @return
+     * @param title         网页title
+     * @param description   网页description
+     * @param keywords      网页keywords
+     * @param emailSend     是否发送邮件提示
+     * @param emailHost     邮箱Host
+     * @param emailPort     邮箱Port
+     * @param emailUsername 邮箱用户名
+     * @param emailPassword 邮箱密码
+     * @return {@see RestResponse.ok()}
      */
     @PostMapping("static")
     public RestResponse getSiteStatic(@RequestParam String title, @RequestParam String description,
