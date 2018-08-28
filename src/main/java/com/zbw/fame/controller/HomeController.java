@@ -134,6 +134,8 @@ public class HomeController extends BaseController {
         List<Archives> archives = new ArrayList<>();
         String current = "";
         for (Articles article : articles) {
+            // 清空文章内容
+            article.setContent("");
             Calendar cal = Calendar.getInstance();
             cal.setTime(article.getCreated());
             String dateStr = cal.get(Calendar.YEAR) + "";

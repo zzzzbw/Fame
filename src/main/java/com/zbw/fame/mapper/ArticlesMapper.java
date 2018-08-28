@@ -1,5 +1,6 @@
 package com.zbw.fame.mapper;
 
+import com.zbw.fame.dto.ArticleInfoDto;
 import com.zbw.fame.model.Articles;
 import com.zbw.fame.util.MyMapper;
 import com.zbw.fame.util.Types;
@@ -45,7 +46,7 @@ public interface ArticlesMapper extends MyMapper<Articles> {
     @Select("SELECT * FROM fame.articles WHERE id " +
             "IN (SELECT a_id FROM fame.middles WHERE m_id = #{metaId}) " +
             "AND fame.articles.status = '" + Types.PUBLISH + "' AND fame.articles.type = '" + Types.POST + "' order by created desc")
-    List<Articles> selectPublishByMetas(@Param("metaId") Integer metaId);
+    List<ArticleInfoDto> selectPublishByMetas(@Param("metaId") Integer metaId);
 
     /**
      * 根据metaId获取关联已发布文章的数量
