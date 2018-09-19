@@ -1,0 +1,10 @@
+FROM mysql:5.7.23
+
+MAINTAINER zzzzbw "zzzzbw@gmail.com"
+
+ENV LANG C.UTF-8
+
+# 拷贝初始化sql
+COPY ./fame-server/src/main/resources/init.sql /docker-entrypoint-initdb.d/init.sql
+# 复制mysql配置文件
+COPY ./fame-docker/fame-mysql/mysqld.cnf /etc/mysql/mysql.conf.d/mysqld.cnf

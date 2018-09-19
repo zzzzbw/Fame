@@ -1,0 +1,19 @@
+FROM node:10.10.0-alpine
+
+MAINTAINER zzzzbw "zzzzbw@gmail.com"
+
+RUN npm config set registry https://registry.npm.taobao.org
+
+ENV HOST 0.0.0.0
+ENV NODE_ENV=production
+
+WORKDIR /app
+
+COPY ./fame-front/package.json ./
+RUN NODE_ENV=build npm install
+
+COPY ./fame-front .
+
+EXPOSE 3000
+
+CMD ["npm","run","docker"]

@@ -1,0 +1,138 @@
+@font-face {
+  font-family: 'fame-icon';
+  src:  url('../fonts/fame-icon.eot?41dvrc');
+  src:  url('../fonts/fame-icon.eot?41dvrc#iefix') format('embedded-opentype'),
+    url('../fonts/fame-icon.ttf?41dvrc') format('truetype'),
+    url('../fonts/fame-icon.woff?41dvrc') format('woff'),
+    url('../fonts/fame-icon.svg?41dvrc#fame-icon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'fame-icon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'fame-icon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Enable Ligatures ================ */
+  letter-spacing: 0;
+  -webkit-font-feature-settings: "liga";
+  -moz-font-feature-settings: "liga=1";
+  -moz-font-feature-settings: "liga";
+  -ms-font-feature-settings: "liga" 1;
+  font-feature-settings: "liga";
+  -webkit-font-variant-ligatures: discretionary-ligatures;
+  font-variant-ligatures: discretionary-ligatures;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-close:before {
+  content: "\f00d";
+}
+.icon-remove:before {
+  content: "\f00d";
+}
+.icon-times:before {
+  content: "\f00d";
+}
+.icon-thumbs-o-up:before {
+  content: "\f087";
+}
+.icon-thumbs-o-down:before {
+  content: "\f088";
+}
+.icon-mail-reply:before {
+  content: "\f112";
+}
+.icon-reply:before {
+  content: "\f112";
+}
+.icon-eye:before {
+  content: "\e903";
+}
+.icon-minus:before {
+  content: "\e904";
+}
+.icon-table:before {
+  content: "\e905";
+}
+.icon-image:before {
+  content: "\e906";
+}
+.icon-chain:before {
+  content: "\e907";
+}
+.icon-eraser:before {
+  content: "\e908";
+}
+.icon-list-ol:before {
+  content: "\e909";
+}
+.icon-list-ul:before {
+  content: "\e90a";
+}
+.icon-quote-left:before {
+  content: "\e90b";
+}
+.icon-code:before {
+  content: "\e90c";
+}
+.icon-header:before {
+  content: "\e90d";
+}
+.icon-strikethrough:before {
+  content: "\e90e";
+}
+.icon-italic:before {
+  content: "\e90f";
+}
+.icon-bold:before {
+  content: "\e910";
+}
+.icon-hashtag:before {
+  content: "\e912";
+}
+.icon-th-list:before {
+  content: "\e915";
+}
+.icon-calendar:before {
+  content: "\e917";
+}
+.icon-folder:before {
+  content: "\e918";
+}
+.icon-tags:before {
+  content: "\e919";
+}
+.icon-tag:before {
+  content: "\e91a";
+}
+.icon-arrow-up:before {
+  content: "\e91c";
+}
+.icon-rocket:before {
+  content: "\e9a5";
+}
+
