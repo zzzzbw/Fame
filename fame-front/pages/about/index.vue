@@ -17,9 +17,9 @@
 
   export default {
     head () {
-      return {title: `关于`}
+      return { title: `关于` }
     },
-    fetch ({store, params}) {
+    fetch ({ store, params }) {
       return store.dispatch('getPage', pageTitle)
     },
     data () {

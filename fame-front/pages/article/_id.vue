@@ -30,9 +30,9 @@
 
   export default {
     head () {
-      return {title: `${this.article.title}`}
+      return { title: `${this.article.title}` }
     },
-    fetch ({store, params}) {
+    fetch ({ store, params }) {
       return store.dispatch('getArticle', params.id)
     },
     data () {

@@ -31,11 +31,11 @@
     data () {
       return {
         links: [
-          {path: '/', name: '首页'},
-          {path: '/category', name: '分类'},
-          {path: '/tag', name: '标签'},
-          {path: '/archive', name: '归档'},
-          {path: '/about', name: '关于'}
+          { path: '/', name: '首页' },
+          { path: '/category', name: '分类' },
+          { path: '/tag', name: '标签' },
+          { path: '/archive', name: '归档' },
+          { path: '/about', name: '关于' }
         ],
         menuOpen: false
       }
@@ -45,7 +45,7 @@
         this.menuOpen = !this.menuOpen
       },
       to (url, query) {
-        this.$router.push({path: url, query: query})
+        this.$router.push({ path: url, query: query })
         this.toggle()
       }
     }

@@ -36,9 +36,9 @@
       return 'move'
     },
     head () {
-      return {title: `Blog`}
+      return { title: `Blog` }
     },
-    fetch ({store, query}) {
+    fetch ({ store, query }) {
       return store.dispatch('getArticles', query.page)
     },
     computed: {

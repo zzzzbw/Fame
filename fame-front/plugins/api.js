@@ -1,4 +1,4 @@
-import {get, post} from './http'
+import { get, post } from './http'
 
 const api = {
   getArticles (page, limit) {

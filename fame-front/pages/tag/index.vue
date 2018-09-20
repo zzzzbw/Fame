@@ -24,9 +24,9 @@
 <script type="text/ecmascript-6">
   export default {
     head () {
-      return {title: `标签`}
+      return { title: `标签` }
     },
-    fetch ({store}) {
+    fetch ({ store }) {
       return store.dispatch('getTags')
     },
     computed: {

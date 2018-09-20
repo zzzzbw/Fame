@@ -24,9 +24,9 @@
 <script>
   export default {
     head () {
-      return {title: `归档`}
+      return { title: `归档` }
     },
-    fetch ({store}) {
+    fetch ({ store }) {
       return store.dispatch('getArchive')
     },
     computed: {

@@ -23,9 +23,9 @@
 <script type="text/ecmascript-6">
   export default {
     head () {
-      return {title: `分类`}
+      return { title: `分类` }
     },
-    fetch ({store}) {
+    fetch ({ store }) {
       return store.dispatch('getCategories')
     },
     computed: {
