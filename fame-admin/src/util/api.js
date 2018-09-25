@@ -1,4 +1,4 @@
-import {get, post, del} from './http'
+import {get, post, del} from '../plugins/http'
 import util from './fame'
 
 const auth = {
