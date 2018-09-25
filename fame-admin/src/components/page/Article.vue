@@ -192,7 +192,7 @@
     },
     watch: {
       // 监听route刷新绑定的article数据
-      $route (to, from) {
+      $route () {
         this.getArticle()
       }
     }

@@ -38,7 +38,7 @@
               <div class="title">最新文章</div>
             </div>
             <ul class="info">
-              <li v-for="article in articles">{{article}}</li>
+              <li v-for="article in articles" :key="article.id">{{article}}</li>
             </ul>
           </div>
         </div>
@@ -50,7 +50,7 @@
               <div class="title">最新评论</div>
             </div>
             <ul class="info">
-              <li v-for="comment in comments">{{comment.name}} => {{comment.content}}</li>
+              <li v-for="comment in comments" :key="comment.id">{{comment.name}} => {{comment.content}}</li>
             </ul>
           </div>
         </div>

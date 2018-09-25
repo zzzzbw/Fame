@@ -8,7 +8,7 @@
               <div class="title">标签列表</div>
             </div>
             <ul class="meta-list">
-              <li v-for="tag in tags">
+              <li v-for="tag in tags" :key="tag.id">
                 <span class="meta" @click="clickTag(tag.id,tag.name)">{{tag.name}}</span>
                 <span style="float: right;clear: both">
                 <span class="meta-count">{{tag.count}}</span>
@@ -28,7 +28,7 @@
               <div class="title">分类列表</div>
             </div>
             <ul class="meta-list">
-              <li v-for="category in categories">
+              <li v-for="category in categories" :key="category.id">
                 <span class="meta" @click="clickCategory(category.id,category.name)">{{category.name}}</span>
                 <span style="float: right;clear: both">
                 <span class="meta-count">{{category.count}}</span>

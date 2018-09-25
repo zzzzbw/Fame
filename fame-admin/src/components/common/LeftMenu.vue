@@ -57,7 +57,7 @@
       toggleLeftMenu () {
         this.showLeftMenu = !this.showLeftMenu
       },
-      mobileToggle (key, keyPath) {
+      mobileToggle () {
         if (document.body.clientWidth < 600) {
           this.showLeftMenu = false
         }
