@@ -32,7 +32,6 @@ services:
 
   fame-server:
     container_name: fame-server
-    restart: always
     build: 
      context: ./
      dockerfile: ./fame-docker/fame-server-Dockerfile
@@ -46,6 +45,8 @@ services:
     command: mvn clean spring-boot:run -Dspring-boot.run.profiles=docker -Dmaven.test.skip=true
     depends_on:
       - fame-mysql
+    restart: always
+
 
   fame-admin:
    container_name: fame-admin

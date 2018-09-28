@@ -10,10 +10,12 @@ ENV NODE_ENV=production
 WORKDIR /app
 
 COPY ./fame-front/package.json ./
-RUN NODE_ENV=build npm install
+RUN npm install
 
 COPY ./fame-front .
 
+RUN npm run build
+
 EXPOSE 3000
 
-CMD ["npm","run","docker"]
+CMD ["npm","run","start"]
