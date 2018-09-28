@@ -34,9 +34,11 @@
 
 ### 部署方式
 
+注：博客管理后台默认的账号：fame，密码：123456
+
 #### Docker方式部署(推荐)
 
-首先保证有Docker和Docker compose的环境，如果没有可参考[这里]()
+首先保证有Docker和Docker compose的环境，如果没有可参考[这里](https://github.com/zzzzbw/Fame/wiki/Docker%E5%92%8CDocker-compose%E5%AE%89%E8%A3%85)
 
 1. 克隆项目到本地
 
@@ -137,7 +139,7 @@
 
      ```
     npm install
-    npm run dev
+    npm run serve
      ```
 
     4.3 访问地址
