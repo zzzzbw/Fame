@@ -1,3 +1,6 @@
 module.exports = {
-  baseUrl: '/admin/'
+  baseUrl: '/admin/',
+  devServer: {
+    port: 8010
+  }
 }
