@@ -45,7 +45,7 @@
             </el-form-item>
             <el-form-item label="是否设置邮箱提醒:">
               <el-switch
-                v-model="staticForm.emailSend">
+                  v-model="staticForm.emailSend">
               </el-switch>
             </el-form-item>
             <el-form-item label="邮箱:" v-show="staticForm.emailSend">
@@ -97,56 +97,17 @@
     methods: {
       getUsername () {
         this.$api.auth.getUsername().then(data => {
-          if (data.success) {
-            this.userForm.username = data.data
-          } else {
-            this.$message({
-              message: '获取用户名失败',
-              type: 'error'
-            })
-          }
+          this.userForm.username = data.data
         })
       },
       getSitestatic () {
         this.$api.auth.getSitestatic().then(data => {
-          if (data.success) {
-            this.staticForm = data.data
-          } else {
-            this.$message({
-              message: '获取网站设置失败,' + data.msg,
-              type: 'error'
-            })
-          }
+          this.staticForm = data.data
         })
       },
       submitUser () {
         this.$api.auth.resetPassword(this.userForm.username, this.userForm.oldPassword, this.userForm.newPassword).then(data => {
-          if (data.success) {
-            if (data.data === true) {
-              this.$message({
-                message: '保存成功,请重新登陆',
-                type: 'success'
-              })
-              this.$api.auth.logout()
-              this.$router.push('/admin/login')
-            } else {
-              this.$message({
-                message: '保存失败,未更新数据库',
-                type: 'error'
-              })
-            }
-          } else {
-            this.$message({
-              message: '重置密码失败,' + data.msg,
-              type: 'error'
-            })
-          }
-        })
-      },
-      submitSitestatic () {
-        this.$api.auth.saveSitestatic(this.staticForm.title, this.staticForm.description, this.staticForm.keywords, this.staticForm.emailSend, this.staticForm.emailUsername, this.staticForm.emailPassword, this.staticForm.emailHost, this.staticForm.emailPort
-        ).then(data => {
-          if (data.success) {
+          if (data.data === true) {
             this.$message({
               message: '保存成功,请重新登陆',
               type: 'success'
@@ -155,10 +116,21 @@
             this.$router.push('/admin/login')
           } else {
             this.$message({
-              message: '设置网站数据失败,' + data.msg,
+              message: '保存失败,未更新数据库',
               type: 'error'
             })
           }
+        })
+      },
+      submitSitestatic () {
+        this.$api.auth.saveSitestatic(this.staticForm.title, this.staticForm.description, this.staticForm.keywords, this.staticForm.emailSend, this.staticForm.emailUsername, this.staticForm.emailPassword, this.staticForm.emailHost, this.staticForm.emailPort
+        ).then(() => {
+          this.$message({
+            message: '保存成功,请重新登陆',
+            type: 'success'
+          })
+          this.$api.auth.logout()
+          this.$router.push('/admin/login')
         })
       }
     },

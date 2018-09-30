@@ -71,53 +71,25 @@
     },
     methods: {
       getCommentCount (data) {
-        if (data.success) {
-          this.commentCount = data.data
-        } else {
-          this.$message({
-            message: '获取评论数量失败,' + data.msg,
-            type: 'error'
-          })
-        }
+        this.commentCount = data.data
       },
       getArticleCount (data) {
-        if (data.success) {
-          this.articleCount = data.data
-        } else {
-          this.$message({
-            message: '获取文章数量失败,' + data.msg,
-            type: 'error'
-          })
-        }
+        this.articleCount = data.data
       },
       getComments (data) {
-        if (data.success) {
-          for (let key in data.data.list) {
-            let comment = data.data.list[key]
-            if (comment.content.length > 200) {
-              comment.content = comment.content.substring(0, 80) + '...'
-            }
-            this.comments.push(comment)
+        for (let key in data.data.list) {
+          let comment = data.data.list[key]
+          if (comment.content.length > 200) {
+            comment.content = comment.content.substring(0, 80) + '...'
           }
-        } else {
-          this.$message({
-            message: '获取最新日志失败,' + data.msg,
-            type: 'error'
-          })
+          this.comments.push(comment)
         }
       },
       getArticle (data) {
-        if (data.success) {
-          for (let key in data.data.list) {
-            let d = data.data.list[key]
-            let article = d.title
-            this.articles.push(article)
-          }
-        } else {
-          this.$message({
-            message: '获取最新文章失败,' + data.msg,
-            type: 'error'
-          })
+        for (let key in data.data.list) {
+          let d = data.data.list[key]
+          let article = d.title
+          this.articles.push(article)
         }
       },
       initData (articlesData, logsData, articleCountData, commentCountData) {

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import qs from 'qs'
-import { Message, Loading } from 'element-ui'
+import {Message, Loading} from 'element-ui'
 import router from '../router/index'
 import serverConfig from '../../server-config'
 
@@ -46,6 +46,24 @@ Axios.interceptors.response.use(function (response) {
     loadingInstance.close()
     loadingInstance = null
   }
+
+  if (response.data && !response.data.success) {
+    let msg = null
+    switch (response.data.code) {
+      case 999:
+        router.push('/admin/login')
+        msg = '未登录,请先登录'
+        break
+      default:
+        msg = response.data.msg || '系统错误'
+        console.error('Axios response error.Url: ' + response.request.responseURL + ', code: ' + response.data.code + ', msg: ' + response.data.msg)
+    }
+    Message({
+      showClose: true,
+      message: msg,
+      type: 'error'
+    })
+  }
   return response
 }, function (error) {
   // 处理响应失败
@@ -57,19 +75,7 @@ Axios.interceptors.response.use(function (response) {
   if (!error.response) {
     msg = error.message
   } else {
-    switch (error.response.status) {
-      case 999:
-        msg = '未登陆，请先登陆'
-        router.push('/admin/login')
-        break
-      case 404:
-        msg = '该页面不存在'
-        router.push('/error/404/' + msg)
-        break
-      default:
-        router.push('/error/' + error.response.status + '/' + msg)
-        break
-    }
+    router.push('/error/' + error.response.status + '/' + msg)
   }
   Message({
     showClose: true,

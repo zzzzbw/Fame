@@ -9,24 +9,24 @@
       <el-table-column fixed="right" label="操作" width="150">
         <template slot-scope="scope">
           <el-button
-            size="small"
-            @click="handleEdit(scope.row.id)">编辑
+              size="small"
+              @click="handleEdit(scope.row.id)">编辑
           </el-button>
           <el-button
-            size="small"
-            type="danger"
-            @click="handleDelete(scope.row.id)">删除
+              size="small"
+              type="danger"
+              @click="handleDelete(scope.row.id)">删除
           </el-button>
         </template>
       </el-table-column>
     </el-table>
     <div class="admin-page">
       <el-pagination
-        layout="total,prev, pager, next"
-        @current-change="init"
-        :current-page.sync="currentPage"
-        :page-size="pageSize"
-        :total="total">
+          layout="total,prev, pager, next"
+          @current-change="init"
+          :current-page.sync="currentPage"
+          :page-size="pageSize"
+          :total="total">
       </el-pagination>
     </div>
   </div>
@@ -71,34 +71,20 @@
         }
       },
       deletePage (id) {
-        this.$api.auth.deletePage(id).then(data => {
-          if (data.success) {
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            })
-            this.init(this.$route.query.page)
-          } else {
-            this.$message({
-              type: 'error',
-              message: '删除失败!'
-            })
-          }
+        this.$api.auth.deletePage(id).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+          this.init(this.$route.query.page)
         })
       },
       init (page) {
         this.$api.auth.getPages(page || 1).then(data => {
-          if (data.success) {
-            this.initPageDatas(data.data.list)
-            this.total = data.data.total
-            this.pageSize = data.data.pageSize
-            this.currentPage = Number(page) || 1
-          } else {
-            this.$message({
-              message: '获取自定义页面列表失败,' + data.msg,
-              type: 'error'
-            })
-          }
+          this.initPageDatas(data.data.list)
+          this.total = data.data.total
+          this.pageSize = data.data.pageSize
+          this.currentPage = Number(page) || 1
         })
       }
     },

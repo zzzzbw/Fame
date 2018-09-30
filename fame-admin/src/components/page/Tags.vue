@@ -17,7 +17,8 @@
               </li>
             </ul>
             <el-input placeholder="请输入标签名称" class="meta-input" v-model.trim="tagName"></el-input>
-            <el-button type="success" size="small" style="float: right;clear: both" @click="saveOrUpdateTag">保存标签</el-button>
+            <el-button type="success" size="small" style="float: right;clear: both" @click="saveOrUpdateTag">保存标签
+            </el-button>
           </div>
         </div>
       </el-col>
@@ -37,7 +38,8 @@
               </li>
             </ul>
             <el-input placeholder="请输入分类名称" class="meta-input" v-model.trim="categoryName"></el-input>
-            <el-button type="success" size="small" style="float: right;clear: both" @click="saveOrUpdateCategory">保存分类</el-button>
+            <el-button type="success" size="small" style="float: right;clear: both" @click="saveOrUpdateCategory">保存分类
+            </el-button>
           </div>
         </div>
       </el-col>
@@ -60,29 +62,15 @@
     methods: {
       getTags () {
         this.$api.auth.getAllTags().then(data => {
-          if (data.success) {
-            for (let key in data.data) {
-              this.tags.push(data.data[key])
-            }
-          } else {
-            this.$message({
-              message: '获取tag失败,' + data.msg,
-              type: 'error'
-            })
+          for (let key in data.data) {
+            this.tags.push(data.data[key])
           }
         })
       },
       getCategories () {
         this.$api.auth.getAllCategories().then(data => {
-          if (data.success) {
-            for (let key in data.data) {
-              this.categories.push(data.data[key])
-            }
-          } else {
-            this.$message({
-              message: '获取category失败,' + data.msg,
-              type: 'error'
-            })
+          for (let key in data.data) {
+            this.categories.push(data.data[key])
           }
         })
       },
@@ -100,19 +88,12 @@
           cancelButtonText: '取消',
           type: 'error'
         }).then(() => {
-          this.$api.auth.delete(tagName).then(data => {
-            if (data.success) {
-              this.refreshTags()
-              this.$message({
-                type: 'success',
-                message: '删除成功!'
-              })
-            } else {
-              this.$message({
-                message: '删除tag失败,' + data.msg,
-                type: 'error'
-              })
-            }
+          this.$api.auth.deleteTag(tagName).then(() => {
+            this.refreshTags()
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
           })
         }).catch(() => {
         })
@@ -123,19 +104,12 @@
           cancelButtonText: '取消',
           type: 'error'
         }).then(() => {
-          this.$api.auth.deleteCategory(categoryName).then(data => {
-            if (data.success) {
-              this.refreshCategories()
-              this.$message({
-                type: 'success',
-                message: '删除成功!'
-              })
-            } else {
-              this.$message({
-                message: '删除category失败,' + data.msg,
-                type: 'error'
-              })
-            }
+          this.$api.auth.deleteCategory(categoryName).then(() => {
+            this.refreshCategories()
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
           })
         }).catch(() => {
         })
@@ -149,34 +123,20 @@
           return
         }
         if (this.tagId !== null && this.tagId !== '') {
-          this.$api.auth.updateTag(this.tagId, this.tagName).then(data => {
-            if (data.success) {
-              this.refreshTags()
-              this.$message({
-                message: '更新tag成功!',
-                type: 'success'
-              })
-            } else {
-              this.$message({
-                message: '更新tag失败,' + data.msg,
-                type: 'error'
-              })
-            }
+          this.$api.auth.updateTag(this.tagId, this.tagName).then(() => {
+            this.refreshTags()
+            this.$message({
+              message: '更新tag成功!',
+              type: 'success'
+            })
           })
         } else {
-          this.$api.auth.saveTag(this.tagName).then(data => {
-            if (data.success) {
-              this.refreshTags()
-              this.$message({
-                message: '新建tag成功!',
-                type: 'success'
-              })
-            } else {
-              this.$message({
-                message: '新建tag失败,' + data.msg,
-                type: 'error'
-              })
-            }
+          this.$api.auth.saveTag(this.tagName).then(() => {
+            this.refreshTags()
+            this.$message({
+              message: '新建tag成功!',
+              type: 'success'
+            })
           })
         }
       },
@@ -189,34 +149,20 @@
           return
         }
         if (this.categoryId !== null && this.categoryId !== '') {
-          this.$api.auth.updateCategory(this.categoryId, this.categoryName).then(data => {
-            if (data.success) {
-              this.refreshCategories()
-              this.$message({
-                message: '更新category成功!',
-                type: 'success'
-              })
-            } else {
-              this.$message({
-                message: '更新category失败,' + data.msg,
-                type: 'error'
-              })
-            }
+          this.$api.auth.updateCategory(this.categoryId, this.categoryName).then(() => {
+            this.refreshCategories()
+            this.$message({
+              message: '更新category成功!',
+              type: 'success'
+            })
           })
         } else {
-          this.$api.auth.saveCategory(this.categoryName).then(data => {
-            if (data.success) {
-              this.refreshCategories()
-              this.$message({
-                message: '新建category成功!',
-                type: 'success'
-              })
-            } else {
-              this.$message({
-                message: '新建category失败,' + data.msg,
-                type: 'error'
-              })
-            }
+          this.$api.auth.saveCategory(this.categoryName).then(() => {
+            this.refreshCategories()
+            this.$message({
+              message: '新建category成功!',
+              type: 'success'
+            })
           })
         }
       },

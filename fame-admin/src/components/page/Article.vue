@@ -16,35 +16,35 @@
             <div class="panel-content">
               <el-form-item label="标签">
                 <el-select
-                  v-model="article.tags"
-                  multiple
-                  filterable
-                  placeholder="请选择文章标签">
+                    v-model="article.tags"
+                    multiple
+                    filterable
+                    placeholder="请选择文章标签">
                   <el-option
-                    v-for="tag in tags"
-                    :key="tag.value"
-                    :label="tag.label"
-                    :value="tag.value">
+                      v-for="tag in tags"
+                      :key="tag.value"
+                      :label="tag.label"
+                      :value="tag.value">
                   </el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="分类">
                 <el-select v-model="article.category" filterable placeholder="请选择文章分类">
                   <el-option
-                    v-for="category in categories"
-                    :key="category.value"
-                    :label="category.label"
-                    :value="category.value">
+                      v-for="category in categories"
+                      :key="category.value"
+                      :label="category.label"
+                      :value="category.value">
                   </el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="状态">
                 <el-switch
-                  v-model="article.status"
-                  active-value="publish"
-                  inactive-value="draft"
-                  active-text="公开"
-                  inactive-text="隐藏">
+                    v-model="article.status"
+                    active-value="publish"
+                    inactive-value="draft"
+                    active-text="公开"
+                    inactive-text="隐藏">
                 </el-switch>
               </el-form-item>
               <el-form-item>
@@ -96,14 +96,7 @@
         // 如果有id则表示编辑文章,获取文章信息
         if (id) {
           this.$api.auth.getArticle(id).then(data => {
-            if (data.success) {
-              this.initArticle(data.data)
-            } else {
-              this.$message({
-                message: '获取文章失败',
-                type: 'error'
-              })
-            }
+            this.initArticle(data.data)
           })
         } else { // 如果没有id则表示新增文章,不用清空文章信息
           this.article.id = ''

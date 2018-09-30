@@ -15,11 +15,11 @@
             <div class="panel-content">
               <el-form-item label="状态">
                 <el-switch
-                  v-model="page.status"
-                  active-value="publish"
-                  inactive-value="draft"
-                  active-text="公开"
-                  inactive-text="隐藏">
+                    v-model="page.status"
+                    active-value="publish"
+                    inactive-value="draft"
+                    active-text="公开"
+                    inactive-text="隐藏">
                 </el-switch>
               </el-form-item>
               <el-form-item>
@@ -65,17 +65,10 @@
         const id = this.$route.params.id
         if (id) {
           this.$api.auth.getPage(id).then(data => {
-            if (data.success) {
-              this.page.id = data.data.id
-              this.page.title = data.data.title
-              this.page.content = data.data.content
-              this.page.status = data.data.status
-            } else {
-              this.$message({
-                message: '获取自定义页面失败',
-                type: 'error'
-              })
-            }
+            this.page.id = data.data.id
+            this.page.title = data.data.title
+            this.page.content = data.data.content
+            this.page.status = data.data.status
           })
         } else {
           this.page.id = ''
@@ -87,19 +80,12 @@
       savePage (formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            this.$api.auth.savePage(this.page).then(data => {
-              if (data.success) {
-                this.$router.push('/admin/page')
-                this.$message({
-                  message: '发布自定义页面成功!',
-                  type: 'success'
-                })
-              } else {
-                this.$message({
-                  message: '发布自定义页面失败,' + data.msg,
-                  type: 'error'
-                })
-              }
+            this.$api.auth.savePage(this.page).then(() => {
+              this.$router.push('/admin/page')
+              this.$message({
+                message: '发布自定义页面成功!',
+                type: 'success'
+              })
             })
           }
         })

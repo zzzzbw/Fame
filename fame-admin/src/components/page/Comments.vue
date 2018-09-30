@@ -9,25 +9,25 @@
       <el-table-column label="操作" width="150">
         <template slot-scope="scope">
           <el-button
-            size="small"
-            @click="handleDetail(scope.row.id)">详情
+              size="small"
+              @click="handleDetail(scope.row.id)">详情
           </el-button>
           <el-button
-            size="small"
-            type="danger"
-            @click="handleDelete(scope.row.id)">删除
+              size="small"
+              type="danger"
+              @click="handleDelete(scope.row.id)">删除
           </el-button>
         </template>
       </el-table-column>
     </el-table>
     <el-dialog
-      :visible.sync="detailVisible"
-      :modal="false"
-      :fullscreen="isMobile"
-      :width="dialogWidth"
-      center
-      append-to-body
-      custom-class="comment-dialog">
+        :visible.sync="detailVisible"
+        :modal="false"
+        :fullscreen="isMobile"
+        :width="dialogWidth"
+        center
+        append-to-body
+        custom-class="comment-dialog">
       <el-row :gutter="10">
         <el-col :xs="24" :sm="12" :md="3">所属文章:</el-col>
         <el-col :xs="24" :sm="12" :md="9">{{comment.title}}</el-col>
@@ -66,11 +66,11 @@
     </el-dialog>
     <div class="admin-page">
       <el-pagination
-        layout="total,prev, pager, next"
-        @current-change="init"
-        :current-page.sync="currentPage"
-        :page-size="pageSize"
-        :total="total">
+          layout="total,prev, pager, next"
+          @current-change="init"
+          :current-page.sync="currentPage"
+          :page-size="pageSize"
+          :total="total">
       </el-pagination>
     </div>
   </div>
@@ -94,19 +94,12 @@
     methods: {
       init (page) {
         this.$api.auth.getComments(page || 1).then(data => {
-          if (data.success) {
-            this.commentDatas = data.data.list
-            this.total = data.data.total
-            this.pageSize = data.data.pageSize
-            this.currentPage = Number(page) || 1
-            for (let comment of this.commentDatas) {
-              comment.created = this.$dayjs(comment.created).format('YYYY-MM-DD HH:mm')
-            }
-          } else {
-            this.$message({
-              message: '获取评论列表失败,' + data.msg,
-              type: 'error'
-            })
+          this.commentDatas = data.data.list
+          this.total = data.data.total
+          this.pageSize = data.data.pageSize
+          this.currentPage = Number(page) || 1
+          for (let comment of this.commentDatas) {
+            comment.created = this.$dayjs(comment.created).format('YYYY-MM-DD HH:mm')
           }
         })
       },
@@ -125,21 +118,14 @@
       },
       handleDetail (id) {
         this.$api.auth.getCommentDetail(id).then(data => {
-          if (data.success) {
-            this.initDetail(data.data)
-            this.detailVisible = true
-            if (document.body.clientWidth < 768) {
-              this.isMobile = true
-              this.dialogWidth = '100%'
-            } else {
-              this.isMobile = false
-              this.dialogWidth = '60%'
-            }
+          this.initDetail(data.data)
+          this.detailVisible = true
+          if (document.body.clientWidth < 768) {
+            this.isMobile = true
+            this.dialogWidth = '100%'
           } else {
-            this.$message({
-              message: '获取评论详情失败' + data.msg,
-              type: 'error'
-            })
+            this.isMobile = false
+            this.dialogWidth = '60%'
           }
         })
       },
@@ -154,19 +140,12 @@
         })
       },
       deleteComment (id) {
-        this.$api.auth.deleteComment(id).then(data => {
-          if (data.success) {
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            })
-            this.init(this.$route.query.page)
-          } else {
-            this.$message({
-              type: 'error',
-              message: '删除失败!' + data.msg
-            })
-          }
+        this.$api.auth.deleteComment(id).then(() => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+          this.init(this.$route.query.page)
         })
       }
     },
