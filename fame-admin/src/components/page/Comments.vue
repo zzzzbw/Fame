@@ -100,7 +100,7 @@
             this.pageSize = data.data.pageSize
             this.currentPage = Number(page) || 1
             for (let comment of this.commentDatas) {
-              comment.created = this.$moment(comment.created).format('YYYY-MM-DD HH:mm')
+              comment.created = this.$dayjs(comment.created).format('YYYY-MM-DD HH:mm')
             }
           } else {
             this.$message({

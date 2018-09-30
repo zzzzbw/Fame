@@ -63,8 +63,8 @@
           let page = {
             id: data.id,
             title: data.title,
-            publish: this.$moment(data.created).format('YYYY-MM-DD HH:mm'),
-            modified: this.$moment(data.modified).format('YYYY-MM-DD HH:mm'),
+            publish: this.$dayjs(data.created).format('YYYY-MM-DD HH:mm'),
+            modified: this.$dayjs(data.modified).format('YYYY-MM-DD HH:mm'),
             status: this.$util.STATIC.STATUS_PUBLISH === data.status ? '公开' : '隐藏'
           }
           this.pageDatas.push(page)
