@@ -1,8 +1,10 @@
 package com.zbw.fame.interceptor;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zbw.fame.model.Users;
 import com.zbw.fame.util.ErrorCode;
 import com.zbw.fame.util.FameUtil;
+import com.zbw.fame.util.RestResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -13,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 
 /**
  * 管理后台 拦截器
@@ -56,7 +59,10 @@ public class AdminInterceptor implements HandlerInterceptor {
                         response.setHeader(HttpHeaders.ACCESS_CONTROL_MAX_AGE, "3600");
                         response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "x-requested-with");
                     }
-                    response.setStatus(ErrorCode.NOT_LOGIN.getCode());
+                    PrintWriter out = response.getWriter();
+                    ObjectMapper mapper = new ObjectMapper();
+                    out.print(mapper.writeValueAsString(RestResponse.fail(ErrorCode.NOT_LOGIN.getCode(), ErrorCode.NOT_LOGIN.getMsg())));
+                    out.flush();
                     return false;
                 }
             }
