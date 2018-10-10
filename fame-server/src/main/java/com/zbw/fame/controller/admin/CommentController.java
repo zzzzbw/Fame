@@ -51,8 +51,8 @@ public class CommentController extends BaseController {
         if (null == comment) {
             return this.error404();
         }
-        if (null != comment.getpComment()) {
-            comment.getpComment().setContent(FameUtil.mdToHtml(comment.getpComment().getContent()));
+        if (null != comment.getPComment()) {
+            comment.getPComment().setContent(FameUtil.mdToHtml(comment.getPComment().getContent()));
         }
         comment.setContent(FameUtil.mdToHtml(comment.getContent()));
         return RestResponse.ok(comment);

@@ -1,5 +1,8 @@
 package com.zbw.fame.model;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import javax.persistence.OrderBy;
 import java.util.Date;
 
@@ -9,6 +12,8 @@ import java.util.Date;
  * @author zbw
  * @since 2017/7/8 9:29
  */
+@EqualsAndHashCode(callSuper = false)
+@Data
 public class Articles extends BaseEntity {
 
     /**
@@ -66,109 +71,4 @@ public class Articles extends BaseEntity {
      * 是否允许评论
      */
     private Boolean allowComment;
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    public Date getModified() {
-        return modified;
-    }
-
-    public void setModified(Date modified) {
-        this.modified = modified;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public Integer getAuthorId() {
-        return authorId;
-    }
-
-    public void setAuthorId(Integer authorId) {
-        this.authorId = authorId;
-    }
-
-    public Integer getHits() {
-        return hits;
-    }
-
-    public void setHits(Integer hits) {
-        this.hits = hits;
-    }
-
-    public String getTags() {
-        return tags;
-    }
-
-    public void setTags(String tags) {
-        this.tags = tags;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public Boolean getAllowComment() {
-        return allowComment;
-    }
-
-    public void setAllowComment(Boolean allowComment) {
-        this.allowComment = allowComment;
-    }
-
-    @Override
-    public String toString() {
-        return "Articles{" +
-                "title='" + title + '\'' +
-                ", created=" + created +
-                ", modified=" + modified +
-                ", content='" + content + '\'' +
-                ", authorId=" + authorId +
-                ", hits=" + hits +
-                ", tags='" + tags + '\'' +
-                ", category='" + category + '\'' +
-                ", status='" + status + '\'' +
-                ", type='" + type + '\'' +
-                ", allowComment=" + allowComment +
-                '}';
-    }
 }

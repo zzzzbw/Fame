@@ -5,8 +5,7 @@ import com.zbw.fame.model.Users;
 import com.zbw.fame.util.ErrorCode;
 import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.RestResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -23,6 +22,7 @@ import java.io.PrintWriter;
  * @author zbw
  * @since 2017/10/11 14:10
  */
+@Slf4j
 @Component
 public class AdminInterceptor implements HandlerInterceptor {
 
@@ -30,14 +30,12 @@ public class AdminInterceptor implements HandlerInterceptor {
 
     private static final String[] IGNORE_URIS = {"/admin/login", "/admin/logout"};
 
-    private static final Logger logger = LoggerFactory.getLogger(AdminInterceptor.class);
-
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String url = request.getRequestURI();
         String ip = FameUtil.getIp();
 
-        logger.info("用户访问地址: {}, Http类型: {}, ip地址: {}", url, request.getMethod(), ip);
+        log.info("用户访问地址: {}, Http类型: {}, ip地址: {}", url, request.getMethod(), ip);
 
         if (url.contains(AUTH_URIS)) {
             boolean auth = true;

@@ -1,5 +1,8 @@
 package com.zbw.fame.model;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import javax.persistence.OrderBy;
 import java.util.Date;
 
@@ -9,6 +12,8 @@ import java.util.Date;
  * @author zbw
  * @since 2018/1/19 16:27
  */
+@EqualsAndHashCode(callSuper = false)
+@Data
 public class Comments extends BaseEntity {
 
     /**
@@ -66,92 +71,4 @@ public class Comments extends BaseEntity {
      * 评论agent
      */
     private String agent;
-
-    public Integer getArticleId() {
-        return articleId;
-    }
-
-    public void setArticleId(Integer articleId) {
-        this.articleId = articleId;
-    }
-
-    public Integer getpId() {
-        return pId;
-    }
-
-    public void setpId(Integer pId) {
-        this.pId = pId;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getWebsite() {
-        return website;
-    }
-
-    public void setWebsite(String website) {
-        this.website = website;
-    }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    public Integer getAgree() {
-        return agree;
-    }
-
-    public void setAgree(Integer agree) {
-        this.agree = agree;
-    }
-
-    public Integer getDisagree() {
-        return disagree;
-    }
-
-    public void setDisagree(Integer disagree) {
-        this.disagree = disagree;
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
-    public String getAgent() {
-        return agent;
-    }
-
-    public void setAgent(String agent) {
-        this.agent = agent;
-    }
 }

@@ -1,5 +1,8 @@
 package com.zbw.fame.model;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import java.util.Date;
 
 /**
@@ -8,6 +11,8 @@ import java.util.Date;
  * @author zbw
  * @since 2017/7/9 22:09
  */
+@EqualsAndHashCode(callSuper = false)
+@Data
 public class Users extends BaseEntity {
 
     /**
@@ -39,64 +44,4 @@ public class Users extends BaseEntity {
      * 最后登陆时间
      */
     private Date logged;
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPasswordMd5() {
-        return passwordMd5;
-    }
-
-    public void setPasswordMd5(String passwordMd5) {
-        this.passwordMd5 = passwordMd5;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getScreenName() {
-        return screenName;
-    }
-
-    public void setScreenName(String screenName) {
-        this.screenName = screenName;
-    }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    public Date getLogged() {
-        return logged;
-    }
-
-    public void setLogged(Date logged) {
-        this.logged = logged;
-    }
-
-    @Override
-    public String toString() {
-        return "Users{" +
-                "username='" + username + '\'' +
-                ", passwordMd5='" + passwordMd5 + '\'' +
-                ", email='" + email + '\'' +
-                ", screenName='" + screenName + '\'' +
-                ", created=" + created +
-                ", logged=" + logged +
-                '}';
-    }
 }

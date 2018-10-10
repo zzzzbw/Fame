@@ -60,7 +60,7 @@ public class MetasServiceImpl implements MetasService {
         }
         List<Middles> middles = middlesMapper.select(new Middles(null, meta.getId()));
         for (Middles middle : middles) {
-            Articles articles = articlesMapper.selectByPrimaryKey(middle.getaId());
+            Articles articles = articlesMapper.selectByPrimaryKey(middle.getAId());
             if (null != articles) {
                 if (type.equals(Types.CATEGORY)) {
                     articles.setCategory("");

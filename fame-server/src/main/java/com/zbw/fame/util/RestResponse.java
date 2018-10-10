@@ -1,11 +1,14 @@
 package com.zbw.fame.util;
 
+import lombok.Data;
+
 /**
  * json通用返回类
  *
  * @author zbw
  * @since 2017/7/12 19:59
  */
+@Data
 public class RestResponse<T> {
 
     private int code;
@@ -74,37 +77,5 @@ public class RestResponse<T> {
 
     public static RestResponse fail(int code, String msg) {
         return new RestResponse(false, code, msg);
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public void setCode(int code) {
-        this.code = code;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    public T getData() {
-        return data;
-    }
-
-    public void setData(T data) {
-        this.data = data;
-    }
-
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
     }
 }

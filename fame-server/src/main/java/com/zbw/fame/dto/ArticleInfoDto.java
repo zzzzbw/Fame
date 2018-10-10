@@ -1,6 +1,8 @@
 package com.zbw.fame.dto;
 
 import com.zbw.fame.model.BaseEntity;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 文章信息Dto,用于一些列表页
@@ -8,6 +10,8 @@ import com.zbw.fame.model.BaseEntity;
  * @author zbw
  * @since 2018/8/28 14:34
  */
+@EqualsAndHashCode(callSuper = false)
+@Data
 public class ArticleInfoDto extends BaseEntity {
     /**
      * 内容标题
@@ -24,28 +28,4 @@ public class ArticleInfoDto extends BaseEntity {
      * 文章分类
      */
     private String category;
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getTags() {
-        return tags;
-    }
-
-    public void setTags(String tags) {
-        this.tags = tags;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
 }

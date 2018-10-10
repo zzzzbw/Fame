@@ -81,9 +81,9 @@ public class CommentsServiceImpl implements CommentsService {
         }
         CommentDto comment = new CommentDto();
         BeanUtils.copyProperties(entity, comment);
-        if (null != comment.getpId() && -1 != comment.getpId()) {
-            Comments pComment = commentsMapper.selectByPrimaryKey(comment.getpId());
-            comment.setpComment(pComment);
+        if (null != comment.getPId() && -1 != comment.getPId()) {
+            Comments pComment = commentsMapper.selectByPrimaryKey(comment.getPId());
+            comment.setPComment(pComment);
         }
 
         Articles articles = articlesMapper.selectByPrimaryKey(comment.getArticleId());
@@ -95,10 +95,10 @@ public class CommentsServiceImpl implements CommentsService {
     @Override
     public boolean deleteComment(Integer id) {
         Comments record = new Comments();
-        record.setpId(id);
+        record.setPId(id);
         Comments childComment = commentsMapper.selectOne(record);
         if (null != childComment) {
-            childComment.setpId(null);
+            childComment.setPId(null);
             commentsMapper.updateByPrimaryKey(childComment);
         }
         return commentsMapper.deleteByPrimaryKey(id) > 0;

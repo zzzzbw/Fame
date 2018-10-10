@@ -1,5 +1,8 @@
 package com.zbw.fame.model;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import java.util.Date;
 
 /**
@@ -8,6 +11,8 @@ import java.util.Date;
  * @author zbw
  * @since 2017/10/11 9:57
  */
+@EqualsAndHashCode(callSuper = false)
+@Data
 public class Logs extends BaseEntity {
 
     /**
@@ -44,73 +49,4 @@ public class Logs extends BaseEntity {
      * 操作时间
      */
     private Date created;
-
-    public String getAction() {
-        return action;
-    }
-
-    public void setAction(String action) {
-        this.action = action;
-    }
-
-    public String getData() {
-        return data;
-    }
-
-    public void setData(String data) {
-        this.data = data;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    @Override
-    public String toString() {
-        return "Logs{" +
-                "action='" + action + '\'' +
-                ", data='" + data + '\'' +
-                ", message='" + message + '\'' +
-                ", type='" + type + '\'' +
-                ", ip='" + ip + '\'' +
-                ", userId=" + userId +
-                ", created=" + created +
-                '}';
-    }
 }

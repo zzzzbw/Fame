@@ -209,7 +209,7 @@ public class HomeController extends BaseController {
                                     @RequestParam(required = false) String email, @RequestParam(required = false) String website) {
         Comments comments = new Comments();
         comments.setArticleId(articleId);
-        comments.setpId(pId);
+        comments.setPId(pId);
         comments.setContent(content);
         comments.setName(name);
         comments.setEmail(email);
@@ -221,8 +221,8 @@ public class HomeController extends BaseController {
         //发送邮件提醒
         CommentDto commentDetail = commentsService.getCommentDetail(comments.getId());
         emailService.sendEmailToAdmin(commentDetail);
-        if (null != commentDetail.getpComment() && !StringUtils.isEmpty(commentDetail.getpComment().getEmail())) {
-            emailService.sendEmailToUser(commentDetail, commentDetail.getpComment().getEmail());
+        if (null != commentDetail.getPComment() && !StringUtils.isEmpty(commentDetail.getPComment().getEmail())) {
+            emailService.sendEmailToUser(commentDetail, commentDetail.getPComment().getEmail());
         }
         return RestResponse.ok();
     }
