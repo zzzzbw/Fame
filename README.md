@@ -88,7 +88,7 @@
    git clone https://github.com/zzzzbw/Fame.git
    ```
 
-2. 部署服务端
+2. 部署服务端 (项目使用lombok插件，如果要在ide中调试要有lombok插件)
 
     2.1 在mysql中执行 `fame-server/src/main/resources/init.sql` sql文件
 
