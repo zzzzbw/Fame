@@ -111,6 +111,10 @@ a:hover {
   cursor: pointer;
 }
 
+img {
+  max-width: 100%;
+}
+
 .chip {
   box-shadow: 0 0 1px rgba(14, 14, 14, 0.3);
   align-items: center;
@@ -144,15 +148,4 @@ a:hover {
 
 .text-bold {
   font-weight: bold;
-}
-
-.markdown-body img {
-  max-width: 100%;
-  margin: .5rem auto;
-  display: block;
-  text-align: center;
-  border-radius: 4px;
-  transition: all .25s;
-  opacity: .9;
-  cursor: zoom-in;
 }

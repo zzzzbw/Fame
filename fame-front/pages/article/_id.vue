@@ -70,6 +70,19 @@
   }
 </script>
 
+<style>
+  #article .markdown-body img {
+    max-width: 100%;
+    margin: .5rem auto;
+    display: block;
+    text-align: center;
+    border-radius: 4px;
+    transition: all .25s;
+    opacity: .9;
+    cursor: zoom-in;
+  }
+</style>
+
 <style scoped>
   .article-title {
     color: #34495e;

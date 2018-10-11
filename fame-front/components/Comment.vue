@@ -283,8 +283,15 @@
   }
 </script>
 
-<style scoped>
+<style>
+  .comment-item-body .markdown-body img {
+    margin: .5rem 0;
+    max-width: 100%;
+    border-radius: 2px;
+  }
+</style>
 
+<style scoped>
   .comment {
     font-size: 14px;
   }
