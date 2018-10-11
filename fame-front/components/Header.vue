@@ -1,5 +1,5 @@
 <template>
-  <div class="header">
+  <div v-fix class="header">
     <div class="header-container">
       <div class="logo">
         <img src="~/assets/img/logo.png" width="26px" height="26px">
@@ -27,6 +27,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import _ from 'underscore'
   export default {
     data () {
       return {
@@ -48,6 +49,39 @@
         this.$router.push({ path: url, query: query })
         this.toggle()
       }
+    },
+    mounted () {
+      // 顶部图标的显示与隐藏
+      window.onscroll = function () {
+        console.log(document.documentElement.scrollTop || document.body.scrollTop)
+      }
+    },
+    directives: {
+      fix: {
+        inserted (el) {
+          let beforeScrollTop = document.documentElement.scrollTop ||
+            window.pageYOffset ||
+            window.scrollY ||
+            document.body.scrollTop
+          window.addEventListener('scroll', _.throttle(() => {
+            let afterScrollTop = document.documentElement.scrollTop ||
+              window.pageYOffset ||
+              window.scrollY ||
+              document.body.scrollTop
+            let delta = afterScrollTop - beforeScrollTop
+            if (delta === 0) return false
+            delta > 0
+              ? el.classList.add('fixed')
+              : el.classList.remove('fixed')
+            setTimeout(() => {
+              beforeScrollTop = afterScrollTop
+            }, 0)
+          }, 200))
+        },
+        unbind () {
+          window.onscroll = null
+        }
+      }
     }
   }
 </script>
@@ -67,7 +101,11 @@
     left: 0;
     width: 100%;
     z-index: 200;
-    transition: background 0.5s;
+    transition: all 0.8s;
+  }
+
+  .fixed {
+    transform: translateY(-100%);
   }
 
   .header-container {

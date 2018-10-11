@@ -16,7 +16,8 @@
   "dependencies": {
     "axios": "^0.18.0",
     "highlight.js": "^9.12.0",
-    "nuxt": "^1.4.0"
+    "nuxt": "^1.4.0",
+    "underscore": "^1.9.1"
   },
   "devDependencies": {
     "babel-eslint": "^9.0.0",
