@@ -1,4 +1,4 @@
-#__nuxt {
+flow#__nuxt {
   font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -81,6 +81,28 @@
 .slide-down-leave-active {
   position: absolute !important;
   width: 100%;
+}
+
+@keyframes flow {
+  0% {
+    transform: translateY(-20px);
+    opacity: 0
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1
+  }
+}
+
+@-webkit-keyframes flow {
+  0% {
+    -webkit-transform: translateY(-20px);
+    opacity: 0
+  }
+  100% {
+    -webkit-transform: translateY(0);
+    opacity: 1
+  }
 }
 
 /* transition end */

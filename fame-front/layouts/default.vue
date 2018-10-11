@@ -33,7 +33,7 @@
     max-width: 980px;
     font-size: 16px;
     position: relative;
+    animation: flow;
+    animation-duration: .5s;
   }
-
-
 </style>
