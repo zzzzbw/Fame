@@ -1,71 +1,77 @@
 version: '3'
-services: 
+services:
   fame-nginx:
     container_name: fame-nginx
     build:
-     context: ./
-     dockerfile: ./fame-docker/fame-nginx/nginx-Dockerfile
+      context: ./
+      dockerfile: ./fame-docker/fame-nginx/nginx-Dockerfile
+    environment:
+      TZ: Asia/Shanghai
     ports:
-      - "80:80"
+    - "80:80"
     volumes:
-     - ./logs/nginx:/var/log/nginx
+    - ./logs/nginx:/var/log/nginx
     depends_on:
-      - fame-server
-      - fame-admin
-      - fame-front
-  
+    - fame-server
+    - fame-admin
+    - fame-front
+
   fame-mysql:
-   container_name: fame-mysql
-   build: 
-     context: ./
-     dockerfile: ./fame-docker/fame-mysql/fame-mysql-Dockerfile
-   environment:
-     MYSQL_DATABASE: fame
-     MYSQL_ROOT_PASSWORD: root
-     MYSQL_ROOT_HOST: '%'
-     TZ: Asia/Shanghai
-   expose:
-      - "3306"
-   volumes:
-     - ./mysql/mysql_data:/var/lib/mysql
-   restart: always
+    container_name: fame-mysql
+    build:
+      context: ./
+      dockerfile: ./fame-docker/fame-mysql/fame-mysql-Dockerfile
+    environment:
+      MYSQL_DATABASE: fame
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_HOST: '%'
+      TZ: Asia/Shanghai
+    expose:
+    - "3306"
+    volumes:
+    - ./mysql/mysql_data:/var/lib/mysql
+    restart: always
 
   fame-server:
     container_name: fame-server
-    build: 
-     context: ./
-     dockerfile: ./fame-docker/fame-server-Dockerfile
+    build:
+      context: ./
+      dockerfile: ./fame-docker/fame-server-Dockerfile
     working_dir: /app
+    environment:
+      TZ: Asia/Shanghai
     volumes:
-      - ./fame-server:/app
-      - ~/.m2:/root/.m2
-      - ./logs/fame:/app/log
+    - ./fame-server:/app
+    - ~/.m2:/root/.m2
+    - ./logs/fame:/app/log
     expose:
-      - "9090"
+    - "9090"
     command: mvn clean spring-boot:run -Dspring-boot.run.profiles=docker -Dmaven.test.skip=true
     depends_on:
-      - fame-mysql
+    - fame-mysql
     restart: always
 
-
   fame-admin:
-   container_name: fame-admin
-   build: 
-    context: ./
-    dockerfile: ./fame-docker/fame-admin/fame-admin-Dockerfile
-    args:
-      BASE_URL: ${BASE_URL}
-   expose:
-      - "3001"
+    container_name: fame-admin
+    build:
+      context: ./
+      dockerfile: ./fame-docker/fame-admin/fame-admin-Dockerfile
+      args:
+        BASE_URL: ${BASE_URL}
+    environment:
+      TZ: Asia/Shanghai
+    expose:
+    - "3001"
 
   fame-front:
-   container_name: fame-front
-   build: 
-    context: ./
-    dockerfile: ./fame-docker/fame-front-Dockerfile
-   environment:
+    container_name: fame-front
+    build:
+      context: ./
+      dockerfile: ./fame-docker/fame-front-Dockerfile
+    environment:
       BASE_URL: ${BASE_URL}
       PROXY_HOST: ${PROXY_HOST}
       PROXY_PORT: ${PROXY_PORT}
-   expose:
-      - "3000"
+      TZ: Asia/Shanghai
+    expose:
+    - "3000"
