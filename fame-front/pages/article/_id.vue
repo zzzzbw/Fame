@@ -11,8 +11,8 @@
     </div>
     <div class="article-tags">
       <label class="label-tags">Tags:</label>
-      <span v-for="tag in $util.stringToTags(article.tags)" :key="tag" class="chip">
-        {{tag}}
+      <span v-for="tag in $util.stringToTags(article.tags)" :key="tag" class="article-tag">
+        #{{tag}}
       </span>
     </div>
     <comment :article-id="article.id"></comment>
@@ -107,7 +107,6 @@
 
   .article-tags {
     margin: 15px 0;
-
   }
 
   .article-tags .label-tags {
@@ -117,8 +116,10 @@
     color: #34495e;
   }
 
-  .article-tags .chip {
-    margin-right: 5px;
+  .article-tags .article-tag {
+    font-weight: bold;
+    color: #5764c6;
+    margin: 0 0.2em;
   }
 
   @media screen and (max-width: 600px) {

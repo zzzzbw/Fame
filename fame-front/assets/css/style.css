@@ -3,7 +3,7 @@ html {
 }
 
 body {
-  font-family: Source Sans Pro, Helvetica Neue, Arial, sans-serif !important;
+  font-family: Roboto, Arial, sans-serif !important;
   color: #34495e;
   -webkit-font-smoothing: antialiased;
   line-height: 1.6rem;
@@ -275,7 +275,7 @@ table tr td:last-child {
   margin: 0 2px;
   padding: 2px 4px;
   border-radius: 2px;
-  font-family: Source Sans Pro, Roboto Mono, Monaco, courier, monospace !important;
+  font-family: Consolas, Roboto, monospace !important;
   font-size: 0.92rem;
   background-color: #f7f7f7;
 }
@@ -293,7 +293,6 @@ table tr td:last-child {
 .markdown-body del {
   padding: 1px 2px;
 }
-
 
 header,
 footer {

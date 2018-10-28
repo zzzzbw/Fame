@@ -20,8 +20,9 @@ module.exports = {
       {
         rel: 'stylesheet',
         type: 'text/css',
-        href: 'http://fonts.font.im/css?family=Source+Sans+Pro:400,300,300italic,400italic,600,600italic,700,700italic'
+        href: 'http://fonts.font.im/css?family=Roboto:300,300italic,400,400italic,500,500italic,700,700italic'
       }
+
     ],
     noscript: [
       { innerHTML: 'This website requires JavaScript.' }

@@ -9,8 +9,8 @@
       </p>
       <p class="article-date"><span class="icon-eye"></span> {{article.hits}}</p>
       <div class="article-tags">
-        <label v-for="tag in $util.stringToTags(article.tags)" :key="tag" class="chip">
-          {{tag}}
+        <label v-for="tag in $util.stringToTags(article.tags)" :key="tag" class="article-tag">
+          #{{tag}}
         </label>
       </div>
       <div class="article-summary markdown-body" v-html="article.content" v-highlight>
@@ -55,6 +55,17 @@
   }
 </script>
 
+<style>
+  .article-item .markdown-body img {
+    max-width: 100%;
+    margin: .5rem auto;
+    display: block;
+    text-align: center;
+    border-radius: 4px;
+    opacity: .9;
+  }
+</style>
+
 <style scoped>
 
   .article-item {
@@ -91,7 +102,12 @@
   }
 
   .article-item .article-tags {
-    margin-bottom: 10px;
+    font-weight: bold;
+    color: #5764c6;
+  }
+
+  .article-item .article-tags .article-tag {
+    margin: 0 0.2em;
   }
 
   .article-item .article-more {
