@@ -64,7 +64,7 @@
   }
 
   .category-item {
-    margin-bottom: 10px;
+    padding: 0.5em 0;
   }
 
   .category-title {

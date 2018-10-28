@@ -58,11 +58,12 @@
 <style scoped>
 
   .article-item {
-    padding-bottom: 30px;
+    padding: 1em 0 2em;
+    border-bottom: 1px solid #ddd;
   }
 
   .article-item:first-child {
-    margin-top: 30px;
+    margin-top: 20px;
   }
 
   .article-head {
@@ -78,8 +79,8 @@
   }
 
   .article-head > a:hover {
-    outline-width: 0;
-    text-decoration: underline;
+    outline: 0;
+    border-bottom: 2px solid #5764c6;
   }
 
   .article-item .article-date {
