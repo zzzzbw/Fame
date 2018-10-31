@@ -8,7 +8,7 @@
       <div class="comment-box" :key="2">
         <form @submit="submitComment">
           <div class="comment-edit">
-            <div class="gravatar">
+            <div class="gravatar gravatar-comment">
               <img :src="user.gravatar || '/avator.jpg'"/>
             </div>
             <div class="editor">
@@ -342,10 +342,13 @@
 
   .gravatar {
     display: block;
-    margin-right: 10px;
     margin-bottom: 5px;
     width: 36px;
     height: 36px;
+  }
+
+  .gravatar-comment {
+    margin-right: 10px;
   }
 
   .gravatar img {
