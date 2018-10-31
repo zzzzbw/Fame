@@ -9,7 +9,7 @@
         <form @submit="submitComment">
           <div class="comment-edit">
             <div class="gravatar">
-              <img src="~/assets/img/avator.jpg"/>
+              <img :src="user.gravatar || '/avator.jpg'"/>
             </div>
             <div class="editor">
               <transition-group tag="div" name="list" id="reply">
@@ -31,13 +31,17 @@
           <div class="comment-user">
             <div class="user-input">
               <div class="name">
-                <input v-model="name" required="required" type="text" name="name" placeholder="称呼（必填）" maxlength="10">
+                <input v-model="user.name" required="required" type="text" name="name" placeholder="称呼（必填）"
+                       maxlength="10">
               </div>
               <div class="email">
-                <input v-model="email" type="email" name="email" placeholder="邮箱（非必填，不会公开）" maxlength="30">
+                <input v-model="user.email" type="email" name="email" placeholder="邮箱（非必填，不会公开）"
+                       @blur="updateUserGravatar"
+                       maxlength="50">
               </div>
               <div class="website">
-                <input v-model="website" type="url" name="url" placeholder="网站（http, https:// 开头，非必填）" maxlength="20">
+                <input v-model="user.website" type="url" name="url" placeholder="网站（http, https:// 开头，非必填）"
+                       maxlength="50">
               </div>
             </div>
             <button type="submit" class="submit" :disabled="isComment"><span>{{isComment?'发布中...':'发布'}}</span><i
@@ -50,7 +54,7 @@
         <transition-group name="list" tag="ul" class="comment-list">
           <li class="comment-item" v-for="comment in comments" :key="comment.id">
             <div class="gravatar">
-              <img src="~/assets/img/avator.jpg"/>
+              <img :src="gravatar(comment.email)"/>
             </div>
             <div class="comment-item-body">
               <div class="comment-item-header">
@@ -99,9 +103,12 @@
         commentAgrees: [],
         commentDisagrees: [],
         commentContent: '',
-        name: '',
-        email: '',
-        website: '',
+        user: {
+          name: '',
+          email: '',
+          website: '',
+          gravatar: ''
+        },
         isEdit: false,
         isComment: false,
         isReply: false,
@@ -125,6 +132,14 @@
       // 跳转到某条指定的id位置
       toSomeAnchorById (id) {
         this.$util.goAnchor(id, 120, 60)
+      },
+      gravatar (email) {
+        return this.$gravarar.url(email, { s: '36', d: 'retro' })
+      },
+      updateUserGravatar () {
+        if (this.user.email) {
+          this.user.gravatar = this.gravatar(this.user.email)
+        }
       },
       commentPasteListen () {
         document.addEventListener('copy', e => {
@@ -166,9 +181,6 @@
       },
       clearComment () {
         this.commentContent = ''
-        this.name = ''
-        this.email = ''
-        this.website = ''
         this.isEdit = false
         this.isComment = false
         this.isReply = false
@@ -242,9 +254,9 @@
           articleId: this.articleId,
           replyCommentId: this.replyComment.id,
           content: html,
-          name: this.name,
-          email: this.email,
-          website: this.website
+          name: this.user.name,
+          email: this.user.email,
+          website: this.user.website
         })
         this.isComment = false
         if (res.success) {

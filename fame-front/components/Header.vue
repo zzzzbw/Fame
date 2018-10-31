@@ -2,7 +2,7 @@
   <div v-fix class="header">
     <div class="header-container">
       <div class="logo">
-        <img src="~/assets/img/logo.png" width="26px" height="26px">
+        <img src="/logo.png" width="26px" height="26px">
         <span class="text-primary" style="margin-left: 10px">Fame</span>
       </div>
       <ul class="tab link-list">

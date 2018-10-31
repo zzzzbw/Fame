@@ -76,7 +76,8 @@ module.exports = {
     vendor: [
       'axios',
       'highlight.js',
-      'underscore'
+      'underscore',
+      'gravatar'
     ],
     extractCSS: true,
     /*
@@ -94,6 +95,7 @@ module.exports = {
     }
   },
   env: {
+    // 环境变量,用于docker
     baseUrl: process.env.BASE_URL || undefined,
     proxyHost: process.env.PROXY_HOST || undefined,
     proxyPort: process.env.PROXY_PORT || undefined
