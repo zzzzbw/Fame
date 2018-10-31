@@ -68,10 +68,11 @@ services:
     build:
       context: ./
       dockerfile: ./fame-docker/fame-front-Dockerfile
+      args:
+        BASE_URL: ${BASE_URL}
+        PROXY_HOST: ${PROXY_HOST}
+        PROXY_PORT: ${PROXY_PORT}
     environment:
-      BASE_URL: ${BASE_URL}
-      PROXY_HOST: ${PROXY_HOST}
-      PROXY_PORT: ${PROXY_PORT}
       TZ: Asia/Shanghai
     expose:
     - "3000"
