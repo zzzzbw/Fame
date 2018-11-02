@@ -39,11 +39,12 @@ module.exports = {
     { src: '~assets/css/icon.css' }
   ],
   plugins: [
-    { src: '~/plugins/highlight.js' },
-    { src: '~/plugins/clickoutside.js' },
-    { src: '~/plugins/filters.js' },
-    { src: '~/plugins/global.js' },
-    { src: '~/plugins/tools.js' }
+    { src: '~plugins/highlight.js' },
+    { src: '~plugins/clickoutside.js' },
+    { src: '~plugins/filters.js' },
+    { src: '~plugins/global.js' },
+    { src: '~plugins/tools.js' },
+    { src: '~plugins/ga.js', ssr: false }
   ],
   router: {
     linkActiveClass: 'active',
