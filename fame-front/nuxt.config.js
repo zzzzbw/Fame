@@ -29,8 +29,8 @@ module.exports = {
     ]
   },
   /*
- ** Global CSS
- */
+   ** Global CSS
+   */
   css: [
     { src: '~assets/css/main.css' },
     { src: '~assets/css/normalize.css' },
@@ -38,13 +38,17 @@ module.exports = {
     'highlight.js/styles/tomorrow.css',
     { src: '~assets/css/icon.css' }
   ],
+  modules: [
+    ['@nuxtjs/google-analytics', {
+      id: 'UA-128579148-1'
+    }]
+  ],
   plugins: [
     { src: '~plugins/highlight.js' },
     { src: '~plugins/clickoutside.js' },
     { src: '~plugins/filters.js' },
     { src: '~plugins/global.js' },
-    { src: '~plugins/tools.js' },
-    { src: '~plugins/ga.js', ssr: false }
+    { src: '~plugins/tools.js' }
   ],
   router: {
     linkActiveClass: 'active',

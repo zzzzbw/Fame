@@ -13,6 +13,7 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
+    "@nuxtjs/google-analytics": "^2.0.2",
     "axios": "^0.18.0",
     "gravatar": "^1.6.0",
     "highlight.js": "^9.12.0",
