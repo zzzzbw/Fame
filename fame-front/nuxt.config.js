@@ -103,6 +103,7 @@ module.exports = {
     // 环境变量,用于docker
     baseUrl: process.env.BASE_URL || undefined,
     proxyHost: process.env.PROXY_HOST || undefined,
-    proxyPort: process.env.PROXY_PORT || undefined
+    proxyPort: process.env.PROXY_PORT || undefined,
+    icp: process.env.ICP || '在 nuxt.config.js 配置你的备案号'
   }
 }

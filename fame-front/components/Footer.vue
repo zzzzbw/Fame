@@ -3,9 +3,19 @@
     <p class="copyright">
       © 2017 | Proudly powered by <a href="https://github.com/zzzzbw/Fame" target="_blank">Fame</a>
       <br>
-      Theme by <a href="https://github.com/zzzzbw/Fame-front" target="_blank">Fame-front</a></p>
+      <a href="http://www.miitbeian.gov.cn" target="_blank"> {{icp}} </a></p>
   </div>
 </template>
+
+<script type="text/ecmascript-6">
+  export default {
+    data: function () {
+      return {
+        icp: process.env.icp
+      }
+    }
+  }
+</script>
 
 <style scoped>
   .footer {
