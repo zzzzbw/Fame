@@ -2,21 +2,24 @@ package com.zbw.fame.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.mapper.ArticlesMapper;
+import com.zbw.fame.mapper.CommentsMapper;
 import com.zbw.fame.model.Articles;
+import com.zbw.fame.model.Comments;
 import com.zbw.fame.service.ArticlesService;
 import com.zbw.fame.service.MetasService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.Types;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import tk.mybatis.mapper.entity.Example;
+import tk.mybatis.mapper.util.Sqls;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * 文章 Service 实现类
@@ -24,6 +27,7 @@ import java.util.List;
  * @author zbw
  * @since 2017/8/21 22:02
  */
+@Slf4j
 @Service("articlesService")
 @Transactional(rollbackFor = Throwable.class)
 public class ArticlesServiceImpl implements ArticlesService {
@@ -33,6 +37,9 @@ public class ArticlesServiceImpl implements ArticlesService {
 
     @Autowired
     private MetasService metasService;
+
+    @Autowired
+    private CommentsMapper commentsMapper;
 
     @Override
     public Page<Articles> getArticles(Integer page, Integer limit) {
@@ -77,7 +84,6 @@ public class ArticlesServiceImpl implements ArticlesService {
             throw new TipException("请先登陆后发布文章");
         }
 
-
         article.setModified(new Date());
 
         if (null != article.getId()) {
@@ -115,7 +121,17 @@ public class ArticlesServiceImpl implements ArticlesService {
         }
 
         if (articlesMapper.deleteByPrimaryKey(id) > 0) {
-            //传空的属性，则移除该文章关联的属性
+            log.info("删除文章: {}", articles);
+
+            // 删除文章下的评论
+            Example commentsExample = Example
+                    .builder(Comments.class)
+                    .where(Sqls.custom().andEqualTo("articleId", id))
+                    .build();
+            int commentsResult = commentsMapper.deleteByExample(commentsExample);
+            log.info("删除对应的评论,数量: {}", commentsResult);
+
+            // 传空的属性，则移除该文章关联的属性
             metasService.saveOrRemoveMetas("", Types.CATEGORY, articles.getId());
             metasService.saveOrRemoveMetas("", Types.TAG, articles.getId());
             return true;

@@ -2,6 +2,7 @@ package com.zbw.fame.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.Date;
 
@@ -11,7 +12,8 @@ import java.util.Date;
  * @author zbw
  * @since 2017/10/11 9:57
  */
-@EqualsAndHashCode(callSuper = false)
+@ToString(callSuper = true)
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class Logs extends BaseEntity {
 

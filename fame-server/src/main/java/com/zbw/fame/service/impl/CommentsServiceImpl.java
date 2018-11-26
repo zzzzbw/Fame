@@ -11,6 +11,7 @@ import com.zbw.fame.model.Comments;
 import com.zbw.fame.service.CommentsService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.Types;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import org.springframework.util.StringUtils;
  * @author zbw
  * @since 2018/1/19 16:57
  */
+@Slf4j
 @Service("commentsService")
 @Transactional(rollbackFor = Throwable.class)
 public class CommentsServiceImpl implements CommentsService {
@@ -63,9 +65,18 @@ public class CommentsServiceImpl implements CommentsService {
         if (!StringUtils.isEmpty(comments.getWebsite()) && comments.getWebsite().length() > FameConsts.MAX_COMMENT_WEBSITE_COUNT) {
             throw new TipException("网址长度不能超过" + FameConsts.MAX_COMMENT_WEBSITE_COUNT);
         }
+
+        Articles articles = articlesMapper.selectByPrimaryKey(comments.getArticleId());
+        if (null == articles) {
+            throw new TipException("无法查询到对应评论文章");
+        }
         comments.setAgree(0);
         comments.setDisagree(0);
         commentsMapper.insert(comments);
+
+        // 增加文章的评论数
+        articles.setCommentCount(articles.getCommentCount() + 1);
+        articlesMapper.updateByPrimaryKeySelective(articles);
     }
 
     @Override
@@ -94,6 +105,17 @@ public class CommentsServiceImpl implements CommentsService {
 
     @Override
     public boolean deleteComment(Integer id) {
+        Comments comments = commentsMapper.selectByPrimaryKey(id);
+        if (null == comments) {
+            throw new TipException("不存在该评论");
+        }
+
+        // 减去文章中评论数
+        Articles articles = articlesMapper.selectByPrimaryKey(comments.getArticleId());
+        articles.setCommentCount(articles.getCommentCount() - 1);
+        articlesMapper.updateByPrimaryKeySelective(articles);
+
+        // 去除子评论中关联
         Comments record = new Comments();
         record.setPId(id);
         Comments childComment = commentsMapper.selectOne(record);
@@ -101,7 +123,11 @@ public class CommentsServiceImpl implements CommentsService {
             childComment.setPId(null);
             commentsMapper.updateByPrimaryKey(childComment);
         }
-        return commentsMapper.deleteByPrimaryKey(id) > 0;
+        if (commentsMapper.deleteByPrimaryKey(id) > 0) {
+            log.info("删除评论: {}", comments);
+            return true;
+        }
+        return false;
     }
 
     @Override

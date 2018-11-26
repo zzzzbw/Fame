@@ -24,13 +24,6 @@ public class UsersServiceImpl implements UsersService {
     @Autowired
     private UsersMapper usersMapper;
 
-    /**
-     * 用户登陆
-     *
-     * @param username
-     * @param password
-     * @return
-     */
     @Override
     public Users login(String username, String password) {
         Users record = new Users();

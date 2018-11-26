@@ -1,5 +1,5 @@
 DROP DATABASE IF EXISTS fame;
-CREATE DATABASE fame CHARACTER SET utf8 COLLATE utf8_general_ci;;
+CREATE DATABASE fame CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE fame;
 
 CREATE TABLE users (
@@ -24,7 +24,8 @@ CREATE TABLE articles (
   category      VARCHAR(255),
   status        VARCHAR(32),
   type          VARCHAR(32),
-  allow_comment BOOLEAN
+  allow_comment BOOLEAN,
+  comment_count INT DEFAULT NOT NULL 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE comments (
