@@ -5,6 +5,7 @@
       <p class="article-category"><span class="icon-folder"></span> {{article.category | formatCategory}}</p>
       <p class="article-date"><span class="icon-calendar"></span> {{article.created | time('yyyy-MM-dd')}}</p>
       <p class="article-date"><span class="icon-eye"></span> {{article.hits}}</p>
+      <p class="article-date"><span class="icon-bubble2"> {{article.commentCount}} </span></p>
     </div>
 
     <div class="markdown-body" v-html="article.content" v-highlight>
