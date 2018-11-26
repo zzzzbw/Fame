@@ -3,8 +3,8 @@ package com.zbw.fame.model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+import tk.mybatis.mapper.annotation.Order;
 
-import javax.persistence.OrderBy;
 import java.util.Date;
 
 /**
@@ -51,7 +51,7 @@ public class Comments extends BaseEntity {
     /**
      * 评论时间
      */
-    @OrderBy("desc")
+    @Order("desc")
     private Date created;
 
     /**
