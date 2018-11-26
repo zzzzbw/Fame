@@ -5,10 +5,12 @@ MAINTAINER zzzzbw "zzzzbw@gmail.com"
 ARG BASE_URL
 ARG PROXY_HOST
 ARG PROXY_PORT
+ARG ICP
 
 ENV BASE_URL $BASE_URL
 ENV PROXY_HOST $PROXY_HOST
 ENV PROXY_PORT $PROXY_PORT
+ENV ICP $ICP
 
 RUN npm config set registry https://registry.npm.taobao.org
 

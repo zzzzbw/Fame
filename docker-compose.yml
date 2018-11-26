@@ -72,6 +72,7 @@ services:
         BASE_URL: ${BASE_URL}
         PROXY_HOST: ${PROXY_HOST}
         PROXY_PORT: ${PROXY_PORT}
+        ICP: ${ICP}
     environment:
       TZ: Asia/Shanghai
     expose:
