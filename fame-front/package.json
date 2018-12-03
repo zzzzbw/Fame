@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@nuxtjs/google-analytics": "^2.0.2",
+    "@nuxtjs/sitemap": "^0.1.1",
     "axios": "^0.18.0",
     "gravatar": "^1.6.0",
     "highlight.js": "^9.12.0",

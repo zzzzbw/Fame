@@ -1,3 +1,6 @@
+const axios = require('axios')
+const serverConfig = require('./server-config')
+
 // noinspection JSAnnotator
 module.exports = {
   /*
@@ -41,8 +44,15 @@ module.exports = {
   modules: [
     ['@nuxtjs/google-analytics', {
       id: 'UA-128579148-1'
-    }]
+    }],
+    ['@nuxtjs/sitemap']
   ],
+  sitemap: {
+    routes () {
+      return axios.get(serverConfig.api + 'api/article?page=1&limit=999')
+        .then(res => res.data.data.list.map(article => '/article/' + article.id))
+    }
+  },
   plugins: [
     { src: '~plugins/highlight.js' },
     { src: '~plugins/clickoutside.js' },
