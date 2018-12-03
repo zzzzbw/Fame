@@ -49,7 +49,7 @@ module.exports = {
   ],
   sitemap: {
     routes () {
-      return axios.get(serverConfig.api + 'api/article?page=1&limit=999')
+      return axios.get(process.env.BASE_URL || 'http://127.0.0.1:9090/' + 'api/article?page=1&limit=999')
         .then(res => res.data.data.list.map(article => '/article/' + article.id))
     }
   },
