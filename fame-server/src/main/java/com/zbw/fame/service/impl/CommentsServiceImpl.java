@@ -70,9 +70,8 @@ public class CommentsServiceImpl implements CommentsService {
         if (null == articles) {
             throw new TipException("无法查询到对应评论文章");
         }
-        comments.setAgree(0);
-        comments.setDisagree(0);
-        commentsMapper.insert(comments);
+
+        commentsMapper.insertSelective(comments);
 
         // 增加文章的评论数
         articles.setCommentCount(articles.getCommentCount() + 1);

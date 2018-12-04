@@ -19,8 +19,6 @@ import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 import tk.mybatis.mapper.util.Sqls;
 
-import java.util.Date;
-
 /**
  * 文章 Service 实现类
  *
@@ -189,14 +187,11 @@ public class ArticlesServiceImpl implements ArticlesService {
         }
 
 
-        page.setModified(new Date());
-
         if (null != page.getId()) {
             articlesMapper.updateByPrimaryKeySelective(page);
         } else {
-            page.setCreated(new Date());
             page.setType(Types.PAGE);
-            articlesMapper.insert(page);
+            articlesMapper.insertSelective(page);
         }
 
         return page.getId();
