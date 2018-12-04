@@ -84,15 +84,11 @@ public class ArticlesServiceImpl implements ArticlesService {
             throw new TipException("请先登陆后发布文章");
         }
 
-        article.setModified(new Date());
-
         if (null != article.getId()) {
             articlesMapper.updateByPrimaryKeySelective(article);
         } else {
-            article.setCreated(new Date());
-            article.setHits(0);
             article.setType(Types.POST);
-            articlesMapper.insert(article);
+            articlesMapper.insertSelective(article);
         }
 
         Integer id = article.getId();
