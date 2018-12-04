@@ -1,5 +1,4 @@
-const axios = require('axios')
-const serverConfig = require('./server-config')
+const sitemapConfig = require('./config/sitemap-config')
 
 // noinspection JSAnnotator
 module.exports = {
@@ -47,12 +46,7 @@ module.exports = {
     }],
     ['@nuxtjs/sitemap']
   ],
-  sitemap: {
-    routes () {
-      return axios.get(process.env.BASE_URL || 'http://127.0.0.1:9090/' + 'api/article?page=1&limit=999')
-        .then(res => res.data.data.list.map(article => '/article/' + article.id))
-    }
-  },
+  sitemap: sitemapConfig.config,
   plugins: [
     { src: '~plugins/highlight.js' },
     { src: '~plugins/clickoutside.js' },
