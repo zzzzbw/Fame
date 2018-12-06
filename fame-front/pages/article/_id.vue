@@ -7,7 +7,6 @@
       <p class="article-date"><span class="icon-eye"></span> {{article.hits}}</p>
       <p class="article-date"><span class="icon-bubble2"> {{article.commentCount}} </span></p>
     </div>
-
     <div class="markdown-body" v-html="article.content" v-highlight>
     </div>
     <div class="article-tags">
@@ -16,8 +15,8 @@
         #{{tag}}
       </span>
     </div>
+    <nav class="markdown-toc toc"></nav>
     <comment :article-id="article.id"></comment>
-
     <big-img
       :visible.sync="isBigImg"
       :img="img">
@@ -28,6 +27,7 @@
 <script type="text/ecmascript-6">
   import Comment from '~/components/Comment.vue'
   import BigImg from '~/components/BigImg.vue'
+  import tocbot from 'tocbot'
 
   export default {
     head () {
@@ -63,15 +63,38 @@
             _this.img = imgs[i].getAttribute('src')
           })
         }
+      },
+      tocInit () {
+        const headingSelector = 'h1, h2, h3, h4'
+        let body = document.getElementsByClassName('markdown-body')
+        if (body) {
+          let tag = body[0].querySelectorAll(headingSelector)
+          tag.forEach(function (el) {
+            el.setAttribute('id', el.innerHTML)
+          })
+        }
+        tocbot.init({
+          tocSelector: '.markdown-toc',
+          contentSelector: '.markdown-body',
+          headingSelector: headingSelector,
+          collapseDepth: 6
+        })
+        // 延时显示，防止闪烁
+        setTimeout(function () {
+          document.getElementsByClassName('markdown-toc')[0].style.opacity = 1
+        }, 500)
       }
     },
     mounted () {
       this.initEvent()
+      this.tocInit()
     }
   }
 </script>
 
 <style>
+  @import "~/assets/css/markdown-toc.css";
+
   #article .markdown-body img {
     max-width: 100%;
     margin: .5rem auto;
@@ -85,6 +108,20 @@
 </style>
 
 <style scoped>
+  .markdown-toc {
+    position: fixed !important;
+    top: 100px;
+    right: 40px;
+    opacity: 0;
+    transition: all .3s;
+  }
+
+  @media screen and (max-width: 1300px) {
+    .markdown-toc {
+      display: none;
+    }
+  }
+
   .article-title {
     color: #34495e;
     margin: 1.2em 0 0;
