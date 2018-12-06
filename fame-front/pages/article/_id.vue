@@ -76,8 +76,7 @@
         tocbot.init({
           tocSelector: '.markdown-toc',
           contentSelector: '.markdown-body',
-          headingSelector: headingSelector,
-          collapseDepth: 6
+          headingSelector: headingSelector
         })
         // 延时显示，防止闪烁
         setTimeout(function () {
@@ -110,6 +109,8 @@
 <style scoped>
   .markdown-toc {
     position: fixed !important;
+    max-width: calc(100% - 1200px);
+    max-height: calc(100% - 120px);
     top: 100px;
     right: 40px;
     opacity: 0;
