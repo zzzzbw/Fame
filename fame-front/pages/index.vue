@@ -70,7 +70,7 @@
 <style scoped>
 
   .article-item {
-    padding: 1em 0 2em;
+    padding: 2em 0 2em;
     border-bottom: 1px solid #ddd;
   }
 
@@ -109,6 +109,10 @@
 
   .article-item .article-tags .article-tag {
     margin: 0 0.2em;
+  }
+
+  .article-item .article-summary {
+    margin-top: 1.5em;
   }
 
   .article-item .article-more {
