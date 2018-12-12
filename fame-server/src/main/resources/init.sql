@@ -24,7 +24,7 @@ CREATE TABLE articles (
   category      VARCHAR(255),
   status        VARCHAR(32),
   type          VARCHAR(32),
-  allow_comment BOOLEAN,
+  allow_comment BOOLEAN DEFAULT TRUE NOT NULL,
   comment_count INT DEFAULT 0 NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -91,7 +91,7 @@ INSERT INTO metas (name, type) VALUES ('New', 'category');
 INSERT INTO middles (a_id, m_id) VALUES (1, 1);
 INSERT INTO middles (a_id, m_id) VALUES (1, 2);
 
-INSERT INTO articles (title, created, modified, content, author_id, hits, tags, category, status, type)
+INSERT INTO articles (title, created, modified, content, author_id, tags, category, status, type)
 VALUES ('About', now(), now(), '# About me
 ### Hello word
 这是关于我的页面
@@ -100,4 +100,4 @@ VALUES ('About', now(), now(), '# About me
 * [知乎](https://www.zhihu.com/)
 
 ### 也可以设置别的页面
-* 比如友链页面', 1, NULL, NULL, NULL, 'publish', 'page');
+* 比如友链页面', 1, NULL, NULL, 'publish', 'page');
