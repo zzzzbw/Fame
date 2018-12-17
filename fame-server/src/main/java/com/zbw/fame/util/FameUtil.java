@@ -1,8 +1,11 @@
 package com.zbw.fame.util;
 
 import com.vladsch.flexmark.ast.Node;
+import com.vladsch.flexmark.ext.tables.TablesExtension;
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
+import com.vladsch.flexmark.parser.ParserEmulationProfile;
+import com.vladsch.flexmark.util.options.MutableDataSet;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.model.Users;
 import org.springframework.http.HttpHeaders;
@@ -13,6 +16,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Collections;
 
 /**
  * 公用工具类
@@ -23,14 +27,24 @@ import javax.servlet.http.HttpSession;
 public class FameUtil {
 
     /**
+     * markdown 扩展设置
+     */
+    private static final MutableDataSet options = new MutableDataSet();
+
+    static {
+        options.setFrom(ParserEmulationProfile.MARKDOWN);
+        options.set(Parser.EXTENSIONS, Collections.singletonList(TablesExtension.create()));
+    }
+
+    /**
      * markdown 解析器
      */
-    private static final Parser PARSER = Parser.builder().build();
+    private static final Parser PARSER = Parser.builder(options).build();
 
     /**
      * markdown html 解析器
      */
-    private static final HtmlRenderer HTML_RENDER = HtmlRenderer.builder().build();
+    private static final HtmlRenderer HTML_RENDER = HtmlRenderer.builder(options).build();
 
     /**
      * 禁止实例化
