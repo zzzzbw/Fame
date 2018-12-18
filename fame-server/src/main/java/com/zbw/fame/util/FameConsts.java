@@ -77,22 +77,22 @@ public interface FameConsts {
     /**
      * 网站设置缓存key
      */
-    String CACHE_SITESTATIC = "cache_sitestatic";
+    String CACHE_SITE_CONFIG = "cache_site_config";
 
     /**
      * 网站默认title
      */
-    String SITESTATIC_DEFAULT_TITLE = "Fame博客";
+    String SITE_CONFIG_DEFAULT_TITLE = "Fame博客";
 
     /**
      * 网站默认description
      */
-    String SITESTATIC_DEFAULT_DESCRIPTION = "Fame博客";
+    String SITE_CONFIG_DEFAULT_DESCRIPTION = "Fame博客";
 
     /**
      * 网站默认keywords
      */
-    String SITESTATIC_DEFAULT_KEYWORDS = "Fame,blog,博客";
+    String SITE_CONFIG_DEFAULT_KEYWORDS = "Fame,blog,博客";
 
     /**
      * 发送邮件的标题

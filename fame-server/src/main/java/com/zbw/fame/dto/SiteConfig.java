@@ -1,5 +1,6 @@
 package com.zbw.fame.dto;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -9,7 +10,8 @@ import lombok.Data;
  * @since 2017/10/15 21:48
  */
 @Data
-public class SiteStatic {
+@Builder
+public class SiteConfig {
 
     /**
      * 网站title

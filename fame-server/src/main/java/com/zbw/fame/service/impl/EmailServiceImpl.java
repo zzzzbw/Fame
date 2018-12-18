@@ -1,6 +1,6 @@
 package com.zbw.fame.service.impl;
 
-import com.zbw.fame.dto.SiteStatic;
+import com.zbw.fame.dto.SiteConfig;
 import com.zbw.fame.model.Comments;
 import com.zbw.fame.service.EmailService;
 import com.zbw.fame.service.LogsService;
@@ -43,8 +43,8 @@ public class EmailServiceImpl implements EmailService {
     @Override
     @Async
     public void sendEmailToAdmin(Comments comments) {
-        SiteStatic siteStatic = SystemCache.instance().get(FameConsts.CACHE_SITESTATIC);
-        if (null == siteStatic || !siteStatic.isEmailSend()) {
+        SiteConfig config = SystemCache.instance().get(FameConsts.CACHE_SITE_CONFIG);
+        if (null == config || !config.isEmailSend()) {
             return;
         }
         Context context = new Context();
@@ -55,7 +55,7 @@ public class EmailServiceImpl implements EmailService {
         String logData = content + ";  发送给管理员";
         log.info("sendEmailToAdmin start: {}", new Date().toString());
         try {
-            sendEmail(FameConsts.EMAIL_TEMPLATE_DEFAULT_SUBJECT, content, siteStatic.getEmailUsername());
+            sendEmail(FameConsts.EMAIL_TEMPLATE_DEFAULT_SUBJECT, content, config.getEmailUsername());
             logsService.save(Types.LOG_ACTION_SEND_EMAIL, logData, Types.LOG_MESSAGE_SEND_EMAIL_SUCCESS, Types.LOG_TYPE_EMAIL);
         } catch (Exception e) {
             logsService.save(Types.LOG_ACTION_SEND_EMAIL, logData, Types.LOG_MESSAGE_SEND_EMAIL_FAIL, Types.LOG_TYPE_EMAIL);
@@ -66,8 +66,8 @@ public class EmailServiceImpl implements EmailService {
     @Override
     @Async
     public void sendEmailToUser(Comments comments, String replyEmail) {
-        SiteStatic siteStatic = SystemCache.instance().get(FameConsts.CACHE_SITESTATIC);
-        if (null == siteStatic || !siteStatic.isEmailSend()) {
+        SiteConfig config = SystemCache.instance().get(FameConsts.CACHE_SITE_CONFIG);
+        if (null == config || !config.isEmailSend()) {
             return;
         }
         Context context = new Context();
@@ -95,7 +95,7 @@ public class EmailServiceImpl implements EmailService {
      * @throws MessagingException
      */
     private void sendEmail(String subject, String content, String to) throws MessagingException {
-        SiteStatic siteStatic = SystemCache.instance().get(FameConsts.CACHE_SITESTATIC);
+        SiteConfig siteStatic = SystemCache.instance().get(FameConsts.CACHE_SITE_CONFIG);
         JavaMailSender mailSender = (JavaMailSender) mailSender(siteStatic.getEmailHost(), siteStatic.getEmailPort(),
                 siteStatic.getEmailUsername(), siteStatic.getEmailPassword());
         MimeMessage mimeMessage = mailSender.createMimeMessage();
@@ -115,7 +115,7 @@ public class EmailServiceImpl implements EmailService {
      * @param port     端口
      * @param username 邮件名
      * @param password 密码
-     * @return
+     * @return MailSender
      */
     private MailSender mailSender(String host, Integer port, String username, String password) {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
