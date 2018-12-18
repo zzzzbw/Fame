@@ -61,7 +61,7 @@
               <el-input v-model="staticForm.emailPort" placeholder="请输入端口号"/>
             </el-form-item>
             <el-form-item>
-              <el-button type="info" size="small" style="float: right;" @click="submitSitestatic">保存修改
+              <el-button type="info" size="small" style="float: right;" @click="submitSiteConfig">保存修改
               </el-button>
             </el-form-item>
           </el-form>
@@ -100,8 +100,8 @@
           this.userForm.username = data.data
         })
       },
-      getSitestatic () {
-        this.$api.auth.getSitestatic().then(data => {
+      getSiteConfig () {
+        this.$api.auth.getSiteConfig().then(data => {
           this.staticForm = data.data
         })
       },
@@ -122,8 +122,8 @@
           }
         })
       },
-      submitSitestatic () {
-        this.$api.auth.saveSitestatic(this.staticForm.title, this.staticForm.description, this.staticForm.keywords, this.staticForm.emailSend, this.staticForm.emailUsername, this.staticForm.emailPassword, this.staticForm.emailHost, this.staticForm.emailPort
+      submitSiteConfig () {
+        this.$api.auth.saveSiteConfig(this.staticForm.title, this.staticForm.description, this.staticForm.keywords, this.staticForm.emailSend, this.staticForm.emailUsername, this.staticForm.emailPassword, this.staticForm.emailHost, this.staticForm.emailPort
         ).then(() => {
           this.$message({
             message: '保存成功,请重新登陆',
@@ -136,7 +136,7 @@
     },
     mounted () {
       this.getUsername()
-      this.getSitestatic()
+      this.getSiteConfig()
     }
   }
 </script>

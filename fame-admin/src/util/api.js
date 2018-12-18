@@ -19,10 +19,10 @@ const auth = {
     }
     return post('/admin/reset', params)
   },
-  getSitestatic () {
-    return get('/admin/site/static')
+  getSiteConfig () {
+    return get('/admin/config/site')
   },
-  saveSitestatic (title, description, keywords, emailSend, emailUsername, emailPassword, emailHost, emailPort) {
+  saveSiteConfig (title, description, keywords, emailSend, emailUsername, emailPassword, emailHost, emailPort) {
     let params = {
       title: title,
       description: description,
@@ -33,7 +33,7 @@ const auth = {
       emailHost: emailHost,
       emailPort: emailPort
     }
-    return post('/admin/site/static', params)
+    return post('/admin/config/site', params)
   },
   getArticleCount () {
     return get('/admin/article/count')
