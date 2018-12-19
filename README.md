@@ -2,9 +2,19 @@
   <img align="center" src="https://raw.githubusercontent.com/zzzzbw/blog_source/master/images/FameDocker/fame-logo-small.png"/>
 </p>
 
-
-
-![travis](https://travis-ci.org/zzzzbw/Fame.svg?branch=master) ![MIT](https://img.shields.io/github/license/zzzzbw/Fame.svg) ![spring boot](https://img.shields.io/badge/spring%20boot-2.0.5.RELEASE-yellow.svg) ![Maven](https://img.shields.io/badge/maven-v3.3.9-red.svg) ![node](https://img.shields.io/badge/node-v10.6.0-green.svg) ![npm](https://img.shields.io/badge/npm-v6.4.1-blue.svg) ![vue](https://img.shields.io/badge/vue-2.5.2-orange.svg) ![nuxt](https://img.shields.io/badge/nuxt-1.4.0-yellowgreen.svg)![docker](https://img.shields.io/badge/docker-18.06.01--ce-ff69b4.svg)![docker-compose](https://img.shields.io/badge/docker--compose-1.22.0-lightgrey.svg)
+<p align="center">
+    <a href="https://www.travis-ci.org/zzzzbw/Fame/"><img src="https://travis-ci.org/zzzzbw/Fame.svg?branch=master"></a>
+    <a href="https://codebeat.co/projects/github-com-zzzzbw-fame-master"><img alt="codebeat badge" src="https://codebeat.co/badges/7f186f0f-f42c-4a96-b74b-84fa5294ccc8" /></a>
+    <a href="LICENSE"><img src="https://img.shields.io/github/license/zzzzbw/Fame.svg"></a>
+    <a alt="spring boot"><img src="https://img.shields.io/badge/spring%20boot-2.0.5.RELEASE-yellow.svg"/></a>
+    <a alt="Maven"><img src="https://img.shields.io/badge/maven-v3.3.9-red.svg"></a>
+    <a alt="node"><img src="https://img.shields.io/badge/node-v10.6.0-green.svg"></a>
+    <a alt="npm"><img src="https://img.shields.io/badge/npm-v6.4.1-blue.svg"></a>
+    <a alt="vue"><img src="https://img.shields.io/badge/vue-2.5.2-orange.svg"></a>
+    <a alt="nuxt"><img src="https://img.shields.io/badge/nuxt-1.4.0-yellowgreen.svg"></a>
+    <a alt="docker"><img src="https://img.shields.io/badge/docker-18.06.01--ce-ff69b4.svg"></a>
+    <a alt="docker-compose"><img src="https://img.shields.io/badge/docker--compose-1.22.0-lightgrey.svg"></a>
+</p>
 
 * 基于`node` `java` `spring-boot` `vue` `nuxt` 开发的博客系统
 * 支持传统手动部署和`docker`部署
