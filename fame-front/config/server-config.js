@@ -7,6 +7,7 @@ const localProxy = {
 // 使用环境参数或者使用localhost
 const baseUrl = process.env.baseUrl || localhost
 const baseProxy = {
+  protocol: 'http',
   host: process.env.proxyHost || localProxy.host,
   port: process.env.proxyPort || localProxy.port
 }
