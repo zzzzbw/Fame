@@ -22,7 +22,7 @@ module.exports = {
       {
         rel: 'stylesheet',
         type: 'text/css',
-        href: 'http://fonts.font.im/css?family=Roboto:300,300italic,400,400italic,500,500italic,700,700italic'
+        href: 'https://fonts.font.im/css?family=Roboto:300,300italic,400,400italic,500,500italic,700,700italic'
       }
 
     ],
