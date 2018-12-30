@@ -11,7 +11,7 @@ fame:
     title: Fame博客
     description: Fame博客
     keywords: Fame,blog,博客
-    send-mail: true
+    send-mail: false
     mail:
       host: xxxx@qq.com
       port: 0

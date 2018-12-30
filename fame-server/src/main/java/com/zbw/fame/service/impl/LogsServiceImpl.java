@@ -41,7 +41,7 @@ public class LogsServiceImpl implements LogsService {
         log.setType(type);
         log.setIp(ip);
         log.setUserId(userId);
-        logsMapper.insert(log);
+        logsMapper.insertSelective(log);
     }
 
     @Override
