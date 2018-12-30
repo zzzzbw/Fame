@@ -31,10 +31,10 @@ const api = {
     }
     return get('comment', params)
   },
-  postComment (articleId, pid, content, name, email, website) {
+  postComment (articleId, pId, content, name, email, website) {
     let params = {
       articleId: articleId,
-      pid: pid,
+      pId: pId,
       content: content,
       name: name,
       email: email,
