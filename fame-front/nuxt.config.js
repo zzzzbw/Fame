@@ -1,4 +1,5 @@
 const sitemapConfig = require('./config/sitemap-config')
+const feedConfig = require('./config/feed-config')
 
 // noinspection JSAnnotator
 module.exports = {
@@ -44,9 +45,11 @@ module.exports = {
     ['@nuxtjs/google-analytics', {
       id: 'UA-128579148-1'
     }],
-    ['@nuxtjs/sitemap']
+    ['@nuxtjs/sitemap'],
+    '@nuxtjs/feed'
   ],
   sitemap: sitemapConfig.config,
+  feed: feedConfig.config,
   plugins: [
     { src: '~plugins/highlight.js' },
     { src: '~plugins/clickoutside.js' },
@@ -82,12 +85,6 @@ module.exports = {
   ** Build configuration
   */
   build: {
-    vendor: [
-      'axios',
-      'highlight.js',
-      'underscore',
-      'gravatar'
-    ],
     extractCSS: true,
     /*
     ** Run ESLint on save
