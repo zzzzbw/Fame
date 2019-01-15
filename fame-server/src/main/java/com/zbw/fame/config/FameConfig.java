@@ -58,7 +58,7 @@ public class FameConfig {
     /**
      * 邮件发送配置
      */
-    private Mail mail;
+    private Mail mail = new Mail();
 
     @Data
     public static class Mail {
