@@ -86,13 +86,26 @@
 
   .article-head > a {
     color: #34495e;
-    outline: none;
     text-decoration: none;
+    position: relative;
+    overflow: hidden;
   }
 
-  .article-head > a:hover {
-    outline: 0;
-    border-bottom: 2px solid #5764c6;
+  .article-head > a:before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    height: 2px;
+    bottom: 0;
+    left: 51%;
+    right: 51%;
+    background: #5764c6;
+    transition-duration: .2s;
+  }
+
+  .article-head > a:hover:before {
+    left: 0;
+    right: 0;
   }
 
   .article-item .article-date {
@@ -140,9 +153,19 @@
 
   .front-page .pre {
     float: left;
+    transition-duration: .3s;
   }
 
   .front-page .next {
     float: right;
+    transition-duration: .3s;
+  }
+
+  .front-page .pre:hover {
+    transform: translateX(-10px);
+  }
+
+  .front-page .next:hover {
+    transform: translateX(10px);
   }
 </style>
