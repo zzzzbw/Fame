@@ -12,7 +12,7 @@
     <div class="article-tags">
       <label class="label-tags">Tags:</label>
       <span v-for="tag in $util.stringToTags(article.tags)" :key="tag" class="article-tag">
-        #{{tag}}
+        <nuxt-link :to="{path:'/tag/'+tag}">#{{tag}}</nuxt-link>
       </span>
     </div>
     <nav class="markdown-toc toc"></nav>
@@ -159,6 +159,10 @@
     font-weight: bold;
     color: #5764c6;
     margin: 0 0.2em;
+  }
+
+  .article-tags .article-tag a {
+    text-decoration: none;
   }
 
   @media screen and (max-width: 600px) {

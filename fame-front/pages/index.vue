@@ -11,7 +11,7 @@
       <p class="article-date"><span class="icon-bubble2"> {{article.commentCount}} </span></p>
       <div class="article-tags">
         <label v-for="tag in $util.stringToTags(article.tags)" :key="tag" class="article-tag">
-          #{{tag}}
+          <nuxt-link :to="{path:'/tag/'+tag}">#{{tag}}</nuxt-link>
         </label>
       </div>
       <div class="article-summary markdown-body" v-html="article.content" v-highlight>
@@ -122,6 +122,11 @@
 
   .article-item .article-tags .article-tag {
     margin: 0 0.2em;
+    text-decoration: none;
+  }
+
+  .article-item .article-tags .article-tag a {
+    text-decoration: none;
   }
 
   .article-item .article-summary {

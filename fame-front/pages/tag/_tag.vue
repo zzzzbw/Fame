@@ -43,9 +43,23 @@
       }
     },
     methods: {
+      initTag () {
+        let tag = this.$route.params.tag
+        let tagDom = document.getElementsByClassName('tag-link')
+        for (let i = 0; i < tagDom.length; i++) {
+          let dom = tagDom[i]
+          let tagName = dom.getElementsByTagName('span')[0].innerHTML.trim()
+          if (Object.is(tag, tagName)) {
+            // 延时显示，点击效果
+            setTimeout(function () {
+              dom.click()
+            }, 300)
+          }
+        }
+      },
       changeArticles (name) {
         let tag = this.tags.find(tag => Object.is(tag.name, name))
-        if (tag !== null) {
+        if (tag && tag !== null) {
           this.activeTag = name
           this.show = false
           this.tagTitle = tag.name
@@ -53,6 +67,9 @@
           this.show = true
         }
       }
+    },
+    mounted () {
+      this.initTag()
     }
   }
 </script>
