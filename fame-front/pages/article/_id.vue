@@ -162,7 +162,33 @@
   }
 
   .article-tags .article-tag a {
+    color: unset;
     text-decoration: none;
+    transition: all 0.3s;
+  }
+
+  .article-tags .article-tag a:hover {
+    color: #999;
+  }
+
+  .article-tags .article-tag:nth-child(1n) {
+    color: #6fa3ef;
+  }
+
+  .article-tags .article-tag:nth-child(2n) {
+    color: #ff9800;
+  }
+
+  .article-tags .article-tag:nth-child(3n) {
+    color: #46c47c;
+  }
+
+  .article-tags .article-tag:nth-child(4n) {
+    color: #f9bb3c;
+  }
+
+  .article-tags .article-tag:nth-child(5n) {
+    color: #bc99c4;
   }
 
   @media screen and (max-width: 600px) {

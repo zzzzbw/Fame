@@ -117,7 +117,6 @@
 
   .article-item .article-tags {
     font-weight: bold;
-    color: #5764c6;
   }
 
   .article-item .article-tags .article-tag {
@@ -126,7 +125,33 @@
   }
 
   .article-item .article-tags .article-tag a {
+    color: unset;
     text-decoration: none;
+    transition: all 0.3s;
+  }
+
+  .article-item .article-tags .article-tag a:hover {
+    color: #999;
+  }
+
+  .article-item .article-tags .article-tag:nth-child(1n) {
+    color: #6fa3ef;
+  }
+
+  .article-item .article-tags .article-tag:nth-child(2n) {
+    color: #ff9800;
+  }
+
+  .article-item .article-tags .article-tag:nth-child(3n) {
+    color: #46c47c;
+  }
+
+  .article-item .article-tags .article-tag:nth-child(4n) {
+    color: #f9bb3c;
+  }
+
+  .article-item .article-tags .article-tag:nth-child(5n) {
+    color: #bc99c4;
   }
 
   .article-item .article-summary {
