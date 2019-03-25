@@ -2,10 +2,10 @@ package com.zbw.fame.service.impl;
 
 import com.zbw.fame.dto.SiteConfig;
 import com.zbw.fame.model.Comments;
+import com.zbw.fame.service.ConfigService;
 import com.zbw.fame.service.EmailService;
 import com.zbw.fame.service.LogsService;
 import com.zbw.fame.util.FameConsts;
-import com.zbw.fame.util.SystemCache;
 import com.zbw.fame.util.Types;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +35,9 @@ import java.util.Date;
 public class EmailServiceImpl implements EmailService {
 
     @Autowired
+    private ConfigService configService;
+
+    @Autowired
     private LogsService logsService;
 
     @Autowired
@@ -43,7 +46,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     @Async
     public void sendEmailToAdmin(Comments comments) {
-        SiteConfig config = SystemCache.instance().get(FameConsts.CACHE_SITE_CONFIG);
+        SiteConfig config = configService.getSiteConfig();
         if (null == config || !config.isEmailSend()) {
             return;
         }
@@ -66,7 +69,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     @Async
     public void sendEmailToUser(Comments comments, String replyEmail) {
-        SiteConfig config = SystemCache.instance().get(FameConsts.CACHE_SITE_CONFIG);
+        SiteConfig config = configService.getSiteConfig();
         if (null == config || !config.isEmailSend()) {
             return;
         }
@@ -95,12 +98,12 @@ public class EmailServiceImpl implements EmailService {
      * @throws MessagingException
      */
     private void sendEmail(String subject, String content, String to) throws MessagingException {
-        SiteConfig siteStatic = SystemCache.instance().get(FameConsts.CACHE_SITE_CONFIG);
-        JavaMailSender mailSender = (JavaMailSender) mailSender(siteStatic.getEmailHost(), siteStatic.getEmailPort(),
-                siteStatic.getEmailUsername(), siteStatic.getEmailPassword());
+        SiteConfig config = configService.getSiteConfig();
+        JavaMailSender mailSender = (JavaMailSender) mailSender(config.getEmailHost(), config.getEmailPort(),
+                config.getEmailUsername(), config.getEmailPassword());
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-        helper.setFrom(siteStatic.getEmailUsername());
+        helper.setFrom(config.getEmailUsername());
         helper.setTo(to);
         helper.setText(content, true);
         helper.setSubject(subject);

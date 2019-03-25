@@ -11,11 +11,9 @@ import com.zbw.fame.service.ArticlesService;
 import com.zbw.fame.service.CommentsService;
 import com.zbw.fame.service.EmailService;
 import com.zbw.fame.service.MetasService;
-import com.zbw.fame.util.FameConsts;
-import com.zbw.fame.util.FameUtil;
-import com.zbw.fame.util.RestResponse;
-import com.zbw.fame.util.Types;
+import com.zbw.fame.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +29,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api")
-public class HomeController extends BaseController {
+public class FrontController extends BaseController {
 
     @Autowired
     private ArticlesService articlesService;
@@ -45,6 +43,9 @@ public class HomeController extends BaseController {
     @Autowired
     private EmailService emailService;
 
+    @Autowired
+    private CacheManager cacheManager;
+
     /**
      * 文章列表
      *
@@ -55,10 +56,12 @@ public class HomeController extends BaseController {
     @GetMapping("article")
     public RestResponse home(@RequestParam(required = false, defaultValue = "1") Integer page,
                              @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
-        Page<Articles> articles = articlesService.getContents(page, limit);
+        Page<Articles> articles = articlesService.getPublishArticles(page, limit);
         for (Articles a : articles) {
             this.transformPreView(a);
         }
+
+
         return RestResponse.ok(new Pagination<Articles>(articles));
     }
 
@@ -86,16 +89,16 @@ public class HomeController extends BaseController {
      * @param hits      当前点击量
      */
     private void updateHits(Integer articleId, Integer hits) {
-        Integer cHits = cache.get(FameConsts.CACHE_ARTICLE_HITS, articleId.toString());
+        Integer cHits = cacheUtil.getCacheValue(FameConsts.CACHE_ARTICLE_HITS, articleId, Integer.class);
         cHits = null == cHits ? 1 : cHits + 1;
         if (cHits >= FameConsts.CACHE_ARTICLE_HITS_SAVE) {
             Articles temp = new Articles();
             temp.setId(articleId);
             temp.setHits(hits + cHits);
             articlesService.updateArticle(temp);
-            cache.put(FameConsts.CACHE_ARTICLE_HITS, articleId.toString(), 0);
+            cacheUtil.putCacheValue(FameConsts.CACHE_ARTICLE_HITS, articleId, 0);
         } else {
-            cache.put(FameConsts.CACHE_ARTICLE_HITS, articleId.toString(), cHits);
+            cacheUtil.putCacheValue(FameConsts.CACHE_ARTICLE_HITS, articleId, cHits);
         }
     }
 
@@ -130,7 +133,7 @@ public class HomeController extends BaseController {
     @GetMapping("archive")
     public RestResponse archive() {
         Integer maxLimit = 9999;
-        List<Articles> articles = articlesService.getContents(1, maxLimit);
+        List<Articles> articles = articlesService.getPublishArticles(1, maxLimit);
         List<Archives> archives = new ArrayList<>();
         String current = "";
         for (Articles article : articles) {
@@ -165,7 +168,7 @@ public class HomeController extends BaseController {
      */
     @GetMapping("page/{title}")
     public RestResponse page(@PathVariable String title) {
-        Articles page = articlesService.getPage(title);
+        Articles page = articlesService.getPageByTitle(title);
         if (null == page) {
             return error404();
         }

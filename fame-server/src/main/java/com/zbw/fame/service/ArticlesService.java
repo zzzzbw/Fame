@@ -27,7 +27,7 @@ public interface ArticlesService {
      * @param limit 每页数量
      * @return Page<Articles>
      */
-    Page<Articles> getContents(Integer page, Integer limit);
+    Page<Articles> getPublishArticles(Integer page, Integer limit);
 
     /**
      * 根据id获取文章
@@ -83,7 +83,7 @@ public interface ArticlesService {
      * @param title 页面title
      * @return Articles
      */
-    Articles getPage(String title);
+    Articles getPageByTitle(String title);
 
     /**
      * 根据id获取自定义页面
@@ -91,7 +91,7 @@ public interface ArticlesService {
      * @param id 页面id
      * @return Articles
      */
-    Articles getPage(Integer id);
+    Articles getPageById(Integer id);
 
     /**
      * 保存或更新自定义页面

@@ -14,6 +14,8 @@ import com.zbw.fame.util.Types;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -29,6 +31,8 @@ import org.springframework.util.StringUtils;
 @Transactional(rollbackFor = Throwable.class)
 public class CommentsServiceImpl implements CommentsService {
 
+    private static final String COMMENT_CACHE_NAME = "comments";
+
     @Autowired
     private CommentsMapper commentsMapper;
 
@@ -36,6 +40,7 @@ public class CommentsServiceImpl implements CommentsService {
     private ArticlesMapper articlesMapper;
 
     @Override
+    @Cacheable(value = COMMENT_CACHE_NAME, key = "'comment_article_page['+#articleId+':'+#page+':'+#limit+']'")
     public Page<Comments> getCommentsByArticleId(Integer articleId, Integer page, Integer limit) {
         Comments record = new Comments();
         record.setArticleId(articleId);
@@ -43,6 +48,7 @@ public class CommentsServiceImpl implements CommentsService {
     }
 
     @Override
+    @CacheEvict(value = COMMENT_CACHE_NAME, allEntries = true, beforeInvocation = true)
     public void save(Comments comments) {
         if (null == comments) {
             throw new TipException("评论对象为空");
@@ -79,11 +85,13 @@ public class CommentsServiceImpl implements CommentsService {
     }
 
     @Override
+    @Cacheable(value = COMMENT_CACHE_NAME, key = "'comment_page['+#page+':'+#limit+']'")
     public Page<Comments> getComments(Integer page, Integer limit) {
         return PageHelper.startPage(page, limit).doSelectPage(() -> commentsMapper.selectAll());
     }
 
     @Override
+    @Cacheable(value = COMMENT_CACHE_NAME, key = "'comment_detail['+#id+']'")
     public CommentDto getCommentDetail(Integer id) {
         Comments entity = commentsMapper.selectByPrimaryKey(id);
         if (null == entity) {
@@ -103,6 +111,7 @@ public class CommentsServiceImpl implements CommentsService {
 
 
     @Override
+    @CacheEvict(value = COMMENT_CACHE_NAME, allEntries = true, beforeInvocation = true)
     public boolean deleteComment(Integer id) {
         Comments comments = commentsMapper.selectByPrimaryKey(id);
         if (null == comments) {
@@ -130,6 +139,7 @@ public class CommentsServiceImpl implements CommentsService {
     }
 
     @Override
+    @CacheEvict(value = COMMENT_CACHE_NAME, allEntries = true, beforeInvocation = true)
     public void assessComment(Integer commentId, String assess) {
         Comments comment = commentsMapper.selectByPrimaryKey(commentId);
         if (null == comment) {
@@ -147,6 +157,7 @@ public class CommentsServiceImpl implements CommentsService {
     }
 
     @Override
+    @Cacheable(value = COMMENT_CACHE_NAME, key = "'comment_count'")
     public Integer count() {
         return commentsMapper.selectCount(new Comments());
     }

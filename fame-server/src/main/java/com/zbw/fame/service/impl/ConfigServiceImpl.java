@@ -2,9 +2,10 @@ package com.zbw.fame.service.impl;
 
 import com.zbw.fame.dto.SiteConfig;
 import com.zbw.fame.service.ConfigService;
+import com.zbw.fame.util.CacheUtil;
 import com.zbw.fame.util.FameConsts;
-import com.zbw.fame.util.SystemCache;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,9 +18,12 @@ import org.springframework.stereotype.Service;
 @Service("configService")
 public class ConfigServiceImpl implements ConfigService {
 
+    @Autowired
+    private CacheUtil cacheUtil;
+
     @Override
     public SiteConfig getSiteConfig() {
-        SiteConfig config = SystemCache.instance().get(FameConsts.CACHE_SITE_CONFIG);
+        SiteConfig config = cacheUtil.getCacheValue(FameConsts.CACHE_SITE_CONFIG, FameConsts.CACHE_SITE_CONFIG, SiteConfig.class);
         if (null == config) {
             config = SiteConfig.builder()
                     .title(FameConsts.SITE_CONFIG_DEFAULT_TITLE)
@@ -27,6 +31,7 @@ public class ConfigServiceImpl implements ConfigService {
                     .keywords(FameConsts.SITE_CONFIG_DEFAULT_KEYWORDS)
                     .emailSend(false)
                     .build();
+            cacheUtil.putCacheValue(FameConsts.DEFAULT_CACHE, FameConsts.CACHE_SITE_CONFIG, config);
         }
         return config;
     }
@@ -34,6 +39,6 @@ public class ConfigServiceImpl implements ConfigService {
     @Override
     public void saveSiteConfig(SiteConfig siteConfig) {
         log.info("修改网站配置, {}", siteConfig);
-        SystemCache.instance().put(FameConsts.CACHE_SITE_CONFIG, siteConfig);
+        cacheUtil.putCacheValue(FameConsts.DEFAULT_CACHE, FameConsts.CACHE_SITE_CONFIG, siteConfig);
     }
 }

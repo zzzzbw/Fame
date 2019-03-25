@@ -1,11 +1,10 @@
 package com.zbw.fame.controller;
 
 import com.zbw.fame.model.Users;
-import com.zbw.fame.util.ErrorCode;
-import com.zbw.fame.util.FameUtil;
-import com.zbw.fame.util.RestResponse;
-import com.zbw.fame.util.SystemCache;
+import com.zbw.fame.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,10 +19,10 @@ public abstract class BaseController {
     @Autowired
     protected HttpServletRequest request;
 
-    protected SystemCache cache = SystemCache.instance();
+    @Autowired
+    protected CacheUtil cacheUtil;
 
-
-    public Users user() {
+    protected Users user() {
         return FameUtil.getLoginUser();
     }
 

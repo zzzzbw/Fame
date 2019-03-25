@@ -63,6 +63,11 @@ public interface FameConsts {
      */
     Integer MAX_COMMENT_WEBSITE_COUNT = 255;
 
+    /**
+     * 默认缓存
+     */
+    String DEFAULT_CACHE = "default_cache";
+
 
     /**
      * 文章缓存key
@@ -72,7 +77,7 @@ public interface FameConsts {
     /**
      * 文章点击量缓存数
      */
-    Integer CACHE_ARTICLE_HITS_SAVE = 1;
+    Integer CACHE_ARTICLE_HITS_SAVE = 5;
 
     /**
      * 网站设置缓存key

@@ -53,7 +53,7 @@ public class PageController extends BaseController {
      */
     @GetMapping("{id}")
     public RestResponse showPage(@PathVariable Integer id) {
-        Articles page = articlesService.getPage(id);
+        Articles page = articlesService.getPageById(id);
         if (null == page) {
             return this.error404();
         }

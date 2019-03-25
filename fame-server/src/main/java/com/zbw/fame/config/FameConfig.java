@@ -1,9 +1,10 @@
 package com.zbw.fame.config;
 
 import com.zbw.fame.dto.SiteConfig;
+import com.zbw.fame.util.CacheUtil;
 import com.zbw.fame.util.FameConsts;
-import com.zbw.fame.util.SystemCache;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +21,9 @@ import javax.annotation.PostConstruct;
 @ConfigurationProperties(prefix = "fame.config")
 public class FameConfig {
 
+    @Autowired
+    private CacheUtil cacheUtil;
+
     @PostConstruct
     public void init() {
         SiteConfig config = SiteConfig.builder()
@@ -32,7 +36,8 @@ public class FameConfig {
                 .emailUsername(mail.username)
                 .emailPassword(mail.password)
                 .build();
-        SystemCache.instance().put(FameConsts.CACHE_SITE_CONFIG, config);
+
+        cacheUtil.putCacheValue(FameConsts.DEFAULT_CACHE, FameConsts.CACHE_SITE_CONFIG, config);
     }
 
     /**

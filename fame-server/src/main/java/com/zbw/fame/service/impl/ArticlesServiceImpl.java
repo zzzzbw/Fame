@@ -13,6 +13,8 @@ import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.Types;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -30,6 +32,8 @@ import tk.mybatis.mapper.util.Sqls;
 @Transactional(rollbackFor = Throwable.class)
 public class ArticlesServiceImpl implements ArticlesService {
 
+    private static final String ARTICLE_CACHE_NAME = "articles";
+
     @Autowired
     private ArticlesMapper articlesMapper;
 
@@ -40,6 +44,7 @@ public class ArticlesServiceImpl implements ArticlesService {
     private CommentsMapper commentsMapper;
 
     @Override
+    @Cacheable(value = ARTICLE_CACHE_NAME, key = "'article_page['+#page+':'+#limit+']'")
     public Page<Articles> getArticles(Integer page, Integer limit) {
         Articles record = new Articles();
         record.setType(Types.POST);
@@ -47,7 +52,8 @@ public class ArticlesServiceImpl implements ArticlesService {
     }
 
     @Override
-    public Page<Articles> getContents(Integer page, Integer limit) {
+    @Cacheable(value = ARTICLE_CACHE_NAME, key = "'article_publish_page['+#page+':'+#limit+']'")
+    public Page<Articles> getPublishArticles(Integer page, Integer limit) {
         Articles record = new Articles();
         record.setStatus(Types.PUBLISH);
         record.setType(Types.POST);
@@ -55,12 +61,14 @@ public class ArticlesServiceImpl implements ArticlesService {
     }
 
     @Override
+    @Cacheable(value = ARTICLE_CACHE_NAME, key = "'article_content['+#id+']'")
     public Articles get(Integer id) {
         return articlesMapper.selectByPrimaryKey(id);
     }
 
 
     @Override
+    @CacheEvict(value = ARTICLE_CACHE_NAME, allEntries = true, beforeInvocation = true)
     public Integer saveArticle(Articles article) {
         if (null == article) {
             throw new TipException("文章对象为空");
@@ -97,6 +105,7 @@ public class ArticlesServiceImpl implements ArticlesService {
     }
 
     @Override
+    @CacheEvict(value = ARTICLE_CACHE_NAME, allEntries = true, beforeInvocation = true)
     public boolean updateArticle(Articles articles) {
         if (null == articles) {
             throw new TipException("文章不能为空");
@@ -105,6 +114,7 @@ public class ArticlesServiceImpl implements ArticlesService {
     }
 
     @Override
+    @CacheEvict(value = ARTICLE_CACHE_NAME, allEntries = true, beforeInvocation = true)
     public boolean deleteArticle(Integer id) {
         Articles record = new Articles();
         record.setId(id);
@@ -134,6 +144,7 @@ public class ArticlesServiceImpl implements ArticlesService {
     }
 
     @Override
+    @Cacheable(value = ARTICLE_CACHE_NAME, key = "'article_count'")
     public Integer count() {
         Articles record = new Articles();
         record.setType(Types.POST);
@@ -141,6 +152,7 @@ public class ArticlesServiceImpl implements ArticlesService {
     }
 
     @Override
+    @Cacheable(value = ARTICLE_CACHE_NAME, key = "'article_pages['+#page+':'+#limit+']'")
     public Page<Articles> getPages(Integer page, Integer limit) {
         Articles record = new Articles();
         record.setType(Types.PAGE);
@@ -148,7 +160,8 @@ public class ArticlesServiceImpl implements ArticlesService {
     }
 
     @Override
-    public Articles getPage(String title) {
+    @Cacheable(value = ARTICLE_CACHE_NAME, key = "'article_page['+#title+']'")
+    public Articles getPageByTitle(String title) {
         Articles record = new Articles();
         record.setTitle(title);
         record.setType(Types.PAGE);
@@ -157,7 +170,8 @@ public class ArticlesServiceImpl implements ArticlesService {
     }
 
     @Override
-    public Articles getPage(Integer id) {
+    @Cacheable(value = ARTICLE_CACHE_NAME, key = "'article_page['+#id+']'")
+    public Articles getPageById(Integer id) {
         Articles record = new Articles();
         record.setId(id);
         record.setType(Types.PAGE);
@@ -165,6 +179,7 @@ public class ArticlesServiceImpl implements ArticlesService {
     }
 
     @Override
+    @CacheEvict(value = ARTICLE_CACHE_NAME, allEntries = true, beforeInvocation = true)
     public Integer savePage(Articles page) {
         if (null == page) {
             throw new TipException("自定义页面对象为空");
@@ -198,6 +213,7 @@ public class ArticlesServiceImpl implements ArticlesService {
     }
 
     @Override
+    @CacheEvict(value = ARTICLE_CACHE_NAME, allEntries = true, beforeInvocation = true)
     public boolean deletePage(Integer id) {
         Articles record = new Articles();
         record.setId(id);
