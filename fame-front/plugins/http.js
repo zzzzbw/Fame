@@ -14,29 +14,35 @@ const Axios = axios.create({
 })
 
 // 请求拦截（配置发送请求的信息） 传参序列化
-Axios.interceptors.request.use((config) => {
-  if (
-    config.method === 'post' ||
-    config.method === 'put' ||
-    config.method === 'delete'
-  ) {
-    // 序列化
-    config.data = qs.stringify(config.data)
+Axios.interceptors.request.use(
+  config => {
+    if (
+      config.method === 'post' ||
+      config.method === 'put' ||
+      config.method === 'delete'
+    ) {
+      // 序列化
+      config.data = qs.stringify(config.data)
+    }
+    return config
+  },
+  error => {
+    return Promise.reject(error)
   }
-  return config
-}, (error) => {
-  return Promise.reject(error)
-})
+)
 
 // 响应拦截（配置请求回来的信息）
-Axios.interceptors.response.use(function (response) {
-  // 处理响应数据
-  return response
-}, function (error) {
-  // 处理响应失败
+Axios.interceptors.response.use(
+  function(response) {
+    // 处理响应数据
+    return response
+  },
+  function(error) {
+    // 处理响应失败
 
-  return Promise.reject(error)
-})
+    return Promise.reject(error)
+  }
+)
 
 /**
  * get 请求方法
@@ -44,15 +50,17 @@ Axios.interceptors.response.use(function (response) {
  * @param params
  * @returns {Promise}
  */
-export function get (url, params = {}) {
+export function get(url, params = {}) {
   return new Promise((resolve, reject) => {
     Axios.get(url, {
       params: params
-    }).then(response => {
-      resolve(response.data)
-    }).catch(err => {
-      reject(err)
     })
+      .then(response => {
+        resolve(response.data)
+      })
+      .catch(err => {
+        reject(err)
+      })
   })
 }
 
@@ -62,13 +70,16 @@ export function get (url, params = {}) {
  * @param params
  * @returns {Promise}
  */
-export function post (url, params = {}) {
+export function post(url, params = {}) {
   return new Promise((resolve, reject) => {
-    Axios.post(url, params).then(response => {
-      resolve(response.data)
-    }, err => {
-      reject(err)
-    })
+    Axios.post(url, params).then(
+      response => {
+        resolve(response.data)
+      },
+      err => {
+        reject(err)
+      }
+    )
   })
 }
 
@@ -78,13 +89,16 @@ export function post (url, params = {}) {
  * @param params
  * @returns {Promise}
  */
-export function put (url, params = {}) {
+export function put(url, params = {}) {
   return new Promise((resolve, reject) => {
-    Axios.put(url, params).then(response => {
-      resolve(response.data)
-    }, err => {
-      reject(err)
-    })
+    Axios.put(url, params).then(
+      response => {
+        resolve(response.data)
+      },
+      err => {
+        reject(err)
+      }
+    )
   })
 }
 
@@ -94,14 +108,16 @@ export function put (url, params = {}) {
  * @param params
  * @returns {Promise}
  */
-export function del (url, params = {}) {
+export function del(url, params = {}) {
   return new Promise((resolve, reject) => {
     Axios.delete(url, {
       params: params
-    }).then(response => {
-      resolve(response.data)
-    }).catch(err => {
-      reject(err)
     })
+      .then(response => {
+        resolve(response.data)
+      })
+      .catch(err => {
+        reject(err)
+      })
   })
 }

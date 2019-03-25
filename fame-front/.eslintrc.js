@@ -1,16 +1,22 @@
 module.exports = {
   root: true,
-  parser: 'babel-eslint',
   env: {
     browser: true,
     node: true
   },
-  extends: 'standard',
-  // required to lint *.vue files
-  plugins: [
-    'html'
+  parserOptions: {
+    parser: 'babel-eslint'
+  },
+  extends: [
+    '@nuxtjs',
+    'plugin:nuxt/recommended',
+    'plugin:prettier/recommended',
+    'prettier',
+    'prettier/vue'
   ],
+  plugins: ['prettier'],
   // add your custom rules here
-  rules: {},
-  globals: {}
+  rules: {
+    'vue/no-v-html': 'off' //markdown后端渲染
+  }
 }

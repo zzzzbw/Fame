@@ -1,38 +1,38 @@
 import { get, post } from './http'
 
 const api = {
-  getArticles (page, limit) {
-    let params = {
+  getArticles(page, limit) {
+    const params = {
       page: page,
       limit: limit || 5
     }
     return get('/article', params)
   },
-  getArticle (id) {
+  getArticle(id) {
     return get('/article/' + id)
   },
-  getCategories () {
+  getCategories() {
     return get('/category')
   },
-  getTags () {
+  getTags() {
     return get('/tag')
   },
-  getPage (title) {
+  getPage(title) {
     return get('/page/' + title)
   },
-  getArchives () {
+  getArchives() {
     return get('/archive')
   },
-  getComment (articleId, page, limit) {
-    let params = {
+  getComment(articleId, page, limit) {
+    const params = {
       articleId: articleId,
       page: page,
       limit: limit || 5
     }
     return get('comment', params)
   },
-  postComment (articleId, pId, content, name, email, website) {
-    let params = {
+  postComment(articleId, pId, content, name, email, website) {
+    const params = {
       articleId: articleId,
       pId: pId,
       content: content,
@@ -42,8 +42,8 @@ const api = {
     }
     return post('/comment', params)
   },
-  assessComment (commentId, assess) {
-    let params = {
+  assessComment(commentId, assess) {
+    const params = {
       assess: assess
     }
     return post('/comment/' + commentId + '/assess', params)

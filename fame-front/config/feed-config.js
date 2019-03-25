@@ -7,14 +7,14 @@ const config = [
   // A default feed configuration object
   {
     path: '/feed.xml', // The route to your feed.
-    async create (feed) {
+    async create(feed) {
       feed.options = {
         title: 'Fame Blog',
         link: baseUrl + '/feed.xml',
         description: 'A nuxt blog by Fame'
       }
 
-      const res = await (axios.get(articlesUrl))
+      const res = await axios.get(articlesUrl)
       const articles = res.data.data.list
       articles.forEach(article => {
         feed.addItem({

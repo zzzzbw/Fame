@@ -23,7 +23,7 @@ const STATIC = {
  * @param tags
  * @returns {string}
  */
-function tagsToString (tags) {
+function tagsToString(tags) {
   if (tags.length === 0) {
     return ''
   }
@@ -39,7 +39,7 @@ function tagsToString (tags) {
  * @param str
  * @returns {Array}
  */
-function stringToTags (str) {
+function stringToTags(str) {
   if (!str) {
     return []
   }
@@ -52,12 +52,12 @@ function stringToTags (str) {
  * @param offset 偏移量
  * @param speed 速度
  */
-function goAnchor (id, offset, speed) {
-  let anchor = document.getElementById(id)
-  let targetY = anchor.getBoundingClientRect().top
-  let initialY = window.pageYOffset
+function goAnchor(id, offset, speed) {
+  const anchor = document.getElementById(id)
+  const targetY = anchor.getBoundingClientRect().top
+  const initialY = window.pageYOffset
   offset = offset || 0
-  let position = targetY + initialY - offset
+  const position = targetY + initialY - offset
   jump(position, speed)
 }
 
@@ -66,19 +66,19 @@ function goAnchor (id, offset, speed) {
  * @param position
  * @param speed
  */
-function jump (position, speed) {
+function jump(position, speed) {
   let distance = document.documentElement.scrollTop || document.body.scrollTop
   speed = speed || 100
   let step = position / speed
   if (position > distance) {
     smoothDown()
   } else {
-    let newTotal = distance - position
+    const newTotal = distance - position
     step = newTotal / speed
     smoothUp()
   }
 
-  function smoothDown () {
+  function smoothDown() {
     if (distance < position) {
       distance += step
       document.body.scrollTop = distance
@@ -90,7 +90,7 @@ function jump (position, speed) {
     }
   }
 
-  function smoothUp () {
+  function smoothUp() {
     if (distance > position) {
       distance -= step
       document.body.scrollTop = distance

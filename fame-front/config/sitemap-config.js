@@ -5,8 +5,9 @@ const articlesUrl = 'http://' + host + '/api/article?page=1&limit=999'
 
 const config = {
   hostname: baseUrl,
-  routes () {
-    return axios.get(articlesUrl)
+  routes() {
+    return axios
+      .get(articlesUrl)
       .then(res => res.data.data.list.map(article => '/article/' + article.id))
   }
 }
