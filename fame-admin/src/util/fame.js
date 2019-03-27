@@ -3,12 +3,12 @@
  *  全局常量
  */
 const STATIC = {
-  DEFAULT_CATEGORY: '默认分类',
-  STATUS_PUBLISH: 'publish',
-  STATUS_DRAFT: 'draft',
-  META_CATEGORY: 'category',
-  META_TAG: 'tag'
-}
+  DEFAULT_CATEGORY: "默认分类",
+  STATUS_PUBLISH: "publish",
+  STATUS_DRAFT: "draft",
+  META_CATEGORY: "category",
+  META_TAG: "tag"
+};
 
 /************************************************************/
 
@@ -21,12 +21,12 @@ const STATIC = {
  * @param tags
  * @returns {string}
  */
-function tagsToString (tags) {
-  let str = ''
+function tagsToString(tags) {
+  let str = "";
   for (let i = 0; i < tags.length; i++) {
-    str += tags[i] + ','
+    str += tags[i] + ",";
   }
-  return str.substr(0, str.length - 1)
+  return str.substr(0, str.length - 1);
 }
 
 /**
@@ -34,13 +34,13 @@ function tagsToString (tags) {
  * @param str
  * @returns {Array}
  */
-function stringToTags (str) {
-  if (str !== null && str !== '') {
-    let tags = []
-    tags = str.split(',')
-    return tags
+function stringToTags(str) {
+  if (str !== null && str !== "") {
+    let tags = [];
+    tags = str.split(",");
+    return tags;
   } else {
-    return []
+    return [];
   }
 }
 
@@ -48,4 +48,4 @@ export default {
   STATIC,
   tagsToString,
   stringToTags
-}
+};

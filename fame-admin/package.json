@@ -11,19 +11,22 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "dayjs": "^1.7.7",
-    "element-ui": "^2.4.5",
-    "highlight.js": "^9.12.0",
-    "vue": "^2.5.17",
-    "vue-router": "^3.0.1",
-    "vue-simplemde": "^0.4.6"
+    "dayjs": "^1.8.11",
+    "element-ui": "^2.6.3",
+    "highlight.js": "^9.15.6",
+    "vue": "^2.6.10",
+    "vue-router": "^3.0.2",
+    "vue-simplemde": "^0.5.1"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.3",
-    "@vue/cli-plugin-eslint": "^3.0.3",
-    "@vue/cli-service": "^3.0.3",
-    "vue-cli-plugin-element": "^1.0.0",
-    "vue-template-compiler": "^2.5.17"
+    "@vue/cli-plugin-babel": "^3.5.1",
+    "@vue/cli-plugin-eslint": "^3.5.1",
+    "@vue/cli-service": "^3.5.1",
+    "@vue/eslint-config-prettier": "^4.0.1",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.15.3",
+    "eslint-plugin-vue": "^5.2.2",
+    "vue-template-compiler": "^2.6.10"
   },
   "eslintConfig": {
     "root": true,
@@ -32,7 +35,7 @@
     },
     "extends": [
       "plugin:vue/essential",
-      "eslint:recommended"
+      "@vue/prettier"
     ],
     "rules": {
       "no-console": "off"

@@ -1,145 +1,145 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from "vue";
+import Router from "vue-router";
 
-Vue.use(Router)
+Vue.use(Router);
 
-const Error = (resolve) => {
-  import('@/components/Error').then((module) => {
-    resolve(module)
-  })
-}
+const Error = resolve => {
+  import("@/components/Error").then(module => {
+    resolve(module);
+  });
+};
 
-const Login = (resolve) => {
-  import('@/components/Login').then((module) => {
-    resolve(module)
-  })
-}
+const Login = resolve => {
+  import("@/components/Login").then(module => {
+    resolve(module);
+  });
+};
 
-const Admin = (resolve) => {
-  import('@/components/Admin').then((module) => {
-    resolve(module)
-  })
-}
+const Admin = resolve => {
+  import("@/components/Admin").then(module => {
+    resolve(module);
+  });
+};
 
-const Dashboard = (resolve) => {
-  import('@/components/page/Dashboard').then((module) => {
-    resolve(module)
-  })
-}
+const Dashboard = resolve => {
+  import("@/components/page/Dashboard").then(module => {
+    resolve(module);
+  });
+};
 
-const ArticleEdit = (resolve) => {
-  import('@/components/page/Article').then((module) => {
-    resolve(module)
-  })
-}
+const ArticleEdit = resolve => {
+  import("@/components/page/Article").then(module => {
+    resolve(module);
+  });
+};
 
-const ArticleList = (resolve) => {
-  import('@/components/page/Articles').then((module) => {
-    resolve(module)
-  })
-}
+const ArticleList = resolve => {
+  import("@/components/page/Articles").then(module => {
+    resolve(module);
+  });
+};
 
-const CommentList = (resolve) => {
-  import('@/components/page/Comments').then((module) => {
-    resolve(module)
-  })
-}
+const CommentList = resolve => {
+  import("@/components/page/Comments").then(module => {
+    resolve(module);
+  });
+};
 
-const TagList = (resolve) => {
-  import('@/components/page/Tags').then((module) => {
-    resolve(module)
-  })
-}
+const TagList = resolve => {
+  import("@/components/page/Tags").then(module => {
+    resolve(module);
+  });
+};
 
-const PageList = (resolve) => {
-  import('@/components/page/Pages').then((module) => {
-    resolve(module)
-  })
-}
+const PageList = resolve => {
+  import("@/components/page/Pages").then(module => {
+    resolve(module);
+  });
+};
 
-const PageEdit = (resolve) => {
-  import('@/components/page/Page').then((module) => {
-    resolve(module)
-  })
-}
+const PageEdit = resolve => {
+  import("@/components/page/Page").then(module => {
+    resolve(module);
+  });
+};
 
-const Setting = (resolve) => {
-  import('@/components/page/Setting').then((module) => {
-    resolve(module)
-  })
-}
+const Setting = resolve => {
+  import("@/components/page/Setting").then(module => {
+    resolve(module);
+  });
+};
 
 const router = new Router({
-  mode: 'history',
-  linkActiveClass: 'active',
+  mode: "history",
+  linkActiveClass: "active",
   routes: [
     {
-      path: '/',
+      path: "/",
       component: Admin,
-      redirect: '/admin'
+      redirect: "/admin"
     },
     {
-      path: '/admin/login',
-      name: 'Login',
+      path: "/admin/login",
+      name: "Login",
       component: Login
     },
     {
-      path: '/admin',
-      name: 'Admin',
+      path: "/admin",
+      name: "Admin",
       component: Admin,
-      redirect: '/admin/dashboard',
+      redirect: "/admin/dashboard",
       children: [
         {
-          path: 'dashboard',
+          path: "dashboard",
           component: Dashboard
         },
         {
-          path: 'article/publish/:id',
+          path: "article/publish/:id",
           component: ArticleEdit
         },
         {
-          path: 'article/publish',
+          path: "article/publish",
           component: ArticleEdit
         },
         {
-          path: 'article',
+          path: "article",
           component: ArticleList
         },
         {
-          path: 'comment',
+          path: "comment",
           component: CommentList
         },
         {
-          path: 'tag',
+          path: "tag",
           component: TagList
         },
         {
-          path: 'page',
+          path: "page",
           component: PageList
         },
         {
-          path: 'page/publish/:id',
+          path: "page/publish/:id",
           component: PageEdit
         },
         {
-          path: 'page/publish',
+          path: "page/publish",
           component: PageEdit
         },
         {
-          path: 'setting',
+          path: "setting",
           component: Setting
         }
       ]
     },
     {
-      path: '/error/:state/:message',
+      path: "/error/:state/:message",
       component: Error
     },
     {
-      path: '*',
+      path: "*",
       component: Error
     }
   ]
-})
+});
 
-export default router
+export default router;
