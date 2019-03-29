@@ -1,6 +1,6 @@
 package com.zbw.fame.mapper;
 
-import com.zbw.fame.model.Middles;
+import com.zbw.fame.model.domain.Middles;
 import com.zbw.fame.util.MyMapper;
 
 /**

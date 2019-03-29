@@ -1,6 +1,6 @@
 package com.zbw.fame.service;
 
-import com.zbw.fame.dto.MetaDto;
+import com.zbw.fame.model.dto.MetaDto;
 
 import java.util.List;
 

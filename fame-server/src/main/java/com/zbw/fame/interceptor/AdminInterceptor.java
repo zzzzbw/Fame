@@ -1,7 +1,7 @@
 package com.zbw.fame.interceptor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zbw.fame.model.Users;
+import com.zbw.fame.model.domain.Users;
 import com.zbw.fame.util.ErrorCode;
 import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.RestResponse;

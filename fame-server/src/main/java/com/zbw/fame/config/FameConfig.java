@@ -1,6 +1,6 @@
 package com.zbw.fame.config;
 
-import com.zbw.fame.dto.SiteConfig;
+import com.zbw.fame.model.dto.SiteConfig;
 import com.zbw.fame.util.CacheUtil;
 import com.zbw.fame.util.FameConsts;
 import lombok.Data;

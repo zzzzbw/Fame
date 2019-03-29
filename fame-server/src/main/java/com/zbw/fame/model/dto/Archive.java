@@ -1,6 +1,6 @@
-package com.zbw.fame.dto;
+package com.zbw.fame.model.dto;
 
-import com.zbw.fame.model.Articles;
+import com.zbw.fame.model.domain.Articles;
 import lombok.Data;
 
 import java.util.Date;
@@ -13,7 +13,7 @@ import java.util.List;
  * @since 2017/9/21 11:24
  */
 @Data
-public class Archives {
+public class Archive {
 
     private String dateStr;
 

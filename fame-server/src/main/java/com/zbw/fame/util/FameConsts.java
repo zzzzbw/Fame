@@ -77,7 +77,7 @@ public interface FameConsts {
     /**
      * 文章点击量缓存数
      */
-    Integer CACHE_ARTICLE_HITS_SAVE = 5;
+    Integer CACHE_ARTICLE_HITS_SAVE = 3;
 
     /**
      * 网站设置缓存key

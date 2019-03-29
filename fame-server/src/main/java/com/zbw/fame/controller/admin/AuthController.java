@@ -1,7 +1,7 @@
 package com.zbw.fame.controller.admin;
 
 import com.zbw.fame.controller.BaseController;
-import com.zbw.fame.model.Users;
+import com.zbw.fame.model.domain.Users;
 import com.zbw.fame.service.UsersService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.RestResponse;

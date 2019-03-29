@@ -1,24 +1,23 @@
 package com.zbw.fame.controller;
 
 import com.github.pagehelper.Page;
-import com.zbw.fame.dto.Archives;
-import com.zbw.fame.dto.CommentDto;
-import com.zbw.fame.dto.MetaDto;
-import com.zbw.fame.dto.Pagination;
-import com.zbw.fame.model.Articles;
-import com.zbw.fame.model.Comments;
+import com.zbw.fame.model.param.ArticleParam;
+import com.zbw.fame.model.param.CommentParam;
+import com.zbw.fame.model.dto.Archive;
+import com.zbw.fame.model.dto.CommentDto;
+import com.zbw.fame.model.dto.MetaDto;
+import com.zbw.fame.model.dto.Pagination;
+import com.zbw.fame.model.domain.Articles;
+import com.zbw.fame.model.domain.Comments;
 import com.zbw.fame.service.ArticlesService;
 import com.zbw.fame.service.CommentsService;
 import com.zbw.fame.service.EmailService;
 import com.zbw.fame.service.MetasService;
 import com.zbw.fame.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.CacheManager;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -43,9 +42,6 @@ public class FrontController extends BaseController {
     @Autowired
     private EmailService emailService;
 
-    @Autowired
-    private CacheManager cacheManager;
-
     /**
      * 文章列表
      *
@@ -56,12 +52,13 @@ public class FrontController extends BaseController {
     @GetMapping("article")
     public RestResponse home(@RequestParam(required = false, defaultValue = "1") Integer page,
                              @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
-        Page<Articles> articles = articlesService.getPublishArticles(page, limit);
-        for (Articles a : articles) {
-            this.transformPreView(a);
-        }
-
-
+        ArticleParam param = ArticleParam.builder()
+                .type(Types.POST)
+                .status(Types.PUBLISH)
+                .html(true)
+                .summary(true)
+                .build();
+        Page<Articles> articles = articlesService.getArticles(page, limit, param);
         return RestResponse.ok(new Pagination<Articles>(articles));
     }
 
@@ -72,12 +69,19 @@ public class FrontController extends BaseController {
      * @return {@see Articles}
      */
     @GetMapping("article/{id}")
-    public RestResponse content(@PathVariable Integer id) {
-        Articles article = articlesService.get(id);
-        if (null == article || Types.DRAFT.equals(article.getStatus())) {
+    public RestResponse article(@PathVariable Integer id) {
+        ArticleParam param = ArticleParam.builder()
+                .id(id)
+                .type(Types.POST)
+                .status(Types.PUBLISH)
+                .html(true)
+                .summary(false)
+                .build();
+
+        Articles article = articlesService.getArticle(param);
+        if (null == article) {
             return this.error404();
         }
-        this.transformContent(article);
         this.updateHits(article.getId(), article.getHits());
         return RestResponse.ok(article);
     }
@@ -128,35 +132,11 @@ public class FrontController extends BaseController {
     /**
      * 归档页
      *
-     * @return {@see List<Archives>}
+     * @return {@see List<Archive>}
      */
     @GetMapping("archive")
     public RestResponse archive() {
-        Integer maxLimit = 9999;
-        List<Articles> articles = articlesService.getPublishArticles(1, maxLimit);
-        List<Archives> archives = new ArrayList<>();
-        String current = "";
-        for (Articles article : articles) {
-            // 清空文章内容
-            article.setContent("");
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(article.getCreated());
-            String dateStr = cal.get(Calendar.YEAR) + "";
-            if (dateStr.equals(current)) {
-                Archives arc = archives.get(archives.size() - 1);
-                arc.getArticles().add(article);
-                arc.setCount(arc.getArticles().size());
-            } else {
-                current = dateStr;
-                Archives arc = new Archives();
-                arc.setDateStr(dateStr);
-                arc.setCount(1);
-                List<Articles> arts = new ArrayList<>();
-                arts.add(article);
-                arc.setArticles(arts);
-                archives.add(arc);
-            }
-        }
+        List<Archive> archives = articlesService.getArchives();
         return RestResponse.ok(archives);
     }
 
@@ -168,11 +148,18 @@ public class FrontController extends BaseController {
      */
     @GetMapping("page/{title}")
     public RestResponse page(@PathVariable String title) {
-        Articles page = articlesService.getPageByTitle(title);
+        ArticleParam param = ArticleParam.builder()
+                .title(title)
+                .type(Types.PAGE)
+                .status(Types.PUBLISH)
+                .html(true)
+                .summary(false)
+                .build();
+
+        Articles page = articlesService.getArticle(param);
         if (null == page) {
             return error404();
         }
-        transformContent(page);
         return RestResponse.ok(page);
     }
 
@@ -187,10 +174,10 @@ public class FrontController extends BaseController {
     @GetMapping("comment")
     public RestResponse getArticleComment(@RequestParam Integer articleId, @RequestParam(required = false, defaultValue = "1") Integer page,
                                           @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
-        Page<Comments> comments = commentsService.getCommentsByArticleId(articleId, page, limit);
-        for (Comments comment : comments) {
-            comment.setContent(FameUtil.mdToHtml(comment.getContent()));
-        }
+        CommentParam param = CommentParam.builder()
+                .articleId(articleId)
+                .build();
+        Page<Comments> comments = commentsService.getComments(page, limit, param);
         return RestResponse.ok(new Pagination<Comments>(comments));
     }
 
@@ -242,27 +229,4 @@ public class FrontController extends BaseController {
         commentsService.assessComment(commentId, assess);
         return RestResponse.ok();
     }
-
-
-    /**
-     * 文章内容转为html
-     *
-     * @param article 文章实体类
-     */
-    private void transformContent(Articles article) {
-        String html = FameUtil.mdToHtml(article.getContent());
-        article.setContent(html);
-    }
-
-    /**
-     * 文章内容转为预览html
-     *
-     * @param article 文章实体类
-     */
-    private void transformPreView(Articles article) {
-        String html = FameUtil.mdToHtml(FameUtil.getPreView(article.getContent()));
-        article.setContent(html);
-    }
-
-
 }

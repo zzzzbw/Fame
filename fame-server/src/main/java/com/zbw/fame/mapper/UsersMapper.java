@@ -1,6 +1,6 @@
 package com.zbw.fame.mapper;
 
-import com.zbw.fame.model.Users;
+import com.zbw.fame.model.domain.Users;
 import com.zbw.fame.util.MyMapper;
 
 /**

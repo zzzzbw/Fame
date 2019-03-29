@@ -1,6 +1,6 @@
 package com.zbw.fame.service.impl;
 
-import com.zbw.fame.dto.SiteConfig;
+import com.zbw.fame.model.dto.SiteConfig;
 import com.zbw.fame.service.ConfigService;
 import com.zbw.fame.util.CacheUtil;
 import com.zbw.fame.util.FameConsts;

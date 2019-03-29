@@ -1,7 +1,11 @@
 package com.zbw.fame.service;
 
 import com.github.pagehelper.Page;
-import com.zbw.fame.model.Articles;
+import com.zbw.fame.model.param.ArticleParam;
+import com.zbw.fame.model.dto.Archive;
+import com.zbw.fame.model.domain.Articles;
+
+import java.util.List;
 
 /**
  * 文章 Service 接口
@@ -12,30 +16,24 @@ import com.zbw.fame.model.Articles;
 public interface ArticlesService {
 
     /**
-     * 获取所有文章
+     * 根据条件分页查询文章
      *
      * @param page  当前页面
      * @param limit 每页数量
+     * @param param 查询条件
      * @return Page<Articles>
      */
-    Page<Articles> getArticles(Integer page, Integer limit);
+    Page<Articles> getArticles(Integer page, Integer limit, ArticleParam param);
+
 
     /**
-     * 获取已发布的文章
+     * 根据条件查询指定id文章
      *
-     * @param page  当前页面
-     * @param limit 每页数量
-     * @return Page<Articles>
-     */
-    Page<Articles> getPublishArticles(Integer page, Integer limit);
-
-    /**
-     * 根据id获取文章
-     *
-     * @param id 文章id
+     * @param param 查询条件
      * @return Articles
      */
-    Articles get(Integer id);
+    Articles getArticle(ArticleParam param);
+
 
     /**
      * 保存或更新文章
@@ -69,29 +67,12 @@ public interface ArticlesService {
     Integer count();
 
     /**
-     * 获取所有自定义页面
+     * 获取归档信息
      *
-     * @param page  当前页面
-     * @param limit 每页数量
-     * @return Page<Articles>
+     * @return List<Archive>
      */
-    Page<Articles> getPages(Integer page, Integer limit);
+    List<Archive> getArchives();
 
-    /**
-     * 根据title获取自定义页面
-     *
-     * @param title 页面title
-     * @return Articles
-     */
-    Articles getPageByTitle(String title);
-
-    /**
-     * 根据id获取自定义页面
-     *
-     * @param id 页面id
-     * @return Articles
-     */
-    Articles getPageById(Integer id);
 
     /**
      * 保存或更新自定义页面
@@ -108,6 +89,4 @@ public interface ArticlesService {
      * @return boolean
      */
     boolean deletePage(Integer id);
-
-
 }

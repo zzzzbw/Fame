@@ -1,7 +1,7 @@
-package com.zbw.fame.dto;
+package com.zbw.fame.model.dto;
 
-import com.zbw.fame.model.Articles;
-import com.zbw.fame.model.Comments;
+import com.zbw.fame.model.domain.Articles;
+import com.zbw.fame.model.domain.Comments;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

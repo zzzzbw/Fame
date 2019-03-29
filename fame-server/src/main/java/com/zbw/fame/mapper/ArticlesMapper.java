@@ -1,7 +1,7 @@
 package com.zbw.fame.mapper;
 
-import com.zbw.fame.dto.ArticleInfoDto;
-import com.zbw.fame.model.Articles;
+import com.zbw.fame.model.dto.ArticleInfoDto;
+import com.zbw.fame.model.domain.Articles;
 import com.zbw.fame.util.MyMapper;
 import com.zbw.fame.util.Types;
 import org.apache.ibatis.annotations.Param;

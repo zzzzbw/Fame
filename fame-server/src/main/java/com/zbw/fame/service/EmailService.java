@@ -1,6 +1,6 @@
 package com.zbw.fame.service;
 
-import com.zbw.fame.model.Comments;
+import com.zbw.fame.model.domain.Comments;
 
 /**
  * 发送邮件 Service 接口

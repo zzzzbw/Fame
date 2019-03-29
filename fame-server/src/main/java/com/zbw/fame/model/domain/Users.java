@@ -1,5 +1,6 @@
-package com.zbw.fame.model;
+package com.zbw.fame.model.domain;
 
+import com.zbw.fame.model.domain.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

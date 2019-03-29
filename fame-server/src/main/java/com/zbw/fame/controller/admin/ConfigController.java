@@ -2,9 +2,9 @@ package com.zbw.fame.controller.admin;
 
 import com.github.pagehelper.Page;
 import com.zbw.fame.controller.BaseController;
-import com.zbw.fame.dto.Pagination;
-import com.zbw.fame.dto.SiteConfig;
-import com.zbw.fame.model.Logs;
+import com.zbw.fame.model.dto.Pagination;
+import com.zbw.fame.model.dto.SiteConfig;
+import com.zbw.fame.model.domain.Logs;
 import com.zbw.fame.service.LogsService;
 import com.zbw.fame.service.ConfigService;
 import com.zbw.fame.util.FameConsts;

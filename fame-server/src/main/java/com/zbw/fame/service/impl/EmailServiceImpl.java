@@ -1,7 +1,7 @@
 package com.zbw.fame.service.impl;
 
-import com.zbw.fame.dto.SiteConfig;
-import com.zbw.fame.model.Comments;
+import com.zbw.fame.model.dto.SiteConfig;
+import com.zbw.fame.model.domain.Comments;
 import com.zbw.fame.service.ConfigService;
 import com.zbw.fame.service.EmailService;
 import com.zbw.fame.service.LogsService;

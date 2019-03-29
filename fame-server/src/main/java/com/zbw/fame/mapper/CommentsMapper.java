@@ -1,6 +1,6 @@
 package com.zbw.fame.mapper;
 
-import com.zbw.fame.model.Comments;
+import com.zbw.fame.model.domain.Comments;
 import tk.mybatis.mapper.common.Mapper;
 
 /**

@@ -1,6 +1,6 @@
 package com.zbw.fame.mapper;
 
-import com.zbw.fame.model.Logs;
+import com.zbw.fame.model.domain.Logs;
 import com.zbw.fame.util.MyMapper;
 
 /**

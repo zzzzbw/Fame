@@ -1,6 +1,6 @@
 package com.zbw.fame.service;
 
-import com.zbw.fame.model.Users;
+import com.zbw.fame.model.domain.Users;
 
 /**
  * Users Service 接口

@@ -2,9 +2,10 @@ package com.zbw.fame.controller.admin;
 
 import com.github.pagehelper.Page;
 import com.zbw.fame.controller.BaseController;
-import com.zbw.fame.dto.Pagination;
-import com.zbw.fame.model.Articles;
-import com.zbw.fame.model.Users;
+import com.zbw.fame.model.param.ArticleParam;
+import com.zbw.fame.model.dto.Pagination;
+import com.zbw.fame.model.domain.Articles;
+import com.zbw.fame.model.domain.Users;
 import com.zbw.fame.service.ArticlesService;
 import com.zbw.fame.service.LogsService;
 import com.zbw.fame.util.FameConsts;
@@ -42,7 +43,12 @@ public class ArticleController extends BaseController {
     @GetMapping
     public RestResponse index(@RequestParam(required = false, defaultValue = "1") Integer page,
                               @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
-        Page<Articles> articles = articlesService.getArticles(page, limit);
+        ArticleParam param = ArticleParam.builder()
+                .type(Types.POST)
+                .html(false)
+                .summary(false)
+                .build();
+        Page<Articles> articles = articlesService.getArticles(page, limit, param);
         return RestResponse.ok(new Pagination<Articles>(articles));
     }
 
@@ -54,7 +60,13 @@ public class ArticleController extends BaseController {
      */
     @GetMapping("{id}")
     public RestResponse showArticle(@PathVariable Integer id) {
-        Articles article = articlesService.get(id);
+        ArticleParam param = ArticleParam.builder()
+                .id(id)
+                .type(Types.POST)
+                .html(false)
+                .summary(false)
+                .build();
+        Articles article = articlesService.getArticle(param);
         if (null == article) {
             return this.error404();
         }
@@ -82,9 +94,6 @@ public class ArticleController extends BaseController {
                                     @RequestParam(value = "status", defaultValue = Types.DRAFT) String status,
                                     @RequestParam(value = "allowComment", defaultValue = "false") Boolean allowComment) {
         Users user = this.user();
-        if (null == user) {
-            return RestResponse.fail("未登陆，请先登陆");
-        }
         Articles article = new Articles();
         if (!StringUtils.isEmpty(id)) {
             article.setId(id);

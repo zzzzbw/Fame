@@ -1,4 +1,4 @@
-package com.zbw.fame.dto;
+package com.zbw.fame.model.dto;
 
 import com.github.pagehelper.Page;
 import lombok.Data;

@@ -1,8 +1,9 @@
 package com.zbw.fame.service;
 
 import com.github.pagehelper.Page;
-import com.zbw.fame.dto.CommentDto;
-import com.zbw.fame.model.Comments;
+import com.zbw.fame.model.param.CommentParam;
+import com.zbw.fame.model.dto.CommentDto;
+import com.zbw.fame.model.domain.Comments;
 import com.zbw.fame.util.Types;
 
 /**
@@ -22,21 +23,12 @@ public interface CommentsService {
     /**
      * 获取文章下的评论
      *
-     * @param articleId 文章id
      * @param page      第几页
      * @param limit     每页数量
+     * @param param
      * @return Page<Comments>
      */
-    Page<Comments> getCommentsByArticleId(Integer articleId, Integer page, Integer limit);
-
-    /**
-     * 分页获取评论
-     *
-     * @param page  第几页
-     * @param limit 每页数量
-     * @return Page<Comments>
-     */
-    Page<Comments> getComments(Integer page, Integer limit);
+    Page<Comments> getComments(Integer page, Integer limit, CommentParam param);
 
     /**
      * 获取评论详情

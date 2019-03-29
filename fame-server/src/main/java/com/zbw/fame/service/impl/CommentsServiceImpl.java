@@ -2,14 +2,16 @@ package com.zbw.fame.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.zbw.fame.dto.CommentDto;
+import com.zbw.fame.model.param.CommentParam;
+import com.zbw.fame.model.dto.CommentDto;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.mapper.ArticlesMapper;
 import com.zbw.fame.mapper.CommentsMapper;
-import com.zbw.fame.model.Articles;
-import com.zbw.fame.model.Comments;
+import com.zbw.fame.model.domain.Articles;
+import com.zbw.fame.model.domain.Comments;
 import com.zbw.fame.service.CommentsService;
 import com.zbw.fame.util.FameConsts;
+import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.Types;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -40,12 +42,21 @@ public class CommentsServiceImpl implements CommentsService {
     private ArticlesMapper articlesMapper;
 
     @Override
-    @Cacheable(value = COMMENT_CACHE_NAME, key = "'comment_article_page['+#articleId+':'+#page+':'+#limit+']'")
-    public Page<Comments> getCommentsByArticleId(Integer articleId, Integer page, Integer limit) {
+    @Cacheable(value = COMMENT_CACHE_NAME, key = "'comment_page['+#page+':'+#limit+':'+#param+']'")
+    public Page<Comments> getComments(Integer page, Integer limit, CommentParam param) {
         Comments record = new Comments();
-        record.setArticleId(articleId);
+        record.setArticleId(param.getArticleId());
+        Page<Comments> result = PageHelper.startPage(page, limit).doSelectPage(() -> commentsMapper.select(record));
+        if (param.isSummary() || param.isHtml()) {
+            result.forEach(comments -> {
+                String content = FameUtil.contentTransform(comments.getContent(), param.isSummary(), param.isHtml());
+                comments.setContent(content);
+            });
+        }
+
         return PageHelper.startPage(page, limit).doSelectPage(() -> commentsMapper.select(record));
     }
+
 
     @Override
     @CacheEvict(value = COMMENT_CACHE_NAME, allEntries = true, beforeInvocation = true)
@@ -82,12 +93,6 @@ public class CommentsServiceImpl implements CommentsService {
         // 增加文章的评论数
         articles.setCommentCount(articles.getCommentCount() + 1);
         articlesMapper.updateByPrimaryKeySelective(articles);
-    }
-
-    @Override
-    @Cacheable(value = COMMENT_CACHE_NAME, key = "'comment_page['+#page+':'+#limit+']'")
-    public Page<Comments> getComments(Integer page, Integer limit) {
-        return PageHelper.startPage(page, limit).doSelectPage(() -> commentsMapper.selectAll());
     }
 
     @Override

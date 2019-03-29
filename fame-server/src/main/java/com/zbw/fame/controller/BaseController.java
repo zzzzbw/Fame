@@ -1,10 +1,8 @@
 package com.zbw.fame.controller;
 
-import com.zbw.fame.model.Users;
+import com.zbw.fame.model.domain.Users;
 import com.zbw.fame.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
 
 import javax.servlet.http.HttpServletRequest;
 

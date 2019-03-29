@@ -1,7 +1,7 @@
-package com.zbw.fame.dto;
+package com.zbw.fame.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.zbw.fame.model.Metas;
+import com.zbw.fame.model.domain.Metas;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

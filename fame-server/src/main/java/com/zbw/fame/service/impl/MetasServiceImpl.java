@@ -1,13 +1,13 @@
 package com.zbw.fame.service.impl;
 
-import com.zbw.fame.dto.MetaDto;
+import com.zbw.fame.model.dto.MetaDto;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.mapper.ArticlesMapper;
 import com.zbw.fame.mapper.MetasMapper;
 import com.zbw.fame.mapper.MiddlesMapper;
-import com.zbw.fame.model.Articles;
-import com.zbw.fame.model.Metas;
-import com.zbw.fame.model.Middles;
+import com.zbw.fame.model.domain.Articles;
+import com.zbw.fame.model.domain.Metas;
+import com.zbw.fame.model.domain.Middles;
 import com.zbw.fame.service.MetasService;
 import com.zbw.fame.util.Types;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -3,7 +3,7 @@ package com.zbw.fame.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.zbw.fame.mapper.LogsMapper;
-import com.zbw.fame.model.Logs;
+import com.zbw.fame.model.domain.Logs;
 import com.zbw.fame.service.LogsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

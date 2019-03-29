@@ -1,6 +1,6 @@
 package com.zbw.fame.service;
 
-import com.zbw.fame.dto.SiteConfig;
+import com.zbw.fame.model.dto.SiteConfig;
 
 /**
  * 网站设置 Service 接口

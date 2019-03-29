@@ -7,7 +7,7 @@ import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.parser.ParserEmulationProfile;
 import com.vladsch.flexmark.util.options.MutableDataSet;
 import com.zbw.fame.exception.TipException;
-import com.zbw.fame.model.Users;
+import com.zbw.fame.model.domain.Users;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
@@ -152,7 +152,7 @@ public class FameUtil {
      *
      * @return 截取的预览字符串
      */
-    public static String getPreView(String content) {
+    public static String getSummary(String content) {
         int index = FameUtil.ignoreCaseIndexOf(content, FameConsts.PREVIEW_FLAG);
         if (-1 == index) {
             index = content.length() > FameConsts.MAX_PREVIEW_COUNT ? FameConsts.MAX_PREVIEW_COUNT : content.length();
@@ -174,6 +174,25 @@ public class FameUtil {
 
         Node document = PARSER.parse(md);
         return HTML_RENDER.render(document);
+    }
+
+    /**
+     * 根据条件转换markdown内容
+     *
+     * @param content   markdown内容
+     * @param isSummary 是否为摘要
+     * @param isHtml    是否为 html 格式
+     */
+    public static String contentTransform(String content, boolean isSummary, boolean isHtml) {
+        if (isSummary || isHtml) {
+            if (isSummary) {
+                content = FameUtil.getSummary(content);
+            }
+            if (isHtml) {
+                content = FameUtil.mdToHtml(content);
+            }
+        }
+        return content;
     }
 
     /**

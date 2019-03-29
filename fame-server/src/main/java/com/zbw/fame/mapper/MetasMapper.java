@@ -1,7 +1,7 @@
 package com.zbw.fame.mapper;
 
-import com.zbw.fame.dto.MetaDto;
-import com.zbw.fame.model.Metas;
+import com.zbw.fame.model.dto.MetaDto;
+import com.zbw.fame.model.domain.Metas;
 import com.zbw.fame.util.MyMapper;
 import org.apache.ibatis.annotations.*;
 

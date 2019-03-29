@@ -2,9 +2,10 @@ package com.zbw.fame.controller.admin;
 
 import com.github.pagehelper.Page;
 import com.zbw.fame.controller.BaseController;
-import com.zbw.fame.dto.Pagination;
-import com.zbw.fame.model.Articles;
-import com.zbw.fame.model.Users;
+import com.zbw.fame.model.param.ArticleParam;
+import com.zbw.fame.model.dto.Pagination;
+import com.zbw.fame.model.domain.Articles;
+import com.zbw.fame.model.domain.Users;
 import com.zbw.fame.service.ArticlesService;
 import com.zbw.fame.service.LogsService;
 import com.zbw.fame.util.FameConsts;
@@ -41,7 +42,12 @@ public class PageController extends BaseController {
     @GetMapping
     public RestResponse index(@RequestParam(required = false, defaultValue = "1") Integer page,
                               @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
-        Page<Articles> pages = articlesService.getPages(page, limit);
+        ArticleParam param = ArticleParam.builder()
+                .type(Types.PAGE)
+                .html(false)
+                .summary(false)
+                .build();
+        Page<Articles> pages = articlesService.getArticles(page, limit, param);
         return RestResponse.ok(new Pagination<Articles>(pages));
     }
 
@@ -53,7 +59,13 @@ public class PageController extends BaseController {
      */
     @GetMapping("{id}")
     public RestResponse showPage(@PathVariable Integer id) {
-        Articles page = articlesService.getPageById(id);
+        ArticleParam param = ArticleParam.builder()
+                .id(id)
+                .type(Types.PAGE)
+                .html(false)
+                .summary(false)
+                .build();
+        Articles page = articlesService.getArticle(param);
         if (null == page) {
             return this.error404();
         }
@@ -75,9 +87,6 @@ public class PageController extends BaseController {
                                  @RequestParam(value = "content") String content,
                                  @RequestParam(value = "status", defaultValue = Types.DRAFT) String status) {
         Users user = this.user();
-        if (null == user) {
-            return RestResponse.fail("未登陆，请先登陆");
-        }
         Articles page = new Articles();
         if (!StringUtils.isEmpty(id)) {
             page.setId(id);

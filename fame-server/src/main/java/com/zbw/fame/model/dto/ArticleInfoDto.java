@@ -1,6 +1,6 @@
-package com.zbw.fame.dto;
+package com.zbw.fame.model.dto;
 
-import com.zbw.fame.model.BaseEntity;
+import com.zbw.fame.model.domain.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

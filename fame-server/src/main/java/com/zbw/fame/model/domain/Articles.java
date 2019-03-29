@@ -1,4 +1,4 @@
-package com.zbw.fame.model;
+package com.zbw.fame.model.domain;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

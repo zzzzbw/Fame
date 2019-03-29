@@ -2,9 +2,10 @@ package com.zbw.fame.controller.admin;
 
 import com.github.pagehelper.Page;
 import com.zbw.fame.controller.BaseController;
-import com.zbw.fame.dto.CommentDto;
-import com.zbw.fame.dto.Pagination;
-import com.zbw.fame.model.Comments;
+import com.zbw.fame.model.param.CommentParam;
+import com.zbw.fame.model.dto.CommentDto;
+import com.zbw.fame.model.dto.Pagination;
+import com.zbw.fame.model.domain.Comments;
 import com.zbw.fame.service.CommentsService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
@@ -35,7 +36,12 @@ public class CommentController extends BaseController {
     @GetMapping
     public RestResponse index(@RequestParam(required = false, defaultValue = "1") Integer page,
                               @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
-        Page<Comments> comments = commentsService.getComments(page, limit);
+        CommentParam param = CommentParam
+                .builder()
+                .summary(false)
+                .html(false)
+                .build();
+        Page<Comments> comments = commentsService.getComments(page, limit, param);
         return RestResponse.ok(new Pagination<Comments>(comments));
     }
 

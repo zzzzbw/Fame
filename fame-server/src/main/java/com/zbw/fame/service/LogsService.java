@@ -1,7 +1,7 @@
 package com.zbw.fame.service;
 
 import com.github.pagehelper.Page;
-import com.zbw.fame.model.Logs;
+import com.zbw.fame.model.domain.Logs;
 
 /**
  * 日志 Service 接口

@@ -2,7 +2,7 @@ package com.zbw.fame.service.impl;
 
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.mapper.UsersMapper;
-import com.zbw.fame.model.Users;
+import com.zbw.fame.model.domain.Users;
 import com.zbw.fame.service.UsersService;
 import com.zbw.fame.util.FameUtil;
 import org.springframework.beans.factory.annotation.Autowired;
