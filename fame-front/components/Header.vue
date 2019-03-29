@@ -1,10 +1,10 @@
 <template>
   <div v-fix class="header">
     <div class="header-container">
-      <div class="logo">
+      <nuxt-link class="logo" :to="'/'">
         <img src="/logo.png" width="26px" height="26px" />
         <span class="text-primary" style="margin-left: 10px">Fame</span>
-      </div>
+      </nuxt-link>
       <ul class="tab link-list">
         <li v-for="(list, index) in links" :key="index" class="tab-item">
           <nuxt-link :to="{ path: list.path }" exact>{{ list.name }}</nuxt-link>
@@ -32,6 +32,7 @@
 
 <script type="text/ecmascript-6">
 import _ from 'underscore'
+
 export default {
   directives: {
     fix: {

@@ -1,7 +1,5 @@
 import sitemapConfig from './config/sitemap-config'
 import feedConfig from './config/feed-config'
-// const sitemapConfig = require('./config/sitemap-config')
-// const feedConfig = require('./config/feed-config')
 
 // noinspection JSAnnotator
 export default {
