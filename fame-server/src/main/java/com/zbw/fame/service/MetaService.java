@@ -10,14 +10,14 @@ import java.util.List;
  * @author zbw
  * @since 2017/8/28 23:32
  */
-public interface MetasService {
+public interface MetaService {
     /**
      * 根据属性以及属性下的已发布文章
      *
      * @param type 属性类型
      * @return List<MetaDto>
      */
-    List<MetaDto> getMetaDtos(String type);
+    List<MetaDto> getPublishMetaDtos(String type);
 
     /**
      * 根据属性以及属性下的文章
@@ -25,7 +25,7 @@ public interface MetasService {
      * @param type 属性类型
      * @return List<MetaDto>
      */
-    List<MetaDto> getMetaDto(String type);
+    List<MetaDto> getMetaDtos(String type);
 
     /**
      * 删除属性(同时删除关联文章的属性)

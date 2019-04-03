@@ -1,6 +1,6 @@
 package com.zbw.fame.model.dto;
 
-import com.zbw.fame.model.domain.Articles;
+import com.zbw.fame.model.domain.Article;
 import lombok.Data;
 
 import java.util.Date;
@@ -21,5 +21,5 @@ public class Archive {
 
     private Integer count;
 
-    private List<Articles> articles;
+    private List<Article> articles;
 }

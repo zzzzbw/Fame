@@ -1,7 +1,7 @@
 package com.zbw.fame.controller.admin;
 
 import com.zbw.fame.controller.BaseController;
-import com.zbw.fame.service.MetasService;
+import com.zbw.fame.service.MetaService;
 import com.zbw.fame.util.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 public class MetaController extends BaseController {
 
     @Autowired
-    private MetasService metasService;
+    private MetaService metaService;
 
     /**
      * 获取所有属性
@@ -26,7 +26,7 @@ public class MetaController extends BaseController {
      */
     @GetMapping
     public RestResponse getAll(@RequestParam String type) {
-        return RestResponse.ok(metasService.getMetaDto(type));
+        return RestResponse.ok(metaService.getMetaDtos(type));
     }
 
     /**
@@ -38,7 +38,7 @@ public class MetaController extends BaseController {
      */
     @DeleteMapping
     public RestResponse deleteMeta(@RequestParam String name, @RequestParam String type) {
-        if (metasService.deleteMeta(name, type)) {
+        if (metaService.deleteMeta(name, type)) {
             return RestResponse.ok();
         }
         return RestResponse.fail();
@@ -53,7 +53,7 @@ public class MetaController extends BaseController {
      */
     @PostMapping
     public RestResponse saveMeta(@RequestParam String name, @RequestParam String type) {
-        if (metasService.saveMeta(name, type)) {
+        if (metaService.saveMeta(name, type)) {
             return RestResponse.ok();
         }
         return RestResponse.fail();
@@ -69,7 +69,7 @@ public class MetaController extends BaseController {
      */
     @PostMapping("{id}")
     public RestResponse updateMeta(@PathVariable Integer id, @RequestParam String name, @RequestParam String type) {
-        if (metasService.updateMeta(id, name, type)) {
+        if (metaService.updateMeta(id, name, type)) {
             return RestResponse.ok();
         }
         return RestResponse.fail();

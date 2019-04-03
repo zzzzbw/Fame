@@ -1,8 +1,8 @@
 package com.zbw.fame.controller.admin;
 
 import com.zbw.fame.controller.BaseController;
-import com.zbw.fame.model.domain.Users;
-import com.zbw.fame.service.UsersService;
+import com.zbw.fame.model.domain.User;
+import com.zbw.fame.service.UserService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 public class AuthController extends BaseController {
 
     @Autowired
-    private UsersService usersService;
+    private UserService userService;
 
     /**
      * 后台登录
@@ -38,7 +38,7 @@ public class AuthController extends BaseController {
         if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
             return RestResponse.fail("用户名和密码不能为空");
         }
-        Users user = usersService.login(username, password);
+        User user = userService.login(username, password);
         request.getSession().setAttribute(FameConsts.USER_SESSION_KEY, user);
 
         return RestResponse.ok();
@@ -51,7 +51,7 @@ public class AuthController extends BaseController {
      */
     @PostMapping("logout")
     public RestResponse logout() {
-        Users user = this.user();
+        User user = this.user();
         if (null == user) {
             return RestResponse.fail("没有用户登陆");
         }
@@ -74,7 +74,7 @@ public class AuthController extends BaseController {
             return RestResponse.fail("用户名与登陆的不符合");
         }
 
-        boolean result = usersService.reset(username, oldPassword, newPassword);
+        boolean result = userService.reset(username, oldPassword, newPassword);
         return RestResponse.ok(result);
     }
 
@@ -85,7 +85,7 @@ public class AuthController extends BaseController {
      */
     @GetMapping("username")
     public RestResponse username() {
-        Users user = this.user();
+        User user = this.user();
         if (null == user) {
             return RestResponse.fail("没有用户登陆");
         }

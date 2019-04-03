@@ -1,6 +1,6 @@
 package com.zbw.fame.controller;
 
-import com.zbw.fame.model.domain.Users;
+import com.zbw.fame.model.domain.User;
 import com.zbw.fame.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,7 +20,7 @@ public abstract class BaseController {
     @Autowired
     protected CacheUtil cacheUtil;
 
-    protected Users user() {
+    protected User user() {
         return FameUtil.getLoginUser();
     }
 

@@ -1,6 +1,5 @@
 package com.zbw.fame.model.domain;
 
-import com.zbw.fame.model.domain.BaseEntity;
 import lombok.*;
 
 /**
@@ -14,7 +13,7 @@ import lombok.*;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class Middles extends BaseEntity {
+public class Middle extends BaseEntity {
 
     private Integer aId;
 

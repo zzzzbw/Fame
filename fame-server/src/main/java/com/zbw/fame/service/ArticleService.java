@@ -1,9 +1,9 @@
 package com.zbw.fame.service;
 
 import com.github.pagehelper.Page;
+import com.zbw.fame.model.domain.Article;
 import com.zbw.fame.model.param.ArticleParam;
 import com.zbw.fame.model.dto.Archive;
-import com.zbw.fame.model.domain.Articles;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * @author zbw
  * @since 2017/8/21 22:01
  */
-public interface ArticlesService {
+public interface ArticleService {
 
     /**
      * 根据条件分页查询文章
@@ -21,18 +21,18 @@ public interface ArticlesService {
      * @param page  当前页面
      * @param limit 每页数量
      * @param param 查询条件
-     * @return Page<Articles>
+     * @return Page<Article>
      */
-    Page<Articles> getArticles(Integer page, Integer limit, ArticleParam param);
+    Page<Article> getArticles(Integer page, Integer limit, ArticleParam param);
 
 
     /**
      * 根据条件查询指定id文章
      *
      * @param param 查询条件
-     * @return Articles
+     * @return Article
      */
-    Articles getArticle(ArticleParam param);
+    Article getArticle(ArticleParam param);
 
 
     /**
@@ -41,7 +41,7 @@ public interface ArticlesService {
      * @param article 文章entity
      * @return Integer
      */
-    Integer saveArticle(Articles article);
+    Integer saveArticle(Article article);
 
     /**
      * 更新文章
@@ -49,7 +49,7 @@ public interface ArticlesService {
      * @param articles 文章entity
      * @return boolean
      */
-    boolean updateArticle(Articles articles);
+    boolean updateArticle(Article articles);
 
     /**
      * 根据id删除文章
@@ -80,7 +80,7 @@ public interface ArticlesService {
      * @param page 页面entity
      * @return Integer
      */
-    Integer savePage(Articles page);
+    Integer savePage(Article page);
 
     /**
      * 根据id删除自定义页面

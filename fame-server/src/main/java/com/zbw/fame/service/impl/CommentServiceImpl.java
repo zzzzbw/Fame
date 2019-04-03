@@ -2,14 +2,14 @@ package com.zbw.fame.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.zbw.fame.model.domain.Comment;
 import com.zbw.fame.model.param.CommentParam;
 import com.zbw.fame.model.dto.CommentDto;
 import com.zbw.fame.exception.TipException;
-import com.zbw.fame.mapper.ArticlesMapper;
-import com.zbw.fame.mapper.CommentsMapper;
-import com.zbw.fame.model.domain.Articles;
-import com.zbw.fame.model.domain.Comments;
-import com.zbw.fame.service.CommentsService;
+import com.zbw.fame.mapper.ArticleMapper;
+import com.zbw.fame.mapper.CommentMapper;
+import com.zbw.fame.model.domain.Article;
+import com.zbw.fame.service.CommentService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.Types;
@@ -31,22 +31,22 @@ import org.springframework.util.StringUtils;
 @Slf4j
 @Service("commentsService")
 @Transactional(rollbackFor = Throwable.class)
-public class CommentsServiceImpl implements CommentsService {
+public class CommentServiceImpl implements CommentService {
 
     private static final String COMMENT_CACHE_NAME = "comments";
 
     @Autowired
-    private CommentsMapper commentsMapper;
+    private CommentMapper commentMapper;
 
     @Autowired
-    private ArticlesMapper articlesMapper;
+    private ArticleMapper articleMapper;
 
     @Override
     @Cacheable(value = COMMENT_CACHE_NAME, key = "'comment_page['+#page+':'+#limit+':'+#param+']'")
-    public Page<Comments> getComments(Integer page, Integer limit, CommentParam param) {
-        Comments record = new Comments();
+    public Page<Comment> getComments(Integer page, Integer limit, CommentParam param) {
+        Comment record = new Comment();
         record.setArticleId(param.getArticleId());
-        Page<Comments> result = PageHelper.startPage(page, limit).doSelectPage(() -> commentsMapper.select(record));
+        Page<Comment> result = PageHelper.startPage(page, limit).doSelectPage(() -> commentMapper.select(record));
         if (param.isSummary() || param.isHtml()) {
             result.forEach(comments -> {
                 String content = FameUtil.contentTransform(comments.getContent(), param.isSummary(), param.isHtml());
@@ -54,63 +54,63 @@ public class CommentsServiceImpl implements CommentsService {
             });
         }
 
-        return PageHelper.startPage(page, limit).doSelectPage(() -> commentsMapper.select(record));
+        return PageHelper.startPage(page, limit).doSelectPage(() -> commentMapper.select(record));
     }
 
 
     @Override
     @CacheEvict(value = COMMENT_CACHE_NAME, allEntries = true, beforeInvocation = true)
-    public void save(Comments comments) {
-        if (null == comments) {
+    public void save(Comment comment) {
+        if (null == comment) {
             throw new TipException("评论对象为空");
         }
-        if (StringUtils.isEmpty(comments.getContent())) {
+        if (StringUtils.isEmpty(comment.getContent())) {
             throw new TipException("评论不能为空");
         }
-        if (comments.getContent().length() > FameConsts.MAX_COMMENT_CONTENT_COUNT) {
+        if (comment.getContent().length() > FameConsts.MAX_COMMENT_CONTENT_COUNT) {
             throw new TipException("评论字数不能超过" + FameConsts.MAX_COMMENT_CONTENT_COUNT);
         }
-        if (StringUtils.isEmpty(comments.getName())) {
+        if (StringUtils.isEmpty(comment.getName())) {
             throw new TipException("名称不能为空");
         }
-        if (comments.getName().length() > FameConsts.MAX_COMMENT_NAME_COUNT) {
+        if (comment.getName().length() > FameConsts.MAX_COMMENT_NAME_COUNT) {
             throw new TipException("名称字数不能超过" + FameConsts.MAX_COMMENT_NAME_COUNT);
         }
-        if (!StringUtils.isEmpty(comments.getEmail()) && comments.getEmail().length() > FameConsts.MAX_COMMENT_EMAIL_COUNT) {
+        if (!StringUtils.isEmpty(comment.getEmail()) && comment.getEmail().length() > FameConsts.MAX_COMMENT_EMAIL_COUNT) {
             throw new TipException("邮箱字数不能超过" + FameConsts.MAX_COMMENT_EMAIL_COUNT);
         }
-        if (!StringUtils.isEmpty(comments.getWebsite()) && comments.getWebsite().length() > FameConsts.MAX_COMMENT_WEBSITE_COUNT) {
+        if (!StringUtils.isEmpty(comment.getWebsite()) && comment.getWebsite().length() > FameConsts.MAX_COMMENT_WEBSITE_COUNT) {
             throw new TipException("网址长度不能超过" + FameConsts.MAX_COMMENT_WEBSITE_COUNT);
         }
 
-        Articles articles = articlesMapper.selectByPrimaryKey(comments.getArticleId());
-        if (null == articles) {
+        Article article = articleMapper.selectByPrimaryKey(comment.getArticleId());
+        if (null == article) {
             throw new TipException("无法查询到对应评论文章");
         }
 
-        commentsMapper.insertSelective(comments);
+        commentMapper.insertSelective(comment);
 
         // 增加文章的评论数
-        articles.setCommentCount(articles.getCommentCount() + 1);
-        articlesMapper.updateByPrimaryKeySelective(articles);
+        article.setCommentCount(article.getCommentCount() + 1);
+        articleMapper.updateByPrimaryKeySelective(article);
     }
 
     @Override
     @Cacheable(value = COMMENT_CACHE_NAME, key = "'comment_detail['+#id+']'")
     public CommentDto getCommentDetail(Integer id) {
-        Comments entity = commentsMapper.selectByPrimaryKey(id);
+        Comment entity = commentMapper.selectByPrimaryKey(id);
         if (null == entity) {
             return null;
         }
         CommentDto comment = new CommentDto();
         BeanUtils.copyProperties(entity, comment);
         if (null != comment.getPId() && -1 != comment.getPId()) {
-            Comments pComment = commentsMapper.selectByPrimaryKey(comment.getPId());
+            Comment pComment = commentMapper.selectByPrimaryKey(comment.getPId());
             comment.setPComment(pComment);
         }
 
-        Articles articles = articlesMapper.selectByPrimaryKey(comment.getArticleId());
-        comment.setArticle(articles);
+        Article article = articleMapper.selectByPrimaryKey(comment.getArticleId());
+        comment.setArticle(article);
         return comment;
     }
 
@@ -118,26 +118,26 @@ public class CommentsServiceImpl implements CommentsService {
     @Override
     @CacheEvict(value = COMMENT_CACHE_NAME, allEntries = true, beforeInvocation = true)
     public boolean deleteComment(Integer id) {
-        Comments comments = commentsMapper.selectByPrimaryKey(id);
-        if (null == comments) {
+        Comment comment = commentMapper.selectByPrimaryKey(id);
+        if (null == comment) {
             throw new TipException("不存在该评论");
         }
 
         // 减去文章中评论数
-        Articles articles = articlesMapper.selectByPrimaryKey(comments.getArticleId());
-        articles.setCommentCount(articles.getCommentCount() - 1);
-        articlesMapper.updateByPrimaryKeySelective(articles);
+        Article article = articleMapper.selectByPrimaryKey(comment.getArticleId());
+        article.setCommentCount(article.getCommentCount() - 1);
+        articleMapper.updateByPrimaryKeySelective(article);
 
         // 去除子评论中关联
-        Comments record = new Comments();
+        Comment record = new Comment();
         record.setPId(id);
-        Comments childComment = commentsMapper.selectOne(record);
+        Comment childComment = commentMapper.selectOne(record);
         if (null != childComment) {
             childComment.setPId(null);
-            commentsMapper.updateByPrimaryKey(childComment);
+            commentMapper.updateByPrimaryKey(childComment);
         }
-        if (commentsMapper.deleteByPrimaryKey(id) > 0) {
-            log.info("删除评论: {}", comments);
+        if (commentMapper.deleteByPrimaryKey(id) > 0) {
+            log.info("删除评论: {}", comment);
             return true;
         }
         return false;
@@ -146,7 +146,7 @@ public class CommentsServiceImpl implements CommentsService {
     @Override
     @CacheEvict(value = COMMENT_CACHE_NAME, allEntries = true, beforeInvocation = true)
     public void assessComment(Integer commentId, String assess) {
-        Comments comment = commentsMapper.selectByPrimaryKey(commentId);
+        Comment comment = commentMapper.selectByPrimaryKey(commentId);
         if (null == comment) {
             throw new TipException("没有该评论");
         }
@@ -158,13 +158,13 @@ public class CommentsServiceImpl implements CommentsService {
         } else {
             throw new TipException("assess参数错误");
         }
-        commentsMapper.updateByPrimaryKey(comment);
+        commentMapper.updateByPrimaryKey(comment);
     }
 
     @Override
     @Cacheable(value = COMMENT_CACHE_NAME, key = "'comment_count'")
     public Integer count() {
-        return commentsMapper.selectCount(new Comments());
+        return commentMapper.selectCount(new Comment());
     }
 
 }

@@ -1,6 +1,5 @@
 package com.zbw.fame.model.domain;
 
-import com.zbw.fame.model.domain.BaseEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -16,7 +15,7 @@ import java.util.Date;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class Logs extends BaseEntity {
+public class Log extends BaseEntity {
 
     /**
      * 操作动作

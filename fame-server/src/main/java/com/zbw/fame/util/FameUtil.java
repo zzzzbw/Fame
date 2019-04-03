@@ -7,7 +7,7 @@ import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.parser.ParserEmulationProfile;
 import com.vladsch.flexmark.util.options.MutableDataSet;
 import com.zbw.fame.exception.TipException;
-import com.zbw.fame.model.domain.Users;
+import com.zbw.fame.model.domain.User;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
@@ -59,13 +59,12 @@ public class FameUtil {
      *
      * @return session中的用户
      */
-    public static Users getLoginUser() {
+    public static User getLoginUser() {
         HttpSession session = getSession();
         if (null == session) {
             return null;
         }
-        Users user = (Users) session.getAttribute(FameConsts.USER_SESSION_KEY);
-        return user;
+        return (User) session.getAttribute(FameConsts.USER_SESSION_KEY);
     }
 
     /**

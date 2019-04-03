@@ -2,7 +2,7 @@ DROP DATABASE IF EXISTS fame;
 CREATE DATABASE fame CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE fame;
 
-CREATE TABLE users (
+CREATE TABLE user (
   id           INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
   username     VARCHAR(45)     NOT NULL UNIQUE,
   password_md5 VARCHAR(45)     NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE users (
   logged       TIMESTAMP       NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE articles (
+CREATE TABLE article (
   id            INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
   title         VARCHAR(255)    NOT NULL,
   created       TIMESTAMP       NOT NULL DEFAULT current_timestamp,
@@ -28,7 +28,7 @@ CREATE TABLE articles (
   comment_count INT DEFAULT 0 NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE comments (
+CREATE TABLE comment (
   id         INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
   article_id INT             NOT NULL,
   p_id       INT,
@@ -43,19 +43,19 @@ CREATE TABLE comments (
   created    TIMESTAMP       NOT NULL DEFAULT current_timestamp
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE metas (
+CREATE TABLE meta (
   id   INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
   name VARCHAR(255)    NOT NULL,
   type VARCHAR(45)     NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE middles (
+CREATE TABLE middle (
   id   INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
   a_id INT             NOT NULL,
   m_id INT             NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE logs (
+CREATE TABLE log (
   id      INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
   action  VARCHAR(255),
   data    TEXT,
@@ -67,31 +67,31 @@ CREATE TABLE logs (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-INSERT INTO users (username, password_md5, email, screen_name)
+INSERT INTO user (username, password_md5, email, screen_name)
 VALUES ('fame', '3e6693e83d186225b85b09e71c974d2d', '', 'admin');
 
-INSERT INTO articles (title, created, modified, content, author_id, hits, tags, category, status, type)
+INSERT INTO article (title, created, modified, content, author_id, hits, tags, category, status, type)
 VALUES ('Hello world', now(), now(), '
 欢迎使用[Fame](https://github.com/zzzzbw/Fame)! 这是你的第一篇博客。快点来写点什么吧
 
 ```java
-public static void main(Stringp[] args){
+public static void main(String[] args){
     System.out.println("Hello world");
 }
 ```
 
 > 想要了解更多详细信息，可以查看[文档](https://github.com/zzzzbw/Fame/blob/master/README.md)。', 1, 0, 'First', 'New', 'publish', 'post');
 
-INSERT INTO comments (article_id, content, name, email, website, agree, disagree, ip, agent) VALUES ('1', '## 测试评论
+INSERT INTO comment (article_id, content, name, email, website, agree, disagree, ip, agent) VALUES ('1', '## 测试评论
 这是我的网址[Fame](http://zzzzbw.cn)', 'zzzzbw', '920049380@qq.com', 'http://zzzzbw.cn', '1', '0', '0.0.0.1', '');
 
-INSERT INTO metas (name, type) VALUES ('First', 'tag');
-INSERT INTO metas (name, type) VALUES ('New', 'category');
+INSERT INTO meta (name, type) VALUES ('First', 'tag');
+INSERT INTO meta (name, type) VALUES ('New', 'category');
 
-INSERT INTO middles (a_id, m_id) VALUES (1, 1);
-INSERT INTO middles (a_id, m_id) VALUES (1, 2);
+INSERT INTO middle (a_id, m_id) VALUES (1, 1);
+INSERT INTO middle (a_id, m_id) VALUES (1, 2);
 
-INSERT INTO articles (title, created, modified, content, author_id, tags, category, status, type)
+INSERT INTO article (title, created, modified, content, author_id, tags, category, status, type)
 VALUES ('About', now(), now(), '# About me
 ### Hello word
 这是关于我的页面

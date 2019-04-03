@@ -1,10 +1,10 @@
 package com.zbw.fame.service.impl;
 
 import com.zbw.fame.model.dto.SiteConfig;
-import com.zbw.fame.model.domain.Comments;
+import com.zbw.fame.model.domain.Comment;
 import com.zbw.fame.service.ConfigService;
 import com.zbw.fame.service.EmailService;
-import com.zbw.fame.service.LogsService;
+import com.zbw.fame.service.LogService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.Types;
 import lombok.extern.slf4j.Slf4j;
@@ -38,14 +38,14 @@ public class EmailServiceImpl implements EmailService {
     private ConfigService configService;
 
     @Autowired
-    private LogsService logsService;
+    private LogService logService;
 
     @Autowired
     private TemplateEngine templateEngine;
 
     @Override
     @Async
-    public void sendEmailToAdmin(Comments comments) {
+    public void sendEmailToAdmin(Comment comments) {
         SiteConfig config = configService.getSiteConfig();
         if (null == config || !config.isEmailSend()) {
             return;
@@ -59,16 +59,16 @@ public class EmailServiceImpl implements EmailService {
         log.info("sendEmailToAdmin start: {}", new Date().toString());
         try {
             sendEmail(FameConsts.EMAIL_TEMPLATE_DEFAULT_SUBJECT, content, config.getEmailUsername());
-            logsService.save(Types.LOG_ACTION_SEND_EMAIL, logData, Types.LOG_MESSAGE_SEND_EMAIL_SUCCESS, Types.LOG_TYPE_EMAIL);
+            logService.save(Types.LOG_ACTION_SEND_EMAIL, logData, Types.LOG_MESSAGE_SEND_EMAIL_SUCCESS, Types.LOG_TYPE_EMAIL);
         } catch (Exception e) {
-            logsService.save(Types.LOG_ACTION_SEND_EMAIL, logData, Types.LOG_MESSAGE_SEND_EMAIL_FAIL, Types.LOG_TYPE_EMAIL);
+            logService.save(Types.LOG_ACTION_SEND_EMAIL, logData, Types.LOG_MESSAGE_SEND_EMAIL_FAIL, Types.LOG_TYPE_EMAIL);
             log.error(e.getMessage());
         }
     }
 
     @Override
     @Async
-    public void sendEmailToUser(Comments comments, String replyEmail) {
+    public void sendEmailToUser(Comment comments, String replyEmail) {
         SiteConfig config = configService.getSiteConfig();
         if (null == config || !config.isEmailSend()) {
             return;
@@ -82,9 +82,9 @@ public class EmailServiceImpl implements EmailService {
         log.info("sendEmailToUser start: {}", new Date().toString());
         try {
             sendEmail(FameConsts.EMAIL_TEMPLATE_DEFAULT_SUBJECT, content, replyEmail);
-            logsService.save(Types.LOG_ACTION_SEND_EMAIL, logData, Types.LOG_MESSAGE_SEND_EMAIL_SUCCESS, Types.LOG_TYPE_EMAIL);
+            logService.save(Types.LOG_ACTION_SEND_EMAIL, logData, Types.LOG_MESSAGE_SEND_EMAIL_SUCCESS, Types.LOG_TYPE_EMAIL);
         } catch (Exception e) {
-            logsService.save(Types.LOG_ACTION_SEND_EMAIL, logData, Types.LOG_MESSAGE_SEND_EMAIL_FAIL, Types.LOG_TYPE_EMAIL);
+            logService.save(Types.LOG_ACTION_SEND_EMAIL, logData, Types.LOG_MESSAGE_SEND_EMAIL_FAIL, Types.LOG_TYPE_EMAIL);
             log.error(e.getMessage());
         }
     }

@@ -1,7 +1,7 @@
 package com.zbw.fame.service;
 
 import com.github.pagehelper.Page;
-import com.zbw.fame.model.domain.Logs;
+import com.zbw.fame.model.domain.Log;
 
 /**
  * 日志 Service 接口
@@ -9,7 +9,7 @@ import com.zbw.fame.model.domain.Logs;
  * @author zbw
  * @since 2017/10/11 10:42
  */
-public interface LogsService {
+public interface LogService {
 
     /**
      * 保存操作日志
@@ -49,7 +49,7 @@ public interface LogsService {
      *
      * @param page  当前分页
      * @param limit 分页大小
-     * @return Page<Logs>
+     * @return Page<Log>
      */
-    Page<Logs> getLogs(Integer page, Integer limit);
+    Page<Log> getLogs(Integer page, Integer limit);
 }

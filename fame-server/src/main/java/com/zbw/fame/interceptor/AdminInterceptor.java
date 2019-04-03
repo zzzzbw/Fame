@@ -1,7 +1,7 @@
 package com.zbw.fame.interceptor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zbw.fame.model.domain.Users;
+import com.zbw.fame.model.domain.User;
 import com.zbw.fame.util.ErrorCode;
 import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.RestResponse;
@@ -47,7 +47,7 @@ public class AdminInterceptor implements HandlerInterceptor {
             }
             //登录拦截
             if (auth) {
-                Users user = FameUtil.getLoginUser();
+                User user = FameUtil.getLoginUser();
                 if (null == user) {
                     // 要设置跨域，不然输出信息没有
                     if (request.getHeader(HttpHeaders.ORIGIN) != null) {

@@ -2,9 +2,9 @@ package com.zbw.fame.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.zbw.fame.mapper.LogsMapper;
-import com.zbw.fame.model.domain.Logs;
-import com.zbw.fame.service.LogsService;
+import com.zbw.fame.mapper.LogMapper;
+import com.zbw.fame.model.domain.Log;
+import com.zbw.fame.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,10 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service("logsService")
 @Transactional(rollbackFor = Throwable.class)
-public class LogsServiceImpl implements LogsService {
+public class LogServiceImpl implements LogService {
 
     @Autowired
-    private LogsMapper logsMapper;
+    private LogMapper logMapper;
 
     @Override
     public void save(String action, String data, String message, String type) {
@@ -34,19 +34,19 @@ public class LogsServiceImpl implements LogsService {
 
     @Override
     public void save(String action, String data, String message, String type, String ip, Integer userId) {
-        Logs log = new Logs();
+        Log log = new Log();
         log.setAction(action);
         log.setData(data);
         log.setMessage(message);
         log.setType(type);
         log.setIp(ip);
         log.setUserId(userId);
-        logsMapper.insertSelective(log);
+        logMapper.insertSelective(log);
     }
 
     @Override
-    public Page<Logs> getLogs(Integer page, Integer limit) {
-        return PageHelper.startPage(page, limit).doSelectPage(() -> logsMapper.selectAll());
+    public Page<Log> getLogs(Integer page, Integer limit) {
+        return PageHelper.startPage(page, limit).doSelectPage(() -> logMapper.selectAll());
     }
 
 }

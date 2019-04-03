@@ -4,8 +4,8 @@ import com.github.pagehelper.Page;
 import com.zbw.fame.controller.BaseController;
 import com.zbw.fame.model.dto.Pagination;
 import com.zbw.fame.model.dto.SiteConfig;
-import com.zbw.fame.model.domain.Logs;
-import com.zbw.fame.service.LogsService;
+import com.zbw.fame.model.domain.Log;
+import com.zbw.fame.service.LogService;
 import com.zbw.fame.service.ConfigService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.RestResponse;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 public class ConfigController extends BaseController {
 
     @Autowired
-    private LogsService logsService;
+    private LogService logsService;
 
     @Autowired
     private ConfigService configService;
@@ -33,13 +33,13 @@ public class ConfigController extends BaseController {
      *
      * @param page  第几页
      * @param limit 每页数量
-     * @return {@see Pagination<Logs>}
+     * @return {@see Pagination<Log>}
      */
     @GetMapping("logs")
     public RestResponse getLogs(@RequestParam(defaultValue = "1") Integer page,
                                 @RequestParam(defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
-        Page<Logs> logs = logsService.getLogs(page, limit);
-        return RestResponse.ok(new Pagination<Logs>(logs));
+        Page<Log> logs = logsService.getLogs(page, limit);
+        return RestResponse.ok(new Pagination<Log>(logs));
     }
 
     /**

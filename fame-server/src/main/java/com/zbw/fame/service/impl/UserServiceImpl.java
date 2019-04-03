@@ -1,9 +1,9 @@
 package com.zbw.fame.service.impl;
 
 import com.zbw.fame.exception.TipException;
-import com.zbw.fame.mapper.UsersMapper;
-import com.zbw.fame.model.domain.Users;
-import com.zbw.fame.service.UsersService;
+import com.zbw.fame.mapper.UserMapper;
+import com.zbw.fame.model.domain.User;
+import com.zbw.fame.service.UserService;
 import com.zbw.fame.util.FameUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,23 +19,23 @@ import java.util.Date;
  */
 @Service("usersService")
 @Transactional(rollbackFor = Throwable.class)
-public class UsersServiceImpl implements UsersService {
+public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UsersMapper usersMapper;
+    private UserMapper userMapper;
 
     @Override
-    public Users login(String username, String password) {
-        Users record = new Users();
+    public User login(String username, String password) {
+        User record = new User();
         record.setUsername(username);
         String md5 = FameUtil.getMd5(password);
         record.setPasswordMd5(md5);
-        Users user = usersMapper.selectOne(record);
+        User user = userMapper.selectOne(record);
         if (user == null) {
             throw new TipException("用户名或者密码错误");
         }
         user.setLogged(new Date());
-        usersMapper.updateByPrimaryKey(user);
+        userMapper.updateByPrimaryKey(user);
         //清空密码
         user.setPasswordMd5(null);
         return user;
@@ -43,9 +43,9 @@ public class UsersServiceImpl implements UsersService {
 
     @Override
     public boolean reset(String username, String oldPassword, String newPassword) {
-        Users record = new Users();
+        User record = new User();
         record.setUsername(username);
-        Users user = usersMapper.selectOne(record);
+        User user = userMapper.selectOne(record);
         if (null == user) {
             throw new TipException("该用户名不存在");
         }
@@ -55,7 +55,7 @@ public class UsersServiceImpl implements UsersService {
         }
 
         user.setPasswordMd5(FameUtil.getMd5(newPassword));
-        int a = usersMapper.updateByPrimaryKey(user);
+        int a = userMapper.updateByPrimaryKey(user);
         return a > 0;
     }
 }

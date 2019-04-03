@@ -1,7 +1,7 @@
 package com.zbw.fame.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.zbw.fame.model.domain.Metas;
+import com.zbw.fame.model.domain.Meta;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -15,7 +15,7 @@ import java.util.List;
  */
 @EqualsAndHashCode(callSuper = false)
 @Data
-public class MetaDto extends Metas {
+public class MetaDto extends Meta {
 
     private Integer count;
 

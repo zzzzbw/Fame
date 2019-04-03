@@ -2,12 +2,12 @@ package com.zbw.fame.controller.admin;
 
 import com.github.pagehelper.Page;
 import com.zbw.fame.controller.BaseController;
+import com.zbw.fame.model.domain.Article;
 import com.zbw.fame.model.param.ArticleParam;
 import com.zbw.fame.model.dto.Pagination;
-import com.zbw.fame.model.domain.Articles;
-import com.zbw.fame.model.domain.Users;
-import com.zbw.fame.service.ArticlesService;
-import com.zbw.fame.service.LogsService;
+import com.zbw.fame.model.domain.User;
+import com.zbw.fame.service.ArticleService;
+import com.zbw.fame.service.LogService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.RestResponse;
@@ -27,17 +27,17 @@ import org.springframework.web.bind.annotation.*;
 public class PageController extends BaseController {
 
     @Autowired
-    private ArticlesService articlesService;
+    private ArticleService articleService;
 
     @Autowired
-    private LogsService logsService;
+    private LogService logService;
 
     /**
      * 自定义页面列表
      *
      * @param page  第几页
      * @param limit 每页数量
-     * @return {@see Pagination<Articles>}
+     * @return {@see Pagination<Article>}
      */
     @GetMapping
     public RestResponse index(@RequestParam(required = false, defaultValue = "1") Integer page,
@@ -47,15 +47,15 @@ public class PageController extends BaseController {
                 .html(false)
                 .summary(false)
                 .build();
-        Page<Articles> pages = articlesService.getArticles(page, limit, param);
-        return RestResponse.ok(new Pagination<Articles>(pages));
+        Page<Article> pages = articleService.getArticles(page, limit, param);
+        return RestResponse.ok(new Pagination<Article>(pages));
     }
 
     /**
      * 获取自定义页面信息
      *
      * @param id 自定义页面id
-     * @return {@see Articles}
+     * @return {@see Article}
      */
     @GetMapping("{id}")
     public RestResponse showPage(@PathVariable Integer id) {
@@ -65,7 +65,7 @@ public class PageController extends BaseController {
                 .html(false)
                 .summary(false)
                 .build();
-        Articles page = articlesService.getArticle(param);
+        Article page = articleService.getArticle(param);
         if (null == page) {
             return this.error404();
         }
@@ -86,8 +86,8 @@ public class PageController extends BaseController {
                                  @RequestParam(value = "title") String title,
                                  @RequestParam(value = "content") String content,
                                  @RequestParam(value = "status", defaultValue = Types.DRAFT) String status) {
-        Users user = this.user();
-        Articles page = new Articles();
+        User user = this.user();
+        Article page = new Article();
         if (!StringUtils.isEmpty(id)) {
             page.setId(id);
         }
@@ -95,7 +95,7 @@ public class PageController extends BaseController {
         page.setContent(content);
         page.setStatus(status);
         page.setAuthorId(user.getId());
-        articlesService.savePage(page);
+        articleService.savePage(page);
         return RestResponse.ok("保存文章成功");
     }
 
@@ -107,8 +107,8 @@ public class PageController extends BaseController {
      */
     @DeleteMapping("{id}")
     public RestResponse deletePage(@PathVariable Integer id) {
-        if (articlesService.deletePage(id)) {
-            logsService.save(Types.LOG_ACTION_DELETE, "id:" + id, Types.LOG_MESSAGE_DELETE_PAGE, Types.LOG_TYPE_OPERATE, FameUtil.getIp());
+        if (articleService.deletePage(id)) {
+            logService.save(Types.LOG_ACTION_DELETE, "id:" + id, Types.LOG_MESSAGE_DELETE_PAGE, Types.LOG_TYPE_OPERATE, FameUtil.getIp());
             return RestResponse.ok("删除自定义页面成功");
         } else {
             return RestResponse.fail();

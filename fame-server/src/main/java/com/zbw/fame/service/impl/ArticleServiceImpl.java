@@ -2,15 +2,15 @@ package com.zbw.fame.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.zbw.fame.model.domain.Article;
 import com.zbw.fame.model.param.ArticleParam;
 import com.zbw.fame.model.dto.Archive;
 import com.zbw.fame.exception.TipException;
-import com.zbw.fame.mapper.ArticlesMapper;
-import com.zbw.fame.mapper.CommentsMapper;
-import com.zbw.fame.model.domain.Articles;
-import com.zbw.fame.model.domain.Comments;
-import com.zbw.fame.service.ArticlesService;
-import com.zbw.fame.service.MetasService;
+import com.zbw.fame.mapper.ArticleMapper;
+import com.zbw.fame.mapper.CommentMapper;
+import com.zbw.fame.model.domain.Comment;
+import com.zbw.fame.service.ArticleService;
+import com.zbw.fame.service.MetaService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.Types;
@@ -37,30 +37,30 @@ import java.util.List;
 @Slf4j
 @Service("articlesService")
 @Transactional(rollbackFor = Throwable.class)
-public class ArticlesServiceImpl implements ArticlesService {
+public class ArticleServiceImpl implements ArticleService {
 
     private static final String ARTICLE_CACHE_NAME = "articles";
 
     @Autowired
-    private ArticlesMapper articlesMapper;
+    private ArticleMapper articleMapper;
 
     @Autowired
-    private MetasService metasService;
+    private MetaService metasService;
 
     @Autowired
-    private CommentsMapper commentsMapper;
+    private CommentMapper commentsMapper;
 
     @Override
     @Cacheable(value = ARTICLE_CACHE_NAME, key = "'article_page['+#page+':'+#limit+':'+#param+']'")
-    public Page<Articles> getArticles(Integer page, Integer limit, ArticleParam param) {
-        Articles record = new Articles();
+    public Page<Article> getArticles(Integer page, Integer limit, ArticleParam param) {
+        Article record = new Article();
         record.setType(param.getType());
         record.setStatus(param.getStatus());
-        Page<Articles> result = PageHelper.startPage(page, limit).doSelectPage(() -> articlesMapper.select(record));
+        Page<Article> result = PageHelper.startPage(page, limit).doSelectPage(() -> articleMapper.select(record));
         if (param.isSummary() || param.isHtml()) {
-            result.forEach(articles -> {
-                String content = FameUtil.contentTransform(articles.getContent(), param.isSummary(), param.isHtml());
-                articles.setContent(content);
+            result.forEach(article -> {
+                String content = FameUtil.contentTransform(article.getContent(), param.isSummary(), param.isHtml());
+                article.setContent(content);
             });
         }
 
@@ -69,22 +69,22 @@ public class ArticlesServiceImpl implements ArticlesService {
 
     @Override
     @Cacheable(value = ARTICLE_CACHE_NAME, key = "'article_content['+#param+']'")
-    public Articles getArticle(ArticleParam param) {
-        Articles record = new Articles();
+    public Article getArticle(ArticleParam param) {
+        Article record = new Article();
         record.setId(param.getId());
         record.setTitle(param.getTitle());
         record.setType(param.getType());
         record.setStatus(param.getStatus());
-        Articles articles = articlesMapper.selectOne(record);
-        String content = FameUtil.contentTransform(articles.getContent(), param.isSummary(), param.isHtml());
-        articles.setContent(content);
-        return articles;
+        Article article = articleMapper.selectOne(record);
+        String content = FameUtil.contentTransform(article.getContent(), param.isSummary(), param.isHtml());
+        article.setContent(content);
+        return article;
     }
 
 
     @Override
     @CacheEvict(value = ARTICLE_CACHE_NAME, allEntries = true, beforeInvocation = true)
-    public Integer saveArticle(Articles article) {
+    public Integer saveArticle(Article article) {
         if (null == article) {
             throw new TipException("文章对象为空");
         }
@@ -106,10 +106,10 @@ public class ArticlesServiceImpl implements ArticlesService {
         }
 
         if (null != article.getId()) {
-            articlesMapper.updateByPrimaryKeySelective(article);
+            articleMapper.updateByPrimaryKeySelective(article);
         } else {
             article.setType(Types.POST);
-            articlesMapper.insertSelective(article);
+            articleMapper.insertSelective(article);
         }
 
         Integer id = article.getId();
@@ -121,38 +121,38 @@ public class ArticlesServiceImpl implements ArticlesService {
 
     @Override
     @CacheEvict(value = ARTICLE_CACHE_NAME, allEntries = true, beforeInvocation = true)
-    public boolean updateArticle(Articles articles) {
-        if (null == articles) {
+    public boolean updateArticle(Article article) {
+        if (null == article) {
             throw new TipException("文章不能为空");
         }
-        return articlesMapper.updateByPrimaryKeySelective(articles) > 0;
+        return articleMapper.updateByPrimaryKeySelective(article) > 0;
     }
 
     @Override
     @CacheEvict(value = ARTICLE_CACHE_NAME, allEntries = true, beforeInvocation = true)
     public boolean deleteArticle(Integer id) {
-        Articles record = new Articles();
+        Article record = new Article();
         record.setId(id);
         record.setType(Types.POST);
-        Articles articles = articlesMapper.selectOne(record);
-        if (null == articles) {
+        Article article = articleMapper.selectOne(record);
+        if (null == article) {
             throw new TipException("没有id为" + id + "的文章");
         }
 
-        if (articlesMapper.deleteByPrimaryKey(id) > 0) {
-            log.info("删除文章: {}", articles);
+        if (articleMapper.deleteByPrimaryKey(id) > 0) {
+            log.info("删除文章: {}", article);
 
             // 删除文章下的评论
             Example commentsExample = Example
-                    .builder(Comments.class)
+                    .builder(Comment.class)
                     .where(Sqls.custom().andEqualTo("articleId", id))
                     .build();
             int commentsResult = commentsMapper.deleteByExample(commentsExample);
             log.info("删除对应的评论,数量: {}", commentsResult);
 
             // 传空的属性，则移除该文章关联的属性
-            metasService.saveOrRemoveMetas("", Types.CATEGORY, articles.getId());
-            metasService.saveOrRemoveMetas("", Types.TAG, articles.getId());
+            metasService.saveOrRemoveMetas("", Types.CATEGORY, article.getId());
+            metasService.saveOrRemoveMetas("", Types.TAG, article.getId());
             return true;
         }
         return false;
@@ -161,21 +161,21 @@ public class ArticlesServiceImpl implements ArticlesService {
     @Override
     @Cacheable(value = ARTICLE_CACHE_NAME, key = "'article_count'")
     public Integer count() {
-        Articles record = new Articles();
+        Article record = new Article();
         record.setType(Types.POST);
-        return articlesMapper.selectCount(record);
+        return articleMapper.selectCount(record);
     }
 
     @Override
     @Cacheable(value = ARTICLE_CACHE_NAME, key = "'archives'")
     public List<Archive> getArchives() {
-        Articles record = new Articles();
+        Article record = new Article();
         record.setStatus(Types.PUBLISH);
         record.setType(Types.POST);
-        List<Articles> articles = articlesMapper.select(record);
+        List<Article> articles = articleMapper.select(record);
         List<Archive> archives = new ArrayList<>();
         String current = "";
-        for (Articles article : articles) {
+        for (Article article : articles) {
             // 清空文章内容
             article.setContent("");
             Calendar cal = Calendar.getInstance();
@@ -190,7 +190,7 @@ public class ArticlesServiceImpl implements ArticlesService {
                 Archive arc = new Archive();
                 arc.setDateStr(dateStr);
                 arc.setCount(1);
-                List<Articles> arts = new ArrayList<>();
+                List<Article> arts = new ArrayList<>();
                 arts.add(article);
                 arc.setArticles(arts);
                 archives.add(arc);
@@ -201,7 +201,7 @@ public class ArticlesServiceImpl implements ArticlesService {
 
     @Override
     @CacheEvict(value = ARTICLE_CACHE_NAME, allEntries = true, beforeInvocation = true)
-    public Integer savePage(Articles page) {
+    public Integer savePage(Article page) {
         if (null == page) {
             throw new TipException("自定义页面对象为空");
         }
@@ -224,10 +224,10 @@ public class ArticlesServiceImpl implements ArticlesService {
 
 
         if (null != page.getId()) {
-            articlesMapper.updateByPrimaryKeySelective(page);
+            articleMapper.updateByPrimaryKeySelective(page);
         } else {
             page.setType(Types.PAGE);
-            articlesMapper.insertSelective(page);
+            articleMapper.insertSelective(page);
         }
 
         return page.getId();
@@ -236,13 +236,13 @@ public class ArticlesServiceImpl implements ArticlesService {
     @Override
     @CacheEvict(value = ARTICLE_CACHE_NAME, allEntries = true, beforeInvocation = true)
     public boolean deletePage(Integer id) {
-        Articles record = new Articles();
+        Article record = new Article();
         record.setId(id);
         record.setType(Types.PAGE);
-        Articles page = articlesMapper.selectOne(record);
+        Article page = articleMapper.selectOne(record);
         if (null == page) {
             throw new TipException("没有id为" + id + "的自定义页面");
         }
-        return articlesMapper.deleteByPrimaryKey(id) > 0;
+        return articleMapper.deleteByPrimaryKey(id) > 0;
     }
 }

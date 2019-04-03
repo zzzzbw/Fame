@@ -16,7 +16,7 @@ import java.util.Date;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class Users extends BaseEntity {
+public class User extends BaseEntity {
 
     /**
      * 账号

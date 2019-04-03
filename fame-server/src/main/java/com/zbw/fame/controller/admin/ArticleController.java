@@ -2,12 +2,12 @@ package com.zbw.fame.controller.admin;
 
 import com.github.pagehelper.Page;
 import com.zbw.fame.controller.BaseController;
+import com.zbw.fame.model.domain.User;
 import com.zbw.fame.model.param.ArticleParam;
 import com.zbw.fame.model.dto.Pagination;
-import com.zbw.fame.model.domain.Articles;
-import com.zbw.fame.model.domain.Users;
-import com.zbw.fame.service.ArticlesService;
-import com.zbw.fame.service.LogsService;
+import com.zbw.fame.model.domain.Article;
+import com.zbw.fame.service.ArticleService;
+import com.zbw.fame.service.LogService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.RestResponse;
@@ -27,10 +27,10 @@ import org.springframework.web.bind.annotation.*;
 public class ArticleController extends BaseController {
 
     @Autowired
-    private ArticlesService articlesService;
+    private ArticleService articleService;
 
     @Autowired
-    private LogsService logsService;
+    private LogService logService;
 
 
     /**
@@ -38,7 +38,7 @@ public class ArticleController extends BaseController {
      *
      * @param page  第几页
      * @param limit 每页数量
-     * @return {@see Pagination<Articles>}
+     * @return {@see Pagination<Article>}
      */
     @GetMapping
     public RestResponse index(@RequestParam(required = false, defaultValue = "1") Integer page,
@@ -48,15 +48,15 @@ public class ArticleController extends BaseController {
                 .html(false)
                 .summary(false)
                 .build();
-        Page<Articles> articles = articlesService.getArticles(page, limit, param);
-        return RestResponse.ok(new Pagination<Articles>(articles));
+        Page<Article> articles = articleService.getArticles(page, limit, param);
+        return RestResponse.ok(new Pagination<Article>(articles));
     }
 
     /**
      * 单个文章信息
      *
      * @param id 文章id
-     * @return {@see Articles}
+     * @return {@see Article}
      */
     @GetMapping("{id}")
     public RestResponse showArticle(@PathVariable Integer id) {
@@ -66,7 +66,7 @@ public class ArticleController extends BaseController {
                 .html(false)
                 .summary(false)
                 .build();
-        Articles article = articlesService.getArticle(param);
+        Article article = articleService.getArticle(param);
         if (null == article) {
             return this.error404();
         }
@@ -93,8 +93,8 @@ public class ArticleController extends BaseController {
                                     @RequestParam(value = "category") String category,
                                     @RequestParam(value = "status", defaultValue = Types.DRAFT) String status,
                                     @RequestParam(value = "allowComment", defaultValue = "false") Boolean allowComment) {
-        Users user = this.user();
-        Articles article = new Articles();
+        User user = this.user();
+        Article article = new Article();
         if (!StringUtils.isEmpty(id)) {
             article.setId(id);
         }
@@ -105,7 +105,7 @@ public class ArticleController extends BaseController {
         article.setStatus(status);
         article.setAllowComment(allowComment);
         article.setAuthorId(user.getId());
-        articlesService.saveArticle(article);
+        articleService.saveArticle(article);
         return RestResponse.ok("保存文章成功");
     }
 
@@ -117,8 +117,8 @@ public class ArticleController extends BaseController {
      */
     @DeleteMapping("{id}")
     public RestResponse deleteArticle(@PathVariable Integer id) {
-        if (articlesService.deleteArticle(id)) {
-            logsService.save(Types.LOG_ACTION_DELETE, "id:" + id, Types.LOG_MESSAGE_DELETE_ARTICLE, Types.LOG_TYPE_OPERATE, FameUtil.getIp());
+        if (articleService.deleteArticle(id)) {
+            logService.save(Types.LOG_ACTION_DELETE, "id:" + id, Types.LOG_MESSAGE_DELETE_ARTICLE, Types.LOG_TYPE_OPERATE, FameUtil.getIp());
             return RestResponse.ok("删除文章成功");
         } else {
             return RestResponse.fail();
@@ -132,7 +132,7 @@ public class ArticleController extends BaseController {
      */
     @GetMapping("count")
     public RestResponse count() {
-        return RestResponse.ok(articlesService.count());
+        return RestResponse.ok(articleService.count());
     }
 
 }

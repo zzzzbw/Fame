@@ -16,7 +16,7 @@ import java.util.Date;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class Articles extends BaseEntity {
+public class Article extends BaseEntity {
 
     /**
      * 内容标题

@@ -1,7 +1,7 @@
 package com.zbw.fame.model.dto;
 
-import com.zbw.fame.model.domain.Articles;
-import com.zbw.fame.model.domain.Comments;
+import com.zbw.fame.model.domain.Article;
+import com.zbw.fame.model.domain.Comment;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -13,15 +13,15 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = false)
 @Data
-public class CommentDto extends Comments {
+public class CommentDto extends Comment {
 
     /**
      * 评论文章
      */
-    private Articles article;
+    private Article article;
 
     /**
      * 父评论
      */
-    private Comments pComment;
+    private Comment pComment;
 }

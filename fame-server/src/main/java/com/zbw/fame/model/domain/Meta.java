@@ -14,7 +14,7 @@ import lombok.*;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class Metas extends BaseEntity {
+public class Meta extends BaseEntity {
 
     /**
      * 属性名

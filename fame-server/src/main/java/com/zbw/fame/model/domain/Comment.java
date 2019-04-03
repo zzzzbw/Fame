@@ -17,7 +17,7 @@ import java.util.Date;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class Comments extends BaseEntity {
+public class Comment extends BaseEntity {
 
     /**
      * 所属文章id

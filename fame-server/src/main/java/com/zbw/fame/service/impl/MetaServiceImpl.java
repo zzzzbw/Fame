@@ -1,14 +1,14 @@
 package com.zbw.fame.service.impl;
 
+import com.zbw.fame.model.domain.Article;
+import com.zbw.fame.model.domain.Meta;
+import com.zbw.fame.model.domain.Middle;
 import com.zbw.fame.model.dto.MetaDto;
 import com.zbw.fame.exception.TipException;
-import com.zbw.fame.mapper.ArticlesMapper;
-import com.zbw.fame.mapper.MetasMapper;
-import com.zbw.fame.mapper.MiddlesMapper;
-import com.zbw.fame.model.domain.Articles;
-import com.zbw.fame.model.domain.Metas;
-import com.zbw.fame.model.domain.Middles;
-import com.zbw.fame.service.MetasService;
+import com.zbw.fame.mapper.ArticleMapper;
+import com.zbw.fame.mapper.MetaMapper;
+import com.zbw.fame.mapper.MiddleMapper;
+import com.zbw.fame.service.MetaService;
 import com.zbw.fame.util.Types;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,83 +28,83 @@ import java.util.Set;
  */
 @Service("metasService")
 @Transactional(rollbackFor = Throwable.class)
-public class MetasServiceImpl implements MetasService {
+public class MetaServiceImpl implements MetaService {
 
     @Autowired
-    private MiddlesMapper middlesMapper;
+    private MiddleMapper middleMapper;
 
     @Autowired
-    private MetasMapper metasMapper;
+    private MetaMapper metaMapper;
 
     @Autowired
-    private ArticlesMapper articlesMapper;
+    private ArticleMapper articleMapper;
+
+    @Override
+    public List<MetaDto> getPublishMetaDtos(String type) {
+        type = verifyType(type);
+        return metaMapper.selectPublishMetaDtos(type);
+    }
 
     @Override
     public List<MetaDto> getMetaDtos(String type) {
         type = verifyType(type);
-        return metasMapper.selectMetasDtoPublish(type);
-    }
-
-    @Override
-    public List<MetaDto> getMetaDto(String type) {
-        type = verifyType(type);
-        return metasMapper.selectMetasDto(type);
+        return metaMapper.selectMetaDtos(type);
     }
 
     @Override
     public boolean deleteMeta(String name, String type) {
         type = verifyType(type);
-        Metas meta = metasMapper.selectOne(new Metas(name, type));
+        Meta meta = metaMapper.selectOne(new Meta(name, type));
         if (null == meta) {
             throw new TipException("没有该名称的属性");
         }
-        List<Middles> middles = middlesMapper.select(new Middles(null, meta.getId()));
-        for (Middles middle : middles) {
-            Articles articles = articlesMapper.selectByPrimaryKey(middle.getAId());
-            if (null != articles) {
+        List<Middle> middles = middleMapper.select(new Middle(null, meta.getId()));
+        for (Middle middle : middles) {
+            Article article = articleMapper.selectByPrimaryKey(middle.getAId());
+            if (null != article) {
                 if (type.equals(Types.CATEGORY)) {
-                    articles.setCategory("");
+                    article.setCategory("");
                 }
                 if (type.equals(Types.TAG)) {
-                    articles.setTags(this.resetMeta(name, articles.getTags()));
+                    article.setTags(this.resetMeta(name, article.getTags()));
                 }
-                articlesMapper.updateByPrimaryKey(articles);
+                articleMapper.updateByPrimaryKey(article);
             }
         }
 
-        middlesMapper.delete(new Middles(null, meta.getId()));
-        metasMapper.delete(meta);
+        middleMapper.delete(new Middle(null, meta.getId()));
+        metaMapper.delete(meta);
         return true;
     }
 
     @Override
     public boolean saveMeta(String name, String type) {
         type = verifyType(type);
-        Metas metas = new Metas();
+        Meta metas = new Meta();
         metas.setType(type);
         metas.setName(name);
-        if (metasMapper.select(metas).size() > 0) {
+        if (metaMapper.select(metas).size() > 0) {
             throw new TipException("该属性已经存在");
         }
-        return metasMapper.insert(metas) > 0;
+        return metaMapper.insert(metas) > 0;
     }
 
     @Override
     public boolean updateMeta(Integer id, String name, String type) {
         type = verifyType(type);
-        Metas meta = metasMapper.selectByPrimaryKey(id);
+        Meta meta = metaMapper.selectByPrimaryKey(id);
         if (null == meta) {
             throw new TipException("没有该属性");
         }
-        List<Articles> articles = articlesMapper.selectByMetas(id);
-        for (Articles article : articles) {
+        List<Article> articles = articleMapper.selectByMeta(id);
+        for (Article article : articles) {
             String metas;
             if (type.equals(Types.CATEGORY)) {
                 metas = article.getCategory();
                 String newMetas = metas.replace(meta.getName(), name);
                 if (!newMetas.equals(metas)) {
                     article.setCategory(newMetas);
-                    articlesMapper.updateByPrimaryKey(article);
+                    articleMapper.updateByPrimaryKey(article);
                 }
             }
             if (type.equals(Types.TAG)) {
@@ -112,12 +112,12 @@ public class MetasServiceImpl implements MetasService {
                 String newMetas = metas.replace(meta.getName(), name);
                 if (!newMetas.equals(metas)) {
                     article.setTags(newMetas);
-                    articlesMapper.updateByPrimaryKey(article);
+                    articleMapper.updateByPrimaryKey(article);
                 }
             }
         }
         meta.setName(name);
-        return metasMapper.updateByPrimaryKey(meta) > 0;
+        return metaMapper.updateByPrimaryKey(meta) > 0;
     }
 
     @Override
@@ -128,7 +128,7 @@ public class MetasServiceImpl implements MetasService {
         }
 
         if (StringUtils.isEmpty(names)) {
-            middlesMapper.delete(new Middles(articleId, null));
+            middleMapper.delete(new Middle(articleId, null));
             return true;
         }
 
@@ -146,22 +146,22 @@ public class MetasServiceImpl implements MetasService {
      * @param articleId
      */
     private void saveMetas(String names, String type, Integer articleId) {
-        List<Metas> metas = metasMapper.selectByArticles(articleId, type);
+        List<Meta> metas = metaMapper.selectByArticle(articleId, type);
         Set<String> metaSet = new HashSet<>();
-        for (Metas meta : metas) {
+        for (Meta meta : metas) {
             metaSet.add(meta.getName());
         }
         String[] nameArr = names.split(",");
         for (String name : nameArr) {
             if (!metaSet.contains(name)) {
-                Metas newMeta = new Metas(name, type);
-                Metas meta = metasMapper.selectOne(newMeta);
+                Meta newMeta = new Meta(name, type);
+                Meta meta = metaMapper.selectOne(newMeta);
                 if (null == meta) {
-                    metasMapper.insert(newMeta);
+                    metaMapper.insert(newMeta);
                 } else {
                     newMeta = meta;
                 }
-                middlesMapper.insert(new Middles(articleId, newMeta.getId()));
+                middleMapper.insert(new Middle(articleId, newMeta.getId()));
             }
         }
     }
@@ -176,10 +176,10 @@ public class MetasServiceImpl implements MetasService {
     private void removeMetas(String names, String type, Integer articleId) {
         String[] nameArr = names.split(",");
         Set<String> nameSet = new HashSet<>(Arrays.asList(nameArr));
-        List<Metas> metas = metasMapper.selectByArticles(articleId, type);
-        for (Metas meta : metas) {
+        List<Meta> metas = metaMapper.selectByArticle(articleId, type);
+        for (Meta meta : metas) {
             if (!nameSet.contains(meta.getName())) {
-                middlesMapper.delete(new Middles(articleId, meta.getId()));
+                middleMapper.delete(new Middle(articleId, meta.getId()));
             }
         }
 

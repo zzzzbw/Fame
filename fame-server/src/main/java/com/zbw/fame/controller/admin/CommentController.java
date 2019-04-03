@@ -2,11 +2,11 @@ package com.zbw.fame.controller.admin;
 
 import com.github.pagehelper.Page;
 import com.zbw.fame.controller.BaseController;
+import com.zbw.fame.model.domain.Comment;
 import com.zbw.fame.model.param.CommentParam;
 import com.zbw.fame.model.dto.CommentDto;
 import com.zbw.fame.model.dto.Pagination;
-import com.zbw.fame.model.domain.Comments;
-import com.zbw.fame.service.CommentsService;
+import com.zbw.fame.service.CommentService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.RestResponse;
@@ -24,14 +24,14 @@ import org.springframework.web.bind.annotation.*;
 public class CommentController extends BaseController {
 
     @Autowired
-    private CommentsService commentsService;
+    private CommentService commentService;
 
     /**
      * 获取所有评论
      *
      * @param page  第几页
      * @param limit 每页数量
-     * @return {@see Pagination<Comments>}
+     * @return {@see Pagination<Comment>}
      */
     @GetMapping
     public RestResponse index(@RequestParam(required = false, defaultValue = "1") Integer page,
@@ -41,8 +41,8 @@ public class CommentController extends BaseController {
                 .summary(false)
                 .html(false)
                 .build();
-        Page<Comments> comments = commentsService.getComments(page, limit, param);
-        return RestResponse.ok(new Pagination<Comments>(comments));
+        Page<Comment> comments = commentService.getComments(page, limit, param);
+        return RestResponse.ok(new Pagination<Comment>(comments));
     }
 
     /**
@@ -53,7 +53,7 @@ public class CommentController extends BaseController {
      */
     @GetMapping("{id}")
     public RestResponse detail(@PathVariable Integer id) {
-        CommentDto comment = commentsService.getCommentDetail(id);
+        CommentDto comment = commentService.getCommentDetail(id);
         if (null == comment) {
             return this.error404();
         }
@@ -72,7 +72,7 @@ public class CommentController extends BaseController {
      */
     @DeleteMapping("{id}")
     public RestResponse delete(@PathVariable Integer id) {
-        if (commentsService.deleteComment(id)) {
+        if (commentService.deleteComment(id)) {
 
             return RestResponse.ok();
         } else {
@@ -87,7 +87,7 @@ public class CommentController extends BaseController {
      */
     @GetMapping("count")
     public RestResponse count() {
-        return RestResponse.ok(commentsService.count());
+        return RestResponse.ok(commentService.count());
     }
 
 }

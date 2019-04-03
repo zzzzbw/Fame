@@ -1,6 +1,6 @@
 package com.zbw.fame.service;
 
-import com.zbw.fame.model.domain.Comments;
+import com.zbw.fame.model.domain.Comment;
 
 /**
  * 发送邮件 Service 接口
@@ -15,7 +15,7 @@ public interface EmailService {
      *
      * @param comments 回复的Comment信息
      */
-    void sendEmailToAdmin(Comments comments);
+    void sendEmailToAdmin(Comment comments);
 
     /**
      * 发送邮件给被评论的用户
@@ -23,5 +23,5 @@ public interface EmailService {
      * @param comments   评论的Comment信息
      * @param replyEmail 被评论人邮箱
      */
-    void sendEmailToUser(Comments comments, String replyEmail);
+    void sendEmailToUser(Comment comments, String replyEmail);
 }

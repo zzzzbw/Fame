@@ -1,13 +1,13 @@
 package com.zbw.fame.mapper;
 
-import com.zbw.fame.model.domain.Users;
+import com.zbw.fame.model.domain.User;
 import com.zbw.fame.util.MyMapper;
 
 /**
- * Users Mapper
+ * User Mapper
  *
  * @author zbw
  * @since 2017/7/12 21:34
  */
-public interface UsersMapper extends MyMapper<Users>{
+public interface UserMapper extends MyMapper<User>{
 }

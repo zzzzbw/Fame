@@ -1,23 +1,23 @@
 package com.zbw.fame.service;
 
-import com.zbw.fame.model.domain.Users;
+import com.zbw.fame.model.domain.User;
 
 /**
- * Users Service 接口
+ * User Service 接口
  *
  * @author zbw
  * @since 2017/7/12 21:25
  */
-public interface UsersService {
+public interface UserService {
 
     /**
      * 用户登陆
      *
      * @param username 用户名
      * @param password 密码
-     * @return Users
+     * @return User
      */
-    Users login(String username, String password);
+    User login(String username, String password);
 
     /**
      * 用户重置密码
