@@ -6,6 +6,7 @@ import com.zbw.fame.util.CacheUtil;
 import com.zbw.fame.util.FameConsts;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.Cache;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,7 +24,7 @@ public class ConfigServiceImpl implements ConfigService {
 
     @Override
     public SiteConfig getSiteConfig() {
-        SiteConfig config = cacheUtil.getCacheValue(FameConsts.CACHE_SITE_CONFIG, FameConsts.CACHE_SITE_CONFIG, SiteConfig.class);
+        SiteConfig config = cacheUtil.getCacheValue(FameConsts.DEFAULT_CACHE, FameConsts.CACHE_SITE_CONFIG, SiteConfig.class);
         if (null == config) {
             config = SiteConfig.builder()
                     .title(FameConsts.SITE_CONFIG_DEFAULT_TITLE)
