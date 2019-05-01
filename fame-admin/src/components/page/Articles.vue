@@ -1,5 +1,39 @@
 <template>
   <div>
+    <div class="tool-container">
+      <div>
+        <span>
+          状态：
+        </span>
+        <el-radio-group v-model="tool.status" @change="onSelectStatus">
+          <el-radio-button label="">全部</el-radio-button>
+          <el-radio-button :label="this.$util.STATIC.STATUS_PUBLISH"
+            >公开</el-radio-button
+          >
+          <el-radio-button :label="this.$util.STATIC.STATUS_DRAFT"
+            >隐藏</el-radio-button
+          >
+        </el-radio-group>
+      </div>
+      <div style="  display: flex;justify-content: space-between;">
+        <el-input
+          v-model="tool.title"
+          placeholder="搜索文章标题"
+          prefix-icon="el-icon-search"
+          clearable
+          style="max-width: 300px;"
+          @change="onSearchTitle"
+        ></el-input>
+        <el-button
+          type="info"
+          icon="el-icon-edit"
+          style="margin-left: 16px;"
+          @click="handleNew"
+          >新文章
+        </el-button>
+      </div>
+    </div>
+
     <el-table :data="articleDatas" border stripe style="width: 100%">
       <el-table-column prop="id" label="id" width="60"></el-table-column>
       <el-table-column
@@ -7,29 +41,37 @@
         label="标题"
         show-overflow-tooltip
       ></el-table-column>
-      <el-table-column
-        prop="category"
-        label="分类"
-        show-overflow-tooltip
-      ></el-table-column>
+      <el-table-column prop="category" label="分类" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span class="meta">{{ scope.row.category }}</span>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="status"
         label="状态"
         width="100"
         show-overflow-tooltip
-      ></el-table-column>
-      <el-table-column
-        prop="publish"
-        label="发布日期"
-        width="150"
-        show-overflow-tooltip
-      ></el-table-column>
-      <el-table-column
-        prop="modified"
-        label="修改日期"
-        width="150"
-        show-overflow-tooltip
-      ></el-table-column>
+      >
+        <template slot-scope="scope">
+          <el-tag
+            :type="scope.row.status === '公开' ? 'success' : 'warning'"
+            disable-transitions
+            >{{ scope.row.status }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="发布日期" width="150" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <i class="el-icon-time"></i>
+          <span style="margin-left: 10px">{{ scope.row.publish }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="修改日期" width="150" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <i class="el-icon-time"></i>
+          <span style="margin-left: 10px">{{ scope.row.modified }}</span>
+        </template>
+      </el-table-column>
       <el-table-column fixed="right" label="操作" width="150">
         <template slot-scope="scope">
           <el-button size="small" @click="handleEdit(scope.row.id)"
@@ -61,6 +103,10 @@
 export default {
   data: function () {
     return {
+      tool: {
+        status: '',
+        title: ''
+      },
       articleDatas: [],
       total: 0,
       pageSize: 10,
@@ -68,6 +114,15 @@ export default {
     }
   },
   methods: {
+    onSelectStatus (value) {
+      this.init(this.currentPage, this.tool.title, value)
+    },
+    onSearchTitle (value) {
+      this.init(this.currentPage, value, this.tool.status)
+    },
+    handleNew () {
+      this.$router.push('/admin/article/publish')
+    },
     handleEdit (id) {
       this.$router.push('/admin/article/publish/' + id)
     },
@@ -105,8 +160,8 @@ export default {
         this.init(this.$route.query.page)
       })
     },
-    init (page) {
-      this.$api.auth.getArticles(page || 1).then(data => {
+    init (page, title, status) {
+      this.$api.auth.getArticles(page || 1, title, status).then(data => {
         this.initArticleDatas(data.data.list)
         this.total = data.data.total
         this.pageSize = data.data.pageSize
@@ -149,6 +204,13 @@ export default {
 </style>
 
 <style scoped>
+.tool-container {
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  background: #fff;
+}
+
 .el-table {
   border: 1px solid #e6ebf5;
 }
@@ -156,5 +218,16 @@ export default {
 .admin-page {
   margin-top: 30px;
   text-align: center;
+}
+
+.meta {
+  margin: 0.4rem;
+  max-width: 350px;
+  padding: 0.4rem 0.5rem;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  border: 1px solid #ffd740;
+  background-color: #ffd740;
 }
 </style>

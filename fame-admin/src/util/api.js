@@ -53,9 +53,13 @@ const auth = {
     };
     return get("/admin/site/logs", params);
   },
-  getArticles(page) {
+  getArticles(page, title, status, category, tag) {
     let params = {
-      page: page
+      page: page,
+      title: title,
+      status: status,
+      category: category,
+      tag: tag
     };
     return get("/admin/article", params);
   },

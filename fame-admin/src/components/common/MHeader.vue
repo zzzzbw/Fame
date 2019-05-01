@@ -8,7 +8,7 @@
       <li>
         <a @click="logout">
           <span class="icon-sign-in"></span>
-          <span>Log out</span>
+          <span>退出</span>
         </a>
       </li>
     </ul>

@@ -15,10 +15,6 @@
         <span class="icon-dashboard"></span>&nbsp;
         <span slot="title">仪表盘</span>
       </el-menu-item>
-      <el-menu-item index="/admin/article/publish">
-        <span class="icon-edit"></span>&nbsp;
-        <span slot="title">发布文章</span>
-      </el-menu-item>
       <el-menu-item index="/admin/article?page=1">
         <span class="icon-list"></span>&nbsp;
         <span slot="title">文章列表</span>
@@ -31,20 +27,10 @@
         <span class="icon-tags"></span>&nbsp;
         <span slot="title">标签/分类</span>
       </el-menu-item>
-      <el-submenu index="1">
-        <template slot="title"
-          >自定义页面</template
-        >
-        <el-menu-item index="/admin/page/publish">
-          <span class="icon-folder"></span>&nbsp;
-          <span slot="title">新增页面</span>
-        </el-menu-item>
-        <el-menu-item index="/admin/page?page=1">
-          <span class="icon-th-list"></span>&nbsp;
-          <span slot="title">页面列表</span>
-        </el-menu-item>
-      </el-submenu>
-
+      <el-menu-item index="/admin/page?page=1">
+        <span class="icon-th-list"></span>&nbsp;
+        <span slot="title">页面列表</span>
+      </el-menu-item>
       <el-menu-item index="/admin/setting">
         <span class="icon-cog"></span>&nbsp;
         <span slot="title">网站设置</span>

@@ -1,5 +1,15 @@
 <template>
   <div>
+    <div class="tool-container" style="justify-content: flex-end">
+      <el-button
+        type="info"
+        icon="el-icon-edit"
+        style="margin-left: 16px;"
+        @click="handleNew"
+        >新页面
+      </el-button>
+    </div>
+
     <el-table :data="pageDatas" border stripe style="width: 100%">
       <el-table-column prop="id" label="id" width="60"></el-table-column>
       <el-table-column
@@ -64,6 +74,9 @@ export default {
     }
   },
   methods: {
+    handleNew () {
+      this.$router.push('/admin/page/publish')
+    },
     handleEdit (id) {
       this.$router.push('/admin/page/publish/' + id)
     },
@@ -144,6 +157,13 @@ export default {
 </style>
 
 <style scoped>
+.tool-container {
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  background: #fff;
+}
+
 .el-table {
   border: 1px solid #e6ebf5;
 }
