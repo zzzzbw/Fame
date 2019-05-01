@@ -11,20 +11,20 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
-    "dayjs": "^1.8.11",
-    "element-ui": "^2.6.3",
+    "dayjs": "^1.8.13",
+    "element-ui": "^2.8.2",
     "highlight.js": "^9.15.6",
     "vue": "^2.6.10",
-    "vue-router": "^3.0.2",
+    "vue-router": "^3.0.6",
     "vue-simplemde": "^0.5.1"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.5.1",
-    "@vue/cli-plugin-eslint": "^3.5.1",
-    "@vue/cli-service": "^3.5.1",
+    "@vue/cli-plugin-babel": "^3.7.0",
+    "@vue/cli-plugin-eslint": "^3.7.0",
+    "@vue/cli-service": "^3.7.0",
     "@vue/eslint-config-prettier": "^4.0.1",
     "babel-eslint": "^10.0.1",
-    "eslint": "^5.15.3",
+    "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.2.2",
     "vue-template-compiler": "^2.6.10"
   },

@@ -7,7 +7,7 @@
     <ul class="header-right">
       <li>
         <a @click="logout">
-          <span class="icon-sign-in"></span>
+          <span class="icon-sign-in"></span>&nbsp;
           <span>退出</span>
         </a>
       </li>

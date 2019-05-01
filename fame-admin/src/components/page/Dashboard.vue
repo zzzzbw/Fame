@@ -9,7 +9,7 @@
               <p>发布文章数</p>
             </div>
             <div class="icon">
-              <span class="icon-book"></span>
+              <i class="el-icon-tickets"></i>
             </div>
             <div style="clear: both"></div>
           </div>
@@ -23,7 +23,7 @@
               <p>评论数</p>
             </div>
             <div class="icon red">
-              <span class="icon-comment-o"></span>
+              <i class="el-icon-chat-line-round"></i>
             </div>
             <div style="clear: both"></div>
           </div>

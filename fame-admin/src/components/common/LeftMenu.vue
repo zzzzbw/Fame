@@ -12,27 +12,27 @@
       @select="mobileToggle"
     >
       <el-menu-item index="/admin/dashboard">
-        <span class="icon-dashboard"></span>&nbsp;
+        <i class="el-icon-monitor"></i>
         <span slot="title">仪表盘</span>
       </el-menu-item>
       <el-menu-item index="/admin/article?page=1">
-        <span class="icon-list"></span>&nbsp;
+        <i class="el-icon-document-copy"></i>
         <span slot="title">文章列表</span>
       </el-menu-item>
       <el-menu-item index="/admin/comment?page=1">
-        <span class="icon-comments-o"></span>
+        <i class="el-icon-chat-dot-round"></i>
         <span slot="title">评论列表</span>
       </el-menu-item>
       <el-menu-item index="/admin/tag">
-        <span class="icon-tags"></span>&nbsp;
+        <i class="el-icon-copy-document"></i>
         <span slot="title">标签/分类</span>
       </el-menu-item>
       <el-menu-item index="/admin/page?page=1">
-        <span class="icon-th-list"></span>&nbsp;
+        <i class="el-icon-document"></i>
         <span slot="title">页面列表</span>
       </el-menu-item>
       <el-menu-item index="/admin/setting">
-        <span class="icon-cog"></span>&nbsp;
+        <i class="el-icon-setting"></i>
         <span slot="title">网站设置</span>
       </el-menu-item>
     </el-menu>
