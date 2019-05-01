@@ -3,9 +3,9 @@ package com.zbw.fame.controller.admin;
 import com.github.pagehelper.Page;
 import com.zbw.fame.controller.BaseController;
 import com.zbw.fame.model.domain.User;
-import com.zbw.fame.model.param.ArticleParam;
 import com.zbw.fame.model.dto.Pagination;
 import com.zbw.fame.model.domain.Article;
+import com.zbw.fame.model.query.ArticleQuery;
 import com.zbw.fame.service.ArticleService;
 import com.zbw.fame.service.LogService;
 import com.zbw.fame.util.FameConsts;
@@ -42,13 +42,8 @@ public class ArticleController extends BaseController {
      */
     @GetMapping
     public RestResponse index(@RequestParam(required = false, defaultValue = "1") Integer page,
-                              @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
-        ArticleParam param = ArticleParam.builder()
-                .type(Types.POST)
-                .html(false)
-                .summary(false)
-                .build();
-        Page<Article> articles = articleService.getArticles(page, limit, param);
+                              @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit, ArticleQuery query) {
+        Page<Article> articles = articleService.getAdminArticles(page, limit, query);
         return RestResponse.ok(new Pagination<Article>(articles));
     }
 
@@ -60,13 +55,7 @@ public class ArticleController extends BaseController {
      */
     @GetMapping("{id}")
     public RestResponse showArticle(@PathVariable Integer id) {
-        ArticleParam param = ArticleParam.builder()
-                .id(id)
-                .type(Types.POST)
-                .html(false)
-                .summary(false)
-                .build();
-        Article article = articleService.getArticle(param);
+        Article article = articleService.getAdminArticle(id);
         if (null == article) {
             return this.error404();
         }

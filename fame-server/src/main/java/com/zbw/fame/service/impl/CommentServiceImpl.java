@@ -2,13 +2,12 @@ package com.zbw.fame.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.zbw.fame.model.domain.Comment;
-import com.zbw.fame.model.param.CommentParam;
-import com.zbw.fame.model.dto.CommentDto;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.mapper.ArticleMapper;
 import com.zbw.fame.mapper.CommentMapper;
 import com.zbw.fame.model.domain.Article;
+import com.zbw.fame.model.domain.Comment;
+import com.zbw.fame.model.dto.CommentDto;
 import com.zbw.fame.service.CommentService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
@@ -40,22 +39,6 @@ public class CommentServiceImpl implements CommentService {
 
     @Autowired
     private ArticleMapper articleMapper;
-
-    @Override
-    @Cacheable(value = COMMENT_CACHE_NAME, key = "'comment_page['+#page+':'+#limit+':'+#param+']'")
-    public Page<Comment> getComments(Integer page, Integer limit, CommentParam param) {
-        Comment record = new Comment();
-        record.setArticleId(param.getArticleId());
-        Page<Comment> result = PageHelper.startPage(page, limit).doSelectPage(() -> commentMapper.select(record));
-        if (param.isSummary() || param.isHtml()) {
-            result.forEach(comments -> {
-                String content = FameUtil.contentTransform(comments.getContent(), param.isSummary(), param.isHtml());
-                comments.setContent(content);
-            });
-        }
-
-        return PageHelper.startPage(page, limit).doSelectPage(() -> commentMapper.select(record));
-    }
 
 
     @Override
@@ -93,6 +76,32 @@ public class CommentServiceImpl implements CommentService {
         // 增加文章的评论数
         article.setCommentCount(article.getCommentCount() + 1);
         articleMapper.updateByPrimaryKeySelective(article);
+    }
+
+    @Override
+    @Cacheable(value = COMMENT_CACHE_NAME, key = "'article_comments['+#page+':'+#limit+':'+#articleId+']'")
+    public Page<Comment> getCommentsByArticleId(Integer page, Integer limit, Integer articleId) {
+        Comment record = new Comment();
+        record.setArticleId(articleId);
+        Page<Comment> result = PageHelper.startPage(page, limit).doSelectPage(() -> commentMapper.select(record));
+        result.forEach(comments -> {
+            String content = FameUtil.contentTransform(comments.getContent(), false, true);
+            comments.setContent(content);
+        });
+
+        return result;
+    }
+
+    @Override
+    public Page<Comment> getAdminComments(Integer page, Integer limit) {
+        Comment record = new Comment();
+        Page<Comment> result = PageHelper.startPage(page, limit).doSelectPage(() -> commentMapper.select(record));
+        result.forEach(comments -> {
+            String content = FameUtil.contentTransform(comments.getContent(), false, false);
+            comments.setContent(content);
+        });
+
+        return result;
     }
 
     @Override

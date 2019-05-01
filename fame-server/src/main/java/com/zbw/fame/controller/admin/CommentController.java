@@ -3,7 +3,6 @@ package com.zbw.fame.controller.admin;
 import com.github.pagehelper.Page;
 import com.zbw.fame.controller.BaseController;
 import com.zbw.fame.model.domain.Comment;
-import com.zbw.fame.model.param.CommentParam;
 import com.zbw.fame.model.dto.CommentDto;
 import com.zbw.fame.model.dto.Pagination;
 import com.zbw.fame.service.CommentService;
@@ -36,12 +35,7 @@ public class CommentController extends BaseController {
     @GetMapping
     public RestResponse index(@RequestParam(required = false, defaultValue = "1") Integer page,
                               @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
-        CommentParam param = CommentParam
-                .builder()
-                .summary(false)
-                .html(false)
-                .build();
-        Page<Comment> comments = commentService.getComments(page, limit, param);
+        Page<Comment> comments = commentService.getAdminComments(page, limit);
         return RestResponse.ok(new Pagination<Comment>(comments));
     }
 

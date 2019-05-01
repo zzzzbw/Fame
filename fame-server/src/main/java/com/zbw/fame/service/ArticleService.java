@@ -2,8 +2,8 @@ package com.zbw.fame.service;
 
 import com.github.pagehelper.Page;
 import com.zbw.fame.model.domain.Article;
-import com.zbw.fame.model.param.ArticleParam;
 import com.zbw.fame.model.dto.Archive;
+import com.zbw.fame.model.query.ArticleQuery;
 
 import java.util.List;
 
@@ -16,24 +16,39 @@ import java.util.List;
 public interface ArticleService {
 
     /**
-     * 根据条件分页查询文章
+     * 分页查询前端文章
      *
      * @param page  当前页面
      * @param limit 每页数量
-     * @param param 查询条件
      * @return Page<Article>
      */
-    Page<Article> getArticles(Integer page, Integer limit, ArticleParam param);
-
+    Page<Article> getFrontArticles(Integer page, Integer limit);
 
     /**
-     * 根据条件查询指定id文章
+     * 根据id获取前端文章
      *
-     * @param param 查询条件
+     * @param id 文章id
      * @return Article
      */
-    Article getArticle(ArticleParam param);
+    Article getFrontArticle(Integer id);
 
+    /**
+     * 分页查询后端文章
+     *
+     * @param page  当前页面
+     * @param limit 每页数量
+     * @param query 查询条件
+     * @return Page<Article>
+     */
+    Page<Article> getAdminArticles(Integer page, Integer limit, ArticleQuery query);
+
+    /**
+     * 根据id获取后端文章
+     *
+     * @param id 文章id
+     * @return Article
+     */
+    Article getAdminArticle(Integer id);
 
     /**
      * 保存或更新文章
@@ -73,6 +88,31 @@ public interface ArticleService {
      */
     List<Archive> getArchives();
 
+
+    /**
+     * 根据title获取前端自定义页面
+     *
+     * @param title 页面标题
+     * @return Article
+     */
+    Article getFrontPage(String title);
+
+    /**
+     * 分页查询后端自定义页面
+     *
+     * @param page  当前页面
+     * @param limit 每页数量
+     * @return Page<Article>
+     */
+    Page<Article> getAdminPages(Integer page, Integer limit);
+
+    /**
+     * 根据id获取后端页面
+     *
+     * @param id 文章id
+     * @return Article
+     */
+    Article getAdminPage(Integer id);
 
     /**
      * 保存或更新自定义页面

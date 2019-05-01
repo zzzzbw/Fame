@@ -1,19 +1,20 @@
 package com.zbw.fame.controller;
 
 import com.github.pagehelper.Page;
+import com.zbw.fame.model.domain.Article;
 import com.zbw.fame.model.domain.Comment;
-import com.zbw.fame.model.param.ArticleParam;
-import com.zbw.fame.model.param.CommentParam;
 import com.zbw.fame.model.dto.Archive;
 import com.zbw.fame.model.dto.CommentDto;
 import com.zbw.fame.model.dto.MetaDto;
 import com.zbw.fame.model.dto.Pagination;
-import com.zbw.fame.model.domain.Article;
 import com.zbw.fame.service.ArticleService;
 import com.zbw.fame.service.CommentService;
 import com.zbw.fame.service.EmailService;
 import com.zbw.fame.service.MetaService;
-import com.zbw.fame.util.*;
+import com.zbw.fame.util.FameConsts;
+import com.zbw.fame.util.FameUtil;
+import com.zbw.fame.util.RestResponse;
+import com.zbw.fame.util.Types;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -52,13 +53,7 @@ public class FrontController extends BaseController {
     @GetMapping("article")
     public RestResponse home(@RequestParam(required = false, defaultValue = "1") Integer page,
                              @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
-        ArticleParam param = ArticleParam.builder()
-                .type(Types.POST)
-                .status(Types.PUBLISH)
-                .html(true)
-                .summary(true)
-                .build();
-        Page<Article> articles = articleService.getArticles(page, limit, param);
+        Page<Article> articles = articleService.getFrontArticles(page, limit);
         return RestResponse.ok(new Pagination<Article>(articles));
     }
 
@@ -70,15 +65,7 @@ public class FrontController extends BaseController {
      */
     @GetMapping("article/{id}")
     public RestResponse article(@PathVariable Integer id) {
-        ArticleParam param = ArticleParam.builder()
-                .id(id)
-                .type(Types.POST)
-                .status(Types.PUBLISH)
-                .html(true)
-                .summary(false)
-                .build();
-
-        Article article = articleService.getArticle(param);
+        Article article = articleService.getFrontArticle(id);
         if (null == article) {
             return this.error404();
         }
@@ -148,15 +135,7 @@ public class FrontController extends BaseController {
      */
     @GetMapping("page/{title}")
     public RestResponse page(@PathVariable String title) {
-        ArticleParam param = ArticleParam.builder()
-                .title(title)
-                .type(Types.PAGE)
-                .status(Types.PUBLISH)
-                .html(true)
-                .summary(false)
-                .build();
-
-        Article page = articleService.getArticle(param);
+        Article page = articleService.getFrontPage(title);
         if (null == page) {
             return error404();
         }
@@ -174,10 +153,7 @@ public class FrontController extends BaseController {
     @GetMapping("comment")
     public RestResponse getArticleComment(@RequestParam Integer articleId, @RequestParam(required = false, defaultValue = "1") Integer page,
                                           @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
-        CommentParam param = CommentParam.builder()
-                .articleId(articleId)
-                .build();
-        Page<Comment> comments = commentService.getComments(page, limit, param);
+        Page<Comment> comments = commentService.getCommentsByArticleId(page, limit, articleId);
         return RestResponse.ok(new Pagination<Comment>(comments));
     }
 

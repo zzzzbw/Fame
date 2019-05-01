@@ -3,12 +3,12 @@ package com.zbw.fame.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.zbw.fame.model.domain.Article;
-import com.zbw.fame.model.param.ArticleParam;
 import com.zbw.fame.model.dto.Archive;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.mapper.ArticleMapper;
 import com.zbw.fame.mapper.CommentMapper;
 import com.zbw.fame.model.domain.Comment;
+import com.zbw.fame.model.query.ArticleQuery;
 import com.zbw.fame.service.ArticleService;
 import com.zbw.fame.service.MetaService;
 import com.zbw.fame.util.FameConsts;
@@ -51,32 +51,63 @@ public class ArticleServiceImpl implements ArticleService {
     private CommentMapper commentsMapper;
 
     @Override
-    @Cacheable(value = ARTICLE_CACHE_NAME, key = "'article_page['+#page+':'+#limit+':'+#param+']'")
-    public Page<Article> getArticles(Integer page, Integer limit, ArticleParam param) {
+    @Cacheable(value = ARTICLE_CACHE_NAME, key = "'font_articles['+#page+':'+#limit+']'")
+    public Page<Article> getFrontArticles(Integer page, Integer limit) {
         Article record = new Article();
-        record.setType(param.getType());
-        record.setStatus(param.getStatus());
-        Page<Article> result = PageHelper.startPage(page, limit).doSelectPage(() -> articleMapper.select(record));
-        if (param.isSummary() || param.isHtml()) {
-            result.forEach(article -> {
-                String content = FameUtil.contentTransform(article.getContent(), param.isSummary(), param.isHtml());
-                article.setContent(content);
-            });
-        }
+        record.setStatus(Types.PUBLISH);
+        record.setType(Types.POST);
 
+        Page<Article> result = PageHelper.startPage(page, limit).doSelectPage(() -> articleMapper.select(record));
+        result.forEach(article -> {
+            String content = FameUtil.contentTransform(article.getContent(), true, true);
+            article.setContent(content);
+        });
         return result;
     }
 
     @Override
-    @Cacheable(value = ARTICLE_CACHE_NAME, key = "'article_content['+#param+']'")
-    public Article getArticle(ArticleParam param) {
+    @Cacheable(value = ARTICLE_CACHE_NAME, key = "'front_article['+#id+']'")
+    public Article getFrontArticle(Integer id) {
         Article record = new Article();
-        record.setId(param.getId());
-        record.setTitle(param.getTitle());
-        record.setType(param.getType());
-        record.setStatus(param.getStatus());
+        record.setId(id);
+        record.setStatus(Types.PUBLISH);
+        record.setType(Types.POST);
         Article article = articleMapper.selectOne(record);
-        String content = FameUtil.contentTransform(article.getContent(), param.isSummary(), param.isHtml());
+        String content = FameUtil.contentTransform(article.getContent(), false, true);
+        article.setContent(content);
+        return article;
+    }
+
+    @Override
+    public Page<Article> getAdminArticles(Integer page, Integer limit, ArticleQuery query) {
+        Example example = new Example(Article.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("type", Types.POST);
+        if (!StringUtils.isEmpty(query.getStatus())) {
+            criteria.andEqualTo("status", query.getStatus());
+        }
+        if (!StringUtils.isEmpty(query.getTitle())) {
+            criteria.andLike("title", "%" + query.getTitle() + "%");
+        }
+        if (!StringUtils.isEmpty(query.getTag())) {
+            criteria.andLike("tags", "%" + query.getTag() + "%");
+        }
+        if (!StringUtils.isEmpty(query.getCategory())) {
+            criteria.andLike("category", "%" + query.getCategory() + "%");
+        }
+        Page<Article> result = PageHelper.startPage(page, limit).doSelectPage(() -> articleMapper.selectByExample(example));
+        //只需要文章列表，不需要内容
+        result.forEach(article -> article.setContent(""));
+        return result;
+    }
+
+    @Override
+    public Article getAdminArticle(Integer id) {
+        Article record = new Article();
+        record.setId(id);
+        record.setType(Types.POST);
+        Article article = articleMapper.selectOne(record);
+        String content = FameUtil.contentTransform(article.getContent(), false, false);
         article.setContent(content);
         return article;
     }
@@ -197,6 +228,40 @@ public class ArticleServiceImpl implements ArticleService {
             }
         }
         return archives;
+    }
+
+    @Override
+    @Cacheable(value = ARTICLE_CACHE_NAME, key = "'front_page['+#title+']'")
+    public Article getFrontPage(String title) {
+        Article record = new Article();
+        record.setTitle(title);
+        record.setStatus(Types.PUBLISH);
+        record.setType(Types.PAGE);
+        Article article = articleMapper.selectOne(record);
+        String content = FameUtil.contentTransform(article.getContent(), false, true);
+        article.setContent(content);
+        return article;
+    }
+
+    @Override
+    public Page<Article> getAdminPages(Integer page, Integer limit) {
+        Article record = new Article();
+        record.setType(Types.PAGE);
+        Page<Article> result = PageHelper.startPage(page, limit).doSelectPage(() -> articleMapper.select(record));
+        //只需要文章列表，不需要内容
+        result.forEach(article -> article.setContent(""));
+        return result;
+    }
+
+    @Override
+    public Article getAdminPage(Integer id) {
+        Article record = new Article();
+        record.setId(id);
+        record.setType(Types.PAGE);
+        Article article = articleMapper.selectOne(record);
+        String content = FameUtil.contentTransform(article.getContent(), false, false);
+        article.setContent(content);
+        return article;
     }
 
     @Override

@@ -3,7 +3,6 @@ package com.zbw.fame.controller.admin;
 import com.github.pagehelper.Page;
 import com.zbw.fame.controller.BaseController;
 import com.zbw.fame.model.domain.Article;
-import com.zbw.fame.model.param.ArticleParam;
 import com.zbw.fame.model.dto.Pagination;
 import com.zbw.fame.model.domain.User;
 import com.zbw.fame.service.ArticleService;
@@ -42,12 +41,7 @@ public class PageController extends BaseController {
     @GetMapping
     public RestResponse index(@RequestParam(required = false, defaultValue = "1") Integer page,
                               @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
-        ArticleParam param = ArticleParam.builder()
-                .type(Types.PAGE)
-                .html(false)
-                .summary(false)
-                .build();
-        Page<Article> pages = articleService.getArticles(page, limit, param);
+        Page<Article> pages = articleService.getAdminPages(page, limit);
         return RestResponse.ok(new Pagination<Article>(pages));
     }
 
@@ -59,13 +53,7 @@ public class PageController extends BaseController {
      */
     @GetMapping("{id}")
     public RestResponse showPage(@PathVariable Integer id) {
-        ArticleParam param = ArticleParam.builder()
-                .id(id)
-                .type(Types.PAGE)
-                .html(false)
-                .summary(false)
-                .build();
-        Article page = articleService.getArticle(param);
+        Article page = articleService.getAdminPage(id);
         if (null == page) {
             return this.error404();
         }
