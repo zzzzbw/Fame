@@ -6,12 +6,12 @@
     <a href="https://www.travis-ci.org/zzzzbw/Fame/"><img src="https://travis-ci.org/zzzzbw/Fame.svg?branch=master"></a>
     <a href="https://codebeat.co/projects/github-com-zzzzbw-fame-master"><img alt="codebeat badge" src="https://codebeat.co/badges/7f186f0f-f42c-4a96-b74b-84fa5294ccc8" /></a>
     <a href="LICENSE"><img src="https://img.shields.io/github/license/zzzzbw/Fame.svg"></a>
-    <a alt="spring boot"><img src="https://img.shields.io/badge/spring%20boot-2.0.5.RELEASE-yellow.svg"/></a>
+    <a alt="spring boot"><img src="https://img.shields.io/badge/spring%20boot-2.1.0.RELEASE-yellow.svg"/></a>
     <a alt="Maven"><img src="https://img.shields.io/badge/maven-v3.3.9-red.svg"></a>
-    <a alt="node"><img src="https://img.shields.io/badge/node-v10.6.0-green.svg"></a>
+    <a alt="node"><img src="https://img.shields.io/badge/node-v10.10.0-green.svg"></a>
     <a alt="npm"><img src="https://img.shields.io/badge/npm-v6.4.1-blue.svg"></a>
-    <a alt="vue"><img src="https://img.shields.io/badge/vue-2.5.2-orange.svg"></a>
-    <a alt="nuxt"><img src="https://img.shields.io/badge/nuxt-1.4.0-yellowgreen.svg"></a>
+    <a alt="vue"><img src="https://img.shields.io/badge/vue-2.6.10-orange.svg"></a>
+    <a alt="nuxt"><img src="https://img.shields.io/badge/nuxt-2.6.3-yellowgreen.svg"></a>
     <a alt="docker"><img src="https://img.shields.io/badge/docker-18.06.01--ce-ff69b4.svg"></a>
     <a alt="docker-compose"><img src="https://img.shields.io/badge/docker--compose-1.22.0-lightgrey.svg"></a>
 </p>
@@ -22,7 +22,7 @@
 * 适合当做`'Javaer'`,`'Vuer'`的练手学习项目，也适合`'跨界开发'`做新技术涉猎的参考
 * 项目会持续更新，如果有不完善的地方，欢迎指出
 
-> 演示站点: [zzzzbw.cn](http://zzzzbw.cn)
+> 演示站点: [https://zzzzbw.cn](https://zzzzbw.cn)
 
 ### 项目结构
 
@@ -111,10 +111,12 @@
       `vi src/main/resources/application-dev.properties`
 
       ```
-      spring.datasource.driverClassName=com.mysql.jdbc.Driver
-      spring.datasource.url=jdbc:mysql://localhost:3306/fame?useUnicode=true&characterEncoding=utf-8&useSSL=false
-      spring.datasource.username=root
-      spring.datasource.password=root
+      spring:
+        datasource:
+          driverClassName: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://localhost:3306/fame?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+          username: root
+          password: root
       ```
       将数据库的用户名和密码修改成对应你数据库的用户名密码
 
@@ -158,18 +160,19 @@
 
 ### 部分界面
 
-![](https://raw.githubusercontent.com/zzzzbw/blog_source/master/images/FameDocker/Snipaste_2018-09-20_22-00-10.png)
+![](https://raw.githubusercontent.com/zzzzbw/blog_source/master/images/FameDocker/Snipaste_2019-05-03_00-27-11.png)
 
-![](https://raw.githubusercontent.com/zzzzbw/blog_source/master/images/FameDocker/Snipaste_2018-09-20_22-00-29.png)
+![](https://raw.githubusercontent.com/zzzzbw/blog_source/master/images/FameDocker/Snipaste_2019-05-03_00-28-59.png)
 
-![](https://raw.githubusercontent.com/zzzzbw/blog_source/master/images/FameDocker/Snipaste_2018-09-20_22-00-35.png)
+![](https://raw.githubusercontent.com/zzzzbw/blog_source/master/images/FameDocker/Snipaste_2019-05-03_00-29-34.png)
 
-![](https://raw.githubusercontent.com/zzzzbw/blog_source/master/images/FameDocker/Snipaste_2018-09-20_22-01-10.png)
+![](https://raw.githubusercontent.com/zzzzbw/blog_source/master/images/FameDocker/Snipaste_2019-05-03_00-30-51.png)
 
-![](https://raw.githubusercontent.com/zzzzbw/blog_source/master/images/FameDocker/Snipaste_2018-09-20_22-01-40.png)
+![](https://raw.githubusercontent.com/zzzzbw/blog_source/master/images/FameDocker/Snipaste_2019-05-03_00-31-23.png)
 
-![](https://raw.githubusercontent.com/zzzzbw/blog_source/master/images/FameDocker/Snipaste_2018-09-20_22-01-57.png)
+![](https://raw.githubusercontent.com/zzzzbw/blog_source/master/images/FameDocker/Snipaste_2019-05-03_00-32-02.png)
 
+![](https://raw.githubusercontent.com/zzzzbw/blog_source/master/images/FameDocker/Snipaste_2019-05-03_00-33-00.png)
 
 
 
