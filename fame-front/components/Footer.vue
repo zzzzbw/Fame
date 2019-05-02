@@ -11,7 +11,7 @@
 
 <script type="text/ecmascript-6">
 export default {
-  data: function () {
+  data: function() {
     return {
       icp: process.env.icp
     }

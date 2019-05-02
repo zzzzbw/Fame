@@ -30,7 +30,7 @@
     </div>
     <nav class="markdown-toc toc"></nav>
     <comment :article-id="article.id"></comment>
-    <big-img :visible.sync="isBigImg" :img="img"> </big-img>
+    <big-img :visible.sync="isBigImg" :img="img"></big-img>
   </div>
 </template>
 
@@ -83,7 +83,7 @@ export default {
       const body = document.getElementsByClassName('markdown-body')
       if (body) {
         const tag = body[0].querySelectorAll(headingSelector)
-        tag.forEach(function (el) {
+        tag.forEach(function(el) {
           el.setAttribute('id', el.innerHTML)
         })
       }
@@ -93,7 +93,7 @@ export default {
         headingSelector: headingSelector
       })
       // 延时显示，防止闪烁
-      setTimeout(function () {
+      setTimeout(function() {
         document.getElementsByClassName('markdown-toc')[0].style.opacity = 1
       }, 500)
     }

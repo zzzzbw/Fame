@@ -11,6 +11,8 @@ const baseProxy = {
   host: process.env.proxyHost || localProxy.host,
   port: process.env.proxyPort || localProxy.port
 }
-exports.isProd = isProd
-exports.api = isProd ? baseUrl : localhost
-exports.baseProxy = isProd ? baseProxy : localProxy
+export default {
+  isProd: isProd,
+  api: isProd ? baseUrl : localhost,
+  baseProxy: isProd ? baseProxy : localProxy
+}

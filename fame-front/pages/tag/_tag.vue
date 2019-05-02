@@ -42,7 +42,7 @@ export default {
   head () {
     return { title: `标签` }
   },
-  data: function () {
+  data: function() {
     return {
       articles: [],
       tagTitle: '',
@@ -70,7 +70,7 @@ export default {
         const tagName = dom.getElementsByTagName('span')[0].innerHTML.trim()
         if (Object.is(tag, tagName)) {
           // 延时显示，点击效果
-          setTimeout(function () {
+          setTimeout(function() {
             dom.click()
           }, 300)
         }

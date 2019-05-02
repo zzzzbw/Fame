@@ -13,7 +13,7 @@ export default {
   mounted () {
     // 顶部图标的显示与隐藏
     const scrollTop = this.$refs.scrollTop
-    window.onscroll = function () {
+    window.onscroll = function() {
       if ((document.documentElement.scrollTop || document.body.scrollTop) > 200) {
         scrollTop.classList.add('opacity')
       } else {
@@ -29,7 +29,7 @@ export default {
   methods: {
     // 原生js实现滑动滚动到顶端
     toTop () {
-      timer = setInterval(function () {
+      timer = setInterval(function() {
         osTop = document.documentElement.scrollTop || document.body.scrollTop
         const iSpeed = Math.floor(-osTop / 50) // 减速滚动
         // let iSpeed = -6.5 // 固定速度滚动
