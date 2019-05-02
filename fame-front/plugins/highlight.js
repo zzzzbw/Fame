@@ -14,6 +14,11 @@ hljs.registerLanguage('shell', require('highlight.js/lib/languages/shell'))
 hljs.registerLanguage('nginx', require('highlight.js/lib/languages/nginx'))
 hljs.registerLanguage('stylus', require('highlight.js/lib/languages/stylus'))
 hljs.registerLanguage('python', require('highlight.js/lib/languages/python'))
+hljs.registerLanguage('yaml', require('highlight.js/lib/languages/yaml'))
+hljs.registerLanguage(
+  'properties',
+  require('highlight.js/lib/languages/properties')
+)
 hljs.registerLanguage(
   'javascript',
   require('highlight.js/lib/languages/javascript')
