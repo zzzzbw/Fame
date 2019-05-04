@@ -33,8 +33,9 @@ public interface ArticleMapper extends Mapper<Article> {
      * @param metaId 属性id
      * @return Integer
      */
-    @Select("SELECT count(*) FROM fame.article WHERE id IN (SELECT a_id FROM fame.middle WHERE m_id = #{metaId}) " +
-            "AND fame.article.TYPE = '" + Types.POST + "' AND fame.article.type = '" + Types.POST + "'")
+    @Select("SELECT count(*) FROM fame.article WHERE id " +
+            "IN (SELECT a_id FROM fame.middle WHERE m_id = #{metaId}) " +
+            "AND fame.article.type = '" + Types.POST + "' AND fame.article.status != '" + Types.DELETE + "'")
     Integer selectCountByMeta(@Param("metaId") Integer metaId);
 
     /**
@@ -58,5 +59,4 @@ public interface ArticleMapper extends Mapper<Article> {
             "IN (SELECT a_id FROM fame.middle WHERE m_id = #{metaId}) " +
             "AND fame.article.status = '" + Types.PUBLISH + "' AND fame.article.type = '" + Types.POST + "'")
     Integer selectPublishCountByMeta(@Param("metaId") Integer metaId);
-
 }

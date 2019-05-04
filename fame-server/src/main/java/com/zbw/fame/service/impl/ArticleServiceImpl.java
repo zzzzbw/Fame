@@ -83,6 +83,7 @@ public class ArticleServiceImpl implements ArticleService {
         Example example = new Example(Article.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("type", Types.POST);
+        criteria.andNotEqualTo("status", Types.DELETE);
         if (!StringUtils.isEmpty(query.getStatus())) {
             criteria.andEqualTo("status", query.getStatus());
         }
@@ -170,13 +171,15 @@ public class ArticleServiceImpl implements ArticleService {
             throw new TipException("没有id为" + id + "的文章");
         }
 
-        if (articleMapper.deleteByPrimaryKey(id) > 0) {
+        record.setStatus(Types.DELETE);
+        if (articleMapper.updateByPrimaryKeySelective(record) > 0) {
             log.info("删除文章: {}", article);
 
             // 删除文章下的评论
             Example commentsExample = Example
                     .builder(Comment.class)
-                    .where(Sqls.custom().andEqualTo("articleId", id))
+                    .where(Sqls.custom()
+                            .andEqualTo("articleId", id))
                     .build();
             int commentsResult = commentsMapper.deleteByExample(commentsExample);
             log.info("删除对应的评论,数量: {}", commentsResult);
@@ -192,9 +195,12 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     @Cacheable(value = ARTICLE_CACHE_NAME, key = "'article_count'")
     public Integer count() {
-        Article record = new Article();
-        record.setType(Types.POST);
-        return articleMapper.selectCount(record);
+        Example articleExample = Example
+                .builder(Article.class)
+                .where(Sqls.custom()
+                        .andNotEqualTo("status", Types.DELETE))
+                .build();
+        return articleMapper.selectCountByExample(articleExample);
     }
 
     @Override
@@ -247,7 +253,14 @@ public class ArticleServiceImpl implements ArticleService {
     public Page<Article> getAdminPages(Integer page, Integer limit) {
         Article record = new Article();
         record.setType(Types.PAGE);
-        Page<Article> result = PageHelper.startPage(page, limit).doSelectPage(() -> articleMapper.select(record));
+        Example pageExample = Example
+                .builder(Article.class)
+                .where(Sqls.custom()
+                        .andEqualTo("type", Types.PAGE)
+                        .andNotEqualTo("status", Types.DELETE))
+                .build();
+
+        Page<Article> result = PageHelper.startPage(page, limit).doSelectPage(() -> articleMapper.selectByExample(pageExample));
         //只需要文章列表，不需要内容
         result.forEach(article -> article.setContent(""));
         return result;
@@ -308,6 +321,7 @@ public class ArticleServiceImpl implements ArticleService {
         if (null == page) {
             throw new TipException("没有id为" + id + "的自定义页面");
         }
-        return articleMapper.deleteByPrimaryKey(id) > 0;
+        record.setStatus(Types.DELETE);
+        return articleMapper.updateByPrimaryKeySelective(record) > 0;
     }
 }

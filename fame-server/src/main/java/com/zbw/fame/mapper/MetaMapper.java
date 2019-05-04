@@ -58,14 +58,4 @@ public interface MetaMapper extends Mapper<Meta> {
                     many = @Many(select = "com.zbw.fame.mapper.ArticleMapper.selectPublishByMeta"))
     })
     List<MetaDto> selectPublishMetaDtos(@Param("type") String type);
-
-    /**
-     * 获取所有属性
-     *
-     * @param type 属性类型
-     * @return List<MetaDto>
-     */
-    @Select("SELECT name, type ,count(*) as articleCount FROM fame.meta WHERE type = #{type} GROUP BY name")
-    List<MetaDto> selectMetasDistinct(@Param("type") String type);
-
 }
