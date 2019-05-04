@@ -7,14 +7,37 @@ package com.zbw.fame.util;
  * @since 2017/8/27 22:06
  */
 public interface Types {
+    /**
+     * 文章状态:公开
+     */
     String PUBLISH = "publish";
+    /**
+     * 文章状态:草稿
+     */
     String DRAFT = "draft";
+    /**
+     * 文章状态:删除
+     */
+    String DELETE = "delete";
 
+    /**
+     * 属性分类:归档
+     */
     String CATEGORY = "category";
+    /**
+     * 属性分类:标签
+     */
     String TAG = "tag";
 
+    /**
+     * 文章类型:博客
+     */
     String POST = "post";
+    /**
+     * 文章类型:自定义页面
+     */
     String PAGE = "page";
+
 
     String AGREE = "agree";
     String DISAGREE = "disagree";

@@ -1,7 +1,7 @@
 package com.zbw.fame.mapper;
 
 import com.zbw.fame.model.domain.Middle;
-import com.zbw.fame.util.MyMapper;
+import tk.mybatis.mapper.common.Mapper;
 
 /**
  * Middle Mapper
@@ -9,8 +9,5 @@ import com.zbw.fame.util.MyMapper;
  * @author zbw
  * @since 2017/9/18 15:24
  */
-public interface MiddleMapper extends MyMapper<Middle>{
-
-
-
+public interface MiddleMapper extends Mapper<Middle> {
 }

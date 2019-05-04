@@ -1,7 +1,7 @@
 package com.zbw.fame.mapper;
 
 import com.zbw.fame.model.domain.User;
-import com.zbw.fame.util.MyMapper;
+import tk.mybatis.mapper.common.Mapper;
 
 /**
  * User Mapper
@@ -9,5 +9,5 @@ import com.zbw.fame.util.MyMapper;
  * @author zbw
  * @since 2017/7/12 21:34
  */
-public interface UserMapper extends MyMapper<User>{
+public interface UserMapper extends Mapper<User> {
 }

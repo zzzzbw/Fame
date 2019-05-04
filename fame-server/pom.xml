@@ -18,7 +18,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <mybatis-spring-boot.version>1.3.2</mybatis-spring-boot.version>
-        <mapper-spring-boot.version>2.1.0</mapper-spring-boot.version>
+        <mapper-spring-boot.version>2.1.5</mapper-spring-boot.version>
         <pagehelper-spring-boot.version>1.2.10</pagehelper-spring-boot.version>
         <flexmark.version>0.34.58</flexmark.version>
     </properties>

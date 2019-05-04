@@ -1,14 +1,6 @@
 #端口号
 server:
   port: 9090
-#mybatis
-mybatis:
-  type-aliases-package: com.zbw.fame.model.domain
-#mapper
-mapper:
-  mappers: com.zbw.fame.util.MyMapper
-  not-empty: false
-  identity: MYSQL
 spring:
   #mail
   mail:

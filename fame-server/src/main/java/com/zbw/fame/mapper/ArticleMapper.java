@@ -2,10 +2,10 @@ package com.zbw.fame.mapper;
 
 import com.zbw.fame.model.domain.Article;
 import com.zbw.fame.model.dto.ArticleInfoDto;
-import com.zbw.fame.util.MyMapper;
 import com.zbw.fame.util.Types;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import java.util.List;
  * @author zbw
  * @since 2017/7/8 10:39
  */
-public interface ArticleMapper extends MyMapper<Article> {
+public interface ArticleMapper extends Mapper<Article> {
 
     /**
      * 根据metaId获取关联的文章
