@@ -74,4 +74,9 @@ public class Comment extends BaseEntity {
      * 评论agent
      */
     private String agent;
+
+    /**
+     * 状态
+     */
+    private Integer status;
 }

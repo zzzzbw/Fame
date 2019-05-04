@@ -198,6 +198,7 @@ public class ArticleServiceImpl implements ArticleService {
         Example articleExample = Example
                 .builder(Article.class)
                 .where(Sqls.custom()
+                        .andEqualTo("type",Types.POST)
                         .andNotEqualTo("status", Types.DELETE))
                 .build();
         return articleMapper.selectCountByExample(articleExample);

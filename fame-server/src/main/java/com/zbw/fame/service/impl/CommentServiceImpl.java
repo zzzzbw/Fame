@@ -83,6 +83,7 @@ public class CommentServiceImpl implements CommentService {
     public Page<Comment> getCommentsByArticleId(Integer page, Integer limit, Integer articleId) {
         Comment record = new Comment();
         record.setArticleId(articleId);
+        record.setStatus(Types.COMMENT_STATUS_NORMAL);
         Page<Comment> result = PageHelper.startPage(page, limit).doSelectPage(() -> commentMapper.select(record));
         result.forEach(comments -> {
             String content = FameUtil.contentTransform(comments.getContent(), false, true);
@@ -95,6 +96,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Page<Comment> getAdminComments(Integer page, Integer limit) {
         Comment record = new Comment();
+        record.setStatus(Types.COMMENT_STATUS_NORMAL);
         Page<Comment> result = PageHelper.startPage(page, limit).doSelectPage(() -> commentMapper.select(record));
         result.forEach(comments -> {
             String content = FameUtil.contentTransform(comments.getContent(), false, false);
@@ -145,7 +147,8 @@ public class CommentServiceImpl implements CommentService {
             childComment.setPId(null);
             commentMapper.updateByPrimaryKey(childComment);
         }
-        if (commentMapper.deleteByPrimaryKey(id) > 0) {
+        comment.setStatus(Types.COMMENT_STATUS_DELETE);
+        if (commentMapper.updateByPrimaryKeySelective(comment) > 0) {
             log.info("删除评论: {}", comment);
             return true;
         }
@@ -173,7 +176,9 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Cacheable(value = COMMENT_CACHE_NAME, key = "'comment_count'")
     public Integer count() {
-        return commentMapper.selectCount(new Comment());
+        Comment record = new Comment();
+        record.setStatus(Types.COMMENT_STATUS_NORMAL);
+        return commentMapper.selectCount(record);
     }
 
 }

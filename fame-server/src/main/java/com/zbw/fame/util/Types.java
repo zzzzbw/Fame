@@ -38,6 +38,15 @@ public interface Types {
      */
     String PAGE = "page";
 
+    /**
+     * 评论状态:正常
+     */
+    Integer COMMENT_STATUS_NORMAL = 0;
+
+    /**
+     * 评论状态:删除
+     */
+    Integer COMMENT_STATUS_DELETE = -1;
 
     String AGREE = "agree";
     String DISAGREE = "disagree";

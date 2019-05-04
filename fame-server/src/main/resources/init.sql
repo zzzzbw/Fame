@@ -40,6 +40,7 @@ CREATE TABLE comment (
   disagree   INT             NOT NULL DEFAULT 0,
   ip         VARCHAR(255),
   agent      VARCHAR(255),
+  status     INT DEFAULT 0 NOT NULL,
   created    TIMESTAMP       NOT NULL DEFAULT current_timestamp
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
