@@ -1,6 +1,6 @@
 /* color */
-.blue{
-  background: #30A5FF !important;
+.blue {
+  background: #30a5ff !important;
 }
 
 .red {
@@ -8,11 +8,11 @@
 }
 
 .green {
-  background: #1ABC9C !important;
+  background: #1abc9c !important;
 }
 
 .yellow {
-  background: #FABE28 !important;
+  background: #fabe28 !important;
 }
 /* color end */
 
@@ -25,7 +25,7 @@
   margin-bottom: 30px;
   width: 100%;
   border-radius: 0;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, .1);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
 }
 
 .panel .panel-content {
@@ -44,7 +44,7 @@
 
 .panel .message p {
   font-size: 14px;
-  color: #AAB5BC;
+  color: #aab5bc;
   font-weight: 600;
   text-transform: uppercase;
   margin: 8px 5px;
@@ -55,9 +55,9 @@
   padding: 10px 10px;
   margin-bottom: 15px;
   color: #555;
-  border-color: #FFF;
+  border-color: #fff;
   font-weight: bold;
-  background: #FFFFFF;
+  background: #ffffff;
   font-size: 16px;
   text-shadow: none;
   border-bottom: 1px solid #e6ebf5;
@@ -75,8 +75,8 @@
 
 .panel .icon {
   font-size: 30px;
-  color: #FFFFFF;
-  background: #30A5FF;
+  color: #ffffff;
+  background: #30a5ff;
   padding: 19px;
 }
 

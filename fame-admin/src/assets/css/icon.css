@@ -1,17 +1,18 @@
 @font-face {
-  font-family: 'fame-icon';
-  src:  url('../fonts/fame-icon.eot?ic8skt');
-  src:  url('../fonts/fame-icon.eot?ic8skt#iefix') format('embedded-opentype'),
-  url('../fonts/fame-icon.ttf?ic8skt') format('truetype'),
-  url('../fonts/fame-icon.woff?ic8skt') format('woff'),
-  url('../fonts/fame-icon.svg?ic8skt#fame-icon') format('svg');
+  font-family: "fame-icon";
+  src: url("../fonts/fame-icon.eot?ic8skt");
+  src: url("../fonts/fame-icon.eot?ic8skt#iefix") format("embedded-opentype"),
+    url("../fonts/fame-icon.ttf?ic8skt") format("truetype"),
+    url("../fonts/fame-icon.woff?ic8skt") format("woff"),
+    url("../fonts/fame-icon.svg?ic8skt#fame-icon") format("svg");
   font-weight: normal;
   font-style: normal;
 }
 
-[class^="icon-"], [class*=" icon-"] {
+[class^="icon-"],
+[class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'fame-icon' !important;
+  font-family: "fame-icon" !important;
   speak: none;
   font-style: normal;
   font-weight: normal;
