@@ -146,4 +146,8 @@ export default {
 .el-select {
   width: 100%;
 }
+
+.markdown-body {
+  height: calc(90vh - 100px);
+}
 </style>
