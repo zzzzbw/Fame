@@ -14,9 +14,9 @@
     "dayjs": "^1.8.13",
     "element-ui": "^2.8.2",
     "highlight.js": "^9.15.6",
+    "mavon-editor": "^2.7.4",
     "vue": "^2.6.10",
-    "vue-router": "^3.0.6",
-    "vue-simplemde": "^0.5.1"
+    "vue-router": "^3.0.6"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.7.0",

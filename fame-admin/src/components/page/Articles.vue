@@ -5,14 +5,14 @@
         <span>
           状态：
         </span>
-        <el-radio-group v-model="tool.status" @change="onSelectStatus">
+        <el-radio-group v-model="tool.status" @change="init">
           <el-radio-button label="">全部</el-radio-button>
           <el-radio-button :label="this.$util.STATIC.STATUS_PUBLISH"
-            >公开</el-radio-button
-          >
+            >公开
+          </el-radio-button>
           <el-radio-button :label="this.$util.STATIC.STATUS_DRAFT"
-            >隐藏</el-radio-button
-          >
+            >隐藏
+          </el-radio-button>
         </el-radio-group>
       </div>
       <div style="  display: flex;justify-content: space-between;">
@@ -22,7 +22,7 @@
           prefix-icon="el-icon-search"
           clearable
           style="max-width: 300px;"
-          @change="onSearchTitle"
+          @change="init"
         ></el-input>
         <el-button
           type="info"
@@ -88,7 +88,7 @@
     </el-table>
     <div class="admin-page">
       <el-pagination
-        layout="total,prev, pager, next"
+        layout="total, prev, pager, next"
         @current-change="init"
         :current-page.sync="currentPage"
         :page-size="pageSize"
@@ -114,12 +114,6 @@ export default {
     }
   },
   methods: {
-    onSelectStatus (value) {
-      this.init(this.currentPage, this.tool.title, value)
-    },
-    onSearchTitle (value) {
-      this.init(this.currentPage, value, this.tool.status)
-    },
     handleNew () {
       this.$router.push('/admin/article/publish')
     },
@@ -157,20 +151,20 @@ export default {
           type: 'success',
           message: '删除成功!'
         })
-        this.init(this.$route.query.page)
+        this.init()
       })
     },
-    init (page, title, status) {
-      this.$api.auth.getArticles(page || 1, title, status).then(data => {
+    init () {
+      this.$api.auth.getArticles(this.currentPage, this.tool.title, this.tool.status).then(data => {
         this.initArticleDatas(data.data.list)
         this.total = data.data.total
         this.pageSize = data.data.pageSize
-        this.currentPage = Number(page) || 1
       })
     }
   },
   mounted () {
-    this.init(this.$route.query.page)
+    this.currentPage = Number(this.$route.query.page) || 1
+    this.init()
   }
 }
 </script>

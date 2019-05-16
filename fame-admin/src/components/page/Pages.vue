@@ -110,19 +110,19 @@ export default {
           type: 'success',
           message: '删除成功!'
         })
-        this.init(this.$route.query.page)
+        this.init()
       })
     },
-    init (page) {
-      this.$api.auth.getPages(page || 1).then(data => {
+    init () {
+      this.$api.auth.getPages(this.currentPage).then(data => {
         this.initPageDatas(data.data.list)
         this.total = data.data.total
         this.pageSize = data.data.pageSize
-        this.currentPage = Number(page) || 1
       })
     }
   },
   mounted () {
+    this.currentPage = Number(this.$route.query.page) || 1;
     this.init()
   }
 }
