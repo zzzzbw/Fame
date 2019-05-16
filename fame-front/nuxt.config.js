@@ -27,7 +27,11 @@ export default {
         name: 'keywords',
         content: 'vue, nuxt, java, spring-boot, maven'
       },
-      { name: 'author', content: 'zzzzbw@gmail.com' }
+      { name: 'author', content: 'zzzzbw@gmail.com' },
+      {
+        name: 'google-site-verification',
+        content: process.env.GOOGLE_SITE_VERIFICATION
+      }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
@@ -53,7 +57,7 @@ export default {
     [
       '@nuxtjs/google-analytics',
       {
-        id: 'UA-128579148-1'
+        id: process.env.GOOGLE_ANALYTICS
       }
     ],
     ['@nuxtjs/sitemap'],
@@ -102,7 +106,7 @@ export default {
     /*
      ** Run ESLint on save
      */
-    extend(config, { isDev, isClient }) {
+    extend (config, { isDev, isClient }) {
       if (isDev && isClient) {
         config.module.rules.push({
           enforce: 'pre',
