@@ -142,13 +142,8 @@ export default {
 }
 </script>
 
-<style>
-@import "~simplemde/dist/simplemde.min.css";
-@import "~highlight.js/styles/googlecode.css";
-
-.markdown-editor .CodeMirror {
-  height: calc(90vh - 200px);
+<style scoped>
+.el-select {
+  width: 100%;
 }
 </style>
-
-<style scoped></style>
