@@ -110,12 +110,11 @@ export default {
     };
   },
   methods: {
-    init(page) {
-      this.$api.auth.getComments(page || 1).then(data => {
+    init() {
+      this.$api.auth.getComments(this.currentPage).then(data => {
         this.commentDatas = data.data.list;
         this.total = data.data.total;
         this.pageSize = data.data.pageSize;
-        this.currentPage = Number(page) || 1;
         for (let comment of this.commentDatas) {
           comment.created = this.$dayjs(comment.created).format(
             "YYYY-MM-DD HH:mm"
@@ -166,12 +165,13 @@ export default {
           type: "success",
           message: "删除成功!"
         });
-        this.init(this.$route.query.page);
+        this.init();
       });
     }
   },
   mounted() {
-    this.init(this.$route.query.page);
+    this.currentPage = Number(this.$route.query.page) || 1;
+    this.init();
   }
 };
 </script>
