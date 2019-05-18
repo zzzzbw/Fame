@@ -1,5 +1,6 @@
 import sitemapConfig from './config/sitemap-config'
 import feedConfig from './config/feed-config'
+import googleAnalytics from './config/google-analytics-config'
 
 // noinspection JSAnnotator
 export default {
@@ -53,18 +54,10 @@ export default {
     'highlight.js/styles/tomorrow.css',
     { src: '~assets/css/icon.css' }
   ],
-  modules: [
-    [
-      '@nuxtjs/google-analytics',
-      {
-        id: process.env.GOOGLE_ANALYTICS
-      }
-    ],
-    ['@nuxtjs/sitemap'],
-    '@nuxtjs/feed'
-  ],
+  modules: ['@nuxtjs/google-analytics', '@nuxtjs/sitemap', '@nuxtjs/feed'],
   sitemap: sitemapConfig.config,
   feed: feedConfig.config,
+  googleAnalytics: googleAnalytics.config,
   plugins: [
     { src: '~plugins/highlight.js' },
     { src: '~plugins/clickoutside.js' },
@@ -106,7 +99,7 @@ export default {
     /*
      ** Run ESLint on save
      */
-    extend (config, { isDev, isClient }) {
+    extend(config, { isDev, isClient }) {
       if (isDev && isClient) {
         config.module.rules.push({
           enforce: 'pre',
