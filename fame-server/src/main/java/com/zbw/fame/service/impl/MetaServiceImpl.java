@@ -79,6 +79,9 @@ public class MetaServiceImpl implements MetaService {
 
     @Override
     public boolean saveMeta(String name, String type) {
+        if (StringUtils.isEmpty(name)) {
+            throw new TipException("属性名不能为空");
+        }
         type = verifyType(type);
         Meta metas = new Meta();
         metas.setType(type);
@@ -86,16 +89,21 @@ public class MetaServiceImpl implements MetaService {
         if (metaMapper.select(metas).size() > 0) {
             throw new TipException("该属性已经存在");
         }
+
         return metaMapper.insert(metas) > 0;
     }
 
     @Override
     public boolean updateMeta(Integer id, String name, String type) {
+        if (StringUtils.isEmpty(name)) {
+            throw new TipException("属性名不能为空");
+        }
         type = verifyType(type);
         Meta meta = metaMapper.selectByPrimaryKey(id);
         if (null == meta) {
             throw new TipException("没有该属性");
         }
+
         List<Article> articles = articleMapper.selectByMeta(id);
         for (Article article : articles) {
             String metas;
@@ -127,11 +135,6 @@ public class MetaServiceImpl implements MetaService {
             throw new TipException("关联文章id不能为空");
         }
 
-        if (StringUtils.isEmpty(names)) {
-            middleMapper.delete(new Middle(articleId, null));
-            return true;
-        }
-
         removeMetas(names, type, articleId);
         saveMetas(names, type, articleId);
         return true;
@@ -153,6 +156,9 @@ public class MetaServiceImpl implements MetaService {
         }
         String[] nameArr = names.split(",");
         for (String name : nameArr) {
+            if (StringUtils.isEmpty(name)) {
+                continue;
+            }
             if (!metaSet.contains(name)) {
                 Meta newMeta = new Meta(name, type);
                 Meta meta = metaMapper.selectOne(newMeta);

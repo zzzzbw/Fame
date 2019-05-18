@@ -1,5 +1,6 @@
 import sitemapConfig from './config/sitemap-config'
 import feedConfig from './config/feed-config'
+import googleAnalytics from './config/google-analytics-config'
 
 // noinspection JSAnnotator
 export default {
@@ -27,7 +28,11 @@ export default {
         name: 'keywords',
         content: 'vue, nuxt, java, spring-boot, maven'
       },
-      { name: 'author', content: 'zzzzbw@gmail.com' }
+      { name: 'author', content: 'zzzzbw@gmail.com' },
+      {
+        name: 'google-site-verification',
+        content: process.env.GOOGLE_SITE_VERIFICATION
+      }
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
@@ -49,18 +54,10 @@ export default {
     'highlight.js/styles/tomorrow.css',
     { src: '~assets/css/icon.css' }
   ],
-  modules: [
-    [
-      '@nuxtjs/google-analytics',
-      {
-        id: 'UA-128579148-1'
-      }
-    ],
-    ['@nuxtjs/sitemap'],
-    '@nuxtjs/feed'
-  ],
+  modules: ['@nuxtjs/google-analytics', '@nuxtjs/sitemap', '@nuxtjs/feed'],
   sitemap: sitemapConfig.config,
   feed: feedConfig.config,
+  googleAnalytics: googleAnalytics.config,
   plugins: [
     { src: '~plugins/highlight.js' },
     { src: '~plugins/clickoutside.js' },
