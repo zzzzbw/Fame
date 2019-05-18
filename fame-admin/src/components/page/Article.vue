@@ -7,7 +7,7 @@
       :model="article"
     >
       <el-row :gutter="30">
-        <el-col :xs="24" :sm="16" :md="16" :lg="16">
+        <el-col :xs="24" :sm="16" :md="19" :lg="19">
           <el-form-item prop="title">
             <el-input
               v-model="article.title"
@@ -24,7 +24,7 @@
             <!-- 键修饰符，键别名 -->
           </el-form-item>
         </el-col>
-        <el-col :xs="24" :sm="8" :md="8" :lg="8">
+        <el-col :xs="24" :sm="8" :md="5" :lg="5">
           <div class="panel">
             <div class="panel-content">
               <el-form-item label="标签">
