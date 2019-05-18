@@ -18,6 +18,7 @@
             <mavon-editor
               :toolbars="markdownOption.toolbars"
               :codeStyle="markdownOption.codeStyle"
+              :subfield="markdownOption.subfield"
               v-model="article.content"
             />
             <!-- 键修饰符，键别名 -->
@@ -94,6 +95,7 @@ export default {
     return {
       markdownOption: {
         codeStyle: "tomorrow",
+        subfield: false,
         toolbars: {
           bold: true, // 粗体
           italic: true, // 斜体

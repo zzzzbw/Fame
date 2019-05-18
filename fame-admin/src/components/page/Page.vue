@@ -13,6 +13,7 @@
             <mavon-editor
               :toolbars="markdownOption.toolbars"
               :codeStyle="markdownOption.codeStyle"
+              :subfield="markdownOption.subfield"
               v-model="page.content"
             />
           </el-form-item>
@@ -57,6 +58,7 @@ export default {
     return {
       markdownOption: {
         codeStyle: "tomorrow",
+        subfield: false,
         toolbars: {
           bold: true, // 粗体
           italic: true, // 斜体
