@@ -47,6 +47,9 @@ const api = {
       assess: assess
     }
     return post('/comment/' + commentId + '/assess', params)
+  },
+  getOptions() {
+    return get('/option')
   }
 }
 

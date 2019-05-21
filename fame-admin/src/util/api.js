@@ -11,38 +11,20 @@ const auth = {
   getUsername() {
     return get("/admin/username");
   },
-  resetPassword(username, oldPassword, newPassword) {
+  resetPassword(oldUsername, newUsername, oldPassword, newPassword) {
     let params = {
-      username: username,
+      oldUsername: oldUsername,
+      newUsername: newUsername,
       oldPassword: oldPassword,
       newPassword: newPassword
     };
     return post("/admin/reset", params);
   },
-  getSiteConfig() {
-    return get("/admin/config/site");
+  getOptions() {
+    return get("/admin/option/all");
   },
-  saveSiteConfig(
-    title,
-    description,
-    keywords,
-    emailSend,
-    emailUsername,
-    emailPassword,
-    emailHost,
-    emailPort
-  ) {
-    let params = {
-      title: title,
-      description: description,
-      keywords: keywords,
-      emailSend: emailSend,
-      emailUsername: emailUsername,
-      emailPassword: emailPassword,
-      emailHost: emailHost,
-      emailPort: emailPort
-    };
-    return post("/admin/config/site", params);
+  saveOptions(options) {
+    return post("/admin/option/save", options);
   },
   getArticleCount() {
     return get("/admin/article/count");

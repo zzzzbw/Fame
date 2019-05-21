@@ -22,10 +22,11 @@ public interface UserService {
     /**
      * 用户重置密码
      *
-     * @param username    用户名
+     * @param oldUsername 原用户名
+     * @param newUsername 新用户名
      * @param oldPassword 原密码
      * @param newPassword 新密码
      * @return boolean
      */
-    boolean reset(String username, String oldPassword, String newPassword);
+    boolean reset(String oldUsername, String newUsername, String oldPassword, String newPassword);
 }

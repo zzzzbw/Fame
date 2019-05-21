@@ -1,6 +1,7 @@
 import sitemapConfig from './config/sitemap-config'
 import feedConfig from './config/feed-config'
 import googleAnalytics from './config/google-analytics-config'
+import defaultConfig from './config/default-config'
 
 // noinspection JSAnnotator
 export default {
@@ -8,7 +9,7 @@ export default {
    ** Headers of the page
    */
   head: {
-    title: 'Blog',
+    title: defaultConfig.meta_title,
     titleTemplate: '%s - Fame',
     meta: [
       { charset: 'utf-8' },
@@ -21,17 +22,23 @@ export default {
       {
         hid: 'description',
         name: 'description',
-        content: 'A nuxt blog by Fame'
+        content: defaultConfig.meta_description
       },
       {
         hid: 'keywords',
         name: 'keywords',
-        content: 'vue, nuxt, java, spring-boot, maven'
+        content: defaultConfig.meta_keywords
       },
-      { name: 'author', content: 'zzzzbw@gmail.com' },
+      { hid: 'author', name: 'author', content: defaultConfig.meta_author },
       {
+        hid: 'google-site-verification',
         name: 'google-site-verification',
-        content: process.env.GOOGLE_SITE_VERIFICATION
+        content: defaultConfig.google_site_verification
+      },
+      {
+        hid: 'baidu-site-verification',
+        name: 'baidu-site-verification',
+        content: defaultConfig.baidu_site_verification
       }
     ],
     link: [
@@ -115,6 +122,5 @@ export default {
     baseUrl: process.env.BASE_URL || undefined,
     proxyHost: process.env.PROXY_HOST || undefined,
     proxyPort: process.env.PROXY_PORT || undefined,
-    icp: process.env.ICP || '在 nuxt.config.js 配置你的备案号'
   }
 }

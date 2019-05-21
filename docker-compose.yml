@@ -10,7 +10,7 @@ services:
     ports:
     - "80:80"
     volumes:
-    - ./logs/nginx:/var/log/nginx
+    - ~/.fame/nginx:/var/log/nginx
     depends_on:
     - fame-server
     - fame-admin
@@ -43,7 +43,7 @@ services:
     volumes:
     - ./fame-server:/app
     - ~/.m2:/root/.m2
-    - ./logs/fame:/app/log
+    - ~/.fame/logs/fame:/app/log
     expose:
     - "9090"
     command: mvn clean spring-boot:run -Dspring-boot.run.profiles=docker -Dmaven.test.skip=true
@@ -72,9 +72,6 @@ services:
         BASE_URL: ${BASE_URL}
         PROXY_HOST: ${PROXY_HOST}
         PROXY_PORT: ${PROXY_PORT}
-        ICP: ${ICP}
-        GOOGLE_SITE_VERIFICATION: ${GOOGLE_SITE_VERIFICATION}
-        GOOGLE_ANALYTICS: ${GOOGLE_ANALYTICS}
     environment:
       TZ: Asia/Shanghai
     expose:

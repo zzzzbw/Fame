@@ -5,6 +5,8 @@ spring:
     url: jdbc:mysql://fame-mysql:3306/fame?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
     password: root
+  jpa:
+    show-sql: false
 #log
 logging:
   level:

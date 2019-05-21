@@ -42,9 +42,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean reset(String username, String oldPassword, String newPassword) {
+    public boolean reset(String oldUsername, String newUsername, String oldPassword, String newPassword) {
         User record = new User();
-        record.setUsername(username);
+        record.setUsername(oldUsername);
         User user = userMapper.selectOne(record);
         if (null == user) {
             throw new TipException("该用户名不存在");
@@ -54,6 +54,7 @@ public class UserServiceImpl implements UserService {
             throw new TipException("原密码错误");
         }
 
+        user.setUsername(newUsername);
         user.setPasswordMd5(FameUtil.getMd5(newPassword));
         int a = userMapper.updateByPrimaryKey(user);
         return a > 0;

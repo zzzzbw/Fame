@@ -3,7 +3,9 @@
     <div class="header-container">
       <nuxt-link class="logo" :to="'/'">
         <img src="/logo.png" width="26px" height="26px" />
-        <span class="text-primary" style="margin-left: 10px">Fame</span>
+        <span class="text-primary" style="margin-left: 10px">{{
+          options.blog_name || 'Fame'
+        }}</span>
       </nuxt-link>
       <ul class="tab link-list">
         <li v-for="(list, index) in links" :key="index" class="tab-item">
@@ -36,7 +38,7 @@ import _ from 'underscore'
 export default {
   directives: {
     fix: {
-      inserted (el) {
+      inserted(el) {
         let beforeScrollTop = document.documentElement.scrollTop ||
           window.pageYOffset ||
           window.scrollY ||
@@ -56,12 +58,12 @@ export default {
           }, 0)
         }, 200))
       },
-      unbind () {
+      unbind() {
         window.onscroll = null
       }
     }
   },
-  data () {
+  data() {
     return {
       links: [
         { path: '/', name: '首页' },
@@ -73,11 +75,16 @@ export default {
       menuOpen: false
     }
   },
+  computed: {
+    options() {
+      return this.$store.state.option.data
+    }
+  },
   methods: {
-    toggle () {
+    toggle() {
       this.menuOpen = !this.menuOpen
     },
-    to (url, query) {
+    to(url, query) {
       this.$router.push({ path: url, query: query })
       this.toggle()
     }

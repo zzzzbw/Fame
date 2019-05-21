@@ -7,10 +7,7 @@ import com.zbw.fame.model.dto.Archive;
 import com.zbw.fame.model.dto.CommentDto;
 import com.zbw.fame.model.dto.MetaDto;
 import com.zbw.fame.model.dto.Pagination;
-import com.zbw.fame.service.ArticleService;
-import com.zbw.fame.service.CommentService;
-import com.zbw.fame.service.EmailService;
-import com.zbw.fame.service.MetaService;
+import com.zbw.fame.service.*;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.RestResponse;
@@ -20,6 +17,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 博客前台 Controller
@@ -42,6 +40,9 @@ public class FrontController extends BaseController {
 
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private OptionService optionService;
 
     /**
      * 文章列表
@@ -204,5 +205,16 @@ public class FrontController extends BaseController {
     public RestResponse assessComment(@PathVariable Integer commentId, @RequestParam String assess) {
         commentService.assessComment(commentId, assess);
         return RestResponse.ok();
+    }
+
+    /**
+     * 获取前端的设置
+     *
+     * @return Map
+     */
+    @GetMapping("option")
+    public RestResponse getOption() {
+        Map<String, String> map = optionService.getFrontOptionMap();
+        return RestResponse.ok(map);
     }
 }

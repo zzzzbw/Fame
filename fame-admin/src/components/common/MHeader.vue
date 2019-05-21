@@ -3,7 +3,7 @@
     <div class="collapse">
       <a @click="collapse"><span class="icon-th-list"></span></a>
     </div>
-    <h3 class="title">Fame</h3>
+    <h3 class="title">Fame Dashboard</h3>
     <ul class="header-right">
       <li>
         <a @click="logout">
