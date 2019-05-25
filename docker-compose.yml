@@ -10,7 +10,7 @@ services:
     ports:
     - "80:80"
     volumes:
-    - ~/.fame/nginx:/var/log/nginx
+    - ~/.fame/logs/nginx:/var/log/nginx
     depends_on:
     - fame-server
     - fame-admin
@@ -29,7 +29,7 @@ services:
     expose:
     - "3306"
     volumes:
-    - ./mysql/mysql_data:/var/lib/mysql
+    - ~/.fame/mysql/mysql_data:/var/lib/mysql
     restart: always
 
   fame-server:
@@ -43,7 +43,7 @@ services:
     volumes:
     - ./fame-server:/app
     - ~/.m2:/root/.m2
-    - ~/.fame/logs/fame:/app/log
+    - ~/.fame/logs/server:/app/log
     expose:
     - "9090"
     command: mvn clean spring-boot:run -Dspring-boot.run.profiles=docker -Dmaven.test.skip=true
