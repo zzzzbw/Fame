@@ -20,13 +20,22 @@ public interface UserService {
     User login(String username, String password);
 
     /**
-     * 用户重置密码
+     * 修改用户密码
      *
-     * @param oldUsername 原用户名
-     * @param newUsername 新用户名
+     * @param username    用户名
      * @param oldPassword 原密码
      * @param newPassword 新密码
      * @return boolean
      */
-    boolean reset(String oldUsername, String newUsername, String oldPassword, String newPassword);
+    boolean resetPassword(String username, String oldPassword, String newPassword);
+
+    /**
+     * 修改用户信息
+     *
+     * @param oldUsername 原用户名
+     * @param newUsername 新用户名
+     * @param email       邮箱
+     * @return boolean
+     */
+    boolean resetUser(String oldUsername, String newUsername, String email);
 }

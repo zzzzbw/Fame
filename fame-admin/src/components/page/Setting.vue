@@ -22,49 +22,8 @@
               placeholder="请输入博客底部信息,可以使用html语句"
             />
           </el-form-item>
-
           <el-form-item>
             <el-button type="info" size="small" @click="submitOptions"
-              >保存修改
-            </el-button>
-          </el-form-item>
-        </el-form>
-      </el-tab-pane>
-      <el-tab-pane label="个人设置">
-        <el-form ref="form" v-model="userForm">
-          <el-form-item label="账号:">
-            <el-input
-              v-model="oldUsername"
-              placeholder="账号"
-              :disabled="true"
-            />
-          </el-form-item>
-          <el-form-item label="原密码:">
-            <el-input
-              type="password"
-              v-model="userForm.oldPassword"
-              placeholder="请输入原密码"
-            />
-          </el-form-item>
-          <el-form-item label="更换账号:">
-            <el-input v-model="userForm.username" placeholder="请输入新账号" />
-          </el-form-item>
-          <el-form-item label="新密码:">
-            <el-input
-              type="password"
-              v-model="userForm.newPassword"
-              placeholder="请输入新密码"
-            />
-          </el-form-item>
-          <el-form-item label="确认新密码:">
-            <el-input
-              type="password"
-              v-model="userForm.repeatPassword"
-              placeholder="请输入确认新密码"
-            />
-          </el-form-item>
-          <el-form-item>
-            <el-button type="info" size="small" @click="submitUser"
               >保存修改
             </el-button>
           </el-form-item>
@@ -151,6 +110,53 @@
           </div>
         </el-form>
       </el-tab-pane>
+      <el-tab-pane label="用户信息">
+        <el-form ref="form" v-model="userForm">
+          <p class="tip">修改后需重新登录</p>
+          <el-form-item label="用户名:">
+            <el-input v-model="userForm.username" placeholder="请输入用户名" />
+          </el-form-item>
+          <el-form-item label="邮箱:">
+            <el-input v-model="userForm.email" placeholder="请输入邮箱" />
+          </el-form-item>
+          <el-form-item>
+            <el-button type="info" size="small" @click="submitUser"
+              >保存修改
+            </el-button>
+          </el-form-item>
+        </el-form>
+      </el-tab-pane>
+      <el-tab-pane label="个人设置">
+        <el-form ref="form" v-model="passwordForm">
+          <p class="tip">修改后需重新登录</p>
+          <el-form-item label="原密码:">
+            <el-input
+              type="password"
+              v-model="passwordForm.oldPassword"
+              placeholder="请输入原密码"
+            />
+          </el-form-item>
+          <el-form-item label="新密码:">
+            <el-input
+              type="password"
+              v-model="passwordForm.newPassword"
+              placeholder="请输入新密码"
+            />
+          </el-form-item>
+          <el-form-item label="确认新密码:">
+            <el-input
+              type="password"
+              v-model="passwordForm.repeatPassword"
+              placeholder="请输入确认新密码"
+            />
+          </el-form-item>
+          <el-form-item>
+            <el-button type="info" size="small" @click="submitPassword"
+              >保存修改
+            </el-button>
+          </el-form-item>
+        </el-form>
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -159,9 +165,11 @@
 export default {
     data: function () {
         return {
-            oldUsername: '',
             userForm: {
                 username: '',
+                email: ""
+            },
+            passwordForm: {
                 oldPassword: '',
                 newPassword: '',
                 repeatPassword: ''
@@ -170,9 +178,10 @@ export default {
         }
     },
     methods: {
-        getUsername () {
-            this.$api.auth.getUsername().then(data => {
-                this.oldUsername = data.data
+        getUser () {
+            this.$api.auth.getUser().then(data => {
+                this.userForm.username = data.data.username
+                this.userForm.email = data.data.email
             })
         },
         getOptions () {
@@ -182,15 +191,7 @@ export default {
             })
         },
         submitUser () {
-            if (this.userForm.newPassword !== this.userForm.repeatPassword) {
-                this.$message({
-                    message: '两次输入的密码不同',
-                    type: 'error'
-                })
-                return;
-            }
-
-            this.$api.auth.resetPassword(this.oldUsername, this.userForm.username, this.userForm.oldPassword, this.userForm.newPassword).then(data => {
+            this.$api.auth.resetUser(this.userForm.username, this.userForm.email).then(data => {
                 if (data.data === true) {
                     this.$message({
                         message: '更新设置成功!',
@@ -203,6 +204,32 @@ export default {
                         type: 'error'
                     })
                 }
+                this.$router.push('/admin/login')
+            })
+        },
+        submitPassword () {
+            if (this.passwordForm.newPassword !== this.passwordForm.repeatPassword) {
+                this.$message({
+                    message: '两次输入的密码不同',
+                    type: 'error'
+                })
+                return
+            }
+
+            this.$api.auth.resetPassword(this.passwordForm.oldPassword, this.passwordForm.newPassword).then(data => {
+                if (data.data === true) {
+                    this.$message({
+                        message: '更新设置成功!',
+                        type: 'success'
+                    })
+                } else {
+                    const message = data.msg || '保存失败,未更新数据库'
+                    this.$message({
+                        message: message,
+                        type: 'error'
+                    })
+                }
+                this.$router.push('/admin/login')
             })
         },
         submitOptions () {
@@ -216,10 +243,16 @@ export default {
         }
     },
     mounted () {
-        this.getUsername()
+        this.getUser()
         this.getOptions()
     }
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.tip {
+  font-size: 14px;
+  color: #5e6d82;
+  line-height: 1.5em;
+}
+</style>

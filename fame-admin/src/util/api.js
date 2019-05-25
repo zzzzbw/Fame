@@ -8,17 +8,22 @@ const auth = {
   logout() {
     return post("/admin/logout");
   },
-  getUsername() {
-    return get("/admin/username");
+  getUser() {
+    return get("/admin/user");
   },
-  resetPassword(oldUsername, newUsername, oldPassword, newPassword) {
-    let params = {
-      oldUsername: oldUsername,
-      newUsername: newUsername,
+  resetUser(username, email) {
+    const params = {
+      username: username,
+      email: email
+    };
+    return post("/admin/reset/user", params);
+  },
+  resetPassword(oldPassword, newPassword) {
+    const params = {
       oldPassword: oldPassword,
       newPassword: newPassword
     };
-    return post("/admin/reset", params);
+    return post("/admin/reset/password", params);
   },
   getOptions() {
     return get("/admin/option/all");
@@ -30,13 +35,13 @@ const auth = {
     return get("/admin/article/count");
   },
   getLogs(page) {
-    let params = {
+    const params = {
       page: page
     };
     return get("/admin/site/logs", params);
   },
   getArticles(page, title, status, category, tag) {
-    let params = {
+    const params = {
       page: page,
       title: title,
       status: status,
@@ -55,7 +60,7 @@ const auth = {
     return del("/admin/article/" + id);
   },
   getComments(page) {
-    let params = {
+    const params = {
       page: page
     };
     return get("/admin/comment", params);
@@ -70,61 +75,61 @@ const auth = {
     return get("/admin/comment/count");
   },
   getAllCategories() {
-    let params = {
+    const params = {
       type: util.STATIC.META_CATEGORY
     };
     return get("/admin/meta", params);
   },
   getAllTags() {
-    let params = {
+    const params = {
       type: util.STATIC.META_TAG
     };
     return get("/admin/meta", params);
   },
   saveCategory(name) {
-    let params = {
+    const params = {
       name: name,
       type: util.STATIC.META_CATEGORY
     };
     return post("/admin/meta", params);
   },
   saveTag(name) {
-    let params = {
+    const params = {
       name: name,
       type: util.STATIC.META_TAG
     };
     return post("/admin/meta", params);
   },
   updateCategory(id, name) {
-    let params = {
+    const params = {
       name: name,
       type: util.STATIC.META_CATEGORY
     };
     return post("/admin/meta/" + id, params);
   },
   updateTag(id, name) {
-    let params = {
+    const params = {
       name: name,
       type: util.STATIC.META_TAG
     };
     return post("/admin/meta/" + id, params);
   },
   deleteCategory(name) {
-    let params = {
+    const params = {
       name: name,
       type: util.STATIC.META_CATEGORY
     };
     return del("/admin/meta", params);
   },
   deleteTag(name) {
-    let params = {
+    const params = {
       name: name,
       type: util.STATIC.META_TAG
     };
     return del("/admin/meta", params);
   },
   getPages(page) {
-    let params = {
+    const params = {
       page: page
     };
     return get("/admin/page", params);
