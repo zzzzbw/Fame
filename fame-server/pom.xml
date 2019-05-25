@@ -55,6 +55,12 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
 
+        <!-- jpa 目前用于自动创建表 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
         <!-- mybatis -->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>

@@ -3,17 +3,16 @@
     <p class="copyright">
       © 2017 | Proudly powered by
       <a href="https://github.com/zzzzbw/Fame" target="_blank">Fame</a>
-      <br />
-      <a href="http://www.miitbeian.gov.cn" target="_blank"> {{ icp }} </a>
     </p>
+    <div v-highlight class="markdown-body" v-html="options.blog_footer"></div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 export default {
-  data: function() {
-    return {
-      icp: process.env.icp
+  computed: {
+    options() {
+      return this.$store.state.option.data
     }
   }
 }

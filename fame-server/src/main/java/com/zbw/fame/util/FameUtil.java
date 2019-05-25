@@ -206,4 +206,36 @@ public class FameUtil {
         flag = flag.toUpperCase();
         return str.indexOf(flag);
     }
+
+
+    /**
+     * 转换String到对应数据类型
+     *
+     * @param value String值
+     * @param type  数据类型
+     * @param <T>   T
+     * @return 值
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T convertStringToType(String value, Class type) {
+        if (type.equals(Boolean.class) || type.equals(boolean.class)) {
+            return (T) Boolean.valueOf(value);
+        } else if (type.equals(Integer.class) || type.equals(int.class)) {
+            return (T) Integer.valueOf(value);
+        } else if (type.equals(Byte.class) || type.equals(byte.class)) {
+            return (T) Byte.valueOf(value);
+        } else if (type.equals(Short.class) || type.equals(short.class)) {
+            return (T) Short.valueOf(value);
+        } else if (type.equals(Long.class) || type.equals(long.class)) {
+            return (T) Long.valueOf(value);
+        } else if (type.equals(Float.class) || type.equals(float.class)) {
+            return (T) Float.valueOf(value);
+        } else if (type.equals(Double.class) || type.equals(double.class)) {
+            return (T) Double.valueOf(value);
+        } else if (type.equals(Character.class) || type.equals(char.class)) {
+            return (T) Character.valueOf(value.charAt(0));
+        }
+
+        return (T) value;
+    }
 }

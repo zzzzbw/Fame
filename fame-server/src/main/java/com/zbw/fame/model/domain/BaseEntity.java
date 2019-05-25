@@ -2,10 +2,7 @@ package com.zbw.fame.model.domain;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * BaseModel类
@@ -13,6 +10,7 @@ import javax.persistence.Id;
  * @author zbw
  * @since 2017/7/5 23:59
  */
+@MappedSuperclass
 @Data
 public class BaseEntity {
 

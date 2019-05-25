@@ -1,6 +1,11 @@
 import api from '~/plugins/api'
 
 export const actions = {
+  // 前端设置
+  async getOptions({ commit }) {
+    const { data } = await api.getOptions()
+    commit('option/SET_DATA', data)
+  },
   // 文章详情
   async getArticle({ commit }, id) {
     const { data } = await api.getArticle(id)
@@ -76,5 +81,9 @@ export const actions = {
       commit('comment/DISAGREE_COMMENT', commentId)
     }
     return res
+  },
+  // 全局服务初始化
+  async nuxtServerInit({ dispatch }) {
+    await dispatch('getOptions')
   }
 }
