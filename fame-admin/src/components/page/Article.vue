@@ -65,9 +65,15 @@
               </el-form-item>
               <el-form-item>
                 <el-button-group>
-                  <el-button type="primary" size="small" @click="onPublish"
-                    >发布文章
-                  </el-button>
+                  <el-row>
+                    <el-button type="primary" size="small" @click="onSave"
+                      >保存文章
+                    </el-button>
+
+                    <el-button type="primary" size="small" @click="onPublish"
+                      >发布文章
+                    </el-button>
+                  </el-row>
                 </el-button-group>
               </el-form-item>
             </div>
@@ -169,7 +175,7 @@ export default {
         }
       });
     },
-    saveArticle(formName) {
+    publishArticle(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
           let params = this.article;
@@ -191,7 +197,33 @@ export default {
         }
       });
     },
+    saveArticle(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          let params = this.article;
+          params.tags = this.$util.tagsToString(this.article.tags);
+          this.$api.auth.saveArticle(params).then(data => {
+            if (data.success) {
+              this.$message({
+                message: "保存文章成功!",
+                type: "success"
+              });
+              this.$route.params.id = data.data;
+              this.getArticle();
+            } else {
+              this.$message({
+                message: "保存文章失败," + data.msg,
+                type: "error"
+              });
+            }
+          });
+        }
+      });
+    },
     onPublish() {
+      this.publishArticle("articleForm");
+    },
+    onSave() {
       this.saveArticle("articleForm");
     },
     init() {

@@ -94,8 +94,8 @@ public class ArticleController extends BaseController {
         article.setStatus(status);
         article.setAllowComment(allowComment);
         article.setAuthorId(user.getId());
-        articleService.saveArticle(article);
-        return RestResponse.ok("保存文章成功");
+        Integer articleId = articleService.saveArticle(article);
+        return RestResponse.ok(articleId);
     }
 
     /**
