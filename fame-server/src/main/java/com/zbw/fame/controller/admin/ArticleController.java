@@ -16,14 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Date;
-
-import static com.zbw.fame.util.FameUtil.getDateFromString;
-
 /**
  * 后台文章管理 Controller
  *
@@ -90,8 +82,8 @@ public class ArticleController extends BaseController {
                                     @RequestParam(value = "category") String category,
                                     @RequestParam(value = "status", defaultValue = Types.DRAFT) String status,
                                     @RequestParam(value = "allowComment", defaultValue = "false") Boolean allowComment,
-                                    @RequestParam(value = "created") String created,
-                                    @RequestParam(value = "modified") String modified) {
+                                    @RequestParam(value = "created") Long created,
+                                    @RequestParam(value = "modified") Long modified) {
         User user = this.user();
         Article article = new Article();
         if (!StringUtils.isEmpty(id)) {
@@ -104,8 +96,8 @@ public class ArticleController extends BaseController {
         article.setStatus(status);
         article.setAllowComment(allowComment);
         article.setAuthorId(user.getId());
-        article.setCreated(getDateFromString(created));
-        article.setModified(getDateFromString(modified));
+        article.setCreated(new java.util.Date(created));
+        article.setModified(new java.util.Date(modified));
         Integer articleId = articleService.saveArticle(article);
         return RestResponse.ok(articleId);
     }
