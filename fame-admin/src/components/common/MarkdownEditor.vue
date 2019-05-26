@@ -65,7 +65,7 @@ export default {
     };
   },
   methods: {
-    markdownFullScreen(status, value) {
+    markdownFullScreen(status) {
       if (status) {
         this.$root.$emit("indexUp");
       } else {

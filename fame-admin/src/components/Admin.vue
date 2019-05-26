@@ -37,7 +37,6 @@ export default {
     }
   },
   created () {
-    document.title = 'Fame Admin'
     this.$root.$on('indexDown', this.indexDown)
     this.$root.$on('indexUp', this.indexUp)
   }

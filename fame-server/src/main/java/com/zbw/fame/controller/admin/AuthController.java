@@ -61,20 +61,28 @@ public class AuthController extends BaseController {
     }
 
     /**
-     * 重置密码
+     * 重置用户名密码
      *
-     * @param username    用户名
+     * @param oldUsername 原用户名
+     * @param newUsername 新用户名
      * @param oldPassword 旧密码
      * @param newPassword 新密码
      * @return {@see Boolean}
      */
     @PostMapping("reset")
-    public RestResponse resetPassword(@RequestParam String username, @RequestParam String oldPassword, @RequestParam String newPassword) {
-        if (!username.equals(this.user().getUsername())) {
+    public RestResponse resetPassword(@RequestParam String oldUsername, @RequestParam String newUsername, @RequestParam String oldPassword, @RequestParam String newPassword) {
+        if (StringUtils.isEmpty(oldPassword)
+                || StringUtils.isEmpty(newUsername)
+                || StringUtils.isEmpty(oldPassword)
+                || StringUtils.isEmpty(newPassword)) {
+            return RestResponse.fail("填写数据不能为空");
+        }
+
+        if (!oldUsername.equals(this.user().getUsername())) {
             return RestResponse.fail("用户名与登陆的不符合");
         }
 
-        boolean result = userService.reset(username, oldPassword, newPassword);
+        boolean result = userService.reset(oldUsername, newUsername, oldPassword, newPassword);
         return RestResponse.ok(result);
     }
 

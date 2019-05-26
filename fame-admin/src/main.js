@@ -6,10 +6,6 @@ import FameUtil from "./util/fame";
 import dayjs from "dayjs";
 import axios from "axios";
 import "./plugins/element.js";
-import mavonEditor from "mavon-editor";
-import "mavon-editor/dist/css/index.css";
-
-Vue.use(mavonEditor);
 
 // 时间过滤器
 Vue.filter("time", function(data, fmt) {
