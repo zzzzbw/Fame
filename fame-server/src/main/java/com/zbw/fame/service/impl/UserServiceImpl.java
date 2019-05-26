@@ -8,6 +8,7 @@ import com.zbw.fame.util.FameUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.Date;
 
@@ -26,25 +27,30 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User login(String username, String password) {
-        User record = new User();
-        record.setUsername(username);
-        String md5 = FameUtil.getMd5(password);
-        record.setPasswordMd5(md5);
-        User user = userMapper.selectOne(record);
-        if (user == null) {
+        Example example = new Example(User.class);
+        example.createCriteria()
+                .orEqualTo("username", username)
+                .orEqualTo("email", username);
+        User user = userMapper.selectOneByExample(example);
+        if (null == user) {
             throw new TipException("用户名或者密码错误");
+        }
+        String md5 = FameUtil.getMd5(password);
+        if(!md5.equals(user.getPasswordMd5())){
+            throw  new TipException("用户名或者密码错误");
         }
         user.setLogged(new Date());
         userMapper.updateByPrimaryKey(user);
         //清空密码
         user.setPasswordMd5(null);
         return user;
+
     }
 
     @Override
-    public boolean reset(String oldUsername, String newUsername, String oldPassword, String newPassword) {
+    public boolean resetPassword(String username, String oldPassword, String newPassword) {
         User record = new User();
-        record.setUsername(oldUsername);
+        record.setUsername(username);
         User user = userMapper.selectOne(record);
         if (null == user) {
             throw new TipException("该用户名不存在");
@@ -54,9 +60,22 @@ public class UserServiceImpl implements UserService {
             throw new TipException("原密码错误");
         }
 
-        user.setUsername(newUsername);
         user.setPasswordMd5(FameUtil.getMd5(newPassword));
-        int a = userMapper.updateByPrimaryKey(user);
-        return a > 0;
+        return userMapper.updateByPrimaryKey(user) > 0;
+    }
+
+    @Override
+    public boolean resetUser(String oldUsername, String newUsername, String email) {
+        User record = new User();
+        record.setUsername(oldUsername);
+        User user = userMapper.selectOne(record);
+        if (null == user) {
+            throw new TipException("该用户名不存在");
+        }
+
+        user.setUsername(newUsername);
+        user.setEmail(email);
+
+        return userMapper.updateByPrimaryKey(user) > 0;
     }
 }
