@@ -63,13 +63,32 @@
                 >
                 </el-switch>
               </el-form-item>
+              <el-form-item label="创建日期" text="aasdfasdf">
+                <el-date-picker
+                  v-model="article.created"
+                  type="datetime"
+                  placeholder="创建日期"
+                  size="small"
+                  :editable="flagFalse"
+                >
+                </el-date-picker>
+              </el-form-item>
+              <el-form-item label="修改日期" text="aasdfasdf">
+                <el-date-picker
+                  v-model="article.modified"
+                  type="datetime"
+                  placeholder="修改日期"
+                  size="small"
+                  :editable="flagFalse"
+                >
+                </el-date-picker>
+              </el-form-item>
               <el-form-item>
                 <el-button-group>
                   <el-row>
                     <el-button type="primary" size="small" @click="onSave"
                       >保存文章
                     </el-button>
-
                     <el-button type="primary" size="small" @click="onPublish"
                       >发布文章
                     </el-button>
@@ -99,7 +118,9 @@ export default {
         tags: "",
         category: "",
         content: "",
-        status: ""
+        status: "",
+        created: "",
+        modified: ""
       },
       rules: {
         title: [
@@ -110,7 +131,8 @@ export default {
         ]
       },
       tags: [],
-      categories: []
+      categories: [],
+      flagFalse: false
     };
   },
   methods: {
@@ -129,6 +151,8 @@ export default {
         this.article.category = "";
         this.article.content = "";
         this.article.status = this.$util.STATIC.STATUS_PUBLISH;
+        this.article.created = Date.now();
+        this.article.modified = Date.now();
       }
     },
     initArticle(data) {
@@ -138,6 +162,8 @@ export default {
       this.article.category = data.category;
       this.article.content = data.content;
       this.article.status = data.status;
+      this.article.created = data.created;
+      this.article.modified = data.modified;
     },
     getTags() {
       this.$api.auth.getAllTags().then(data => {
