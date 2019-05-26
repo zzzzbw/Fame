@@ -63,7 +63,7 @@
                 >
                 </el-switch>
               </el-form-item>
-              <el-form-item label="创建日期" text="aasdfasdf">
+              <el-form-item label="创建日期">
                 <el-date-picker
                   v-model="article.created"
                   type="datetime"
@@ -73,7 +73,7 @@
                 >
                 </el-date-picker>
               </el-form-item>
-              <el-form-item label="修改日期" text="aasdfasdf">
+              <el-form-item label="修改日期">
                 <el-date-picker
                   v-model="article.modified"
                   type="datetime"
