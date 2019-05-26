@@ -70,6 +70,7 @@
                   placeholder="创建日期"
                   size="small"
                   :editable="flagFalse"
+                  value-format="timestamp"
                 >
                 </el-date-picker>
               </el-form-item>
@@ -80,6 +81,7 @@
                   placeholder="修改日期"
                   size="small"
                   :editable="flagFalse"
+                  value-format="timestamp"
                 >
                 </el-date-picker>
               </el-form-item>
@@ -162,7 +164,7 @@ export default {
       this.article.category = data.category;
       this.article.content = data.content;
       this.article.status = data.status;
-      this.article.created = data.created;
+      this.article.created = new Date(data.created).getTime();
       this.article.modified = Date.now();
     },
     getTags() {
