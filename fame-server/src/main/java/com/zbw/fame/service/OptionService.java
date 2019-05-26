@@ -32,7 +32,7 @@ public interface OptionService {
      * @param key 设置key
      * @return value
      */
-    <T> T get(String key);
+    String get(String key);
 
     /**
      * 保存设置
