@@ -16,7 +16,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
@@ -253,7 +252,7 @@ public class FameUtil {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             return formatter.parse(dateInString);
         } catch (Exception e) {
-            throw new TipException(e);
+            throw new TipException("日期转换错误："+e);
         }
     }
 }
