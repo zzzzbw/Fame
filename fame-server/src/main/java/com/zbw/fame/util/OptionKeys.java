@@ -82,6 +82,11 @@ public interface OptionKeys {
      */
     String EMAIL_PASSWORD = "email_password";
 
+    /**
+     * 邮件标题
+     */
+    String EMAIL_SUBJECT = "email_subject";
+
 
     /**
      * 传给前端的Option的keys

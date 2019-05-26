@@ -16,6 +16,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
@@ -45,27 +46,19 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     @Async
-    public void sendEmailToAdmin(Comment comments) {
-        boolean isEmail = optionService.get(OptionKeys.IS_EMAIL, Boolean.FALSE);
-        if (!isEmail) {
+    public void sendEmailToAdmin(Comment comment) {
+        if (!isEmail(comment.getEmail())) {
             return;
         }
-        String websiteName = optionService.get(OptionKeys.BLOG_NAME);
-        String website = optionService.get(OptionKeys.BLOG_WEBSITE);
 
-        Context context = new Context();
-        context.setVariable("websiteName", websiteName);
-        context.setVariable("website", website);
-        context.setVariable("name", comments.getName());
-        context.setVariable("content", comments.getContent());
-        context.setVariable("articleId", comments.getArticleId());
+        Context context = getEmailContext(comment);
         String content = templateEngine.process("mail_admin", context);
 
         String logData = content + ";  发送给管理员";
         log.info("sendEmailToAdmin start: {}", new Date().toString());
         try {
             String emailUsername = optionService.get(OptionKeys.EMAIL_USERNAME);
-            sendEmail(FameConsts.EMAIL_TEMPLATE_DEFAULT_SUBJECT, content, emailUsername);
+            sendEmail(content, emailUsername);
             logService.save(Types.LOG_ACTION_SEND_EMAIL, logData, Types.LOG_MESSAGE_SEND_EMAIL_SUCCESS, Types.LOG_TYPE_EMAIL);
         } catch (Exception e) {
             logService.save(Types.LOG_ACTION_SEND_EMAIL, logData, Types.LOG_MESSAGE_SEND_EMAIL_FAIL, Types.LOG_TYPE_EMAIL);
@@ -75,26 +68,18 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     @Async
-    public void sendEmailToUser(Comment comments, String replyEmail) {
-        boolean isEmail = optionService.get(OptionKeys.IS_EMAIL, Boolean.FALSE);
-        if (!isEmail) {
+    public void sendEmailToUser(Comment comment, String replyEmail) {
+        if (!isEmail(replyEmail)) {
             return;
         }
-        String websiteName = optionService.get(OptionKeys.BLOG_NAME);
-        String website = optionService.get(OptionKeys.BLOG_WEBSITE);
 
-        Context context = new Context();
-        context.setVariable("websiteName", websiteName);
-        context.setVariable("website", website);
-        context.setVariable("name", comments.getName());
-        context.setVariable("content", comments.getContent());
-        context.setVariable("articleId", comments.getArticleId());
-        String content = templateEngine.process("mail_admin", context);
+        Context context = getEmailContext(comment);
+        String content = templateEngine.process("mail_user", context);
 
         String logData = content + ";  发送给:" + replyEmail;
         log.info("sendEmailToUser start: {}", new Date().toString());
         try {
-            sendEmail(FameConsts.EMAIL_TEMPLATE_DEFAULT_SUBJECT, content, replyEmail);
+            sendEmail(content, replyEmail);
             logService.save(Types.LOG_ACTION_SEND_EMAIL, logData, Types.LOG_MESSAGE_SEND_EMAIL_SUCCESS, Types.LOG_TYPE_EMAIL);
         } catch (Exception e) {
             logService.save(Types.LOG_ACTION_SEND_EMAIL, logData, Types.LOG_MESSAGE_SEND_EMAIL_FAIL, Types.LOG_TYPE_EMAIL);
@@ -103,16 +88,59 @@ public class EmailServiceImpl implements EmailService {
     }
 
     /**
+     * 判定是否要发送该邮件
+     *
+     * @param email 收件人邮箱
+     * @return 是否发送邮件
+     */
+    private boolean isEmail(String email) {
+        boolean isEmail = optionService.get(OptionKeys.IS_EMAIL, Boolean.FALSE);
+        if (!isEmail) {
+            return false;
+        }
+
+        String adminUserEmail = optionService.get(OptionKeys.EMAIL_USERNAME, "");
+        // 如果是管理员的回复则不必通知管理员
+        return StringUtils.isEmpty(adminUserEmail) || !adminUserEmail.equals(email);
+    }
+
+    /**
+     * 获取邮件Context
+     *
+     * @param comment 评论
+     * @return {@see Context}
+     */
+    private Context getEmailContext(Comment comment) {
+        Context context = new Context();
+
+        String websiteName = optionService.get(OptionKeys.BLOG_NAME);
+        String website = optionService.get(OptionKeys.BLOG_WEBSITE);
+
+        // 如果网址最后没有/,则补上
+        if (!StringUtils.isEmpty(website)
+                && website.lastIndexOf("/") != website.length()) {
+            website = website + "/";
+        }
+
+        context.setVariable("websiteName", websiteName);
+        context.setVariable("website", website);
+        context.setVariable("name", comment.getName());
+        context.setVariable("content", comment.getContent());
+        context.setVariable("articleId", String.valueOf(comment.getArticleId()));
+        return context;
+    }
+
+    /**
      * 发送邮件
      *
-     * @param subject 邮件标题
      * @param content 邮件内容(html)
      * @param to      收件人
      * @throws MessagingException
      */
-    private void sendEmail(String subject, String content, String to) throws MessagingException {
+    private void sendEmail(String content, String to) throws MessagingException {
+        String subject = optionService.get(OptionKeys.EMAIL_SUBJECT, FameConsts.EMAIL_TEMPLATE_DEFAULT_SUBJECT);
         String host = optionService.get(OptionKeys.EMAIL_HOST);
-        Integer port = optionService.get(OptionKeys.EMAIL_PORT);
+        Integer port = optionService.get(OptionKeys.EMAIL_PORT, 25);
         String username = optionService.get(OptionKeys.EMAIL_USERNAME);
         String password = optionService.get(OptionKeys.EMAIL_PASSWORD);
 
