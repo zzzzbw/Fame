@@ -163,7 +163,7 @@ export default {
       this.article.content = data.content;
       this.article.status = data.status;
       this.article.created = data.created;
-      this.article.modified = data.modified;
+      this.article.modified = Date.now();
     },
     getTags() {
       this.$api.auth.getAllTags().then(data => {
