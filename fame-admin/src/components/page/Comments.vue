@@ -18,10 +18,16 @@
         show-overflow-tooltip
       ></el-table-column>
       <el-table-column
-        prop="created"
+        prop=""
         label="评论日期"
+        width="160"
         show-overflow-tooltip
-      ></el-table-column>
+      >
+        <template slot-scope="scope">
+          <i class="el-icon-time"></i>
+          <span style="margin-left: 10px">{{ scope.row.created }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="150">
         <template slot-scope="scope">
           <el-button size="small" @click="handleDetail(scope.row.id)"
