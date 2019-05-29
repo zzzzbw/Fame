@@ -48,10 +48,9 @@ public class OptionServiceImpl implements OptionService {
                 FameUtil.convertStringToType(sysOption.getOptionValue(), defaultValue.getClass()));
     }
 
-
     @Override
-    public <T> T get(String key) {
-        return this.get(key, null);
+    public String get(String key) {
+        return this.get(key, "");
     }
 
     @Override

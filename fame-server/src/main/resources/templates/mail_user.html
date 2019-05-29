@@ -7,9 +7,9 @@
     <title th:text="${websiteName}+'Email'"></title>
 </head>
 <body>
-<h3 th:text="${websiteName}+'有新的评论回复'"></h3>
+<h3 th:text="'你在'+${websiteName}+'的评论有人回复了,快去查看吧!'"></h3>
 <p th:text="'来自'+${name}+'的评论：'+${content}"></p>
 <br>
-<a th:href="${website}+'/article/'+${articleId}">查看详情</a>
+<a th:href="${website}+'article/'+${articleId}">查看详情</a>
 </body>
 </html>

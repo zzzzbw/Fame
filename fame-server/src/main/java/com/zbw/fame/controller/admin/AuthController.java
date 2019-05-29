@@ -61,28 +61,46 @@ public class AuthController extends BaseController {
     }
 
     /**
-     * 重置用户名密码
+     * 修改用户名密码
      *
-     * @param oldUsername 原用户名
-     * @param newUsername 新用户名
      * @param oldPassword 旧密码
      * @param newPassword 新密码
      * @return {@see Boolean}
      */
-    @PostMapping("reset")
-    public RestResponse resetPassword(@RequestParam String oldUsername, @RequestParam String newUsername, @RequestParam String oldPassword, @RequestParam String newPassword) {
-        if (StringUtils.isEmpty(oldPassword)
-                || StringUtils.isEmpty(newUsername)
-                || StringUtils.isEmpty(oldPassword)
-                || StringUtils.isEmpty(newPassword)) {
+    @PostMapping("reset/password")
+    public RestResponse resetPassword(@RequestParam String oldPassword, @RequestParam String newPassword) {
+        User user = this.user();
+        if (null == user) {
+            return RestResponse.fail("没有用户登陆");
+        }
+
+        if (StringUtils.isEmpty(newPassword) || StringUtils.isEmpty(oldPassword)) {
             return RestResponse.fail("填写数据不能为空");
         }
 
-        if (!oldUsername.equals(this.user().getUsername())) {
-            return RestResponse.fail("用户名与登陆的不符合");
+        boolean result = userService.resetPassword(user.getUsername(), oldPassword, newPassword);
+
+        this.logout();
+        return RestResponse.ok(result);
+    }
+
+    /**
+     * 修改用户信息
+     *
+     * @return {@see Boolean}
+     */
+    @PostMapping("reset/user")
+    public RestResponse resetUser(@RequestParam String username, @RequestParam String email) {
+        User user = this.user();
+        if (null == user) {
+            return RestResponse.fail("没有用户登陆");
+        }
+        if (StringUtils.isEmpty(username) || StringUtils.isEmpty(email)) {
+            return RestResponse.fail("填写数据不能为空");
         }
 
-        boolean result = userService.reset(oldUsername, newUsername, oldPassword, newPassword);
+        boolean result = userService.resetUser(user.getUsername(),username,email);
+        this.logout();
         return RestResponse.ok(result);
     }
 
@@ -91,14 +109,14 @@ public class AuthController extends BaseController {
      *
      * @return {@see String}
      */
-    @GetMapping("username")
-    public RestResponse username() {
+    @GetMapping("user")
+    public RestResponse getUser() {
         User user = this.user();
         if (null == user) {
             return RestResponse.fail("没有用户登陆");
         }
 
-        return RestResponse.ok(user.getUsername());
+        return RestResponse.ok(user);
     }
 
 }

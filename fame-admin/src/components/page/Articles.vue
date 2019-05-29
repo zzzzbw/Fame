@@ -15,7 +15,7 @@
           </el-radio-button>
         </el-radio-group>
       </div>
-      <div style="  display: flex;justify-content: space-between;">
+      <div style="display: flex;justify-content: space-between;">
         <el-input
           v-model="tool.title"
           placeholder="搜索文章标题"
@@ -60,13 +60,13 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="发布日期" width="150" show-overflow-tooltip>
+      <el-table-column label="发布日期" width="160" show-overflow-tooltip>
         <template slot-scope="scope">
           <i class="el-icon-time"></i>
           <span style="margin-left: 10px">{{ scope.row.publish }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="修改日期" width="150" show-overflow-tooltip>
+      <el-table-column label="修改日期" width="160" show-overflow-tooltip>
         <template slot-scope="scope">
           <i class="el-icon-time"></i>
           <span style="margin-left: 10px">{{ scope.row.modified }}</span>

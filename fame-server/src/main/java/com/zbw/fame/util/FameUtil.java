@@ -16,7 +16,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 
 /**
  * 公用工具类
@@ -237,5 +239,20 @@ public class FameUtil {
         }
 
         return (T) value;
+    }
+
+    /**
+     * 日期转化
+     *
+     * @param dateInString 需要转换日期的字符串
+     * @return 转换后的日期
+     */
+    public static Date getDateFromString(String dateInString) {
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            return formatter.parse(dateInString);
+        } catch (Exception e) {
+            throw new TipException("日期转换错误："+e);
+        }
     }
 }

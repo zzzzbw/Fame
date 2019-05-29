@@ -9,7 +9,10 @@
         label-width="0px"
       >
         <el-form-item prop="username">
-          <el-input v-model="userForm.username" placeholder="用户名"></el-input>
+          <el-input
+            v-model="userForm.username"
+            placeholder="用户名或邮箱"
+          ></el-input>
         </el-form-item>
         <el-form-item prop="password">
           <el-input
@@ -21,8 +24,8 @@
         </el-form-item>
         <div class="login-btn">
           <el-button type="primary" @click="submitForm('userForm')"
-            >登录</el-button
-          >
+            >登录
+          </el-button>
         </div>
       </el-form>
     </div>
@@ -31,50 +34,50 @@
 
 <script type="text/ecmascript-6">
 export default {
-  data: function () {
-    return {
-      userForm: {
-        username: '',
-        password: ''
-      },
-      rules: {
-        username: [
-          {required: true, message: '请输入用户名', trigger: 'blur'}
-        ],
-        password: [
-          {required: true, message: '请输入密码', trigger: 'blur'}
-        ]
-      }
-    }
-  },
-  methods: {
-    submitForm (formName) {
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          this.$api.auth.login(this.userForm).then(data => {
-            if (data.success) {
-              this.$router.push('/admin')
-              this.$message({
-                message: '登录成功!',
-                type: 'success'
-              })
-            } else {
-              this.$message({
-                message: '登录失败,' + data.msg,
-                type: 'error'
-              })
+    data: function () {
+        return {
+            userForm: {
+                username: '',
+                password: ''
+            },
+            rules: {
+                username: [
+                    { required: true, message: '请输入用户名或邮箱', trigger: 'blur' }
+                ],
+                password: [
+                    { required: true, message: '请输入密码', trigger: 'blur' }
+                ]
             }
-          })
-        } else {
-          this.$message({
-            message: '登录失败',
-            type: 'error'
-          })
-          return false
         }
-      })
+    },
+    methods: {
+        submitForm (formName) {
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    this.$api.auth.login(this.userForm).then(data => {
+                        if (data.success) {
+                            this.$router.push('/admin')
+                            this.$message({
+                                message: '登录成功!',
+                                type: 'success'
+                            })
+                        } else {
+                            this.$message({
+                                message: '登录失败,' + data.msg,
+                                type: 'error'
+                            })
+                        }
+                    })
+                } else {
+                    this.$message({
+                        message: '登录失败',
+                        type: 'error'
+                    })
+                    return false
+                }
+            })
+        }
     }
-  }
 }
 </script>
 
