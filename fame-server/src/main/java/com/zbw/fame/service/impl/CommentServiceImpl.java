@@ -32,7 +32,7 @@ import org.springframework.util.StringUtils;
 @Transactional(rollbackFor = Throwable.class)
 public class CommentServiceImpl implements CommentService {
 
-    private static final String COMMENT_CACHE_NAME = "comments";
+    public static final String COMMENT_CACHE_NAME = "comments";
 
     @Autowired
     private CommentMapper commentMapper;
@@ -42,7 +42,7 @@ public class CommentServiceImpl implements CommentService {
 
 
     @Override
-    @CacheEvict(value = COMMENT_CACHE_NAME, allEntries = true, beforeInvocation = true)
+    @CacheEvict(value = {COMMENT_CACHE_NAME, ArticleServiceImpl.ARTICLE_CACHE_NAME}, allEntries = true, beforeInvocation = true)
     public void save(Comment comment) {
         if (null == comment) {
             throw new TipException("评论对象为空");
