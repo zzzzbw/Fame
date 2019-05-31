@@ -119,10 +119,11 @@ export default {
 <style scoped>
 .markdown-toc {
   position: fixed !important;
-  max-width: calc(100% - 1200px);
+  min-width: calc((100% - 1200px) / 2);
+  max-width: calc((100% - 1000px) / 2);
   max-height: calc(100% - 120px);
+  right: 0px;
   top: 100px;
-  right: 40px;
   opacity: 0;
   transition: all 0.3s;
 }
