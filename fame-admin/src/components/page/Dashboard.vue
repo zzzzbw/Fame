@@ -75,12 +75,21 @@ export default {
   },
   methods: {
     getCommentCount(data) {
+      if (!data.success) {
+        return;
+      }
       this.commentCount = data.data;
     },
     getArticleCount(data) {
+      if (!data.success) {
+        return;
+      }
       this.articleCount = data.data;
     },
     getComments(data) {
+      if (!data.success) {
+        return;
+      }
       for (let key in data.data.list) {
         let comment = data.data.list[key];
         if (comment.content.length > 200) {
@@ -90,6 +99,9 @@ export default {
       }
     },
     getArticle(data) {
+      if (!data.success) {
+        return;
+      }
       for (let key in data.data.list) {
         let d = data.data.list[key];
         let article = d.title;

@@ -39,7 +39,7 @@ import java.util.List;
 @Transactional(rollbackFor = Throwable.class)
 public class ArticleServiceImpl implements ArticleService {
 
-    private static final String ARTICLE_CACHE_NAME = "articles";
+    public static final String ARTICLE_CACHE_NAME = "articles";
 
     @Autowired
     private ArticleMapper articleMapper;
