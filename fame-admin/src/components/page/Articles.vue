@@ -36,11 +36,16 @@
 
     <el-table :data="articleDatas" border stripe style="width: 100%">
       <el-table-column prop="id" label="id" width="60"></el-table-column>
-      <el-table-column
-        prop="title"
-        label="标题"
-        show-overflow-tooltip
-      ></el-table-column>
+      <el-table-column prop="title" label="标题" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <el-link
+            :href="'/article/' + scope.row.id"
+            target="_blank"
+            type="primary"
+            >{{ scope.row.title }}</el-link
+          >
+        </template>
+      </el-table-column>
       <el-table-column prop="category" label="分类" show-overflow-tooltip>
         <template slot-scope="scope">
           <span class="meta">{{ scope.row.category }}</span>
