@@ -100,7 +100,11 @@
                       v-if="this.article.id !== ''"
                     >
                       <a
-                        :href="'/article/' + this.article.id"
+                        :href="
+                          this.$serverConfig.frontUrl +
+                            'article/' +
+                            this.article.id
+                        "
                         target="_blank"
                         style="color: #FFFFFF;"
                         >查看</a
@@ -288,6 +292,7 @@ export default {
 .el-select {
   width: 100%;
 }
+
 a {
   text-decoration: none;
 }
