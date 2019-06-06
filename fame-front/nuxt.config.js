@@ -66,11 +66,11 @@ export default {
   feed: feedConfig.config,
   googleAnalytics: googleAnalytics.config,
   plugins: [
-    { src: '~plugins/highlight.js' },
-    { src: '~plugins/clickoutside.js' },
-    { src: '~plugins/filters.js' },
-    { src: '~plugins/global.js' },
-    { src: '~plugins/tools.js' }
+    { src: '~plugins/highlight.js', ssr: false },
+    { src: '~plugins/clickoutside.js', ssr: false },
+    { src: '~plugins/filters.js', ssr: false },
+    { src: '~plugins/global.js', ssr: false },
+    { src: '~plugins/tools.js', ssr: false }
   ],
   router: {
     linkActiveClass: 'active',

@@ -1,31 +1,52 @@
-const axios = require('axios')
-const baseUrl = process.env.BASE_URL || 'http://127.0.0.1:3000'
-const host = process.env.PROXY_HOST || '127.0.0.1:9090'
-const articlesUrl = 'http://' + host + '/api/article?page=1&limit=999'
+import axios from 'axios'
+import serverConfig from './server-config'
+import defaultConfig from './default-config'
+
+const articlesUrl = serverConfig.api + 'api/article?page=1&limit=999'
+const optionsUrl = serverConfig.api + 'api/option'
 
 const config = [
   // A default feed configuration object
   {
     path: '/feed.xml', // The route to your feed.
     async create(feed) {
+      const optionsResp = await axios.get(optionsUrl)
+      if (optionsResp.status !== 200 || !optionsResp.data.success) {
+        console.error(
+          'feed optionsResp error! status: ' +
+            optionsResp.status +
+            ', data: ' +
+            optionsResp.data
+        )
+        return
+      }
+      const options = optionsResp.data.data
       feed.options = {
-        title: 'Fame Blog',
-        link: baseUrl + '/feed.xml',
-        description: 'A nuxt blog by Fame'
+        title: options.meta_title || defaultConfig.meta_title,
+        link: options.blog_website + '/feed.xml',
+        description: options.meta_description || defaultConfig.meta_description
       }
 
-      const res = await axios.get(articlesUrl)
-      const articles = res.data.data.list
+      const articleResp = await axios.get(articlesUrl)
+      if (articleResp.status !== 200 || !articleResp.data.success) {
+        console.error(
+          'feed articleResp error! status: ' +
+            articleResp.status +
+            ', data: ' +
+            articleResp.data
+        )
+        return
+      }
+      const articles = articleResp.data.data.list
       articles.forEach(article => {
         feed.addItem({
           title: article.title,
           id: article.id,
-          link: baseUrl + '/article/' + article.id,
+          link: options.blog_website + '/article/' + article.id,
           description: article.content,
           content: article.content
         })
       })
-
       feed.addCategory('Nuxt.js')
     }, // The create function (see below)
     cacheTime: 1000 * 60 * 15, // How long should the feed be cached
@@ -33,4 +54,6 @@ const config = [
   }
 ]
 
-exports.config = config
+export default {
+  config
+}

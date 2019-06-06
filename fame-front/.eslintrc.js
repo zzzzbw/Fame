@@ -17,6 +17,7 @@ module.exports = {
   plugins: ['prettier'],
   // add your custom rules here
   rules: {
-    'vue/no-v-html': 'off' //markdown后端渲染
+    'vue/no-v-html': 'off', //markdown后端渲染
+    'no-console': 'off'
   }
 }
