@@ -66,11 +66,11 @@ export default {
   feed: feedConfig.config,
   googleAnalytics: googleAnalytics.config,
   plugins: [
-    { src: '~plugins/highlight.js', ssr: false },
-    { src: '~plugins/clickoutside.js', ssr: false },
-    { src: '~plugins/filters.js', ssr: false },
-    { src: '~plugins/global.js', ssr: false },
-    { src: '~plugins/tools.js', ssr: false }
+    { src: '~plugins/highlight.js', mode: 'client' },
+    { src: '~plugins/clickoutside.js', mode: 'client' },
+    { src: '~plugins/filters.js' },
+    { src: '~plugins/global.js' },
+    { src: '~plugins/tools.js' }
   ],
   router: {
     linkActiveClass: 'active',
@@ -97,7 +97,9 @@ export default {
   /*
    ** Customize the progress bar color
    */
-  loading: { color: '#5764c6' },
+  loading: {
+    color: '#5764c6'
+  },
   /*
    ** Build configuration
    */
