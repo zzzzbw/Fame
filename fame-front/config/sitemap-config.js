@@ -1,7 +1,7 @@
 import axios from 'axios'
 import serverConfig from './server-config'
 
-const articlesUrl = serverConfig.api + 'api/article?page=1&limit=999'
+const articlesUrl = serverConfig.api + '/api/article?page=1&limit=999'
 
 const config = {
   routes() {

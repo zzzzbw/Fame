@@ -103,10 +103,25 @@ function jump(position, speed) {
   }
 }
 
+/**
+ * 去除url最后的斜杠
+ * @param url
+ */
+function formatWebsite(url) {
+  if (!url || url === '') {
+    return ''
+  }
+  if (url.charAt(url.length - 1) === '/') {
+    return url.substr(0, url.length - 1)
+  }
+  return url
+}
+
 export default {
   STATIC,
   tagsToString,
   stringToTags,
   goAnchor,
-  jump
+  jump,
+  formatWebsite
 }

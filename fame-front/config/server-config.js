@@ -6,7 +6,7 @@ const devProxy = {
   port: 9090
 }
 
-const prodUrl = '/'
+const prodUrl = ''
 const prodProxy = {
   protocol: 'http',
   host: 'fame-nginx',

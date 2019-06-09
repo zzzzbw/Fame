@@ -1,9 +1,10 @@
 import axios from 'axios'
 import serverConfig from './server-config'
 import defaultConfig from './default-config'
+import tools from '../plugins/tools'
 
-const articlesUrl = serverConfig.api + 'api/article?page=1&limit=999'
-const optionsUrl = serverConfig.api + 'api/option'
+const articlesUrl = serverConfig.api + '/api/article?page=1&limit=999'
+const optionsUrl = serverConfig.api + '/api/option'
 
 const config = [
   // A default feed configuration object
@@ -23,7 +24,7 @@ const config = [
       const options = optionsResp.data.data
       feed.options = {
         title: options.meta_title || defaultConfig.meta_title,
-        link: options.blog_website + '/feed.xml',
+        link: tools.formatWebsite(options.blog_website) + '/feed.xml',
         description: options.meta_description || defaultConfig.meta_description
       }
 
@@ -42,7 +43,10 @@ const config = [
         feed.addItem({
           title: article.title,
           id: article.id,
-          link: options.blog_website + '/article/' + article.id,
+          link:
+            tools.formatWebsite(options.blog_website) +
+            '/article/' +
+            article.id,
           description: article.content,
           content: article.content
         })
