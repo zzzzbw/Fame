@@ -1,31 +1,34 @@
-const axios = require('axios')
-const baseUrl = process.env.BASE_URL || 'http://127.0.0.1:3000'
-const host = process.env.PROXY_HOST || '127.0.0.1:9090'
-const articlesUrl = 'http://' + host + '/api/article?page=1&limit=999'
+import api from '../plugins/api'
+import tools from '../plugins/tools'
+import defaultConfig from './default-config'
 
 const config = [
   // A default feed configuration object
   {
     path: '/feed.xml', // The route to your feed.
     async create(feed) {
+      const optionsResp = await api.getOptions()
+      const options = optionsResp.data
       feed.options = {
-        title: 'Fame Blog',
-        link: baseUrl + '/feed.xml',
-        description: 'A nuxt blog by Fame'
+        title: options.meta_title || defaultConfig.meta_title,
+        link: tools.formatWebsite(options.blog_website) + '/feed.xml',
+        description: options.meta_description || defaultConfig.meta_description
       }
 
-      const res = await axios.get(articlesUrl)
-      const articles = res.data.data.list
+      const articleResp = await api.getArticles(1, 999)
+      const articles = articleResp.data.list
       articles.forEach(article => {
         feed.addItem({
           title: article.title,
           id: article.id,
-          link: baseUrl + '/article/' + article.id,
+          link:
+            tools.formatWebsite(options.blog_website) +
+            '/article/' +
+            article.id,
           description: article.content,
           content: article.content
         })
       })
-
       feed.addCategory('Nuxt.js')
     }, // The create function (see below)
     cacheTime: 1000 * 60 * 15, // How long should the feed be cached
@@ -33,4 +36,6 @@ const config = [
   }
 ]
 
-exports.config = config
+export default {
+  config
+}

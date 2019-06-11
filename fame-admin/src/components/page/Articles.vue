@@ -36,11 +36,13 @@
 
     <el-table :data="articleDatas" border stripe style="width: 100%">
       <el-table-column prop="id" label="id" width="60"></el-table-column>
-      <el-table-column
-        prop="title"
-        label="标题"
-        show-overflow-tooltip
-      ></el-table-column>
+      <el-table-column prop="title" label="标题" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <el-link :href="scope.row.frontUrl" target="_blank" type="primary"
+            >{{ scope.row.title }}
+          </el-link>
+        </template>
+      </el-table-column>
       <el-table-column prop="category" label="分类" show-overflow-tooltip>
         <template slot-scope="scope">
           <span class="meta">{{ scope.row.category }}</span>
@@ -137,6 +139,7 @@ export default {
         let article = {
           id: data.id,
           title: data.title,
+          frontUrl: this.$serverConfig.frontUrl + 'article/' + data.id,
           publish: this.$dayjs(data.created).format('YYYY-MM-DD HH:mm'),
           modified: this.$dayjs(data.modified).format('YYYY-MM-DD HH:mm'),
           category: data.category || this.$util.STATIC.DEFAULT_CATEGORY,

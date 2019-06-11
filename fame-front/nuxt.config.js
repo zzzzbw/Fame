@@ -66,8 +66,8 @@ export default {
   feed: feedConfig.config,
   googleAnalytics: googleAnalytics.config,
   plugins: [
-    { src: '~plugins/highlight.js' },
-    { src: '~plugins/clickoutside.js' },
+    { src: '~plugins/highlight.js', mode: 'client' },
+    { src: '~plugins/clickoutside.js', mode: 'client' },
     { src: '~plugins/filters.js' },
     { src: '~plugins/global.js' },
     { src: '~plugins/tools.js' }
@@ -97,7 +97,9 @@ export default {
   /*
    ** Customize the progress bar color
    */
-  loading: { color: '#5764c6' },
+  loading: {
+    color: '#5764c6'
+  },
   /*
    ** Build configuration
    */
@@ -116,11 +118,5 @@ export default {
         })
       }
     }
-  },
-  env: {
-    // 环境变量,用于docker
-    baseUrl: process.env.BASE_URL || undefined,
-    proxyHost: process.env.PROXY_HOST || undefined,
-    proxyPort: process.env.PROXY_PORT || undefined,
   }
 }

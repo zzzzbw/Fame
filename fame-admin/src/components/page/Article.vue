@@ -7,7 +7,7 @@
       :model="article"
     >
       <el-row :gutter="30">
-        <el-col :xs="24" :sm="16" :md="19" :lg="19">
+        <el-col :xs="24" :sm="16" :md="20" :lg="20">
           <el-form-item prop="title">
             <el-input
               v-model="article.title"
@@ -19,7 +19,7 @@
             <!-- 键修饰符，键别名 -->
           </el-form-item>
         </el-col>
-        <el-col :xs="24" :sm="8" :md="5" :lg="5">
+        <el-col :xs="24" :sm="8" :md="4" :lg="4">
           <div class="panel">
             <div class="panel-content">
               <el-form-item label="标签">
@@ -89,10 +89,26 @@
                 <el-button-group>
                   <el-row>
                     <el-button type="primary" size="small" @click="onSave"
-                      >保存文章
+                      >保存
                     </el-button>
                     <el-button type="primary" size="small" @click="onPublish"
-                      >发布文章
+                      >发布
+                    </el-button>
+                    <el-button
+                      type="primary"
+                      size="small"
+                      v-if="this.article.id !== ''"
+                    >
+                      <a
+                        :href="
+                          this.$serverConfig.frontUrl +
+                            'article/' +
+                            this.article.id
+                        "
+                        target="_blank"
+                        style="color: #FFFFFF;"
+                        >查看</a
+                      >
                     </el-button>
                   </el-row>
                 </el-button-group>
@@ -275,5 +291,9 @@ export default {
 <style scoped>
 .el-select {
   width: 100%;
+}
+
+a {
+  text-decoration: none;
 }
 </style>

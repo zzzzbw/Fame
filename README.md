@@ -56,13 +56,6 @@
    git clone https://github.com/zzzzbw/Fame.git
    ```
 
-2. 修改 `.env` 配置文件
-
-    ```
-    BASE_URL=http://xx.xxx.xx.xx/
-    xx.xxx.xx.xx为服务器的ip，如果是本地开发环境则默认127.0.0.1不用修改
-    ```
-
 3. 启动项目
 
     ```
@@ -85,8 +78,6 @@
     `http://xx.xxx.xx.xx/` 为博客前端首页
     
     `http://xx.xxx.xx.xx/admin` 为博客管理后台首页
-    
-    // xx.xxx.xx.xx为刚才配置的ip，如果本地开发环境则127.0.0.1
 
 #### 开发环境手动部署
 
@@ -100,18 +91,16 @@
 
 2. 部署服务端 (项目使用lombok插件，如果要在ide中调试要有lombok插件)
 
-    2.1 在mysql中执行 `fame-server/src/main/resources/init.sql` sql文件
-
-    2.2 进入服务端文件夹
+    2.1 进入服务端文件夹
 
         `cd fame-server`
 
-    2.3 修改spring-boot配置文件
+    2.2 修改spring-boot配置文件
 
       `vi src/main/resources/application-dev.properties`
 
       ```
-      spring:
+  spring:
         datasource:
           driverClassName: com.mysql.cj.jdbc.Driver
           url: jdbc:mysql://localhost:3306/fame?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
@@ -119,8 +108,8 @@
           password: root
       ```
       将数据库的用户名和密码修改成对应你数据库的用户名密码
-
-    2.4 启动fame-server
+    
+    2.3 启动fame-server
 
       `mvn clean spring-boot:run -Dmaven.test.skip=true`
 

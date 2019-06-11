@@ -5,6 +5,7 @@ import Api from "./util/api";
 import FameUtil from "./util/fame";
 import dayjs from "dayjs";
 import axios from "axios";
+import serverConfig from "../server-config";
 import "./plugins/element.js";
 
 // 时间过滤器
@@ -18,6 +19,7 @@ Vue.prototype.$api = Api;
 Vue.prototype.$axios = axios;
 Vue.prototype.$util = FameUtil;
 Vue.prototype.$dayjs = dayjs;
+Vue.prototype.$serverConfig = serverConfig;
 
 new Vue({
   render: h => h(App),

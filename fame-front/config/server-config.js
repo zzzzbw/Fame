@@ -1,18 +1,26 @@
 const isProd = process.env.NODE_ENV === 'production'
-const localhost = 'http://127.0.0.1:9090/'
-const localProxy = {
+
+const devUrl = 'http://127.0.0.1:9090/'
+const devProxy = {
   host: '127.0.0.1',
   port: 9090
 }
-// 使用环境参数或者使用localhost
-const baseUrl = process.env.baseUrl || localhost
-const baseProxy = {
+
+const prodUrl = ''
+const prodProxy = {
   protocol: 'http',
-  host: process.env.proxyHost || localProxy.host,
-  port: process.env.proxyPort || localProxy.port
+  host: 'fame-nginx',
+  port: 80
 }
-export default {
+
+const config = {
   isProd: isProd,
-  api: isProd ? baseUrl : localhost,
-  baseProxy: isProd ? baseProxy : localProxy
+  api: isProd ? prodUrl : devUrl,
+  baseProxy: isProd ? prodProxy : devProxy
 }
+
+console.log('----------------------serverConfig----------------------')
+console.log(config)
+console.log('----------------------serverConfig----------------------')
+
+export default config
