@@ -13,8 +13,14 @@ const prodProxy = {
   port: 80
 }
 
-export default {
+const config = {
   isProd: isProd,
   api: isProd ? prodUrl : devUrl,
   baseProxy: isProd ? prodProxy : devProxy
 }
+
+console.log('----------------------serverConfig----------------------')
+console.log(config)
+console.log('----------------------serverConfig----------------------')
+
+export default config

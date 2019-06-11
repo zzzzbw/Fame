@@ -1,13 +1,10 @@
-import axios from 'axios'
-import serverConfig from './server-config'
-
-const articlesUrl = serverConfig.api + '/api/article?page=1&limit=999'
+import api from '../plugins/api'
 
 const config = {
   routes() {
-    return axios
-      .get(articlesUrl)
-      .then(res => res.data.data.list.map(article => '/article/' + article.id))
+    return api
+      .getArticles(1, 999)
+      .then(res => res.data.list.map(article => '/article/' + article.id))
   }
 }
 
