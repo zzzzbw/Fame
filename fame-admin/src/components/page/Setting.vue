@@ -65,6 +65,13 @@
             />
           </el-form-item>
 
+          <el-form-item label="Google站点分析(google_analytics):">
+            <el-input
+              v-model="options.google_analytics"
+              placeholder="UA-XXXXXXXX-X"
+            />
+          </el-form-item>
+
           <el-form-item>
             <el-button type="primary" size="small" @click="submitOptions"
               >保存修改
@@ -219,6 +226,7 @@ export default {
         meta_keywords: '',
         google_site_verification: '',
         baidu_site_verification: '',
+        google_analytics: '',
         is_email: false,
         email_username: '',
         email_password: '',
