@@ -58,6 +58,11 @@ public interface OptionKeys {
     String BAIDU_SITE_VERIFICATION = "baidu-site-verification";
 
     /**
+     * google 站点分析
+     */
+    String GOOGLE_ANALYTICS = "google_analytics";
+
+    /**
      * 是否开启邮件提醒
      */
     String IS_EMAIL = "is_email";
@@ -99,5 +104,6 @@ public interface OptionKeys {
             META_DESCRIPTION,
             META_KEYWORDS,
             GOOGLE_SITE_VERIFICATION,
-            BAIDU_SITE_VERIFICATION);
+            BAIDU_SITE_VERIFICATION,
+            GOOGLE_ANALYTICS);
 }
