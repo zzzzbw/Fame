@@ -7,7 +7,7 @@
       :model="article"
     >
       <el-row :gutter="30">
-        <el-col :xs="24" :sm="16" :md="20" :lg="20">
+        <el-col :xs="24" :sm="16" :md="19" :lg="19">
           <el-form-item prop="title">
             <el-input
               v-model="article.title"
@@ -15,11 +15,11 @@
             ></el-input>
           </el-form-item>
           <el-form-item prop="content">
-            <markdown-editor v-model="article.content" />
+            <markdown-editor v-model="article.content" @keydown.native.meta.83 ="onSave" />
             <!-- 键修饰符，键别名 -->
           </el-form-item>
         </el-col>
-        <el-col :xs="24" :sm="8" :md="4" :lg="4">
+        <el-col :xs="24" :sm="8" :md="5" :lg="5">
           <div class="panel">
             <div class="panel-content">
               <el-form-item label="标签">
