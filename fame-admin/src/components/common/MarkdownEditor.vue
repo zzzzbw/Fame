@@ -3,6 +3,7 @@
     v-model="content"
     :toolbars="markdownOption.toolbars"
     :codeStyle="markdownOption.codeStyle"
+    @save="onSave"
     @fullScreen="markdownOption.fullScreen"
   >
   </mavon-editor>
@@ -25,6 +26,10 @@ export default {
     value: {
       type: String,
       default: ""
+    },
+    onSave: {
+      type: Function,
+      default: function() {}
     }
   },
   data: function() {

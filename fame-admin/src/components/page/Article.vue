@@ -15,7 +15,11 @@
             ></el-input>
           </el-form-item>
           <el-form-item prop="content">
-            <markdown-editor v-model="article.content" @keydown.native.meta.83 ="onSave" />
+            <markdown-editor
+              v-model="article.content"
+              :onSave="onSave"
+              @keydown.native.meta.83="onSave"
+            />
             <!-- 键修饰符，键别名 -->
           </el-form-item>
         </el-col>
