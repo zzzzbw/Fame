@@ -30,7 +30,7 @@ CREATE TABLE article
     title         VARCHAR(255)         NOT NULL,
     created       TIMESTAMP            NOT NULL DEFAULT current_timestamp,
     modified      TIMESTAMP            NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp,
-    content       TEXT,
+    content       MEDIUMTEXT,
     author_id     INT,
     hits          INT     DEFAULT 0    NOT NULL,
     tags          VARCHAR(255),

@@ -43,7 +43,7 @@ public class Article extends BaseEntity {
     /**
      * 内容
      */
-    @Column(name = "content", columnDefinition = "TEXT")
+    @Column(name = "content", columnDefinition = "MEDIUMTEXT")
     private String content;
 
     /**
