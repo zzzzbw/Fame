@@ -2,7 +2,7 @@ import api from '../plugins/api'
 import tools from '../plugins/tools'
 
 // 静态页面,通过routes设置其url
-const STATIC_ROUTE = ['/', '/about', '/archive', 'category']
+const STATIC_ROUTE = ['/', '/about', '/archive', '/category']
 
 const config = {
   routes() {
@@ -22,7 +22,6 @@ const config = {
         STATIC_ROUTE.forEach(route => {
           routes.push(url + route)
         })
-        console.log(routes)
         return routes
       })
     })
