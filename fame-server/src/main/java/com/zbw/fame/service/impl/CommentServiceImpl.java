@@ -1,25 +1,30 @@
 package com.zbw.fame.service.impl;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
 import com.zbw.fame.exception.TipException;
-import com.zbw.fame.mapper.ArticleMapper;
-import com.zbw.fame.mapper.CommentMapper;
 import com.zbw.fame.model.domain.Article;
 import com.zbw.fame.model.domain.Comment;
 import com.zbw.fame.model.dto.CommentDto;
+import com.zbw.fame.repository.ArticleRepository;
+import com.zbw.fame.repository.CommentRepository;
 import com.zbw.fame.service.CommentService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.Types;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+
+import java.util.List;
+
 
 /**
  * 评论 Service 实现类
@@ -29,19 +34,18 @@ import org.springframework.util.StringUtils;
  */
 @Slf4j
 @Service("commentsService")
-@Transactional(rollbackFor = Throwable.class)
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class CommentServiceImpl implements CommentService {
 
     public static final String COMMENT_CACHE_NAME = "comments";
 
-    @Autowired
-    private CommentMapper commentMapper;
+    private final CommentRepository commentRepository;
 
-    @Autowired
-    private ArticleMapper articleMapper;
+    private final ArticleRepository articleRepository;
 
 
     @Override
+    @Transactional(rollbackFor = Throwable.class)
     @CacheEvict(value = {COMMENT_CACHE_NAME, ArticleServiceImpl.ARTICLE_CACHE_NAME}, allEntries = true, beforeInvocation = true)
     public void save(Comment comment) {
         if (null == comment) {
@@ -66,16 +70,14 @@ public class CommentServiceImpl implements CommentService {
             throw new TipException("网址长度不能超过" + FameConsts.MAX_COMMENT_WEBSITE_COUNT);
         }
 
-        Article article = articleMapper.selectByPrimaryKey(comment.getArticleId());
-        if (null == article) {
-            throw new TipException("无法查询到对应评论文章");
-        }
+        Article article = articleRepository.findById(comment.getArticleId())
+                .orElseThrow(() -> new TipException("无法查询到对应评论文章"));
 
-        commentMapper.insertSelective(comment);
+        commentRepository.save(comment);
 
         // 增加文章的评论数
         article.setCommentCount(article.getCommentCount() + 1);
-        articleMapper.updateByPrimaryKeySelective(article);
+        articleRepository.save(article);
     }
 
     @Override
@@ -84,7 +86,8 @@ public class CommentServiceImpl implements CommentService {
         Comment record = new Comment();
         record.setArticleId(articleId);
         record.setStatus(Types.COMMENT_STATUS_NORMAL);
-        Page<Comment> result = PageHelper.startPage(page, limit).doSelectPage(() -> commentMapper.select(record));
+        Page<Comment> result = commentRepository.findAll(Example.of(record), PageRequest.of(page, limit));
+
         result.forEach(comments -> {
             String content = FameUtil.contentTransform(comments.getContent(), false, true);
             comments.setContent(content);
@@ -97,7 +100,7 @@ public class CommentServiceImpl implements CommentService {
     public Page<Comment> getAdminComments(Integer page, Integer limit) {
         Comment record = new Comment();
         record.setStatus(Types.COMMENT_STATUS_NORMAL);
-        Page<Comment> result = PageHelper.startPage(page, limit).doSelectPage(() -> commentMapper.select(record));
+        Page<Comment> result = commentRepository.findAll(Example.of(record), PageRequest.of(page, limit));
         result.forEach(comments -> {
             String content = FameUtil.contentTransform(comments.getContent(), false, false);
             comments.setContent(content);
@@ -109,46 +112,47 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Cacheable(value = COMMENT_CACHE_NAME, key = "'comment_detail['+#id+']'")
     public CommentDto getCommentDetail(Integer id) {
-        Comment entity = commentMapper.selectByPrimaryKey(id);
+        Comment entity = commentRepository.findById(id).orElse(null);
         if (null == entity) {
             return null;
         }
         CommentDto comment = new CommentDto();
         BeanUtils.copyProperties(entity, comment);
         if (null != comment.getPId() && -1 != comment.getPId()) {
-            Comment pComment = commentMapper.selectByPrimaryKey(comment.getPId());
+            Comment pComment = commentRepository.findById(comment.getPId()).orElse(null);
             comment.setPComment(pComment);
         }
 
-        Article article = articleMapper.selectByPrimaryKey(comment.getArticleId());
+        Article article = articleRepository.findById(comment.getArticleId())
+                .orElseThrow(() -> new TipException("评论关联文章不存在"));
         comment.setArticle(article);
         return comment;
     }
 
 
     @Override
+    @Transactional(rollbackFor = Throwable.class)
     @CacheEvict(value = COMMENT_CACHE_NAME, allEntries = true, beforeInvocation = true)
     public boolean deleteComment(Integer id) {
-        Comment comment = commentMapper.selectByPrimaryKey(id);
-        if (null == comment) {
-            throw new TipException("不存在该评论");
-        }
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> new TipException("不存在该评论"));
 
         // 减去文章中评论数
-        Article article = articleMapper.selectByPrimaryKey(comment.getArticleId());
+        Article article = articleRepository.findById(comment.getArticleId())
+                .orElseThrow(() -> new TipException("评论关联文章不存在"));
         article.setCommentCount(article.getCommentCount() - 1);
-        articleMapper.updateByPrimaryKeySelective(article);
+        articleRepository.save(article);
 
         // 去除子评论中关联
         Comment record = new Comment();
         record.setPId(id);
-        Comment childComment = commentMapper.selectOne(record);
-        if (null != childComment) {
+        commentRepository.findOne(Example.of(record)).ifPresent(childComment -> {
             childComment.setPId(null);
-            commentMapper.updateByPrimaryKey(childComment);
-        }
+            commentRepository.save(childComment);
+        });
+
         comment.setStatus(Types.COMMENT_STATUS_DELETE);
-        if (commentMapper.updateByPrimaryKeySelective(comment) > 0) {
+        if (commentRepository.save(comment) != null) {
             log.info("删除评论: {}", comment);
             return true;
         }
@@ -156,12 +160,22 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional(rollbackFor = Throwable.class)
+    @CacheEvict(value = COMMENT_CACHE_NAME, allEntries = true, beforeInvocation = true)
+    public int deleteCommentByArticleId(Integer articleId) {
+        Comment record = new Comment();
+        record.setArticleId(articleId);
+        List<Comment> list = commentRepository.findAll(Example.of(record));
+        list.forEach(comment -> comment.setStatus(Types.COMMENT_STATUS_DELETE));
+        return commentRepository.saveAll(list).size();
+    }
+
+    @Override
+    @Transactional(rollbackFor = Throwable.class)
     @CacheEvict(value = COMMENT_CACHE_NAME, allEntries = true, beforeInvocation = true)
     public void assessComment(Integer commentId, String assess) {
-        Comment comment = commentMapper.selectByPrimaryKey(commentId);
-        if (null == comment) {
-            throw new TipException("没有该评论");
-        }
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new TipException("没有该评论"));
 
         if (Types.AGREE.equals(assess)) {
             comment.setAgree(comment.getAgree() + 1);
@@ -170,15 +184,15 @@ public class CommentServiceImpl implements CommentService {
         } else {
             throw new TipException("assess参数错误");
         }
-        commentMapper.updateByPrimaryKey(comment);
+        commentRepository.save(comment);
     }
 
     @Override
     @Cacheable(value = COMMENT_CACHE_NAME, key = "'comment_count'")
-    public Integer count() {
+    public Long count() {
         Comment record = new Comment();
         record.setStatus(Types.COMMENT_STATUS_NORMAL);
-        return commentMapper.selectCount(record);
+        return commentRepository.count(Example.of(record));
     }
 
 }

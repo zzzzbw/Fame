@@ -1,9 +1,9 @@
 package com.zbw.fame.service;
 
-import com.github.pagehelper.Page;
 import com.zbw.fame.model.domain.Article;
 import com.zbw.fame.model.dto.Archive;
 import com.zbw.fame.model.query.ArticleQuery;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -59,12 +59,13 @@ public interface ArticleService {
     Integer saveArticle(Article article);
 
     /**
-     * 更新文章
+     * 更新文章点击量
      *
-     * @param articles 文章entity
-     * @return boolean
+     * @param articleId 文章id
+     * @param hits 点击量
+     * @return
      */
-    boolean updateArticle(Article articles);
+    boolean updateHits(Integer articleId, Integer hits);
 
     /**
      * 根据id删除文章
@@ -79,7 +80,7 @@ public interface ArticleService {
      *
      * @return Integer
      */
-    Integer count();
+    long count();
 
     /**
      * 获取归档信息

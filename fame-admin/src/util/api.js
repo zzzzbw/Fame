@@ -34,15 +34,9 @@ const auth = {
   getArticleCount() {
     return get("/admin/article/count");
   },
-  getLogs(page) {
-    const params = {
-      page: page
-    };
-    return get("/admin/site/logs", params);
-  },
   getArticles(page, title, status, category, tag) {
     const params = {
-      page: page,
+      page: page - 1,
       title: title,
       status: status,
       category: category,
@@ -61,7 +55,7 @@ const auth = {
   },
   getComments(page) {
     const params = {
-      page: page
+      page: page - 1
     };
     return get("/admin/comment", params);
   },
@@ -130,7 +124,7 @@ const auth = {
   },
   getPages(page) {
     const params = {
-      page: page
+      page: page - 1
     };
     return get("/admin/page", params);
   },

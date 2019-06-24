@@ -7,6 +7,7 @@ import com.zbw.fame.service.OptionService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.OptionKeys;
 import com.zbw.fame.util.Types;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
@@ -32,17 +33,14 @@ import java.util.Date;
  */
 @Slf4j
 @Service
-@Transactional(rollbackFor = Throwable.class)
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class EmailServiceImpl implements EmailService {
 
-    @Autowired
-    private OptionService optionService;
+    private final OptionService optionService;
 
-    @Autowired
-    private LogService logService;
+    private final LogService logService;
 
-    @Autowired
-    private TemplateEngine templateEngine;
+    private final TemplateEngine templateEngine;
 
     @Override
     @Async

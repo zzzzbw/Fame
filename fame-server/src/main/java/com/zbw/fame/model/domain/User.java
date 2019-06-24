@@ -45,14 +45,16 @@ public class User extends BaseEntity {
     private String screenName;
 
     /**
-     * 用户创建时间
-     */
-    @Column(name = "created", columnDefinition = "TIMESTAMP NOT NULL DEFAULT current_timestamp")
-    private Date created;
-
-    /**
      * 最后登陆时间
      */
     @Column(name = "logged", columnDefinition = "TIMESTAMP NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp")
     private Date logged;
+
+    @Override
+    protected void prePersist() {
+        super.prePersist();
+        if (null == logged) {
+            logged = new Date();
+        }
+    }
 }

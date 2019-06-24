@@ -1,11 +1,12 @@
 package com.zbw.fame.service.impl;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
-import com.zbw.fame.mapper.LogMapper;
 import com.zbw.fame.model.domain.Log;
+import com.zbw.fame.repository.LogRepository;
 import com.zbw.fame.service.LogService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,23 +17,25 @@ import org.springframework.transaction.annotation.Transactional;
  * @since 2017/10/11 10:42
  */
 @Service("logsService")
-@Transactional(rollbackFor = Throwable.class)
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class LogServiceImpl implements LogService {
 
-    @Autowired
-    private LogMapper logMapper;
+    private final LogRepository logRepository;
 
     @Override
+    @Transactional(rollbackFor = Throwable.class)
     public void save(String action, String data, String message, String type) {
         this.save(action, data, message, type, null, null);
     }
 
     @Override
+    @Transactional(rollbackFor = Throwable.class)
     public void save(String action, String data, String message, String type, String ip) {
         this.save(action, data, message, type, ip, null);
     }
 
     @Override
+    @Transactional(rollbackFor = Throwable.class)
     public void save(String action, String data, String message, String type, String ip, Integer userId) {
         Log log = new Log();
         log.setAction(action);
@@ -41,12 +44,12 @@ public class LogServiceImpl implements LogService {
         log.setType(type);
         log.setIp(ip);
         log.setUserId(userId);
-        logMapper.insertSelective(log);
+        logRepository.save(log);
     }
 
     @Override
     public Page<Log> getLogs(Integer page, Integer limit) {
-        return PageHelper.startPage(page, limit).doSelectPage(() -> logMapper.selectAll());
+        return logRepository.findAll(PageRequest.of(page, limit));
     }
 
 }

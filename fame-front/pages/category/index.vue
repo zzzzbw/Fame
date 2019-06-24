@@ -7,7 +7,7 @@
         class="category text-bold"
         @click="goAnchor('category-' + category.name)"
       >
-        {{ category.name }}({{ category.count }})
+        {{ category.name }}({{ category.articleCount }})
       </a>
     </div>
     <div class="category-content">

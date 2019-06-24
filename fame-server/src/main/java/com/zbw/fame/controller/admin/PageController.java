@@ -1,6 +1,5 @@
 package com.zbw.fame.controller.admin;
 
-import com.github.pagehelper.Page;
 import com.zbw.fame.controller.BaseController;
 import com.zbw.fame.model.domain.Article;
 import com.zbw.fame.model.dto.Pagination;
@@ -11,7 +10,9 @@ import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.RestResponse;
 import com.zbw.fame.util.Types;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,13 +24,12 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/admin/page")
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class PageController extends BaseController {
 
-    @Autowired
-    private ArticleService articleService;
+    private final ArticleService articleService;
 
-    @Autowired
-    private LogService logService;
+    private final LogService logService;
 
     /**
      * 自定义页面列表
@@ -39,10 +39,10 @@ public class PageController extends BaseController {
      * @return {@see Pagination<Article>}
      */
     @GetMapping
-    public RestResponse index(@RequestParam(required = false, defaultValue = "1") Integer page,
+    public RestResponse index(@RequestParam(required = false, defaultValue = "0") Integer page,
                               @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
         Page<Article> pages = articleService.getAdminPages(page, limit);
-        return RestResponse.ok(new Pagination<Article>(pages));
+        return RestResponse.ok(Pagination.of(pages));
     }
 
     /**

@@ -9,7 +9,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.0.RELEASE</version>
+        <version>2.1.6.RELEASE</version>
         <relativePath/>
     </parent>
 
@@ -17,9 +17,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <mybatis-spring-boot.version>1.3.2</mybatis-spring-boot.version>
-        <mapper-spring-boot.version>2.1.5</mapper-spring-boot.version>
-        <pagehelper-spring-boot.version>1.2.10</pagehelper-spring-boot.version>
         <flexmark.version>0.34.58</flexmark.version>
     </properties>
 
@@ -55,31 +52,12 @@
             <artifactId>mysql-connector-java</artifactId>
         </dependency>
 
-        <!-- jpa 目前用于自动创建表 -->
+        <!-- jpa -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
-        <!-- mybatis -->
-        <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>${mybatis-spring-boot.version}</version>
-        </dependency>
-
-        <!-- mapper -->
-        <dependency>
-            <groupId>tk.mybatis</groupId>
-            <artifactId>mapper-spring-boot-starter</artifactId>
-            <version>${mapper-spring-boot.version}</version>
-        </dependency>
-        <!-- PageHelper -->
-        <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper-spring-boot-starter</artifactId>
-            <version>${pagehelper-spring-boot.version}</version>
-        </dependency>
 
         <!-- markdown解析 -->
         <dependency>

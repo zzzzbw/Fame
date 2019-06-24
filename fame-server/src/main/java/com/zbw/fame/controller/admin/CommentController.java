@@ -1,6 +1,5 @@
 package com.zbw.fame.controller.admin;
 
-import com.github.pagehelper.Page;
 import com.zbw.fame.controller.BaseController;
 import com.zbw.fame.model.domain.Comment;
 import com.zbw.fame.model.dto.CommentDto;
@@ -9,7 +8,9 @@ import com.zbw.fame.service.CommentService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.RestResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -20,10 +21,10 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/admin/comment")
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class CommentController extends BaseController {
 
-    @Autowired
-    private CommentService commentService;
+    private final CommentService commentService;
 
     /**
      * 获取所有评论
@@ -33,10 +34,10 @@ public class CommentController extends BaseController {
      * @return {@see Pagination<Comment>}
      */
     @GetMapping
-    public RestResponse index(@RequestParam(required = false, defaultValue = "1") Integer page,
+    public RestResponse index(@RequestParam(required = false, defaultValue = "0") Integer page,
                               @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
         Page<Comment> comments = commentService.getAdminComments(page, limit);
-        return RestResponse.ok(new Pagination<Comment>(comments));
+        return RestResponse.ok(Pagination.of(comments));
     }
 
     /**

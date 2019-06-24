@@ -34,7 +34,6 @@
     ├─fame-docker         // docker部署文件
     ├─fame-front          // 博客前端，基于Nuxt
     ├─fame-server         // 博客服务端，基于spring-boot
-    ├─.env                // docker-compose环境参数配置文件
     ├─docker-compose.yml  // docker-compose文件
 ```
 
@@ -100,7 +99,7 @@
       `vi src/main/resources/application-dev.properties`
 
       ```
-  spring:
+      spring:
         datasource:
           driverClassName: com.mysql.cj.jdbc.Driver
           url: jdbc:mysql://localhost:3306/fame?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
@@ -108,7 +107,13 @@
           password: root
       ```
       将数据库的用户名和密码修改成对应你数据库的用户名密码
-    
+
+    > 你的`Mysql`中，要先有`fame`数据库。
+    >
+    > ```sql
+    > CREATE DATABASE fame CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
+    > ```
+
     2.3 启动fame-server
 
       `mvn clean spring-boot:run -Dmaven.test.skip=true`

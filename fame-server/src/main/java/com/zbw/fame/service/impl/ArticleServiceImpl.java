@@ -1,29 +1,30 @@
 package com.zbw.fame.service.impl;
 
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
+import com.zbw.fame.exception.TipException;
 import com.zbw.fame.model.domain.Article;
 import com.zbw.fame.model.dto.Archive;
-import com.zbw.fame.exception.TipException;
-import com.zbw.fame.mapper.ArticleMapper;
-import com.zbw.fame.mapper.CommentMapper;
-import com.zbw.fame.model.domain.Comment;
 import com.zbw.fame.model.query.ArticleQuery;
+import com.zbw.fame.repository.ArticleRepository;
 import com.zbw.fame.service.ArticleService;
+import com.zbw.fame.service.CommentService;
 import com.zbw.fame.service.MetaService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.Types;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-import tk.mybatis.mapper.entity.Example;
-import tk.mybatis.mapper.util.Sqls;
 
+import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -36,19 +37,17 @@ import java.util.List;
  */
 @Slf4j
 @Service("articlesService")
-@Transactional(rollbackFor = Throwable.class)
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ArticleServiceImpl implements ArticleService {
 
     public static final String ARTICLE_CACHE_NAME = "articles";
 
-    @Autowired
-    private ArticleMapper articleMapper;
+    private final ArticleRepository articleRepository;
 
-    @Autowired
-    private MetaService metasService;
+    private final CommentService commentService;
 
-    @Autowired
-    private CommentMapper commentsMapper;
+    private final MetaService metasService;
+
 
     @Override
     @Cacheable(value = ARTICLE_CACHE_NAME, key = "'font_articles['+#page+':'+#limit+']'")
@@ -57,7 +56,7 @@ public class ArticleServiceImpl implements ArticleService {
         record.setStatus(Types.PUBLISH);
         record.setType(Types.POST);
 
-        Page<Article> result = PageHelper.startPage(page, limit).doSelectPage(() -> articleMapper.select(record));
+        Page<Article> result = articleRepository.findAll(Example.of(record), PageRequest.of(page, limit));
         result.forEach(article -> {
             String content = FameUtil.contentTransform(article.getContent(), true, true);
             article.setContent(content);
@@ -72,31 +71,36 @@ public class ArticleServiceImpl implements ArticleService {
         record.setId(id);
         record.setStatus(Types.PUBLISH);
         record.setType(Types.POST);
-        Article article = articleMapper.selectOne(record);
+
+        Article article = articleRepository.findOne(Example.of(record))
+                .orElseThrow(() -> new TipException("该文章不存在"));
         String content = FameUtil.contentTransform(article.getContent(), false, true);
         article.setContent(content);
         return article;
     }
 
     @Override
-    public Page<Article> getAdminArticles(Integer page, Integer limit, ArticleQuery query) {
-        Example example = new Example(Article.class);
-        Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("type", Types.POST);
-        criteria.andNotEqualTo("status", Types.DELETE);
-        if (!StringUtils.isEmpty(query.getStatus())) {
-            criteria.andEqualTo("status", query.getStatus());
-        }
-        if (!StringUtils.isEmpty(query.getTitle())) {
-            criteria.andLike("title", "%" + query.getTitle() + "%");
-        }
-        if (!StringUtils.isEmpty(query.getTag())) {
-            criteria.andLike("tags", "%" + query.getTag() + "%");
-        }
-        if (!StringUtils.isEmpty(query.getCategory())) {
-            criteria.andLike("category", "%" + query.getCategory() + "%");
-        }
-        Page<Article> result = PageHelper.startPage(page, limit).doSelectPage(() -> articleMapper.selectByExample(example));
+    public Page<Article> getAdminArticles(Integer page, Integer limit, ArticleQuery articleQuery) {
+        Page<Article> result = articleRepository.findAll((Specification<Article>) (root, query, criteriaBuilder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            predicates.add(criteriaBuilder.equal(root.get("type"), Types.POST));
+            predicates.add(criteriaBuilder.notEqual(root.get("status"), Types.DELETE));
+            if (!StringUtils.isEmpty(articleQuery.getStatus())) {
+                predicates.add(criteriaBuilder.equal(root.get("status"), articleQuery.getStatus()));
+            }
+            if (!StringUtils.isEmpty(articleQuery.getTitle())) {
+                predicates.add(criteriaBuilder.like(root.get("title"), "%" + articleQuery.getTitle() + "%"));
+            }
+            if (!StringUtils.isEmpty(articleQuery.getTag())) {
+                predicates.add(criteriaBuilder.like(root.get("tags"), "%" + articleQuery.getTag() + "%"));
+            }
+            if (!StringUtils.isEmpty(articleQuery.getCategory())) {
+                predicates.add(criteriaBuilder.like(root.get("category"), "%" + articleQuery.getCategory() + "%"));
+            }
+
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        }, PageRequest.of(page, limit));
         //只需要文章列表，不需要内容
         result.forEach(article -> article.setContent(""));
         return result;
@@ -107,7 +111,8 @@ public class ArticleServiceImpl implements ArticleService {
         Article record = new Article();
         record.setId(id);
         record.setType(Types.POST);
-        Article article = articleMapper.selectOne(record);
+        Article article = articleRepository.findOne(Example.of(record))
+                .orElseThrow(() -> new TipException("该文章不存在"));
         String content = FameUtil.contentTransform(article.getContent(), false, false);
         article.setContent(content);
         return article;
@@ -115,6 +120,7 @@ public class ArticleServiceImpl implements ArticleService {
 
 
     @Override
+    @Transactional(rollbackFor = Throwable.class)
     @CacheEvict(value = ARTICLE_CACHE_NAME, allEntries = true, beforeInvocation = true)
     public Integer saveArticle(Article article) {
         if (null == article) {
@@ -138,10 +144,14 @@ public class ArticleServiceImpl implements ArticleService {
         }
 
         if (null != article.getId()) {
-            articleMapper.updateByPrimaryKeySelective(article);
+            Article oldArticle = articleRepository.findById(article.getId())
+                    .orElseThrow(() -> new TipException("修改文章id不存在"));
+
+            FameUtil.copyPropertiesIgnoreNull(article, oldArticle);
+            articleRepository.saveAndFlush(oldArticle);
         } else {
             article.setType(Types.POST);
-            articleMapper.insertSelective(article);
+            articleRepository.saveAndFlush(article);
         }
 
         Integer id = article.getId();
@@ -152,36 +162,29 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
+    @Transactional(rollbackFor = Throwable.class)
     @CacheEvict(value = ARTICLE_CACHE_NAME, allEntries = true, beforeInvocation = true)
-    public boolean updateArticle(Article article) {
-        if (null == article) {
-            throw new TipException("文章不能为空");
-        }
-        return articleMapper.updateByPrimaryKeySelective(article) > 0;
+    public boolean updateHits(Integer articleId, Integer hits) {
+        Article article = articleRepository.findById(articleId)
+                .orElseThrow(() -> new TipException("文章不能为空"));
+        article.setHits(hits);
+        return articleRepository.saveAndFlush(article) != null;
     }
 
     @Override
+    @Transactional(rollbackFor = Throwable.class)
     @CacheEvict(value = ARTICLE_CACHE_NAME, allEntries = true, beforeInvocation = true)
     public boolean deleteArticle(Integer id) {
         Article record = new Article();
         record.setId(id);
         record.setType(Types.POST);
-        Article article = articleMapper.selectOne(record);
-        if (null == article) {
-            throw new TipException("没有id为" + id + "的文章");
-        }
+        Article article = articleRepository.findOne(Example.of(record))
+                .orElseThrow(() -> new TipException("没有id为" + id + "的文章"));
 
-        record.setStatus(Types.DELETE);
-        if (articleMapper.updateByPrimaryKeySelective(record) > 0) {
+        article.setStatus(Types.DELETE);
+        if (articleRepository.save(article) != null) {
             log.info("删除文章: {}", article);
-
-            // 删除文章下的评论
-            Example commentsExample = Example
-                    .builder(Comment.class)
-                    .where(Sqls.custom()
-                            .andEqualTo("articleId", id))
-                    .build();
-            int commentsResult = commentsMapper.deleteByExample(commentsExample);
+            int commentsResult = commentService.deleteCommentByArticleId(id);
             log.info("删除对应的评论,数量: {}", commentsResult);
 
             // 传空的属性，则移除该文章关联的属性
@@ -194,23 +197,18 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     @Cacheable(value = ARTICLE_CACHE_NAME, key = "'article_count'")
-    public Integer count() {
-        Example articleExample = Example
-                .builder(Article.class)
-                .where(Sqls.custom()
-                        .andEqualTo("type",Types.POST)
-                        .andNotEqualTo("status", Types.DELETE))
-                .build();
-        return articleMapper.selectCountByExample(articleExample);
+    public long count() {
+        return articleRepository.count((Specification<Article>) (root, query, criteriaBuilder) -> {
+            Predicate p1 = criteriaBuilder.equal(root.get("type"), Types.POST);
+            Predicate p2 = criteriaBuilder.notEqual(root.get("status"), Types.DELETE);
+            return criteriaBuilder.and(p1, p2);
+        });
     }
 
     @Override
     @Cacheable(value = ARTICLE_CACHE_NAME, key = "'archives'")
     public List<Archive> getArchives() {
-        Article record = new Article();
-        record.setStatus(Types.PUBLISH);
-        record.setType(Types.POST);
-        List<Article> articles = articleMapper.select(record);
+        List<Article> articles = articleRepository.findAllByStatusAndType(Types.PUBLISH, Types.POST);
         List<Archive> archives = new ArrayList<>();
         String current = "";
         for (Article article : articles) {
@@ -244,7 +242,7 @@ public class ArticleServiceImpl implements ArticleService {
         record.setTitle(title);
         record.setStatus(Types.PUBLISH);
         record.setType(Types.PAGE);
-        Article article = articleMapper.selectOne(record);
+        Article article = articleRepository.findOne(Example.of(record)).orElseThrow(() -> new TipException("文章不存在"));
         String content = FameUtil.contentTransform(article.getContent(), false, true);
         article.setContent(content);
         return article;
@@ -252,17 +250,12 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Page<Article> getAdminPages(Integer page, Integer limit) {
-        Article record = new Article();
-        record.setType(Types.PAGE);
-        Example pageExample = Example
-                .builder(Article.class)
-                .where(Sqls.custom()
-                        .andEqualTo("type", Types.PAGE)
-                        .andNotEqualTo("status", Types.DELETE))
-                .build();
+        Page<Article> result = articleRepository.findAll((Specification<Article>) (root, query, criteriaBuilder) -> {
+            Predicate p1 = criteriaBuilder.equal(root.get("type"), Types.PAGE);
+            Predicate p2 = criteriaBuilder.notEqual(root.get("status"), Types.DELETE);
 
-        Page<Article> result = PageHelper.startPage(page, limit).doSelectPage(() -> articleMapper.selectByExample(pageExample));
-        //只需要文章列表，不需要内容
+            return criteriaBuilder.and(p1, p2);
+        }, PageRequest.of(page, limit));
         result.forEach(article -> article.setContent(""));
         return result;
     }
@@ -272,13 +265,14 @@ public class ArticleServiceImpl implements ArticleService {
         Article record = new Article();
         record.setId(id);
         record.setType(Types.PAGE);
-        Article article = articleMapper.selectOne(record);
+        Article article = articleRepository.findOne(Example.of(record)).orElseThrow(() -> new TipException("文章不存在"));
         String content = FameUtil.contentTransform(article.getContent(), false, false);
         article.setContent(content);
         return article;
     }
 
     @Override
+    @Transactional(rollbackFor = Throwable.class)
     @CacheEvict(value = ARTICLE_CACHE_NAME, allEntries = true, beforeInvocation = true)
     public Integer savePage(Article page) {
         if (null == page) {
@@ -303,26 +297,28 @@ public class ArticleServiceImpl implements ArticleService {
 
 
         if (null != page.getId()) {
-            articleMapper.updateByPrimaryKeySelective(page);
+            Article oldPage = articleRepository.findById(page.getId())
+                    .orElseThrow(() -> new TipException("修改文章id不存在"));
+
+            FameUtil.copyPropertiesIgnoreNull(page, oldPage);
+            articleRepository.saveAndFlush(oldPage);
         } else {
             page.setType(Types.PAGE);
-            articleMapper.insertSelective(page);
+            articleRepository.saveAndFlush(page);
         }
 
         return page.getId();
     }
 
     @Override
+    @Transactional(rollbackFor = Throwable.class)
     @CacheEvict(value = ARTICLE_CACHE_NAME, allEntries = true, beforeInvocation = true)
     public boolean deletePage(Integer id) {
         Article record = new Article();
         record.setId(id);
         record.setType(Types.PAGE);
-        Article page = articleMapper.selectOne(record);
-        if (null == page) {
-            throw new TipException("没有id为" + id + "的自定义页面");
-        }
-        record.setStatus(Types.DELETE);
-        return articleMapper.updateByPrimaryKeySelective(record) > 0;
+        Article page = articleRepository.findOne(Example.of(record)).orElseThrow(() -> new TipException("没有id为" + id + "的自定义页面"));
+        page.setStatus(Types.DELETE);
+        return articleRepository.save(page) != null;
     }
 }

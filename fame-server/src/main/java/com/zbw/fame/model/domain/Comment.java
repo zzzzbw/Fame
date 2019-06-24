@@ -1,13 +1,13 @@
 package com.zbw.fame.model.domain;
 
+import com.zbw.fame.util.Types;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import tk.mybatis.mapper.annotation.Order;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import java.util.Date;
+import javax.persistence.PrePersist;
 
 /**
  * 评论 Model
@@ -58,13 +58,6 @@ public class Comment extends BaseEntity {
     private String website;
 
     /**
-     * 评论时间
-     */
-    @Order("desc")
-    @Column(name = "created", columnDefinition = "TIMESTAMP NOT NULL DEFAULT current_timestamp")
-    private Date created;
-
-    /**
      * 赞
      */
     @Column(name = "agree", columnDefinition = "INT NOT NULL DEFAULT 0")
@@ -93,4 +86,20 @@ public class Comment extends BaseEntity {
      */
     @Column(name = "status", columnDefinition = "INT DEFAULT 0 NOT NULL")
     private Integer status;
+
+    @PrePersist
+    @Override
+    protected void prePersist() {
+        super.prePersist();
+
+        if (null == agree) {
+            agree = 0;
+        }
+        if (null == disagree) {
+            disagree = 0;
+        }
+        if (null == status) {
+            status = Types.COMMENT_STATUS_NORMAL;
+        }
+    }
 }

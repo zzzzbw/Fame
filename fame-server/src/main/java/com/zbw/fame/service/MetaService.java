@@ -1,6 +1,6 @@
 package com.zbw.fame.service;
 
-import com.zbw.fame.model.dto.MetaDto;
+import com.zbw.fame.model.dto.MetaInfo;
 
 import java.util.List;
 
@@ -15,17 +15,17 @@ public interface MetaService {
      * 根据属性以及属性下的已发布文章
      *
      * @param type 属性类型
-     * @return List<MetaDto>
+     * @return List<MetaInfo>
      */
-    List<MetaDto> getPublishMetaDtos(String type);
+    List<MetaInfo> getPublishMetaInfos(String type);
 
     /**
      * 根据属性以及属性下的文章
      *
      * @param type 属性类型
-     * @return List<MetaDto>
+     * @return List<MetaInfo>
      */
-    List<MetaDto> getMetaDtos(String type);
+    List<MetaInfo> getMetaInfos(String type);
 
     /**
      * 删除属性(同时删除关联文章的属性)
