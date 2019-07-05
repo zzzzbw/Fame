@@ -36,7 +36,7 @@ function tagsToString(tags) {
  */
 function stringToTags(str) {
   if (str !== null && str !== "") {
-    let tags = [];
+    let tags;
     tags = str.split(",");
     return tags;
   } else {

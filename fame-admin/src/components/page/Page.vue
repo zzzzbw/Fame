@@ -50,6 +50,7 @@ export default {
   },
   data: function() {
     return {
+      submitting: false,
       page: {
         id: "",
         title: "",
@@ -84,14 +85,25 @@ export default {
       }
     },
     savePage(formName) {
+      if (this.submitting) {
+        this.$message({
+          showClose: true,
+          message: "请不要提交过快!",
+          type: "warning"
+        });
+        return;
+      }
       this.$refs[formName].validate(valid => {
         if (valid) {
+          this.submitting = true;
           this.$api.auth.savePage(this.page).then(() => {
             this.$router.push("/admin/page");
             this.$message({
+              showClose: true,
               message: "发布自定义页面成功!",
               type: "success"
             });
+            this.submitting = false;
           });
         }
       });

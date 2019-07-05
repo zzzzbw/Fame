@@ -112,7 +112,7 @@ public class MetaServiceImpl implements MetaService {
                 String newMetas = metas.replace(meta.getName(), name);
                 if (!newMetas.equals(metas)) {
                     article.setCategory(newMetas);
-                    articleMapper.updateByPrimaryKey(article);
+                    articleMapper.updateByPrimaryKeySelective(article);
                 }
             }
             if (type.equals(Types.TAG)) {
@@ -120,12 +120,12 @@ public class MetaServiceImpl implements MetaService {
                 String newMetas = metas.replace(meta.getName(), name);
                 if (!newMetas.equals(metas)) {
                     article.setTags(newMetas);
-                    articleMapper.updateByPrimaryKey(article);
+                    articleMapper.updateByPrimaryKeySelective(article);
                 }
             }
         }
         meta.setName(name);
-        return metaMapper.updateByPrimaryKey(meta) > 0;
+        return metaMapper.updateByPrimaryKeySelective(meta) > 0;
     }
 
     @Override

@@ -28,7 +28,7 @@
             <div class="panel-content">
               <el-form-item label="标签">
                 <el-select
-                  v-model="article.tags"
+                  v-model="selectTags"
                   multiple
                   filterable
                   placeholder="请选择文章标签"
@@ -134,6 +134,7 @@ export default {
   },
   data: function() {
     return {
+      submitting: false,
       article: {
         id: "",
         title: "",
@@ -152,6 +153,7 @@ export default {
           { required: true, message: "文章内容不能为空", trigger: "blur" }
         ]
       },
+      selectTags: [],
       tags: [],
       categories: [],
       flagFalse: false
@@ -167,25 +169,29 @@ export default {
         });
       } else {
         // 如果没有id则表示新增文章,不用清空文章信息
-        this.article.id = "";
-        this.article.title = "";
-        this.article.tags = this.$util.stringToTags("");
-        this.article.category = "";
-        this.article.content = "";
-        this.article.status = this.$util.STATIC.STATUS_PUBLISH;
-        this.article.created = Date.now();
-        this.article.modified = Date.now();
+        const data = {
+          id: "",
+          title: "",
+          tags: "",
+          category: "",
+          content: "",
+          status: this.$util.STATIC.STATUS_PUBLISH,
+          created: Date.now(),
+          modified: Date.now()
+        };
+        this.initArticle(data);
       }
     },
     initArticle(data) {
       this.article.id = data.id;
       this.article.title = data.title;
-      this.article.tags = this.$util.stringToTags(data.tags);
+      this.article.tags = data.tags;
       this.article.category = data.category;
       this.article.content = data.content;
       this.article.status = data.status;
       this.article.created = new Date(data.created).getTime();
       this.article.modified = Date.now();
+      this.selectTags = this.$util.stringToTags(data.tags);
     },
     getTags() {
       this.$api.auth.getAllTags().then(data => {
@@ -199,6 +205,7 @@ export default {
           }
         } else {
           this.$message({
+            showClose: true,
             message: "获取标签列表失败",
             type: "error"
           });
@@ -217,62 +224,64 @@ export default {
           }
         } else {
           this.$message({
+            showClose: true,
             message: "获取分类列表失败",
             type: "error"
           });
         }
       });
     },
-    publishArticle(formName) {
+    submitArticle(formName, success) {
+      if (this.submitting) {
+        this.$message({
+          showClose: true,
+          message: "请不要提交过快!",
+          type: "warning"
+        });
+        return;
+      }
       this.$refs[formName].validate(valid => {
         if (valid) {
+          this.submitting = true;
           let params = this.article;
-          params.tags = this.$util.tagsToString(this.article.tags);
+          params.tags = this.$util.tagsToString(this.selectTags);
           this.$api.auth.saveArticle(params).then(data => {
             if (data.success) {
-              this.$router.push("/admin/article");
-              this.$message({
-                message: "发布文章成功!",
-                type: "success"
-              });
+              success(data.data);
             } else {
               this.$message({
-                message: "发布文章失败," + data.msg,
+                showClose: true,
+                message: "提交文章失败文章失败," + data.msg,
                 type: "error"
               });
             }
-          });
-        }
-      });
-    },
-    saveArticle(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          let params = this.article;
-          params.tags = this.$util.tagsToString(this.article.tags);
-          this.$api.auth.saveArticle(params).then(data => {
-            if (data.success) {
-              this.$message({
-                message: "保存文章成功!",
-                type: "success"
-              });
-              this.$route.params.id = data.data;
-              this.getArticle();
-            } else {
-              this.$message({
-                message: "保存文章失败," + data.msg,
-                type: "error"
-              });
-            }
+            this.submitting = false;
           });
         }
       });
     },
     onPublish() {
-      this.publishArticle("articleForm");
+      const _this = this;
+      this.submitArticle("articleForm", function() {
+        _this.$message({
+          showClose: true,
+          message: "发布文章成功!",
+          type: "success"
+        });
+        _this.$router.push("/admin/article");
+      });
     },
     onSave() {
-      this.saveArticle("articleForm");
+      const _this = this;
+      this.submitArticle("articleForm", function(data) {
+        _this.$message({
+          showClose: true,
+          message: "保存文章成功!",
+          type: "success"
+        });
+        _this.$route.params.id = data;
+        _this.getArticle();
+      });
     },
     init() {
       this.getArticle();
