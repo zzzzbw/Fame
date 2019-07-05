@@ -15,6 +15,7 @@ const Axios = axios.create({
 });
 
 let loadingInstance = null;
+let loginError = false;
 // 请求拦截（配置发送请求的信息） 传参序列化
 Axios.interceptors.request.use(
   config => {
@@ -57,6 +58,17 @@ Axios.interceptors.response.use(
         case 999:
           router.push("/admin/login");
           msg = "未登录,请先登录";
+          if (!loginError) {
+            loginError = true;
+            Message({
+              showClose: true,
+              message: msg,
+              type: "error",
+              onClose: function() {
+                loginError = false;
+              }
+            });
+          }
           break;
         default:
           msg = response.data.msg || "系统错误";
@@ -68,12 +80,12 @@ Axios.interceptors.response.use(
               ", msg: " +
               response.data.msg
           );
+          Message({
+            showClose: true,
+            message: msg,
+            type: "error"
+          });
       }
-      Message({
-        showClose: true,
-        message: msg,
-        type: "error"
-      });
     }
     return response;
   },
