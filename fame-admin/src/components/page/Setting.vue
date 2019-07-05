@@ -189,171 +189,153 @@
 
 <script type="text/ecmascript-6">
 export default {
-  data: function () {
-    const repeatPasswordValidate = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请再次输入确认密码'));
-      } else if (value !== this.passwordForm.newPassword) {
-        callback(new Error('两次输入的密码不一样'))
-      } else {
-        callback()
-      }
-    }
-    const emailSettingValidate = (rule, value, callback) => {
-      if (!this.options.is_email) {
-        return callback()
-      }
-      if (value === '') {
-        callback(new Error('请输入对应信息'))
-      }
-    }
-    return {
-      userForm: {
-        username: '',
-        email: ''
-      },
-      passwordForm: {
-        oldPassword: '',
-        newPassword: '',
-        repeatPassword: ''
-      },
-      options: {
-        blog_name: '',
-        blog_website: '',
-        blog_footer: '',
-        meta_title: '',
-        meta_description: '',
-        meta_keywords: '',
-        google_site_verification: '',
-        baidu_site_verification: '',
-        google_analytics: '',
-        is_email: false,
-        email_username: '',
-        email_password: '',
-        email_host: '',
-        email_port: '',
-        email_subject: ''
-      },
-      websiteRules: {
-        blog_website: [{ type: 'url', message: '请输入正确格式的网址', trigger: 'blur' }]
-      },
-      emailRules: {
-        email_username: [
-          { type: 'email', message: '请输入正确格式的邮箱', trigger: 'blur' },
-          { validator: emailSettingValidate, trigger: 'blur' }
-        ],
-        email_password: [{ validator: emailSettingValidate, trigger: 'blur' }],
-        email_host: [{ validator: emailSettingValidate, trigger: 'blur' }],
-        email_port: [
-          { validator: emailSettingValidate, trigger: 'blur' }
-        ]
-      },
-      userRules: {
-        username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-        email: [
-          { type: 'email', message: '请输入正确格式的邮箱', trigger: 'blur' },
-          { required: true, message: '请输入邮箱', trigger: 'blur' }
-        ]
-      },
-      passwordRules: {
-        oldPassword: [
-          { required: true, message: '请输入原密码', trigger: 'blur' }
-        ],
-        newPassword: [
-          { required: true, message: '请输入新密码', trigger: 'blur' }
-        ],
-        repeatPassword: [{ validator: repeatPasswordValidate, trigger: 'blur' }
-        ]
-      }
-    }
-  },
-  methods: {
-    getUser () {
-      this.$api.auth.getUser().then(data => {
-        this.userForm.username = data.data.username
-        this.userForm.email = data.data.email
-      })
-    },
-    getOptions () {
-      this.$api.auth.getOptions().then(data => {
-        if (data.success) {
-          const options = data.data
-          for (let key in options) {
-            this.options[key] = options[key]
-          }
-          this.options.is_email = this.options.is_email && this.options.is_email === 'true'
-        } else {
-          this.$message({
-            message: '获取数据异常:' + data.msg,
-            type: 'error'
-          })
+    data: function () {
+        const repeatPasswordValidate = (rule, value, callback) => {
+            if (value === '') {
+                callback(new Error('请再次输入确认密码'));
+            } else if (value !== this.passwordForm.newPassword) {
+                callback(new Error('两次输入的密码不一样'))
+            } else {
+                callback()
+            }
         }
-      })
-    },
-    submitUser () {
-      this.$api.auth.resetUser(this.userForm.username, this.userForm.email).then(data => {
-        if (data.data === true) {
-          this.$message({
-            message: '更新设置成功!',
-            type: 'success'
-          })
-        } else {
-          const message = data.msg || '保存失败,未更新数据库'
-          this.$message({
-            message: message,
-            type: 'error'
-          })
+        const emailSettingValidate = (rule, value, callback) => {
+            if (!this.options.is_email) {
+                return callback()
+            }
+            if (value === '') {
+                callback(new Error('请输入对应信息'))
+            }
         }
-        this.$router.push('/admin/login')
-      })
-    },
-    submitPassword () {
-      this.$api.auth.resetPassword(this.passwordForm.oldPassword, this.passwordForm.newPassword).then(data => {
-        if (data.data === true) {
-          this.$message({
-            message: '更新设置成功!',
-            type: 'success'
-          })
-        } else {
-          const message = data.msg || '保存失败,未更新数据库'
-          this.$message({
-            message: message,
-            type: 'error'
-          })
+        return {
+            userForm: {
+                username: '',
+                email: ''
+            },
+            passwordForm: {
+                oldPassword: '',
+                newPassword: '',
+                repeatPassword: ''
+            },
+            options: {
+                blog_name: '',
+                blog_website: '',
+                blog_footer: '',
+                meta_title: '',
+                meta_description: '',
+                meta_keywords: '',
+                google_site_verification: '',
+                baidu_site_verification: '',
+                google_analytics: '',
+                is_email: false,
+                email_username: '',
+                email_password: '',
+                email_host: '',
+                email_port: '',
+                email_subject: ''
+            },
+            websiteRules: {
+                blog_website: [{type: 'url', message: '请输入正确格式的网址', trigger: 'blur'}]
+            },
+            emailRules: {
+                email_username: [
+                    {type: 'email', message: '请输入正确格式的邮箱', trigger: 'blur'},
+                    {validator: emailSettingValidate, trigger: 'blur'}
+                ],
+                email_password: [{validator: emailSettingValidate, trigger: 'blur'}],
+                email_host: [{validator: emailSettingValidate, trigger: 'blur'}],
+                email_port: [
+                    {validator: emailSettingValidate, trigger: 'blur'}
+                ]
+            },
+            userRules: {
+                username: [{required: true, message: '请输入用户名', trigger: 'blur'}],
+                email: [
+                    {type: 'email', message: '请输入正确格式的邮箱', trigger: 'blur'},
+                    {required: true, message: '请输入邮箱', trigger: 'blur'}
+                ]
+            },
+            passwordRules: {
+                oldPassword: [
+                    {required: true, message: '请输入原密码', trigger: 'blur'}
+                ],
+                newPassword: [
+                    {required: true, message: '请输入新密码', trigger: 'blur'}
+                ],
+                repeatPassword: [{validator: repeatPasswordValidate, trigger: 'blur'}
+                ]
+            }
         }
-        this.$router.push('/admin/login')
-      })
     },
-    submitOptions () {
-      this.$api.auth.saveOptions(this.options)
-        .then(() => {
-          this.$message({
-            message: '更新设置成功!',
-            type: 'success'
-          })
-        })
-    },
-    submitAfterValidate (formName) {
-      let fuc
-      if (formName === 'userForm') {
-        fuc = this.submitUser
-      } else if (formName === 'passwordForm') {
-        fuc = this.submitPassword
-      } else {
-        fuc = this.submitOptions
-      }
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          fuc()
+    methods: {
+        getUser() {
+            this.$api.auth.getUser().then(data => {
+                this.userForm.username = data.data.username
+                this.userForm.email = data.data.email
+            })
+        },
+        getOptions() {
+            this.$api.auth.getOptions().then(data => {
+                if (data.success) {
+                    const options = data.data
+                    for (let key in options) {
+                        this.options[key] = options[key]
+                    }
+                    this.options.is_email = this.options.is_email && this.options.is_email === 'true'
+                } else {
+                    this.$util.message.error('获取数据异常:' + data.msg)
+                }
+            })
+        },
+        submitUser() {
+            this.$api.auth.resetUser(this.userForm.username, this.userForm.email).then(data => {
+                if (data.data === true) {
+                    this.$util.message.success('更新设置成功!')
+                } else {
+                    const message = data.msg || '保存失败,未更新数据库'
+                    this.$util.message.error(message)
+                }
+                this.$router.push('/admin/login')
+            })
+        },
+        submitPassword() {
+            this.$api.auth.resetPassword(this.passwordForm.oldPassword, this.passwordForm.newPassword).then(data => {
+                if (data.data === true) {
+                    this.$util.message.success('更新设置成功!')
+                } else {
+                    const message = data.msg || '保存失败,未更新数据库'
+                    this.$util.message.error(message)
+                }
+                this.$router.push('/admin/login')
+            })
+        },
+        submitOptions() {
+            this.$api.auth.saveOptions(this.options)
+                .then(() => {
+                    this.$util.message.success('更新设置成功!')
+                })
+        },
+        submitAfterValidate(formName) {
+            let fuc
+            if (formName === 'userForm') {
+                fuc = this.submitUser
+            } else if (formName === 'passwordForm') {
+                fuc = this.submitPassword
+            } else {
+                fuc = this.submitOptions
+            }
+            this.$refs[formName].validate((valid) => {
+                if (valid) {
+                    fuc()
+                }
+            })
         }
-      })
     }
-  }
-  ,
-  mounted () {
-    this.getUser()
-    this.getOptions()
-  }
+    ,
+    mounted() {
+        this.getUser()
+        this.getOptions()
+    }
 }
 </script>
 

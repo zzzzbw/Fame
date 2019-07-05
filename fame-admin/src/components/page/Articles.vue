@@ -150,10 +150,7 @@ export default {
     },
     deleteArticle (id) {
       this.$api.auth.deleteArticle(id).then(() => {
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
-        })
+        this.$util.message.success('删除成功!')
         this.init()
       })
     },

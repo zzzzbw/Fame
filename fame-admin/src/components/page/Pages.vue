@@ -106,10 +106,7 @@ export default {
     },
     deletePage (id) {
       this.$api.auth.deletePage(id).then(() => {
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
-        })
+        this.$util.message.success('删除成功!')
         this.init()
       })
     },

@@ -204,11 +204,7 @@ export default {
             this.tags.push(tag);
           }
         } else {
-          this.$message({
-            showClose: true,
-            message: "获取标签列表失败",
-            type: "error"
-          });
+          this.$util.message.error("获取标签列表失败");
         }
       });
     },
@@ -223,21 +219,13 @@ export default {
             this.categories.push(category);
           }
         } else {
-          this.$message({
-            showClose: true,
-            message: "获取分类列表失败",
-            type: "error"
-          });
+          this.$util.message.error("获取分类列表失败");
         }
       });
     },
     submitArticle(formName, success) {
       if (this.submitting) {
-        this.$message({
-          showClose: true,
-          message: "请不要提交过快!",
-          type: "warning"
-        });
+        this.$util.message.warning("请不要提交过快!");
         return;
       }
       this.$refs[formName].validate(valid => {
@@ -249,11 +237,7 @@ export default {
             if (data.success) {
               success(data.data);
             } else {
-              this.$message({
-                showClose: true,
-                message: "提交文章失败文章失败," + data.msg,
-                type: "error"
-              });
+              this.$util.error("提交文章失败文章失败," + data.msg);
             }
             this.submitting = false;
           });
@@ -263,22 +247,14 @@ export default {
     onPublish() {
       const _this = this;
       this.submitArticle("articleForm", function() {
-        _this.$message({
-          showClose: true,
-          message: "发布文章成功!",
-          type: "success"
-        });
+        _this.$util.message.success("发布文章成功!");
         _this.$router.push("/admin/article");
       });
     },
     onSave() {
       const _this = this;
       this.submitArticle("articleForm", function(data) {
-        _this.$message({
-          showClose: true,
-          message: "保存文章成功!",
-          type: "success"
-        });
+        _this.$util.message.success("保存文章成功!");
         _this.$route.params.id = data;
         _this.getArticle();
       });

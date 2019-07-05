@@ -166,12 +166,13 @@ export default {
         .catch(() => {});
     },
     deleteComment(id) {
-      this.$api.auth.deleteComment(id).then(() => {
-        this.$message({
-          type: "success",
-          message: "删除成功!"
-        });
-        this.init();
+      this.$api.auth.deleteComment(id).then(data => {
+        if (data.success) {
+          this.$util.message.success("删除成功!");
+          this.init();
+        } else {
+          this.$util.message.error("删除失败 " + data.msg);
+        }
       });
     }
   },

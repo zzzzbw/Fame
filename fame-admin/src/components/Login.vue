@@ -42,37 +42,28 @@ export default {
             },
             rules: {
                 username: [
-                    { required: true, message: '请输入用户名或邮箱', trigger: 'blur' }
+                    {required: true, message: '请输入用户名或邮箱', trigger: 'blur'}
                 ],
                 password: [
-                    { required: true, message: '请输入密码', trigger: 'blur' }
+                    {required: true, message: '请输入密码', trigger: 'blur'}
                 ]
             }
         }
     },
     methods: {
-        submitForm (formName) {
+        submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
                     this.$api.auth.login(this.userForm).then(data => {
                         if (data.success) {
                             this.$router.push('/admin')
-                            this.$message({
-                                message: '登录成功!',
-                                type: 'success'
-                            })
+                            this.$util.message.success('登录成功!')
                         } else {
-                            this.$message({
-                                message: '登录失败,' + data.msg,
-                                type: 'error'
-                            })
+                            this.$util.message.error('登录失败,' + data.msg)
                         }
                     })
                 } else {
-                    this.$message({
-                        message: '登录失败',
-                        type: 'error'
-                    })
+                    this.$util.message.error('登录失败')
                     return false
                 }
             })

@@ -86,11 +86,7 @@ export default {
     },
     savePage(formName) {
       if (this.submitting) {
-        this.$message({
-          showClose: true,
-          message: "请不要提交过快!",
-          type: "warning"
-        });
+        this.$util.message.warning("请不要提交过快!");
         return;
       }
       this.$refs[formName].validate(valid => {
@@ -98,11 +94,7 @@ export default {
           this.submitting = true;
           this.$api.auth.savePage(this.page).then(() => {
             this.$router.push("/admin/page");
-            this.$message({
-              showClose: true,
-              message: "发布自定义页面成功!",
-              type: "success"
-            });
+            this.$util.message.success("发布自定义页面成功!");
             this.submitting = false;
           });
         }
