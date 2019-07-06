@@ -59,25 +59,25 @@
 export default {
   watchQuery: ['page'],
   key: (to) => to.fullPath,
-  transition (to, from) {
+  transition(to, from) {
     return 'move'
   },
-  head () {
+  head() {
     return { title: `Blog` }
   },
   computed: {
-    articles () {
+    articles() {
       return this.$store.state.article.list.data
     },
-    totalPage () {
+    totalPage() {
       return this.$store.state.article.list.totalPage
     },
-    currentPage () {
+    currentPage() {
       return this.$store.state.article.list.currentPage
     }
   },
-  fetch ({ store, query }) {
-    return store.dispatch('getArticles', query.page)
+  fetch({ store, query }) {
+    return store.dispatch('getArticles', query.page || 1)
   }
 }
 </script>

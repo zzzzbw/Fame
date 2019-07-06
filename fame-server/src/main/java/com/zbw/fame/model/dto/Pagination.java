@@ -1,7 +1,8 @@
 package com.zbw.fame.model.dto;
 
-import com.github.pagehelper.Page;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -12,26 +13,24 @@ import java.util.List;
  * @since 2017/10/23 11:44
  */
 @Data
+@AllArgsConstructor
 public class Pagination<T> {
     private int pageNum;
     private int pageSize;
     private long total;
     private int pages;
-    private boolean count;
     private String orderBy;
     private List<T> list;
 
-    public Pagination() {
-    }
-
     @SuppressWarnings("unchecked")
-    public Pagination(Page page) {
-        pageNum = page.getPageNum();
-        pageSize = page.getPageSize();
-        total = page.getTotal();
-        pages =page.getPages();
-        count = page.isCount();
-        orderBy = page.getOrderBy();
-        list = page.getResult();
+    public static <S> Pagination<S> of(Page<S> page) {
+        return new Pagination(
+                page.getNumber(),
+                page.getSize(),
+                page.getTotalElements(),
+                page.getTotalPages(),
+                page.getSort().toString(),
+                page.getContent()
+        );
     }
 }

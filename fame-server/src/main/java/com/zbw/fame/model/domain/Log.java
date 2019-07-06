@@ -55,10 +55,4 @@ public class Log extends BaseEntity {
      */
     @Column(name = "user_id", columnDefinition = "INT")
     private Integer userId;
-
-    /**
-     * 操作时间
-     */
-    @Column(name = "created", columnDefinition = "TIMESTAMP NOT NULL DEFAULT current_timestamp")
-    private Date created;
 }

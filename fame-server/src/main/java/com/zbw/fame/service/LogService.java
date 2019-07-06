@@ -1,7 +1,7 @@
 package com.zbw.fame.service;
 
-import com.github.pagehelper.Page;
 import com.zbw.fame.model.domain.Log;
+import org.springframework.data.domain.Page;
 
 /**
  * 日志 Service 接口

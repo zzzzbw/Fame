@@ -1,7 +1,7 @@
 package com.zbw.fame.config;
 
-import com.zbw.fame.mapper.*;
 import com.zbw.fame.model.domain.*;
+import com.zbw.fame.repository.*;
 import com.zbw.fame.service.OptionService;
 import com.zbw.fame.util.OptionKeys;
 import com.zbw.fame.util.Types;
@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -28,19 +29,19 @@ import java.net.UnknownHostException;
 public class InitApplicationRunner implements ApplicationRunner {
 
     @Autowired
-    private UserMapper userMapper;
+    private UserRepository userRepository;
 
     @Autowired
-    private ArticleMapper articleMapper;
+    private ArticleRepository articleRepository;
 
     @Autowired
-    private MetaMapper metaMapper;
+    private MetaRepository metaRepository;
 
     @Autowired
-    private MiddleMapper middleMapper;
+    private MiddleRepository middleRepository;
 
     @Autowired
-    private CommentMapper commentMapper;
+    private CommentRepository commentRepository;
 
     @Autowired
     private OptionService optionService;
@@ -109,8 +110,8 @@ public class InitApplicationRunner implements ApplicationRunner {
 
     private User createDefaultUserIfAbsent() {
         log.info("Create default user...");
-        int count = userMapper.selectAll().size();
-        if (count > 0) {
+
+        if (userRepository.count() > 0) {
             return null;
         }
         User user = new User();
@@ -118,7 +119,7 @@ public class InitApplicationRunner implements ApplicationRunner {
         user.setPasswordMd5("3e6693e83d186225b85b09e71c974d2d");
         user.setEmail("");
         user.setScreenName("admin");
-        userMapper.insertSelective(user);
+        userRepository.save(user);
         return user;
     }
 
@@ -126,7 +127,7 @@ public class InitApplicationRunner implements ApplicationRunner {
         log.info("Create default article...");
         Article record = new Article();
         record.setType(Types.POST);
-        int count = articleMapper.select(record).size();
+        long count = articleRepository.count(Example.of(record));
         if (null == user || count > 0) {
             return null;
         }
@@ -145,30 +146,30 @@ public class InitApplicationRunner implements ApplicationRunner {
         article.setType(Types.POST);
         article.setAuthorId(user.getId());
 
-        articleMapper.insertSelective(article);
+        articleRepository.save(article);
         return article;
     }
 
     private void createDefaultMetaIfAbsent(Article article) {
         log.info("Create default meta...");
-        int count = metaMapper.selectAll().size();
+        long count = metaRepository.count();
         if (null == article || count > 0) {
             return;
         }
         Meta tag = new Meta(DEFAULT_TAG, Types.TAG);
         Meta category = new Meta(DEFAULT_CATEGORY, Types.CATEGORY);
-        metaMapper.insertSelective(tag);
-        metaMapper.insertSelective(category);
+        metaRepository.save(tag);
+        metaRepository.save(category);
 
         Middle middleTag = new Middle(article.getId(), tag.getId());
         Middle middleCategory = new Middle(article.getId(), category.getId());
-        middleMapper.insertSelective(middleTag);
-        middleMapper.insertSelective(middleCategory);
+        middleRepository.save(middleTag);
+        middleRepository.save(middleCategory);
     }
 
     private void createDefaultCommentIfAbsent(Article article) {
         log.info("Create default comment...");
-        int count = commentMapper.selectAll().size();
+        long count = commentRepository.count();
         if (null == article || count > 0) {
             return;
         }
@@ -180,33 +181,33 @@ public class InitApplicationRunner implements ApplicationRunner {
         comment.setEmail("zzzzbw@gmail.com");
         comment.setWebsite("https://zzzzbw.cn");
         comment.setIp("0.0.0.1");
-        commentMapper.insertSelective(comment);
+        commentRepository.save(comment);
 
         article.setCommentCount(1);
-        articleMapper.updateByPrimaryKeySelective(article);
+        articleRepository.save(article);
     }
 
     private void createDefaultPageIfAbsent(User user) {
         log.info("Create default page...");
         Article record = new Article();
         record.setType(Types.PAGE);
-        int count = articleMapper.select(record).size();
+        long count = articleRepository.count(Example.of(record));
         if (null == user || count > 0) {
             return;
         }
-        Article article = new Article();
-        article.setTitle("About");
-        article.setContent("# About me\n" +
+        Article page = new Article();
+        page.setTitle("About");
+        page.setContent("# About me\n" +
                 "### Hello word\n" +
                 "这是关于我的页面\n" +
                 "* [Github](https://github.com/)\n" +
                 "* [知乎](https://www.zhihu.com/)\n" +
                 "### 也可以设置别的页面\n" +
                 "* 比如友链页面");
-        article.setStatus(Types.PUBLISH);
-        article.setType(Types.PAGE);
-        article.setAuthorId(user.getId());
+        page.setStatus(Types.PUBLISH);
+        page.setType(Types.PAGE);
+        page.setAuthorId(user.getId());
 
-        articleMapper.insertSelective(article);
+        articleRepository.save(page);
     }
 }

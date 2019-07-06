@@ -1,18 +1,17 @@
 package com.zbw.fame.controller;
 
-import com.github.pagehelper.Page;
+
 import com.zbw.fame.model.domain.Article;
 import com.zbw.fame.model.domain.Comment;
-import com.zbw.fame.model.dto.Archive;
-import com.zbw.fame.model.dto.CommentDto;
-import com.zbw.fame.model.dto.MetaDto;
-import com.zbw.fame.model.dto.Pagination;
+import com.zbw.fame.model.dto.*;
 import com.zbw.fame.service.*;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.RestResponse;
 import com.zbw.fame.util.Types;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,22 +26,18 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class FrontController extends BaseController {
 
-    @Autowired
-    private ArticleService articleService;
+    private final ArticleService articleService;
 
-    @Autowired
-    private MetaService metaService;
+    private final MetaService metaService;
 
-    @Autowired
-    private CommentService commentService;
+    private final CommentService commentService;
 
-    @Autowired
-    private EmailService emailService;
+    private final EmailService emailService;
 
-    @Autowired
-    private OptionService optionService;
+    private final OptionService optionService;
 
     /**
      * 文章列表
@@ -52,10 +47,10 @@ public class FrontController extends BaseController {
      * @return {@see Pagination<Article>}
      */
     @GetMapping("article")
-    public RestResponse home(@RequestParam(required = false, defaultValue = "1") Integer page,
+    public RestResponse home(@RequestParam(required = false, defaultValue = "0") Integer page,
                              @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
         Page<Article> articles = articleService.getFrontArticles(page, limit);
-        return RestResponse.ok(new Pagination<Article>(articles));
+        return RestResponse.ok(Pagination.of(articles));
     }
 
     /**
@@ -84,10 +79,7 @@ public class FrontController extends BaseController {
         Integer cHits = cacheUtil.getCacheValue(FameConsts.CACHE_ARTICLE_HITS, articleId, Integer.class);
         cHits = null == cHits ? 1 : cHits + 1;
         if (cHits >= FameConsts.CACHE_ARTICLE_HITS_SAVE) {
-            Article temp = new Article();
-            temp.setId(articleId);
-            temp.setHits(hits + cHits);
-            articleService.updateArticle(temp);
+            articleService.updateHits(articleId, hits + cHits);
             cacheUtil.putCacheValue(FameConsts.CACHE_ARTICLE_HITS, articleId, 0);
         } else {
             cacheUtil.putCacheValue(FameConsts.CACHE_ARTICLE_HITS, articleId, cHits);
@@ -98,23 +90,23 @@ public class FrontController extends BaseController {
     /**
      * 标签页
      *
-     * @return {@see List<MetaDto>}
+     * @return {@see List<MetaInfo>}
      */
     @GetMapping("tag")
     public RestResponse tag() {
-        List<MetaDto> metaDtos = metaService.getPublishMetaDtos(Types.TAG);
-        return RestResponse.ok(metaDtos);
+        List<MetaInfo> metaInfos = metaService.getPublishMetaInfos(Types.TAG);
+        return RestResponse.ok(metaInfos);
     }
 
     /**
      * 分类页
      *
-     * @return {@see List<MetaDto>}
+     * @return {@see List<MetaInfo>}
      */
     @GetMapping("/category")
     public RestResponse category() {
-        List<MetaDto> metaDtos = metaService.getPublishMetaDtos(Types.CATEGORY);
-        return RestResponse.ok(metaDtos);
+        List<MetaInfo> metaInfos = metaService.getPublishMetaInfos(Types.CATEGORY);
+        return RestResponse.ok(metaInfos);
     }
 
     /**
@@ -152,10 +144,10 @@ public class FrontController extends BaseController {
      * @return {@see Pagination<Comment>}
      */
     @GetMapping("comment")
-    public RestResponse getArticleComment(@RequestParam Integer articleId, @RequestParam(required = false, defaultValue = "1") Integer page,
+    public RestResponse getArticleComment(@RequestParam Integer articleId, @RequestParam(required = false, defaultValue = "0") Integer page,
                                           @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
-        Page<Comment> comments = commentService.getCommentsByArticleId(page, limit, articleId);
-        return RestResponse.ok(new Pagination<Comment>(comments));
+        org.springframework.data.domain.Page<Comment> comments = commentService.getCommentsByArticleId(page, limit, articleId);
+        return RestResponse.ok(Pagination.of(comments));
     }
 
 

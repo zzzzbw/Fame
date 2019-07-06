@@ -15,11 +15,11 @@
         <i class="el-icon-monitor"></i>
         <span slot="title">仪表盘</span>
       </el-menu-item>
-      <el-menu-item index="/admin/article?page=1">
+      <el-menu-item index="/admin/article">
         <i class="el-icon-document-copy"></i>
         <span slot="title">文章列表</span>
       </el-menu-item>
-      <el-menu-item index="/admin/comment?page=1">
+      <el-menu-item index="/admin/comment">
         <i class="el-icon-chat-dot-round"></i>
         <span slot="title">评论列表</span>
       </el-menu-item>
@@ -27,7 +27,7 @@
         <i class="el-icon-copy-document"></i>
         <span slot="title">标签/分类</span>
       </el-menu-item>
-      <el-menu-item index="/admin/page?page=1">
+      <el-menu-item index="/admin/page">
         <i class="el-icon-document"></i>
         <span slot="title">页面列表</span>
       </el-menu-item>

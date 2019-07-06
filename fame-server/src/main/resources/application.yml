@@ -3,6 +3,7 @@ server:
   port: 9090
 spring:
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: update
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect

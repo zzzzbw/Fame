@@ -3,11 +3,9 @@ package com.zbw.fame.model.domain;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import tk.mybatis.mapper.annotation.Order;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import java.util.Date;
 
 /**
  * 文章 Model
@@ -26,19 +24,6 @@ public class Article extends BaseEntity {
      */
     @Column(name = "title", columnDefinition = "VARCHAR(255) NOT NULL")
     private String title;
-
-    /**
-     * 内容生成时间
-     */
-    @Order("desc")
-    @Column(name = "created", columnDefinition = "TIMESTAMP NOT NULL DEFAULT current_timestamp")
-    private Date created;
-
-    /**
-     * 内容修改时间
-     */
-    @Column(name = "modified", columnDefinition = "TIMESTAMP NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp")
-    private Date modified;
 
     /**
      * 内容
@@ -93,4 +78,18 @@ public class Article extends BaseEntity {
      */
     @Column(name = "comment_count", columnDefinition = "INT DEFAULT 0 NOT NULL")
     private Integer commentCount;
+
+    @Override
+    protected void prePersist() {
+        super.prePersist();
+        if (null == hits) {
+            hits = 0;
+        }
+        if (null == allowComment) {
+            allowComment = true;
+        }
+        if (null == commentCount) {
+            commentCount = 0;
+        }
+    }
 }

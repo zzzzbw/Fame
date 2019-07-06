@@ -31,16 +31,4 @@ public class SysOption extends BaseEntity {
      */
     @Column(name = "option_value", columnDefinition = "VARCHAR(1023) NOT NULL")
     private String optionValue;
-
-    /**
-     * 创建时间
-     */
-    @Column(name = "created", columnDefinition = "TIMESTAMP NOT NULL DEFAULT current_timestamp")
-    private Date created;
-
-    /**
-     * 修改时间
-     */
-    @Column(name = "modified", columnDefinition = "TIMESTAMP NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp")
-    private Date modified;
 }

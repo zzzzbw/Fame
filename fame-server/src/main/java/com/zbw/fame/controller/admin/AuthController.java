@@ -5,6 +5,7 @@ import com.zbw.fame.model.domain.User;
 import com.zbw.fame.service.UserService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.RestResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +20,10 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 @RequestMapping("/api/admin")
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class AuthController extends BaseController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     /**
      * 后台登录

@@ -3,6 +3,7 @@ package com.zbw.fame.controller.admin;
 import com.zbw.fame.controller.BaseController;
 import com.zbw.fame.service.MetaService;
 import com.zbw.fame.util.RestResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,10 +15,10 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/admin/meta")
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class MetaController extends BaseController {
 
-    @Autowired
-    private MetaService metaService;
+    private final MetaService metaService;
 
     /**
      * 获取所有属性
@@ -26,7 +27,7 @@ public class MetaController extends BaseController {
      */
     @GetMapping
     public RestResponse getAll(@RequestParam String type) {
-        return RestResponse.ok(metaService.getMetaDtos(type));
+        return RestResponse.ok(metaService.getMetaInfos(type));
     }
 
     /**

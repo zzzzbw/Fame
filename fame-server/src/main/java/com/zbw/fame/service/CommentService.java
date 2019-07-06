@@ -1,9 +1,9 @@
 package com.zbw.fame.service;
 
-import com.github.pagehelper.Page;
 import com.zbw.fame.model.domain.Comment;
 import com.zbw.fame.model.dto.CommentDto;
 import com.zbw.fame.util.Types;
+import org.springframework.data.domain.Page;
 
 /**
  * 评论 Service 接口
@@ -55,6 +55,14 @@ public interface CommentService {
     boolean deleteComment(Integer id);
 
     /**
+     * 根据文章id删除评论
+     *
+     * @param articleId 文章id
+     * @return 删除评论数量
+     */
+    int deleteCommentByArticleId(Integer articleId);
+
+    /**
      * 顶或踩评论
      *
      * @param commentId 评论给id
@@ -67,5 +75,5 @@ public interface CommentService {
      *
      * @return 数量
      */
-    Integer count();
+    Long count();
 }
