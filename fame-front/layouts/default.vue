@@ -12,10 +12,10 @@
 </template>
 
 <script>
+import defaultConfig from '../config/default-config'
 import FameHeader from '~/components/Header.vue'
 import FameFooter from '~/components/Footer.vue'
 import FameScrollTop from '~/components/ScrollTop.vue'
-import defaultConfig from '../config/default-config'
 
 export default {
   components: {

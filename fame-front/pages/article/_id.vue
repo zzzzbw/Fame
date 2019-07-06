@@ -35,9 +35,9 @@
 </template>
 
 <script type="text/ecmascript-6">
+import tocbot from 'tocbot'
 import Comment from '~/components/Comment.vue'
 import BigImg from '~/components/BigImg.vue'
-import tocbot from 'tocbot'
 
 export default {
   head () {
