@@ -1,5 +1,7 @@
 package com.zbw.fame.util;
 
+import java.io.File;
+
 /**
  * 常量工具类
  *
@@ -79,5 +81,30 @@ public interface FameConsts {
      * 发送邮件的标题
      */
     String EMAIL_TEMPLATE_DEFAULT_SUBJECT = "来自Fame博客网站发送的邮件";
+
+    /**
+     * Fame保存目录
+     */
+    String FAME_HOME = ".fame" + File.separator;
+
+    /**
+     * 用户目录
+     */
+    String USER_HOME = System.getProperties().getProperty("user.home") + File.separator;
+
+    /**
+     * 上传文件的路径
+     */
+    String UPLOAD_DIR = "upload" + File.separator;
+
+    /**
+     * 媒体文件夹路径
+     */
+    String MEDIA_DIR = UPLOAD_DIR + "media" + File.separator;
+
+    /**
+     * 媒体缩略图后缀
+     */
+    String MEDIA_THUMBNAIL_SUFFIX = "_thumbnail";
 
 }

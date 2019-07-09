@@ -33,7 +33,7 @@ import java.util.List;
  * @since 2018/1/19 16:57
  */
 @Slf4j
-@Service("commentsService")
+@Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class CommentServiceImpl implements CommentService {
 

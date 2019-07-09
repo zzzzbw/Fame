@@ -19,7 +19,7 @@ import java.util.Date;
  * @author zbw
  * @since 2017/7/12 21:24
  */
-@Service("usersService")
+@Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class UserServiceImpl implements UserService {
 

@@ -1,4 +1,5 @@
 import { Message } from "element-ui";
+import serverConfig from "../../server-config";
 /************************************************************/
 /**
  *  全局常量
@@ -16,6 +17,23 @@ const STATIC = {
 /**
  * 通用工具类
  */
+
+/**
+ * 获取服务器链接
+ * @returns {string}
+ */
+function getServerUrl() {
+  return serverConfig.api;
+}
+
+/**
+ * 获取服务器媒体链接
+ * @param url
+ * @returns {string}
+ */
+function getServerMediaUrl(url) {
+  return getServerUrl() + "media/" + url;
+}
 
 /**
  * 标签转字符串
@@ -45,6 +63,24 @@ function stringToTags(str) {
   }
 }
 
+/**
+ * 复制文字到剪切板
+ * @param text
+ */
+function copyText(text) {
+  const oInput = document.createElement("input");
+  oInput.value = text;
+  document.body.appendChild(oInput);
+  oInput.select(); // 选择对象
+  document.execCommand("Copy"); // 执行浏览器复制命令
+  oInput.className = "oInput";
+  oInput.style.display = "none";
+}
+
+/**
+ * 通用提示信息
+ * @type {{success: message.success, warning: message.warning, error: message.error, info: message.info}}
+ */
 const message = {
   success: function(message) {
     Message({
@@ -79,5 +115,8 @@ export default {
   STATIC,
   tagsToString,
   stringToTags,
+  copyText,
+  getServerUrl,
+  getServerMediaUrl,
   message
 };

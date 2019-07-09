@@ -136,6 +136,19 @@ const auth = {
   },
   deletePage(id) {
     return del("/admin/page/" + id);
+  },
+  getMedias(limit, page) {
+    const params = {
+      limit: limit,
+      page: page - 1
+    };
+    return get("/admin/media", params);
+  },
+  getMedia(id) {
+    return get("/admin/media/" + id);
+  },
+  deleteMedia(id) {
+    return del("/admin/media/" + id);
   }
 };
 

@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  * @author zbw
  * @since 2019-05-20 22:45
  */
-@Service("optionService")
+@Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class OptionServiceImpl implements OptionService {
 

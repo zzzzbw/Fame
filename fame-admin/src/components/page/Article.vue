@@ -90,16 +90,21 @@
                 </el-date-picker>
               </el-form-item>
               <el-form-item>
+                <el-button size="small" @click="showMediaDialog(1)"
+                  >媒体库
+                </el-button>
+              </el-form-item>
+              <el-form-item>
                 <el-button-group>
                   <el-row>
-                    <el-button type="primary" size="small" @click="onSave"
+                    <el-button type="success" size="small" @click="onSave"
                       >保存
                     </el-button>
                     <el-button type="primary" size="small" @click="onPublish"
                       >发布
                     </el-button>
                     <el-button
-                      type="primary"
+                      type="info"
                       size="small"
                       v-if="this.article.id !== ''"
                     >
@@ -122,18 +127,63 @@
         </el-col>
       </el-row>
     </el-form>
+    <el-dialog
+      :visible.sync="mediaDialog"
+      top="10vh"
+      :fullscreen="isMobile"
+      append-to-body
+      center
+      width="80%"
+    >
+      <upload :afterUpload="afterUpload"></upload>
+      <div class="media-list">
+        <el-row>
+          <el-col
+            style="padding: 6px"
+            :xs="24"
+            :sm="12"
+            :md="12"
+            :lg="6"
+            :xl="4"
+            v-for="media in mediaDialogData.mediaDatas"
+            :key="media.id"
+          >
+            <media-item
+              :media="media"
+              :after-delete="afterDeleteMedia"
+            ></media-item>
+          </el-col>
+        </el-row>
+        <div class="admin-page">
+          <el-pagination
+            layout="total, prev, pager, next"
+            @current-change="showMediaDialog"
+            :current-page.sync="mediaDialogData.currentPage"
+            :page-size="mediaDialogData.pageSize"
+            :total="mediaDialogData.total"
+          >
+          </el-pagination>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import MarkdownEditor from "../common/MarkdownEditor";
+import MediaItem from "../common/MediaItem";
+import Upload from "../common/Upload";
 
 export default {
   components: {
-    MarkdownEditor
+    MarkdownEditor,
+    MediaItem,
+    Upload
   },
   data: function() {
     return {
+      mediaDialog: false,
+      isMobile: false,
       submitting: false,
       article: {
         id: "",
@@ -156,7 +206,13 @@ export default {
       selectTags: [],
       tags: [],
       categories: [],
-      flagFalse: false
+      flagFalse: false,
+      mediaDialogData: {
+        mediaDatas: [],
+        total: 0,
+        pageSize: 10,
+        currentPage: 1
+      }
     };
   },
   methods: {
@@ -223,6 +279,45 @@ export default {
         }
       });
     },
+    showMediaDialog(page = 1) {
+      this.isMobile = document.body.clientWidth < 768;
+      this.mediaDialog = true;
+      this.$api.auth.getMedias(12, page).then(data => {
+        this.mediaDialogData.mediaDatas = data.data.list;
+        this.mediaDialogData.total = data.data.total;
+        this.mediaDialogData.pageSize = data.data.pageSize;
+        for (let media of this.mediaDialogData.mediaDatas) {
+          if (media.thumbUrl && media.thumbUrl !== "") {
+            media.showUrl = this.$util.getServerMediaUrl(media.thumbUrl);
+          } else {
+            media.showUrl = this.$util.getServerMediaUrl(media.url);
+          }
+        }
+      });
+    },
+    afterDeleteMedia(data) {
+      if (data.success) {
+        this.showMediaDialog(1);
+      }
+    },
+    afterUpload(response) {
+      if (response.success) {
+        this.$api.auth
+          .getMedias(12, this.mediaDialogData.currentPage)
+          .then(data => {
+            this.mediaDialogData.mediaDatas = data.data.list;
+            this.mediaDialogData.total = data.data.total;
+            this.mediaDialogData.pageSize = data.data.pageSize;
+            for (let media of this.mediaDialogData.mediaDatas) {
+              if (media.thumbUrl && media.thumbUrl !== "") {
+                media.showUrl = this.$util.getServerMediaUrl(media.thumbUrl);
+              } else {
+                media.showUrl = this.$util.getServerMediaUrl(media.url);
+              }
+            }
+          });
+      }
+    },
     submitArticle(formName, success) {
       if (this.submitting) {
         this.$util.message.warning("请不要提交过快!");
@@ -280,6 +375,15 @@ export default {
 <style scoped>
 .el-select {
   width: 100%;
+}
+
+.el-date-editor {
+  width: 100%;
+}
+
+.admin-page {
+  margin-top: 30px;
+  text-align: center;
 }
 
 a {

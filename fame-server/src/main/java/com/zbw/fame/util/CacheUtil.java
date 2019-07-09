@@ -1,5 +1,6 @@
 package com.zbw.fame.util;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
@@ -12,10 +13,10 @@ import org.springframework.stereotype.Component;
  * @since 2019/3/25 11:32
  */
 @Component
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class CacheUtil {
-
-    @Autowired
-    private CacheManager cacheManager;
+    
+    private final CacheManager cacheManager;
 
     /**
      * 获取缓存

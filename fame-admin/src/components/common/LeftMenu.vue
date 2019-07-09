@@ -27,6 +27,10 @@
         <i class="el-icon-copy-document"></i>
         <span slot="title">标签/分类</span>
       </el-menu-item>
+      <el-menu-item index="/admin/media">
+        <i class="el-icon-copy-document"></i>
+        <span slot="title">媒体库</span>
+      </el-menu-item>
       <el-menu-item index="/admin/page">
         <i class="el-icon-document"></i>
         <span slot="title">页面列表</span>

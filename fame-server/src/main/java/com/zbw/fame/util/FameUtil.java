@@ -8,6 +8,7 @@ import com.vladsch.flexmark.parser.ParserEmulationProfile;
 import com.vladsch.flexmark.util.options.MutableDataSet;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.model.domain.User;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
@@ -17,12 +18,21 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.text.SimpleDateFormat;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -31,27 +41,28 @@ import java.util.Set;
  * @author zbw
  * @since 2017/7/9 22:08
  */
+@Slf4j
 public class FameUtil {
 
     /**
      * markdown 扩展设置
      */
-    private static final MutableDataSet options = new MutableDataSet();
+    private static final MutableDataSet MARKDOWN_OPTIONS = new MutableDataSet();
 
     static {
-        options.setFrom(ParserEmulationProfile.MARKDOWN);
-        options.set(Parser.EXTENSIONS, Collections.singletonList(TablesExtension.create()));
+        MARKDOWN_OPTIONS.setFrom(ParserEmulationProfile.MARKDOWN);
+        MARKDOWN_OPTIONS.set(Parser.EXTENSIONS, Collections.singletonList(TablesExtension.create()));
     }
 
     /**
      * markdown 解析器
      */
-    private static final Parser PARSER = Parser.builder(options).build();
+    private static final Parser PARSER = Parser.builder(MARKDOWN_OPTIONS).build();
 
     /**
      * markdown html 解析器
      */
-    private static final HtmlRenderer HTML_RENDER = HtmlRenderer.builder(options).build();
+    private static final HtmlRenderer HTML_RENDER = HtmlRenderer.builder(MARKDOWN_OPTIONS).build();
 
     /**
      * 禁止实例化
@@ -277,4 +288,114 @@ public class FameUtil {
         return emptyNames.toArray(result);
     }
 
+    /**
+     * 获取项目保存目录
+     *
+     * @return 项目目录文件
+     */
+    public static Path getFameDir() {
+        Path dir = Paths.get(FameConsts.USER_HOME, FameConsts.FAME_HOME);
+        if (!Files.exists(dir)) {
+            try {
+                Files.createDirectories(dir);
+            } catch (IOException e) {
+                throw new TipException(e);
+            }
+        }
+        return dir;
+    }
+
+    /**
+     * 获取文件文件名,不包括后缀
+     *
+     * @return
+     */
+    public static String getFileBaseName(String fileName) {
+        if (StringUtils.isEmpty(fileName)) {
+            return "";
+        }
+        int index = fileName.lastIndexOf(".");
+        if (index == -1) {
+            return fileName;
+        }
+        return fileName.substring(0, index);
+    }
+
+
+    /**
+     * 返回文件后缀
+     *
+     * @param fileName 文件名
+     * @return 文件后缀
+     */
+    public static String getFileSuffix(String fileName) {
+        if (StringUtils.isEmpty(fileName)) {
+            return "";
+        }
+        int index = fileName.lastIndexOf(".");
+        if (index == -1) {
+            return "";
+        }
+        return fileName.substring(index + 1);
+    }
+
+    /**
+     * 压缩图片
+     *
+     * @param source       源文件
+     * @param target       目标文件
+     * @param imageQuality 压缩图片质量
+     */
+    public static void compressImage(File source, File target, float imageQuality) {
+        InputStream inputStream = null;
+        OutputStream outputStream = null;
+        ImageWriter imageWriter = null;
+        ImageOutputStream imageOutputStream = null;
+        try {
+            inputStream = new FileInputStream(source);
+            outputStream = new FileOutputStream(target);
+            // Create the buffered image
+            BufferedImage bufferedImage = ImageIO.read(inputStream);
+
+            // Get image writers
+            Iterator<ImageWriter> imageWriters = ImageIO.getImageWritersByFormatName("jpg");
+
+            if (!imageWriters.hasNext()) {
+                throw new IllegalStateException("Writers Not Found!!");
+            }
+
+            imageWriter = imageWriters.next();
+            imageOutputStream = ImageIO.createImageOutputStream(outputStream);
+            imageWriter.setOutput(imageOutputStream);
+
+            ImageWriteParam imageWriteParam = imageWriter.getDefaultWriteParam();
+
+            // Set the compress quality metrics
+            imageWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+            imageWriteParam.setCompressionQuality(imageQuality);
+
+            // Created image
+            imageWriter.write(null, new IIOImage(bufferedImage, null, null), imageWriteParam);
+        } catch (IOException e) {
+            throw new TipException(e);
+        } finally {
+            // close all streams
+            try {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+                if (imageOutputStream != null) {
+                    imageOutputStream.close();
+                }
+                if (imageWriter != null) {
+                    imageWriter.dispose();
+                }
+            } catch (IOException e) {
+                log.error(e.getMessage(), e);
+            }
+        }
+    }
 }

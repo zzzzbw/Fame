@@ -4,36 +4,30 @@ import { Message, Loading } from "element-ui";
 import router from "../router/index";
 import serverConfig from "../../server-config";
 
-const Axios = axios.create({
+const axiosJson = axios.create({
   baseURL: serverConfig.api + "api/", // 本地做反向代理
   timeout: 5000,
-  responseType: "json",
   withCredentials: true, // 是否允许带cookie这些
-  headers: {
-    "Content-Type": "application/x-www-form-urlencoded;charset=utf-8"
-  }
+  transformRequest: [
+    data => {
+      return qs.stringify(data);
+    }
+  ]
 });
 
 let loadingInstance = null;
 let loginError = false;
-// 请求拦截（配置发送请求的信息） 传参序列化
-Axios.interceptors.request.use(
-  config => {
+
+// 请求拦截（配置请求信息）
+const requestInterceptor = {
+  before: config => {
     if (loadingInstance === null) {
       loadingInstance = Loading.service({ target: "#main", fullscreen: false });
     }
 
-    if (
-      config.method === "post" ||
-      config.method === "put" ||
-      config.method === "delete"
-    ) {
-      // 序列化
-      config.data = qs.stringify(config.data);
-    }
     return config;
   },
-  error => {
+  error: error => {
     Message({
       showClose: true,
       message: error,
@@ -41,11 +35,11 @@ Axios.interceptors.request.use(
     });
     return Promise.reject(error);
   }
-);
+};
 
 // 响应拦截（配置请求回来的信息）
-Axios.interceptors.response.use(
-  function(response) {
+const responseInterceptor = {
+  after: response => {
     // 处理响应数据
     if (loadingInstance !== null) {
       loadingInstance.close();
@@ -89,7 +83,7 @@ Axios.interceptors.response.use(
     }
     return response;
   },
-  function(error) {
+  error: error => {
     // 处理响应失败
     if (loadingInstance !== null) {
       loadingInstance.close();
@@ -109,6 +103,17 @@ Axios.interceptors.response.use(
 
     return Promise.reject(error);
   }
+};
+
+// 配置axiosJson拦截器
+axiosJson.interceptors.request.use(
+  requestInterceptor.before,
+  requestInterceptor.error
+);
+
+axiosJson.interceptors.response.use(
+  responseInterceptor.after,
+  responseInterceptor.error
 );
 
 /**
@@ -119,9 +124,10 @@ Axios.interceptors.response.use(
  */
 export function get(url, params = {}) {
   return new Promise((resolve, reject) => {
-    Axios.get(url, {
-      params: params
-    })
+    axiosJson
+      .get(url, {
+        params: params
+      })
       .then(response => {
         resolve(response.data);
       })
@@ -139,7 +145,7 @@ export function get(url, params = {}) {
  */
 export function post(url, params = {}) {
   return new Promise((resolve, reject) => {
-    Axios.post(url, params).then(
+    axiosJson.post(url, params).then(
       response => {
         resolve(response.data);
       },
@@ -158,7 +164,7 @@ export function post(url, params = {}) {
  */
 export function put(url, params = {}) {
   return new Promise((resolve, reject) => {
-    Axios.put(url, params).then(
+    axiosJson.put(url, params).then(
       response => {
         resolve(response.data);
       },
@@ -177,9 +183,10 @@ export function put(url, params = {}) {
  */
 export function del(url, params = {}) {
   return new Promise((resolve, reject) => {
-    Axios.delete(url, {
-      params: params
-    })
+    axiosJson
+      .delete(url, {
+        params: params
+      })
       .then(response => {
         resolve(response.data);
       })

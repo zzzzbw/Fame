@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author zbw
  * @since 2017/10/11 10:42
  */
-@Service("logsService")
+@Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class LogServiceImpl implements LogService {
 

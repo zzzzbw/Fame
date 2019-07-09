@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  * @author zbw
  * @since 2017/8/28 23:33
  */
-@Service("metasService")
+@Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class MetaServiceImpl implements MetaService {
 

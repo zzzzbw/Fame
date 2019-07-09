@@ -51,6 +51,12 @@ const TagList = resolve => {
   });
 };
 
+const MediaList = resolve => {
+  import("@/components/page/Medias").then(module => {
+    resolve(module);
+  });
+};
+
 const PageList = resolve => {
   import("@/components/page/Pages").then(module => {
     resolve(module);
@@ -112,6 +118,10 @@ const router = new Router({
         {
           path: "tag",
           component: TagList
+        },
+        {
+          path: "media",
+          component: MediaList
         },
         {
           path: "page",

@@ -35,7 +35,7 @@ import java.util.List;
  * @since 2017/8/21 22:02
  */
 @Slf4j
-@Service("articlesService")
+@Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ArticleServiceImpl implements ArticleService {
 
