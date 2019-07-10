@@ -3,7 +3,7 @@ import { get, post } from './http'
 const api = {
   getArticles(page, limit) {
     const params = {
-      page: page - 1,
+      page: page,
       limit: limit || 5
     }
     return get('/article', params)
@@ -26,7 +26,7 @@ const api = {
   getComment(articleId, page, limit) {
     const params = {
       articleId: articleId,
-      page: page - 1,
+      page: page,
       limit: limit || 5
     }
     return get('comment', params)

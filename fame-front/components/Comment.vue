@@ -140,7 +140,7 @@
 const defaultPlaceholder = '写下你的评论,支持markdown语法哟...'
 // 设置999不分页
 const defaultLimit = 999
-const defaultPage = 1
+const defaultPage = 0
 export default {
   props: {
     articleId: {

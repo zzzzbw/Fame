@@ -17,7 +17,7 @@ export const actions = {
     const list = {
       data: data.list,
       totalPage: data.pages,
-      currentPage: data.pageNum || 1
+      currentPage: data.pageNum || 0
     }
     commit('article/SET_LIST', list)
   },

@@ -41,12 +41,12 @@
       </nuxt-link>
     </div>
     <div class="front-page">
-      <div v-if="currentPage > 1" class="pre text-primary">
+      <div v-if="currentPage > 0" class="pre text-primary">
         <nuxt-link :to="{ path: '', query: { page: currentPage - 1 } }"
           >← Pre
         </nuxt-link>
       </div>
-      <div v-if="currentPage < totalPage" class="next text-primary">
+      <div v-if="currentPage + 1 < totalPage" class="next text-primary">
         <nuxt-link :to="{ path: '', query: { page: currentPage + 1 } }"
           >Next →
         </nuxt-link>
@@ -77,7 +77,7 @@ export default {
     }
   },
   fetch({ store, query }) {
-    return store.dispatch('getArticles', query.page || 1)
+    return store.dispatch('getArticles', query.page || 0)
   }
 }
 </script>

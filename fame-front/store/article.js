@@ -1,8 +1,8 @@
 export const state = () => ({
   list: {
     data: [],
-    totalPage: 1,
-    currentPage: 1
+    totalPage: 0,
+    currentPage: 0
   },
   detail: {},
   page: {}
