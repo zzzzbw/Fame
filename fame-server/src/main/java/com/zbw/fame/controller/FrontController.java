@@ -11,7 +11,9 @@ import com.zbw.fame.util.RestResponse;
 import com.zbw.fame.util.Types;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,8 +50,10 @@ public class FrontController extends BaseController {
      */
     @GetMapping("article")
     public RestResponse home(@RequestParam(required = false, defaultValue = "0") Integer page,
-                             @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
-        Page<Article> articles = articleService.getFrontArticles(page, limit);
+                             @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit,
+                             @RequestParam(required = false, defaultValue = "id") List<String> sort
+    ) {
+        Page<Article> articles = articleService.getFrontArticles(page, limit, sort);
         return RestResponse.ok(Pagination.of(articles));
     }
 

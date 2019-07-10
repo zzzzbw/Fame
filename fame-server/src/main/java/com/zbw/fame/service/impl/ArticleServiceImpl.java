@@ -16,9 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +24,7 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -51,12 +50,13 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     @Cacheable(value = ARTICLE_CACHE_NAME, key = "'font_articles['+#page+':'+#limit+']'")
-    public Page<Article> getFrontArticles(Integer page, Integer limit) {
+    public Page<Article> getFrontArticles(Integer page, Integer limit, List<String> sort) {
         Article record = new Article();
         record.setStatus(Types.PUBLISH);
         record.setType(Types.POST);
 
-        Page<Article> result = articleRepository.findAll(Example.of(record), PageRequest.of(page, limit));
+        Pageable pageable = PageRequest.of(page, limit, new Sort(Sort.Direction.DESC, sort));
+        Page<Article> result = articleRepository.findAll(Example.of(record), pageable);
         result.forEach(article -> {
             String content = FameUtil.contentTransform(article.getContent(), true, true);
             article.setContent(content);

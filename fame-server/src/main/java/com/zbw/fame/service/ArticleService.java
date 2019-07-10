@@ -20,9 +20,10 @@ public interface ArticleService {
      *
      * @param page  当前页面
      * @param limit 每页数量
+     * @param sort  排序
      * @return Page<Article>
      */
-    Page<Article> getFrontArticles(Integer page, Integer limit);
+    Page<Article> getFrontArticles(Integer page, Integer limit, List<String> sort);
 
     /**
      * 根据id获取前端文章
@@ -62,7 +63,7 @@ public interface ArticleService {
      * 更新文章点击量
      *
      * @param articleId 文章id
-     * @param hits 点击量
+     * @param hits      点击量
      * @return
      */
     boolean updateHits(Integer articleId, Integer hits);
