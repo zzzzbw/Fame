@@ -44,7 +44,7 @@ services:
     - ./fame-server:/app
     - ~/.m2:/root/.m2
     - ~/.fame/logs/server:/app/log
-    - ~/.fame/upload:/.fame/upload
+    - ~/.fame/upload:/root/.fame/upload
     expose:
     - "9090"
     command: mvn clean spring-boot:run -Dspring-boot.run.profiles=docker -Dmaven.test.skip=true
