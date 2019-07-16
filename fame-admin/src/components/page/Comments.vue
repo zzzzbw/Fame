@@ -1,102 +1,106 @@
 <template>
   <div>
-    <el-table :data="commentDatas" border style="width: 100%">
-      <el-table-column prop="id" label="id" width="60"></el-table-column>
-      <el-table-column
-        prop="name"
-        label="称呼"
-        show-overflow-tooltip
-      ></el-table-column>
-      <el-table-column
-        prop="content"
-        label="内容"
-        show-overflow-tooltip
-      ></el-table-column>
-      <el-table-column
-        prop="email"
-        label="邮箱"
-        show-overflow-tooltip
-      ></el-table-column>
-      <el-table-column
-        prop=""
-        label="评论日期"
-        width="160"
-        show-overflow-tooltip
+    <el-card>
+      <el-table :data="commentDatas" border style="width: 100%">
+        <el-table-column prop="id" label="id" width="60"></el-table-column>
+        <el-table-column
+          prop="name"
+          label="称呼"
+          show-overflow-tooltip
+        ></el-table-column>
+        <el-table-column
+          prop="content"
+          label="内容"
+          show-overflow-tooltip
+        ></el-table-column>
+        <el-table-column
+          prop="email"
+          label="邮箱"
+          show-overflow-tooltip
+        ></el-table-column>
+        <el-table-column
+          prop=""
+          label="评论日期"
+          width="160"
+          show-overflow-tooltip
+        >
+          <template slot-scope="scope">
+            <i class="el-icon-time"></i>
+            <span style="margin-left: 10px">{{ scope.row.created }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="150">
+          <template slot-scope="scope">
+            <el-button size="small" @click="handleDetail(scope.row.id)"
+              >详情
+            </el-button>
+            <el-button
+              size="small"
+              type="danger"
+              @click="handleDelete(scope.row.id)"
+              >删除
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-dialog
+        :visible.sync="detailVisible"
+        :modal="true"
+        :fullscreen="isMobile"
+        :width="dialogWidth"
+        center
+        append-to-body
+        custom-class="comment-dialog"
       >
-        <template slot-scope="scope">
-          <i class="el-icon-time"></i>
-          <span style="margin-left: 10px">{{ scope.row.created }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" width="150">
-        <template slot-scope="scope">
-          <el-button size="small" @click="handleDetail(scope.row.id)"
-            >详情
-          </el-button>
-          <el-button
-            size="small"
-            type="danger"
-            @click="handleDelete(scope.row.id)"
-            >删除
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-dialog
-      :visible.sync="detailVisible"
-      :modal="false"
-      :fullscreen="isMobile"
-      :width="dialogWidth"
-      center
-      append-to-body
-      custom-class="comment-dialog"
-    >
-      <el-row :gutter="10">
-        <el-col :xs="24" :sm="12" :md="3">所属文章:</el-col>
-        <el-col :xs="24" :sm="12" :md="9">{{ comment.title }}</el-col>
-        <el-col :xs="24" :sm="12" :md="3">称呼:</el-col>
-        <el-col :xs="24" :sm="12" :md="9">{{ comment.name }}</el-col>
-      </el-row>
-      <el-row :gutter="10">
-        <el-col :xs="24" :sm="12" :md="3">邮箱:</el-col>
-        <el-col :xs="24" :sm="12" :md="9">{{ comment.email }}</el-col>
-        <el-col :xs="24" :sm="12" :md="3">网址:</el-col>
-        <el-col :xs="24" :sm="12" :md="9">{{ comment.website }}</el-col>
-      </el-row>
-      <el-row :gutter="10" class="comment-row-detail">
-        <el-col :span="24">
-          <div class="markdown-body comment-replay" v-show="hasReplay">
-            <div>
-              <span class="comment-replay-name">{{ comment.replayName }}</span>
+        <el-row :gutter="10">
+          <el-col :xs="24" :sm="12" :md="3">所属文章:</el-col>
+          <el-col :xs="24" :sm="12" :md="9">{{ comment.title }}</el-col>
+          <el-col :xs="24" :sm="12" :md="3">称呼:</el-col>
+          <el-col :xs="24" :sm="12" :md="9">{{ comment.name }}</el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :xs="24" :sm="12" :md="3">邮箱:</el-col>
+          <el-col :xs="24" :sm="12" :md="9">{{ comment.email }}</el-col>
+          <el-col :xs="24" :sm="12" :md="3">网址:</el-col>
+          <el-col :xs="24" :sm="12" :md="9">{{ comment.website }}</el-col>
+        </el-row>
+        <el-row :gutter="10" class="comment-row-detail">
+          <el-col :span="24">
+            <div class="markdown-body comment-replay" v-show="hasReplay">
+              <div>
+                <span class="comment-replay-name">{{
+                  comment.replayName
+                }}</span>
+              </div>
+              <div v-html="comment.replay"></div>
             </div>
-            <div v-html="comment.replay"></div>
-          </div>
-          <div v-html="comment.content" class="markdown-body"></div>
-        </el-col>
-      </el-row>
-      <el-row :gutter="10">
-        <el-col :xs="24" :sm="12" :md="3">赞:</el-col>
-        <el-col :xs="24" :sm="12" :md="9">{{ comment.agree }}</el-col>
-        <el-col :xs="24" :sm="12" :md="3">踩:</el-col>
-        <el-col :xs="24" :sm="12" :md="9">{{ comment.disagree }}</el-col>
-      </el-row>
-      <el-row :gutter="10">
-        <el-col :xs="24" :sm="12" :md="3">ip:</el-col>
-        <el-col :xs="24" :sm="12" :md="9">{{ comment.ip }}</el-col>
-        <el-col :xs="24" :sm="12" :md="3">agent:</el-col>
-        <el-col :xs="24" :sm="12" :md="9">{{ comment.agent }}</el-col>
-      </el-row>
-    </el-dialog>
-    <div class="admin-page">
-      <el-pagination
-        layout="total,prev, pager, next"
-        @current-change="init"
-        :current-page.sync="currentPage"
-        :page-size="pageSize"
-        :total="total"
-      >
-      </el-pagination>
-    </div>
+            <div v-html="comment.content" class="markdown-body"></div>
+          </el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :xs="24" :sm="12" :md="3">赞:</el-col>
+          <el-col :xs="24" :sm="12" :md="9">{{ comment.agree }}</el-col>
+          <el-col :xs="24" :sm="12" :md="3">踩:</el-col>
+          <el-col :xs="24" :sm="12" :md="9">{{ comment.disagree }}</el-col>
+        </el-row>
+        <el-row :gutter="10">
+          <el-col :xs="24" :sm="12" :md="3">ip:</el-col>
+          <el-col :xs="24" :sm="12" :md="9">{{ comment.ip }}</el-col>
+          <el-col :xs="24" :sm="12" :md="3">agent:</el-col>
+          <el-col :xs="24" :sm="12" :md="9">{{ comment.agent }}</el-col>
+        </el-row>
+      </el-dialog>
+      <div class="admin-page">
+        <el-pagination
+          layout="total,prev, pager, next"
+          @current-change="init"
+          :current-page.sync="currentPage"
+          :page-size="pageSize"
+          :total="total"
+        >
+        </el-pagination>
+      </div>
+    </el-card>
   </div>
 </template>
 
@@ -184,10 +188,6 @@ export default {
 </script>
 
 <style scoped>
-.el-table {
-  border: 1px solid #e6ebf5;
-}
-
 .admin-page {
   margin-top: 30px;
   text-align: center;

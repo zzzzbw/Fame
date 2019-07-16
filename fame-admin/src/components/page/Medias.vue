@@ -1,15 +1,12 @@
 <template>
   <div>
-    <el-card class="box-card">
+    <el-card>
       <div slot="header" class="clearfix">
         <el-breadcrumb separator="/">
           <el-breadcrumb-item :to="{ path: '/admin' }">首页</el-breadcrumb-item>
           <el-breadcrumb-item>媒体库</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
-      <!--      <el-button type="primary" icon="el-icon-edit" @click="showUploadDialog"
-                          >上传
-                        </el-button>-->
       <upload :afterUpload="afterUpload"></upload>
       <el-divider></el-divider>
       <div class="media-list">
