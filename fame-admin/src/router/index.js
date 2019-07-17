@@ -97,56 +97,69 @@ const router = new Router({
       children: [
         {
           path: "dashboard",
+          name: "Dashboard",
           component: Dashboard
         },
         {
           path: "article/publish/:id",
+          name: "ArticleEdit",
           component: ArticleEdit
         },
         {
           path: "article/publish",
+          name: "ArticleNew",
           component: ArticleEdit
         },
         {
           path: "article",
+          name: "ArticleList",
           component: ArticleList
         },
         {
           path: "comment",
+          name: "CommentList",
           component: CommentList
         },
         {
           path: "tag",
+          name: "TagList",
           component: TagList
         },
         {
           path: "media",
+          name: "MediaList",
           component: MediaList
         },
         {
           path: "page",
+          name: "PageList",
           component: PageList
         },
         {
           path: "page/publish/:id",
+          name: "PageEdit",
           component: PageEdit
         },
         {
           path: "page/publish",
+          name: "PageNew",
           component: PageEdit
         },
         {
           path: "setting",
+          name: "Setting",
           component: Setting
         }
       ]
     },
     {
       path: "/error/:state/:message",
+      name: "ErrorMessage",
       component: Error
     },
     {
       path: "*",
+      name: "Error",
       component: Error
     }
   ]

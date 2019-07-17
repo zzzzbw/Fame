@@ -1,105 +1,103 @@
 <template>
   <div>
-    <el-card>
-      <div class="tool-container">
-        <div>
-          <span>
-            状态：
-          </span>
-          <el-radio-group v-model="tool.status" @change="init">
-            <el-radio-button label="">全部</el-radio-button>
-            <el-radio-button :label="this.$util.STATIC.STATUS_PUBLISH"
-              >公开
-            </el-radio-button>
-            <el-radio-button :label="this.$util.STATIC.STATUS_DRAFT"
-              >隐藏
-            </el-radio-button>
-          </el-radio-group>
-        </div>
-        <div style="display: flex;justify-content: space-between;">
-          <el-input
-            v-model="tool.title"
-            placeholder="搜索文章标题"
-            prefix-icon="el-icon-search"
-            clearable
-            style="max-width: 300px;"
-            @change="init"
-          ></el-input>
-          <el-button
-            type="info"
-            icon="el-icon-edit"
-            style="margin-left: 16px;"
-            @click="handleNew"
-            >新文章
-          </el-button>
-        </div>
+    <div class="tool-container">
+      <div>
+        <span>
+          状态：
+        </span>
+        <el-radio-group v-model="tool.status" @change="init">
+          <el-radio-button label="">全部</el-radio-button>
+          <el-radio-button :label="this.$util.STATIC.STATUS_PUBLISH"
+            >公开
+          </el-radio-button>
+          <el-radio-button :label="this.$util.STATIC.STATUS_DRAFT"
+            >隐藏
+          </el-radio-button>
+        </el-radio-group>
       </div>
+      <div style="display: flex;justify-content: space-between;">
+        <el-input
+          v-model="tool.title"
+          placeholder="搜索文章标题"
+          prefix-icon="el-icon-search"
+          clearable
+          style="max-width: 300px;"
+          @change="init"
+        ></el-input>
+        <el-button
+          type="info"
+          icon="el-icon-edit"
+          style="margin-left: 16px;"
+          @click="handleNew"
+          >新文章
+        </el-button>
+      </div>
+    </div>
 
-      <el-table :data="articleDatas" border stripe style="width: 100%">
-        <el-table-column prop="id" label="id" width="60"></el-table-column>
-        <el-table-column prop="title" label="标题" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <el-link :href="scope.row.frontUrl" target="_blank" type="primary"
-              >{{ scope.row.title }}
-            </el-link>
-          </template>
-        </el-table-column>
-        <el-table-column prop="category" label="分类" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span class="meta">{{ scope.row.category }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="status"
-          label="状态"
-          width="100"
-          show-overflow-tooltip
-        >
-          <template slot-scope="scope">
-            <el-tag
-              :type="scope.row.status === '公开' ? 'success' : 'warning'"
-              disable-transitions
-              >{{ scope.row.status }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column label="发布日期" width="160" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <i class="el-icon-time"></i>
-            <span style="margin-left: 10px">{{ scope.row.publish }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="修改日期" width="160" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <i class="el-icon-time"></i>
-            <span style="margin-left: 10px">{{ scope.row.modified }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column fixed="right" label="操作" width="150">
-          <template slot-scope="scope">
-            <el-button size="small" @click="handleEdit(scope.row.id)"
-              >编辑
-            </el-button>
-            <el-button
-              size="small"
-              type="danger"
-              @click="handleDelete(scope.row.id)"
-              >删除
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <div class="admin-page">
-        <el-pagination
-          layout="total, prev, pager, next"
-          @current-change="init"
-          :current-page.sync="currentPage"
-          :page-size="pageSize"
-          :total="total"
-        >
-        </el-pagination>
-      </div>
-    </el-card>
+    <el-table :data="articleDatas" border stripe style="width: 100%">
+      <el-table-column prop="id" label="id" width="60"></el-table-column>
+      <el-table-column prop="title" label="标题" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <el-link :href="scope.row.frontUrl" target="_blank" type="primary"
+            >{{ scope.row.title }}
+          </el-link>
+        </template>
+      </el-table-column>
+      <el-table-column prop="category" label="分类" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <span class="meta">{{ scope.row.category }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="status"
+        label="状态"
+        width="100"
+        show-overflow-tooltip
+      >
+        <template slot-scope="scope">
+          <el-tag
+            :type="scope.row.status === '公开' ? 'success' : 'warning'"
+            disable-transitions
+            >{{ scope.row.status }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="发布日期" width="160" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <i class="el-icon-time"></i>
+          <span style="margin-left: 10px">{{ scope.row.publish }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="修改日期" width="160" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <i class="el-icon-time"></i>
+          <span style="margin-left: 10px">{{ scope.row.modified }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column fixed="right" label="操作" width="150">
+        <template slot-scope="scope">
+          <el-button size="small" @click="handleEdit(scope.row.id)"
+            >编辑
+          </el-button>
+          <el-button
+            size="small"
+            type="danger"
+            @click="handleDelete(scope.row.id)"
+            >删除
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <div class="admin-page">
+      <el-pagination
+        layout="total, prev, pager, next"
+        @current-change="init"
+        :current-page.sync="currentPage"
+        :page-size="pageSize"
+        :total="total"
+      >
+      </el-pagination>
+    </div>
   </div>
 </template>
 
@@ -201,7 +199,7 @@ export default {
 
 <style scoped>
 .tool-container {
-  padding: 16px;
+  padding: 0 16px 16px 16px;
   display: flex;
   justify-content: space-between;
   background: #fff;

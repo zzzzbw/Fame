@@ -5,9 +5,14 @@
     <div class="container" :class="[indexShowUp ? 'index-up' : 'index-down']">
       <div class="main" id="main">
         <div class="content" id="content">
-          <transition name="move" mode="out-in">
-            <router-view></router-view>
-          </transition>
+          <el-card>
+            <div slot="header">
+              <bread-crumb></bread-crumb>
+            </div>
+            <transition name="move" mode="out-in">
+              <router-view></router-view>
+            </transition>
+          </el-card>
         </div>
       </div>
     </div>
@@ -17,29 +22,31 @@
 <script type="text/ecmascript-6">
 import MHeader from './common/MHeader'
 import LeftMenu from './common/LeftMenu'
+import BreadCrumb from './common/BreadCrumb'
 
 export default {
-  components: {
-    MHeader,
-    LeftMenu
-  },
-  data () {
-    return {
-      indexShowUp: false
-    }
-  },
-  methods: {
-    indexDown () {
-      this.indexShowUp = false
+    components: {
+        MHeader,
+        LeftMenu,
+        BreadCrumb
     },
-    indexUp () {
-      this.indexShowUp = true
+    data() {
+        return {
+            indexShowUp: false
+        }
+    },
+    methods: {
+        indexDown() {
+            this.indexShowUp = false
+        },
+        indexUp() {
+            this.indexShowUp = true
+        }
+    },
+    created() {
+        this.$root.$on('indexDown', this.indexDown)
+        this.$root.$on('indexUp', this.indexUp)
     }
-  },
-  created () {
-    this.$root.$on('indexDown', this.indexDown)
-    this.$root.$on('indexUp', this.indexUp)
-  }
 }
 </script>
 
@@ -70,13 +77,18 @@ export default {
 
 .main {
   width: 100%;
-  height: 100%;
+  height: calc(100% - 60px);
   padding: 0;
 }
 
 .content {
   clear: both;
+  height: 100%;
   margin: 30px;
+}
+
+.el-card {
+  height: 100%;
 }
 
 @media screen and (max-width: 600px) {

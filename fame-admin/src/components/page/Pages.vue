@@ -1,67 +1,65 @@
 <template>
   <div>
-    <el-card>
-      <div class="tool-container" style="justify-content: flex-end">
-        <el-button
-          type="info"
-          icon="el-icon-edit"
-          style="margin-left: 16px;"
-          @click="handleNew"
-          >新页面
-        </el-button>
-      </div>
+    <div class="tool-container" style="justify-content: flex-end">
+      <el-button
+        type="info"
+        icon="el-icon-edit"
+        style="margin-left: 16px;"
+        @click="handleNew"
+        >新页面
+      </el-button>
+    </div>
 
-      <el-table :data="pageDatas" border stripe style="width: 100%">
-        <el-table-column prop="id" label="id" width="60"></el-table-column>
-        <el-table-column
-          prop="title"
-          label="标题"
-          min-width="150"
-          show-overflow-tooltip
-        ></el-table-column>
-        <el-table-column label="发布日期" width="160" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <i class="el-icon-time"></i>
-            <span style="margin-left: 10px">{{ scope.row.publish }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="修改日期" width="160" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <i class="el-icon-time"></i>
-            <span style="margin-left: 10px">{{ scope.row.modified }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="status"
-          label="状态"
-          width="100"
-          show-overflow-tooltip
-        ></el-table-column>
-        <el-table-column fixed="right" label="操作" width="150">
-          <template slot-scope="scope">
-            <el-button size="small" @click="handleEdit(scope.row.id)"
-              >编辑
-            </el-button>
-            <el-button
-              size="small"
-              type="danger"
-              @click="handleDelete(scope.row.id)"
-              >删除
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <div class="admin-page">
-        <el-pagination
-          layout="total,prev, pager, next"
-          @current-change="init"
-          :current-page.sync="currentPage"
-          :page-size="pageSize"
-          :total="total"
-        >
-        </el-pagination>
-      </div>
-    </el-card>
+    <el-table :data="pageDatas" border stripe style="width: 100%">
+      <el-table-column prop="id" label="id" width="60"></el-table-column>
+      <el-table-column
+        prop="title"
+        label="标题"
+        min-width="150"
+        show-overflow-tooltip
+      ></el-table-column>
+      <el-table-column label="发布日期" width="160" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <i class="el-icon-time"></i>
+          <span style="margin-left: 10px">{{ scope.row.publish }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="修改日期" width="160" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <i class="el-icon-time"></i>
+          <span style="margin-left: 10px">{{ scope.row.modified }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="status"
+        label="状态"
+        width="100"
+        show-overflow-tooltip
+      ></el-table-column>
+      <el-table-column fixed="right" label="操作" width="150">
+        <template slot-scope="scope">
+          <el-button size="small" @click="handleEdit(scope.row.id)"
+            >编辑
+          </el-button>
+          <el-button
+            size="small"
+            type="danger"
+            @click="handleDelete(scope.row.id)"
+            >删除
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <div class="admin-page">
+      <el-pagination
+        layout="total,prev, pager, next"
+        @current-change="init"
+        :current-page.sync="currentPage"
+        :page-size="pageSize"
+        :total="total"
+      >
+      </el-pagination>
+    </div>
   </div>
 </template>
 
@@ -157,7 +155,7 @@ export default {
 
 <style scoped>
 .tool-container {
-  padding: 16px;
+  padding: 0 16px 16px 16px;
   display: flex;
   justify-content: space-between;
   background: #fff;

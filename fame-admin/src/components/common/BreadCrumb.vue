@@ -1,0 +1,95 @@
+<template>
+  <div>
+    <el-breadcrumb separator="/">
+      <el-breadcrumb-item
+        v-if="!isDashboard()"
+        :to="{ path: '/admin/dashboard' }"
+        >首页
+      </el-breadcrumb-item>
+      <el-breadcrumb-item
+        v-for="item in levelList"
+        :key="item.name"
+        :to="{ path: item.link }"
+        >{{ item.title }}
+      </el-breadcrumb-item>
+    </el-breadcrumb>
+  </div>
+</template>
+
+<script>
+const config = [
+  { name: "ArticleList", title: "文章列表", link: "/admin/article" },
+  {
+    name: "ArticleNew",
+    title: "新建文章",
+    parent: "ArticleList"
+  },
+  {
+    name: "ArticleEdit",
+    title: "编辑文章",
+    parent: "ArticleList"
+  },
+  { name: "CommentList", title: "评论列表" },
+  { name: "TagList", title: "标签列表" },
+  { name: "MediaList", title: "媒体库" },
+  { name: "PageList", title: "页面列表", link: "/admin/page" },
+  { name: "PageNew", title: "新建页面", parent: "PageList" },
+  { name: "PageEdit", title: "编辑页面", parent: "PageList" },
+  { name: "Setting", title: "网站设置" }
+];
+
+export default {
+  name: "BreadCrumb",
+  data() {
+    return {
+      levelList: []
+    };
+  },
+  methods: {
+    initLevelList() {
+      this.levelList = [];
+      if (!this.$route.name) {
+        return;
+      }
+      this.getBreadcrumb(this.$route.name);
+      this.levelList.reverse();
+    },
+    getBreadcrumb(name) {
+      let breadCrumbItem = null;
+      config.forEach(c => {
+        if (c.name === name) {
+          breadCrumbItem = c;
+        }
+      });
+      if (null === breadCrumbItem) {
+        return;
+      }
+      this.levelList.push(breadCrumbItem);
+      if (breadCrumbItem.parent && breadCrumbItem.parent !== "") {
+        this.getBreadcrumb(breadCrumbItem.parent);
+      }
+    },
+    isDashboard() {
+      if (!this.$route.name) {
+        return false;
+      }
+      console.log(this.$route.name);
+      return this.$route.name.toLowerCase() === "Dashboard".toLowerCase();
+    }
+  },
+  watch: {
+    $route(route) {
+      // if you go to the redirect page, do not update the breadcrumbs
+      if (route.path.startsWith("/redirect/")) {
+        return;
+      }
+      this.initLevelList();
+    }
+  },
+  created() {
+    this.initLevelList();
+  }
+};
+</script>
+
+<style scoped></style>

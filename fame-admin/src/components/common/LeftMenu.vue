@@ -4,11 +4,11 @@
     class="left-menu"
   >
     <el-menu
-      default-active=""
+      :default-active="activeMenu"
       background-color="#324157"
       text-color="#fff"
       active-text-color="#ffd04b"
-      router
+      :router="true"
       @select="mobileToggle"
     >
       <el-menu-item index="/admin/dashboard">
@@ -45,24 +45,32 @@
 
 <script type="text/ecmascript-6">
 export default {
-  data () {
-    return {
-      showLeftMenu: false
-    }
-  },
-  methods: {
-    toggleLeftMenu () {
-      this.showLeftMenu = !this.showLeftMenu
+    data() {
+        return {
+            showLeftMenu: false
+        }
     },
-    mobileToggle () {
-      if (document.body.clientWidth < 600) {
-        this.showLeftMenu = false
-      }
+    computed: {
+        activeMenu() {
+            const route = this.$route
+            const {path} = route
+            return path
+        }
+    },
+    methods: {
+
+        toggleLeftMenu() {
+            this.showLeftMenu = !this.showLeftMenu
+        },
+        mobileToggle() {
+            if (document.body.clientWidth < 600) {
+                this.showLeftMenu = false
+            }
+        }
+    },
+    created() {
+        this.$root.$on('collapse', this.toggleLeftMenu)
     }
-  },
-  created () {
-    this.$root.$on('collapse', this.toggleLeftMenu)
-  }
 }
 </script>
 

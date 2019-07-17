@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-top: -30px">
+  <div>
     <el-row :gutter="30">
       <el-col :xs="24" :sm="12" :md="12" :lg="12" style="margin-top: 30px">
         <el-card>

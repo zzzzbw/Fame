@@ -1,31 +1,23 @@
 <template>
   <div>
-    <el-card>
-      <div slot="header" class="clearfix">
-        <el-breadcrumb separator="/">
-          <el-breadcrumb-item :to="{ path: '/admin' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item>媒体库</el-breadcrumb-item>
-        </el-breadcrumb>
-      </div>
-      <upload :afterUpload="afterUpload"></upload>
-      <el-divider></el-divider>
-      <div class="media-list">
-        <el-row>
-          <el-col
-            class="block"
-            :xs="24"
-            :sm="12"
-            :md="12"
-            :lg="6"
-            :xl="4"
-            v-for="media in mediaDatas"
-            :key="media.id"
-          >
-            <media-item :media="media" :after-delete="init"></media-item>
-          </el-col>
-        </el-row>
-      </div>
-    </el-card>
+    <upload :afterUpload="afterUpload"></upload>
+    <el-divider></el-divider>
+    <div class="media-list">
+      <el-row>
+        <el-col
+          class="block"
+          :xs="24"
+          :sm="12"
+          :md="12"
+          :lg="6"
+          :xl="4"
+          v-for="media in mediaDatas"
+          :key="media.id"
+        >
+          <media-item :media="media" :after-delete="init"></media-item>
+        </el-col>
+      </el-row>
+    </div>
     <div class="admin-page">
       <el-pagination
         layout="total, prev, pager, next"
