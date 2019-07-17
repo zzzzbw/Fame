@@ -5,14 +5,19 @@
     <div class="container" :class="[indexShowUp ? 'index-up' : 'index-down']">
       <div class="main" id="main">
         <div class="content" id="content">
-          <el-card>
+          <el-card v-if="!isDashboard()">
             <div slot="header">
               <bread-crumb></bread-crumb>
             </div>
-            <transition name="move" mode="out-in">
+            <transition name="fade" mode="out-in">
               <router-view></router-view>
             </transition>
           </el-card>
+          <div v-else>
+            <transition name="move" mode="out-in">
+              <router-view></router-view>
+            </transition>
+          </div>
         </div>
       </div>
     </div>
@@ -36,6 +41,12 @@ export default {
         }
     },
     methods: {
+        isDashboard() {
+            if (!this.$route.name) {
+                return false;
+            }
+            return this.$route.name.toLowerCase() === "Dashboard".toLowerCase();
+        },
         indexDown() {
             this.indexShowUp = false
         },

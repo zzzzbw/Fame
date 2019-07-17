@@ -73,7 +73,6 @@ export default {
       if (!this.$route.name) {
         return false;
       }
-      console.log(this.$route.name);
       return this.$route.name.toLowerCase() === "Dashboard".toLowerCase();
     }
   },

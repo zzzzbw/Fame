@@ -35,23 +35,16 @@ section {
   border-radius: 0.5rem;
 }
 
-.move-enter-active,
-.move-leave-active {
-  transition: opacity 0.3s;
-}
-
-.move-enter,
-.move-leave {
+.fade-enter {
   opacity: 0;
 }
-
-.flow-enter-active,
-.flow-leave-active {
-  transition: all 0.5s;
+.fade-leave {
+  opacity: 1;
 }
-
-.flow-enter,
-.flow-leave {
-  transform: translateY(-20px);
+.fade-enter-active {
+  transition: opacity 0.2s;
+}
+.fade-leave-active {
   opacity: 0;
+  transition: opacity 0.2s;
 }
