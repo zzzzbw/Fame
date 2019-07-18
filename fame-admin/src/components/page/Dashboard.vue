@@ -153,6 +153,7 @@ export default {
   background: #30a5ff;
   padding: 19px;
   float: right;
+  border-radius: 6px;
 }
 
 .info {

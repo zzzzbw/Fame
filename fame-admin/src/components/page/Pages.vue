@@ -1,13 +1,11 @@
 <template>
   <div>
-    <div class="tool-container" style="justify-content: flex-end">
-      <el-button
-        type="info"
-        icon="el-icon-edit"
-        style="margin-left: 16px;"
-        @click="handleNew"
-        >新页面
-      </el-button>
+    <div class="tool-container">
+      <div class="tool-container-item" style="float: right;margin-right: 30px;">
+        <el-button type="info" icon="el-icon-edit" @click="handleNew"
+          >新页面
+        </el-button>
+      </div>
     </div>
 
     <el-table :data="pageDatas" border stripe style="width: 100%">
@@ -155,10 +153,11 @@ export default {
 
 <style scoped>
 .tool-container {
-  padding: 0 16px 16px 16px;
-  display: flex;
-  justify-content: space-between;
   background: #fff;
+}
+
+.tool-container-item {
+  margin-bottom: 16px;
 }
 
 .admin-page {

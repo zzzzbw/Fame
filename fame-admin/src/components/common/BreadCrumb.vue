@@ -1,9 +1,7 @@
 <template>
   <div>
     <el-breadcrumb separator="/">
-      <el-breadcrumb-item
-        v-if="!isDashboard()"
-        :to="{ path: '/admin/dashboard' }"
+      <el-breadcrumb-item :to="{ path: '/admin/dashboard' }"
         >首页
       </el-breadcrumb-item>
       <el-breadcrumb-item
@@ -68,12 +66,6 @@ export default {
       if (breadCrumbItem.parent && breadCrumbItem.parent !== "") {
         this.getBreadcrumb(breadCrumbItem.parent);
       }
-    },
-    isDashboard() {
-      if (!this.$route.name) {
-        return false;
-      }
-      return this.$route.name.toLowerCase() === "Dashboard".toLowerCase();
     }
   },
   watch: {

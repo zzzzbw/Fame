@@ -1,37 +1,47 @@
 <template>
   <div>
     <div class="tool-container">
-      <div>
-        <span>
-          状态：
-        </span>
-        <el-radio-group v-model="tool.status" @change="init">
-          <el-radio-button label="">全部</el-radio-button>
-          <el-radio-button :label="this.$util.STATIC.STATUS_PUBLISH"
-            >公开
-          </el-radio-button>
-          <el-radio-button :label="this.$util.STATIC.STATUS_DRAFT"
-            >隐藏
-          </el-radio-button>
-        </el-radio-group>
-      </div>
-      <div style="display: flex;justify-content: space-between;">
-        <el-input
-          v-model="tool.title"
-          placeholder="搜索文章标题"
-          prefix-icon="el-icon-search"
-          clearable
-          style="max-width: 300px;"
-          @change="init"
-        ></el-input>
-        <el-button
-          type="info"
-          icon="el-icon-edit"
-          style="margin-left: 16px;"
-          @click="handleNew"
-          >新文章
-        </el-button>
-      </div>
+      <el-row>
+        <el-col :xs="24" :sm="24" :md="16" :lg="18">
+          <div class="tool-container-item">
+            <span>
+              状态：
+            </span>
+            <el-radio-group v-model="tool.status" @change="init">
+              <el-radio-button label="">全部</el-radio-button>
+              <el-radio-button :label="this.$util.STATIC.STATUS_PUBLISH"
+                >公开
+              </el-radio-button>
+              <el-radio-button :label="this.$util.STATIC.STATUS_DRAFT"
+                >隐藏
+              </el-radio-button>
+            </el-radio-group>
+          </div>
+        </el-col>
+        <el-col :xs="24" :sm="24" :md="8" :lg="6">
+          <el-row :gutter="20">
+            <el-col :xs="24" :sm="24" :md="12" :lg="16">
+              <div class="tool-container-item">
+                <el-input
+                  v-model="tool.title"
+                  placeholder="搜索文章标题"
+                  prefix-icon="el-icon-search"
+                  clearable
+                  style="max-width: 350px;"
+                  @change="init"
+                ></el-input>
+              </div>
+            </el-col>
+            <el-col :xs="24" :sm="24" :md="12" :lg="8">
+              <div class="tool-container-item">
+                <el-button type="info" icon="el-icon-edit" @click="handleNew"
+                  >新文章
+                </el-button>
+              </div>
+            </el-col>
+          </el-row>
+        </el-col>
+      </el-row>
     </div>
 
     <el-table :data="articleDatas" border stripe style="width: 100%">
@@ -199,10 +209,11 @@ export default {
 
 <style scoped>
 .tool-container {
-  padding: 0 16px 16px 16px;
-  display: flex;
-  justify-content: space-between;
   background: #fff;
+}
+
+.tool-container-item {
+  margin-bottom: 16px;
 }
 
 .admin-page {

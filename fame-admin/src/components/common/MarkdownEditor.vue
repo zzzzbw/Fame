@@ -91,6 +91,6 @@ export default {
 
 <style scoped>
 .markdown-body {
-  height: calc(90vh - 100px);
+  height: calc(90vh - 120px);
 }
 </style>
