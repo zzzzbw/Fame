@@ -2,7 +2,7 @@
   <div>
     <el-form :rules="rules" ref="pageForm" :model="page">
       <el-row :gutter="30">
-        <el-col :xs="24" :sm="16" :md="16" :lg="16">
+        <el-col :xs="24" :sm="16" :md="19" :lg="19">
           <el-form-item prop="title">
             <el-input
               v-model="page.title"
@@ -13,7 +13,7 @@
             <markdown-editor v-model="page.content" />
           </el-form-item>
         </el-col>
-        <el-col :xs="24" :sm="8" :md="8" :lg="8">
+        <el-col :xs="24" :sm="8" :md="5" :lg="5">
           <div class="panel">
             <div class="panel-content">
               <el-form-item label="状态">
@@ -28,9 +28,14 @@
               </el-form-item>
               <el-form-item>
                 <el-button-group>
-                  <el-button type="primary" size="small" @click="onPublish"
-                    >发布页面
-                  </el-button>
+                  <el-row>
+                    <el-button type="success" size="small" @click="onSave"
+                      >保存
+                    </el-button>
+                    <el-button type="primary" size="small" @click="onPublish"
+                      >发布
+                    </el-button>
+                  </el-row>
                 </el-button-group>
               </el-form-item>
             </div>
@@ -84,7 +89,7 @@ export default {
         this.page.status = this.$util.STATIC.STATUS_PUBLISH;
       }
     },
-    savePage(formName) {
+    submitArticle(formName, success) {
       if (this.submitting) {
         this.$util.message.warning("请不要提交过快!");
         return;
@@ -92,16 +97,31 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.submitting = true;
-          this.$api.auth.savePage(this.page).then(() => {
-            this.$router.push("/admin/page");
-            this.$util.message.success("发布自定义页面成功!");
+          this.$api.auth.savePage(this.page).then(data => {
+            if (data.success) {
+              success(data.data);
+            } else {
+              this.$util.error("提交文章失败文章失败," + data.msg);
+            }
             this.submitting = false;
           });
         }
       });
     },
     onPublish() {
-      this.savePage("pageForm");
+      const _this = this;
+      this.submitArticle("pageForm", function() {
+        _this.$util.message.success("发布页面成功!");
+        _this.$router.push("/admin/page");
+      });
+    },
+    onSave() {
+      const _this = this;
+      this.submitArticle("pageForm", function(data) {
+        _this.$util.message.success("保存页面成功!");
+        _this.$route.params.id = data;
+        _this.getPage();
+      });
     }
   },
   mounted() {

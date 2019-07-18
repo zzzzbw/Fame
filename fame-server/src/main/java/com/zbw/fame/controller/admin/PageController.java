@@ -83,8 +83,7 @@ public class PageController extends BaseController {
         page.setContent(content);
         page.setStatus(status);
         page.setAuthorId(user.getId());
-        articleService.savePage(page);
-        return RestResponse.ok("保存文章成功");
+        return RestResponse.ok(articleService.savePage(page));
     }
 
     /**

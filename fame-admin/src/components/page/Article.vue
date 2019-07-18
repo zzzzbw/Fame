@@ -15,11 +15,7 @@
             ></el-input>
           </el-form-item>
           <el-form-item prop="content">
-            <markdown-editor
-              v-model="article.content"
-              :onSave="onSave"
-              @keydown.native.meta.83="onSave"
-            />
+            <markdown-editor v-model="article.content" :onSave="onSave" />
             <!-- 键修饰符，键别名 -->
           </el-form-item>
         </el-col>
@@ -332,7 +328,7 @@ export default {
             if (data.success) {
               success(data.data);
             } else {
-              this.$util.error("提交文章失败文章失败," + data.msg);
+              this.$util.error("提交文章失败," + data.msg);
             }
             this.submitting = false;
           });
