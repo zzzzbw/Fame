@@ -28,7 +28,7 @@ const config = [
     parent: "ArticleList"
   },
   { name: "CommentList", title: "评论列表" },
-  { name: "TagList", title: "标签列表" },
+  { name: "MetaList", title: "标签/分类" },
   { name: "MediaList", title: "媒体库" },
   { name: "PageList", title: "页面列表", link: "/admin/page" },
   { name: "PageNew", title: "新建页面", parent: "PageList" },

@@ -69,58 +69,46 @@ const auth = {
     return get("/admin/comment/count");
   },
   getAllCategories() {
-    const params = {
-      type: util.STATIC.META_CATEGORY
-    };
-    return get("/admin/meta", params);
+    return get("/admin/category");
   },
   getAllTags() {
-    const params = {
-      type: util.STATIC.META_TAG
-    };
-    return get("/admin/meta", params);
+    return get("/admin/tag");
   },
   saveCategory(name) {
     const params = {
-      name: name,
-      type: util.STATIC.META_CATEGORY
+      name: name
     };
-    return post("/admin/meta", params);
+    return post("/admin/category", params);
   },
   saveTag(name) {
     const params = {
-      name: name,
-      type: util.STATIC.META_TAG
+      name: name
     };
-    return post("/admin/meta", params);
+    return post("/admin/tag", params);
   },
   updateCategory(id, name) {
     const params = {
-      name: name,
-      type: util.STATIC.META_CATEGORY
+      name: name
     };
-    return post("/admin/meta/" + id, params);
+    return post("/admin/category/" + id, params);
   },
   updateTag(id, name) {
     const params = {
-      name: name,
-      type: util.STATIC.META_TAG
+      name: name
     };
-    return post("/admin/meta/" + id, params);
+    return post("/admin/tag/" + id, params);
   },
   deleteCategory(name) {
     const params = {
-      name: name,
-      type: util.STATIC.META_CATEGORY
+      name: name
     };
-    return del("/admin/meta", params);
+    return del("/admin/category", params);
   },
   deleteTag(name) {
     const params = {
-      name: name,
-      type: util.STATIC.META_TAG
+      name: name
     };
-    return del("/admin/meta", params);
+    return del("/admin/tag", params);
   },
   getPages(page) {
     const params = {

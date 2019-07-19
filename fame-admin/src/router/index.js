@@ -45,8 +45,8 @@ const CommentList = resolve => {
   });
 };
 
-const TagList = resolve => {
-  import("@/components/page/Tags").then(module => {
+const MetaList = resolve => {
+  import("@/components/page/Metas").then(module => {
     resolve(module);
   });
 };
@@ -121,9 +121,9 @@ const router = new Router({
           component: CommentList
         },
         {
-          path: "tag",
-          name: "TagList",
-          component: TagList
+          path: "meta",
+          name: "MetaList",
+          component: MetaList
         },
         {
           path: "media",

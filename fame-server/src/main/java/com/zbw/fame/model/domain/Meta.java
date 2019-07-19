@@ -3,6 +3,8 @@ package com.zbw.fame.model.domain;
 import lombok.*;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 
 /**
@@ -12,6 +14,7 @@ import javax.persistence.Entity;
  * @since 2017/8/28 23:04
  */
 @Entity
+@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING, columnDefinition = "VARCHAR(45)")
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString(callSuper = true)
@@ -24,10 +27,4 @@ public class Meta extends BaseEntity {
      */
     @Column(name = "name", columnDefinition = "VARCHAR(255) NOT NULL")
     private String name;
-
-    /**
-     * 属性类型
-     */
-    @Column(name = "type", columnDefinition = "VARCHAR(45) NOT NULL")
-    private String type;
 }

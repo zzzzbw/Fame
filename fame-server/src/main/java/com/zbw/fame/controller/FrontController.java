@@ -33,7 +33,9 @@ public class FrontController extends BaseController {
 
     private final ArticleService articleService;
 
-    private final MetaService metaService;
+    private final CategoryService categoryService;
+
+    private final TagService tagService;
 
     private final CommentService commentService;
 
@@ -98,7 +100,7 @@ public class FrontController extends BaseController {
      */
     @GetMapping("tag")
     public RestResponse tag() {
-        List<MetaInfo> metaInfos = metaService.getPublishMetaInfos(Types.TAG);
+        List<MetaInfo> metaInfos = tagService.getMetaInfosWithPublishArticle();
         return RestResponse.ok(metaInfos);
     }
 
@@ -109,7 +111,7 @@ public class FrontController extends BaseController {
      */
     @GetMapping("/category")
     public RestResponse category() {
-        List<MetaInfo> metaInfos = metaService.getPublishMetaInfos(Types.CATEGORY);
+        List<MetaInfo> metaInfos = categoryService.getMetaInfosWithPublishArticle();
         return RestResponse.ok(metaInfos);
     }
 

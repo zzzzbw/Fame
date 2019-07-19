@@ -5,6 +5,7 @@ import com.zbw.fame.repository.*;
 import com.zbw.fame.service.OptionService;
 import com.zbw.fame.util.OptionKeys;
 import com.zbw.fame.util.Types;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,25 +27,22 @@ import java.net.UnknownHostException;
  */
 @Slf4j
 @Component
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class InitApplicationRunner implements ApplicationRunner {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private ArticleRepository articleRepository;
+    private final ArticleRepository articleRepository;
 
-    @Autowired
-    private MetaRepository metaRepository;
+    private final CategoryRepository categoryRepository;
 
-    @Autowired
-    private MiddleRepository middleRepository;
+    private final TagRepository tagRepository;
 
-    @Autowired
-    private CommentRepository commentRepository;
+    private final MiddleRepository middleRepository;
 
-    @Autowired
-    private OptionService optionService;
+    private final CommentRepository commentRepository;
+
+    private final OptionService optionService;
 
     private static final String DEFAULT_TAG = "First";
 
@@ -101,7 +99,8 @@ public class InitApplicationRunner implements ApplicationRunner {
         log.info("Start create default data...");
         User user = createDefaultUserIfAbsent();
         Article article = createDefaultArticleIfAbsent(user);
-        createDefaultMetaIfAbsent(article);
+        createDefaultCategoryIfAbsent(article);
+        createDefaultTagIfAbsent(article);
         createDefaultCommentIfAbsent(article);
         createDefaultPageIfAbsent(user);
         optionService.save(OptionKeys.FAME_INIT, Boolean.TRUE.toString());
@@ -150,21 +149,36 @@ public class InitApplicationRunner implements ApplicationRunner {
         return article;
     }
 
-    private void createDefaultMetaIfAbsent(Article article) {
-        log.info("Create default meta...");
-        long count = metaRepository.count();
+    private void createDefaultCategoryIfAbsent(Article article) {
+        log.info("Create default category...");
+        long count = categoryRepository.count();
         if (null == article || count > 0) {
             return;
         }
-        Meta tag = new Meta(DEFAULT_TAG, Types.TAG);
-        Meta category = new Meta(DEFAULT_CATEGORY, Types.CATEGORY);
-        metaRepository.save(tag);
-        metaRepository.save(category);
+
+        Category category = new Category();
+        category.setName(DEFAULT_CATEGORY);
+        category = categoryRepository.save(category);
+
+
+        Middle middleCategory = new Middle(article.getId(), category.getId());
+        middleRepository.save(middleCategory);
+    }
+
+    private void createDefaultTagIfAbsent(Article article) {
+        log.info("Create default tag...");
+        long count = tagRepository.count();
+        if (null == article || count > 0) {
+            return;
+        }
+
+
+        Tag tag = new Tag();
+        tag.setName(DEFAULT_TAG);
+        tag = tagRepository.save(tag);
 
         Middle middleTag = new Middle(article.getId(), tag.getId());
-        Middle middleCategory = new Middle(article.getId(), category.getId());
         middleRepository.save(middleTag);
-        middleRepository.save(middleCategory);
     }
 
     private void createDefaultCommentIfAbsent(Article article) {

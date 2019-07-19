@@ -39,7 +39,7 @@
       <el-col :xs="24" :sm="12" :md="12" :lg="12" style="margin-top: 30px">
         <el-card>
           <div slot="header">
-            <span>标签列表</span>
+            <span>分类列表</span>
           </div>
           <ul class="meta-list">
             <li v-for="category in categories" :key="category.id">

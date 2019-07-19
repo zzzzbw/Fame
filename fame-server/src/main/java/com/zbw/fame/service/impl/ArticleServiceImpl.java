@@ -2,12 +2,11 @@ package com.zbw.fame.service.impl;
 
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.model.domain.Article;
+import com.zbw.fame.model.domain.Tag;
 import com.zbw.fame.model.dto.Archive;
 import com.zbw.fame.model.query.ArticleQuery;
 import com.zbw.fame.repository.ArticleRepository;
-import com.zbw.fame.service.ArticleService;
-import com.zbw.fame.service.CommentService;
-import com.zbw.fame.service.MetaService;
+import com.zbw.fame.service.*;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.Types;
@@ -24,7 +23,6 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -45,7 +43,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     private final CommentService commentService;
 
-    private final MetaService metasService;
+    private final CategoryService categoryService;
+
+    private final TagService tagService;
 
 
     @Override
@@ -156,8 +156,8 @@ public class ArticleServiceImpl implements ArticleService {
 
         Integer id = article.getId();
         //存储分类和标签
-        metasService.saveOrRemoveMetas(article.getCategory(), Types.CATEGORY, id);
-        metasService.saveOrRemoveMetas(article.getTags(), Types.TAG, id);
+        categoryService.saveOrRemoveMetas(article.getCategory(), id);
+        tagService.saveOrRemoveMetas(article.getTags(), id);
         return id;
     }
 
@@ -188,8 +188,8 @@ public class ArticleServiceImpl implements ArticleService {
             log.info("删除对应的评论,数量: {}", commentsResult);
 
             // 传空的属性，则移除该文章关联的属性
-            metasService.saveOrRemoveMetas("", Types.CATEGORY, article.getId());
-            metasService.saveOrRemoveMetas("", Types.TAG, article.getId());
+            categoryService.saveOrRemoveMetas("", id);
+            tagService.saveOrRemoveMetas("", id);
             return true;
         }
         return false;

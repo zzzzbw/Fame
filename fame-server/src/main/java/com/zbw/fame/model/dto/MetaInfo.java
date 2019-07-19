@@ -20,10 +20,8 @@ public class MetaInfo {
 
     private String name;
 
-    private String type;
-
     private Integer articleCount;
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonInclude
     private List<ArticleInfo> articles;
 }

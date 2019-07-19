@@ -1,15 +1,10 @@
 package com.fame.zbw;
 
-import com.zbw.fame.model.dto.MetaInfo;
-import com.zbw.fame.repository.MetaRepository;
-import com.zbw.fame.service.MetaService;
-import com.zbw.fame.util.RestResponse;
-import com.zbw.fame.util.Types;
+import com.zbw.fame.service.CategoryService;
+import com.zbw.fame.service.TagService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
 
 /**
  * @author zhangbowen
@@ -19,20 +14,24 @@ import java.util.List;
 public class MetaServiceTests extends BaseTests {
 
     @Autowired
-    private MetaService metaService;
+    private CategoryService categoryService;
 
     @Autowired
-    private MetaRepository metaRepository;
+    private TagService tagService;
 
     @Test
     public void test1() {
-        metaService.deleteMeta("testCategory", Types.CATEGORY);
+        categoryService.save("testCategory");
     }
 
     @Test
-    public void test3() {
-        List<MetaInfo> metaInfos = metaService.getMetaInfos(Types.CATEGORY);
-        log.info("{}", metaInfos);
+    public void test2() {
+        categoryService.delete("First");
+    }
+
+    @Test
+    public void test3(){
+
     }
 
 }

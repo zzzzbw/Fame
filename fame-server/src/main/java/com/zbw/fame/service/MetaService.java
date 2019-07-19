@@ -10,59 +10,43 @@ import java.util.List;
  * @author zbw
  * @since 2017/8/28 23:32
  */
-public interface MetaService {
-    /**
-     * 根据属性以及属性下的已发布文章
-     *
-     * @param type 属性类型
-     * @return List<MetaInfo>
-     */
-    List<MetaInfo> getPublishMetaInfos(String type);
-
-    /**
-     * 根据属性以及属性下的文章
-     *
-     * @param type 属性类型
-     * @return List<MetaInfo>
-     */
-    List<MetaInfo> getMetaInfos(String type);
-
+public interface MetaService<META> {
     /**
      * 删除属性(同时删除关联文章的属性)
      *
      * @param name 属性名
-     * @param type 属性类型
-     * @return boolean
+     * @return Integer 删除的属性id
      */
-    boolean deleteMeta(String name, String type);
+    Integer delete(String name);
 
     /**
      * 保存属性
      *
      * @param name 属性名
-     * @param type 属性类型
-     * @return boolean
+     * @return 保存后的属性实体
      */
-    boolean saveMeta(String name, String type);
+    META save(String name);
 
     /**
      * 更新属性(同时更新关联文章的属性)
      *
      * @param id   属性id
      * @param name 属性名
-     * @param type 属性类型
-     * @return boolean
+     * @return 存后的属性实体
      */
-    boolean updateMeta(Integer id, String name, String type);
+    META update(Integer id, String name);
 
     /**
      * 添加或者删除属性(同时添加或者删除关联文章的属性)
      *
      * @param names     属性名
-     * @param type      属性类型
      * @param articleId 关联文章id
      * @return boolean
      */
-    boolean saveOrRemoveMetas(String names, String type, Integer articleId);
+    boolean saveOrRemoveMetas(String names, Integer articleId);
+
+    List<MetaInfo> getMetaInfosWithPublishArticle();
+
+    List<MetaInfo> getMetaInfosWithAllArticle();
 
 }

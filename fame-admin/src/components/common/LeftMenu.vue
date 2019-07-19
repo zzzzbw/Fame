@@ -23,7 +23,7 @@
         <i class="el-icon-chat-dot-round"></i>
         <span slot="title">评论列表</span>
       </el-menu-item>
-      <el-menu-item index="/admin/tag">
+      <el-menu-item index="/admin/meta">
         <i class="el-icon-copy-document"></i>
         <span slot="title">标签/分类</span>
       </el-menu-item>
