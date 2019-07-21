@@ -17,9 +17,6 @@ public abstract class BaseController {
     @Autowired
     protected HttpServletRequest request;
 
-    @Autowired
-    protected CacheUtil cacheUtil;
-
     protected User user() {
         return FameUtil.getLoginUser();
     }

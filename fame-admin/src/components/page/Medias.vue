@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     init() {
-      this.$api.auth.getMedias(12, this.currentPage).then(data => {
+      this.$api.auth.pageMedia(12, this.currentPage).then(data => {
         this.mediaDatas = data.data.list;
         this.total = data.data.total;
         this.pageSize = data.data.pageSize;

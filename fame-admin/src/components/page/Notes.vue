@@ -8,7 +8,7 @@
       </div>
     </div>
 
-    <el-table :data="pageDatas" border stripe style="width: 100%">
+    <el-table :data="noteDatas" border stripe style="width: 100%">
       <el-table-column prop="id" label="id" width="60"></el-table-column>
       <el-table-column
         prop="title"
@@ -65,7 +65,7 @@
 export default {
     data: function () {
         return {
-            pageDatas: [],
+            noteDatas: [],
             total: 0,
             pageSize: 10,
             currentPage: 1
@@ -73,10 +73,10 @@ export default {
     },
     methods: {
         handleNew() {
-            this.$router.push('/admin/page/publish')
+            this.$router.push('/admin/note/publish')
         },
         handleEdit(id) {
-            this.$router.push('/admin/page/publish/' + id)
+            this.$router.push('/admin/note/publish/' + id)
         },
         handleDelete(id) {
             this.$confirm('此操作将永久删除该自定义页面, 是否继续?', '提示', {
@@ -84,33 +84,33 @@ export default {
                 cancelButtonText: '取消',
                 type: 'danger'
             }).then(() => {
-                this.deletePage(id)
+                this.deleteNote(id)
             }).catch(() => {
             })
         },
-        initPageDatas(pages) {
-            this.pageDatas = []
+        initNoteDatas(pages) {
+            this.noteDatas = []
             for (let key in pages) {
                 let data = pages[key]
-                let page = {
+                let note = {
                     id: data.id,
                     title: data.title,
                     publish: this.$dayjs(data.created).format('YYYY-MM-DD HH:mm'),
                     modified: this.$dayjs(data.modified).format('YYYY-MM-DD HH:mm'),
                     status: this.$util.STATIC.STATUS_PUBLISH === data.status ? '公开' : '隐藏'
                 }
-                this.pageDatas.push(page)
+                this.noteDatas.push(note)
             }
         },
-        deletePage(id) {
-            this.$api.auth.deletePage(id).then(() => {
+        deleteNote(id) {
+            this.$api.auth.deleteNote(id).then(() => {
                 this.$util.message.success('删除成功!')
                 this.init()
             })
         },
         init() {
-            this.$api.auth.getPages(this.currentPage).then(data => {
-                this.initPageDatas(data.data.list)
+            this.$api.auth.pageNote(this.currentPage).then(data => {
+                this.initNoteDatas(data.data.list)
                 this.total = data.data.total
                 this.pageSize = data.data.pageSize
             })

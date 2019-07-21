@@ -3,16 +3,21 @@ package com.zbw.fame.service.impl;
 import com.zbw.fame.model.domain.Article;
 import com.zbw.fame.model.domain.Category;
 import com.zbw.fame.model.domain.Middle;
+import com.zbw.fame.model.domain.Post;
 import com.zbw.fame.repository.ArticleRepository;
 import com.zbw.fame.repository.CategoryRepository;
 import com.zbw.fame.repository.MiddleRepository;
+import com.zbw.fame.repository.PostRepository;
 import com.zbw.fame.service.CategoryService;
 import com.zbw.fame.service.MiddleService;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
+
+import static com.zbw.fame.service.impl.AbstractArticleServiceImpl.ARTICLE_CACHE_NAME;
 
 /**
  * @author zhangbowen
@@ -24,9 +29,9 @@ public class CategoryServiceImpl extends AbstractMetaServiceImpl<Category> imple
 
     public CategoryServiceImpl(MiddleRepository middleRepository,
                                CategoryRepository categoryRepository,
-                               ArticleRepository articleRepository,
+                               PostRepository postRepository,
                                MiddleService middleService) {
-        super(middleRepository, categoryRepository, articleRepository, middleService);
+        super(middleRepository, categoryRepository, postRepository, middleService);
     }
 
     @Override
@@ -37,6 +42,7 @@ public class CategoryServiceImpl extends AbstractMetaServiceImpl<Category> imple
     }
 
     @Override
+    @CacheEvict(value = ARTICLE_CACHE_NAME, allEntries = true, beforeInvocation = true)
     @Transactional(rollbackFor = Throwable.class)
     public Integer delete(String name) {
         Integer metaId = super.delete(name);
@@ -44,9 +50,9 @@ public class CategoryServiceImpl extends AbstractMetaServiceImpl<Category> imple
         // 清除关联的文章分类
         List<Middle> middles = middleRepository.findAllByMId(metaId);
         for (Middle middle : middles) {
-            articleRepository.findById(middle.getAId()).ifPresent(article -> {
-                article.setCategory("");
-                articleRepository.save(article);
+            postRepository.findById(middle.getAId()).ifPresent(post -> {
+                post.setCategory("");
+                postRepository.save(post);
             });
         }
         middleRepository.deleteAllByMId(metaId);
@@ -55,19 +61,20 @@ public class CategoryServiceImpl extends AbstractMetaServiceImpl<Category> imple
 
 
     @Override
+    @CacheEvict(value = ARTICLE_CACHE_NAME, allEntries = true, beforeInvocation = true)
     @Transactional(rollbackFor = Throwable.class)
     public Category update(Integer id, String name) {
         Category category = super.update(id, name);
 
         // 更新文章中的分类列表
         Set<Integer> articleIds = middleService.getArticleIdsByMetaId(id);
-        List<Article> articles = articleRepository.findAllById(articleIds);
-        for (Article article : articles) {
-            String metaStr = article.getCategory();
+        List<Post> posts = postRepository.findAllById(articleIds);
+        for (Post post : posts) {
+            String metaStr = post.getCategory();
             String newMetaStr = metaStr.replace(category.getName(), name);
             if (!newMetaStr.equals(metaStr)) {
-                article.setCategory(newMetaStr);
-                articleRepository.save(article);
+                post.setCategory(newMetaStr);
+                postRepository.save(post);
             }
         }
         return category;

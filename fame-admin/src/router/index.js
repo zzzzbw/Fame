@@ -27,14 +27,14 @@ const Dashboard = resolve => {
   });
 };
 
-const ArticleEdit = resolve => {
-  import("@/components/page/Article").then(module => {
+const PostEdit = resolve => {
+  import("@/components/page/Post").then(module => {
     resolve(module);
   });
 };
 
-const ArticleList = resolve => {
-  import("@/components/page/Articles").then(module => {
+const PostList = resolve => {
+  import("@/components/page/Posts").then(module => {
     resolve(module);
   });
 };
@@ -57,14 +57,14 @@ const MediaList = resolve => {
   });
 };
 
-const PageList = resolve => {
-  import("@/components/page/Pages").then(module => {
+const NoteList = resolve => {
+  import("@/components/page/Notes").then(module => {
     resolve(module);
   });
 };
 
-const PageEdit = resolve => {
-  import("@/components/page/Page").then(module => {
+const NoteEdit = resolve => {
+  import("@/components/page/Note").then(module => {
     resolve(module);
   });
 };
@@ -101,19 +101,19 @@ const router = new Router({
           component: Dashboard
         },
         {
-          path: "article/publish/:id",
-          name: "ArticleEdit",
-          component: ArticleEdit
+          path: "post/publish/:id",
+          name: "PostEdit",
+          component: PostEdit
         },
         {
-          path: "article/publish",
-          name: "ArticleNew",
-          component: ArticleEdit
+          path: "post/publish",
+          name: "PostNew",
+          component: PostEdit
         },
         {
-          path: "article",
-          name: "ArticleList",
-          component: ArticleList
+          path: "post",
+          name: "PostList",
+          component: PostList
         },
         {
           path: "comment",
@@ -131,19 +131,19 @@ const router = new Router({
           component: MediaList
         },
         {
-          path: "page",
-          name: "PageList",
-          component: PageList
+          path: "note",
+          name: "NoteList",
+          component: NoteList
         },
         {
-          path: "page/publish/:id",
-          name: "PageEdit",
-          component: PageEdit
+          path: "note/publish/:id",
+          name: "NoteEdit",
+          component: NoteEdit
         },
         {
-          path: "page/publish",
-          name: "PageNew",
-          component: PageEdit
+          path: "note/publish",
+          name: "NoteNew",
+          component: NoteEdit
         },
         {
           path: "setting",

@@ -32,7 +32,9 @@ public class InitApplicationRunner implements ApplicationRunner {
 
     private final UserRepository userRepository;
 
-    private final ArticleRepository articleRepository;
+    private final PostRepository postRepository;
+
+    private final NoteRepository noteRepository;
 
     private final CategoryRepository categoryRepository;
 
@@ -51,7 +53,7 @@ public class InitApplicationRunner implements ApplicationRunner {
     /**
      * 用于初始化访问的链接
      */
-    private static final String INIT_URL = "/api/article";
+    private static final String INIT_URL = "/api/post";
 
     @Value("${server.port}")
     private String port;
@@ -98,11 +100,11 @@ public class InitApplicationRunner implements ApplicationRunner {
     private void createDefaultIfAbsent() {
         log.info("Start create default data...");
         User user = createDefaultUserIfAbsent();
-        Article article = createDefaultArticleIfAbsent(user);
-        createDefaultCategoryIfAbsent(article);
-        createDefaultTagIfAbsent(article);
-        createDefaultCommentIfAbsent(article);
-        createDefaultPageIfAbsent(user);
+        Post post = createDefaultPostIfAbsent(user);
+        createDefaultCategoryIfAbsent(post);
+        createDefaultTagIfAbsent(post);
+        createDefaultCommentIfAbsent(post);
+        createDefaultNoteIfAbsent(user);
         optionService.save(OptionKeys.FAME_INIT, Boolean.TRUE.toString());
         log.info("Create default data success");
     }
@@ -122,37 +124,34 @@ public class InitApplicationRunner implements ApplicationRunner {
         return user;
     }
 
-    private Article createDefaultArticleIfAbsent(User user) {
-        log.info("Create default article...");
-        Article record = new Article();
-        record.setType(Types.POST);
-        long count = articleRepository.count(Example.of(record));
+    private Post createDefaultPostIfAbsent(User user) {
+        log.info("Create default post...");
+        long count = postRepository.count();
         if (null == user || count > 0) {
             return null;
         }
-        Article article = new Article();
-        article.setTitle("Hello world");
-        article.setContent("欢迎使用[Fame](https://github.com/zzzzbw/Fame)! 这是你的第一篇博客。快点来写点什么吧\n" +
+        Post post = new Post();
+        post.setTitle("Hello world");
+        post.setContent("欢迎使用[Fame](https://github.com/zzzzbw/Fame)! 这是你的第一篇博客。快点来写点什么吧\n" +
                 "```java\n" +
                 "public static void main(String[] args){\n" +
                 "    System.out.println(\"Hello world\");\n" +
                 "}\n" +
                 "```\n" +
                 "> 想要了解更多详细信息，可以查看[文档](https://github.com/zzzzbw/Fame/blob/master/README.md)。");
-        article.setTags(DEFAULT_TAG);
-        article.setCategory(DEFAULT_CATEGORY);
-        article.setStatus(Types.PUBLISH);
-        article.setType(Types.POST);
-        article.setAuthorId(user.getId());
+        post.setTags(DEFAULT_TAG);
+        post.setCategory(DEFAULT_CATEGORY);
+        post.setStatus(Types.PUBLISH);
+        post.setAuthorId(user.getId());
 
-        articleRepository.save(article);
-        return article;
+        postRepository.save(post);
+        return post;
     }
 
-    private void createDefaultCategoryIfAbsent(Article article) {
+    private void createDefaultCategoryIfAbsent(Post post) {
         log.info("Create default category...");
         long count = categoryRepository.count();
-        if (null == article || count > 0) {
+        if (null == post || count > 0) {
             return;
         }
 
@@ -161,14 +160,14 @@ public class InitApplicationRunner implements ApplicationRunner {
         category = categoryRepository.save(category);
 
 
-        Middle middleCategory = new Middle(article.getId(), category.getId());
+        Middle middleCategory = new Middle(post.getId(), category.getId());
         middleRepository.save(middleCategory);
     }
 
-    private void createDefaultTagIfAbsent(Article article) {
+    private void createDefaultTagIfAbsent(Post post) {
         log.info("Create default tag...");
         long count = tagRepository.count();
-        if (null == article || count > 0) {
+        if (null == post || count > 0) {
             return;
         }
 
@@ -177,18 +176,18 @@ public class InitApplicationRunner implements ApplicationRunner {
         tag.setName(DEFAULT_TAG);
         tag = tagRepository.save(tag);
 
-        Middle middleTag = new Middle(article.getId(), tag.getId());
+        Middle middleTag = new Middle(post.getId(), tag.getId());
         middleRepository.save(middleTag);
     }
 
-    private void createDefaultCommentIfAbsent(Article article) {
+    private void createDefaultCommentIfAbsent(Post post) {
         log.info("Create default comment...");
         long count = commentRepository.count();
-        if (null == article || count > 0) {
+        if (null == post || count > 0) {
             return;
         }
         Comment comment = new Comment();
-        comment.setArticleId(article.getId());
+        comment.setArticleId(post.getId());
         comment.setContent("## 测试评论\n" +
                 "这是我的网址[Fame](http://zzzzbw.cn)");
         comment.setName("zzzzbw");
@@ -197,31 +196,28 @@ public class InitApplicationRunner implements ApplicationRunner {
         comment.setIp("0.0.0.1");
         commentRepository.save(comment);
 
-        article.setCommentCount(1);
-        articleRepository.save(article);
+        post.setCommentCount(1);
+        postRepository.save(post);
     }
 
-    private void createDefaultPageIfAbsent(User user) {
+    private void createDefaultNoteIfAbsent(User user) {
         log.info("Create default page...");
-        Article record = new Article();
-        record.setType(Types.PAGE);
-        long count = articleRepository.count(Example.of(record));
+        long count = noteRepository.count();
         if (null == user || count > 0) {
             return;
         }
-        Article page = new Article();
-        page.setTitle("About");
-        page.setContent("# About me\n" +
+        Note note = new Note();
+        note.setTitle("About");
+        note.setContent("# About me\n" +
                 "### Hello word\n" +
                 "这是关于我的页面\n" +
                 "* [Github](https://github.com/)\n" +
                 "* [知乎](https://www.zhihu.com/)\n" +
                 "### 也可以设置别的页面\n" +
                 "* 比如友链页面");
-        page.setStatus(Types.PUBLISH);
-        page.setType(Types.PAGE);
-        page.setAuthorId(user.getId());
+        note.setStatus(Types.PUBLISH);
+        note.setAuthorId(user.getId());
 
-        articleRepository.save(page);
+        noteRepository.save(note);
     }
 }

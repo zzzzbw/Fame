@@ -16,23 +16,23 @@
 
 <script>
 const config = [
-  { name: "ArticleList", title: "文章列表", link: "/admin/article" },
+  { name: "PostList", title: "文章列表", link: "/admin/post" },
   {
-    name: "ArticleNew",
+    name: "PostNew",
     title: "新建文章",
-    parent: "ArticleList"
+    parent: "PostList"
   },
   {
-    name: "ArticleEdit",
+    name: "PostEdit",
     title: "编辑文章",
-    parent: "ArticleList"
+    parent: "PostList"
   },
   { name: "CommentList", title: "评论列表" },
   { name: "MetaList", title: "标签/分类" },
   { name: "MediaList", title: "媒体库" },
-  { name: "PageList", title: "页面列表", link: "/admin/page" },
-  { name: "PageNew", title: "新建页面", parent: "PageList" },
-  { name: "PageEdit", title: "编辑页面", parent: "PageList" },
+  { name: "NoteList", title: "页面列表", link: "/admin/note" },
+  { name: "NoteNew", title: "新建页面", parent: "NoteList" },
+  { name: "NoteEdit", title: "编辑页面", parent: "NoteList" },
   { name: "Setting", title: "网站设置" }
 ];
 

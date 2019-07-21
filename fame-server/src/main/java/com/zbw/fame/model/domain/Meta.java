@@ -15,8 +15,6 @@ import javax.persistence.Entity;
  */
 @Entity
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING, columnDefinition = "VARCHAR(45)")
-@AllArgsConstructor
-@NoArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Data

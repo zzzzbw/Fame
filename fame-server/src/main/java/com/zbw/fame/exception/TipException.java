@@ -6,7 +6,7 @@ package com.zbw.fame.exception;
  * @author zbw
  * @since 2017/7/12 21:29
  */
-public class TipException extends RuntimeException{
+public class TipException extends RuntimeException {
 
     public TipException() {
     }

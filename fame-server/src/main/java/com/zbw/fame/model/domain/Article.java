@@ -1,10 +1,10 @@
 package com.zbw.fame.model.domain;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
 
 /**
@@ -14,6 +14,7 @@ import javax.persistence.Entity;
  * @since 2017/7/8 9:29
  */
 @Entity
+@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING, columnDefinition = "VARCHAR(45)")
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -44,28 +45,10 @@ public class Article extends BaseEntity {
     private Integer hits;
 
     /**
-     * 标签列表
-     */
-    @Column(name = "tags", columnDefinition = "VARCHAR(500)")
-    private String tags;
-
-    /**
-     * 文章分类
-     */
-    @Column(name = "category", columnDefinition = "VARCHAR(500)")
-    private String category;
-
-    /**
      * 内容状态
      */
     @Column(name = "status", columnDefinition = "VARCHAR(32)")
     private String status;
-
-    /**
-     * 内容类别
-     */
-    @Column(name = "type", columnDefinition = "VARCHAR(32)")
-    private String type;
 
     /**
      * 是否允许评论

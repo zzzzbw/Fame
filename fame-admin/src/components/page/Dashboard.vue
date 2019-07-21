@@ -66,19 +66,19 @@ export default {
     };
   },
   methods: {
-    getCommentCount(data) {
+    countComment(data) {
       if (!data.success) {
         return;
       }
       this.commentCount = data.data;
     },
-    getArticleCount(data) {
+    countPost(data) {
       if (!data.success) {
         return;
       }
       this.articleCount = data.data;
     },
-    getComments(data) {
+    pageComment(data) {
       if (!data.success) {
         return;
       }
@@ -90,7 +90,7 @@ export default {
         this.comments.push(comment);
       }
     },
-    getArticle(data) {
+    pagePost(data) {
       if (!data.success) {
         return;
       }
@@ -100,19 +100,19 @@ export default {
         this.articles.push(article);
       }
     },
-    initData(articlesData, logsData, articleCountData, commentCountData) {
-      this.getArticleCount(articleCountData);
-      this.getComments(logsData);
-      this.getArticle(articlesData);
-      this.getCommentCount(commentCountData);
+    initData(postData, commentData, postCountData, commentCountData) {
+      this.pagePost(postData);
+      this.pageComment(commentData);
+      this.countPost(postCountData);
+      this.countComment(commentCountData);
     },
     init() {
       this.$axios
         .all([
-          this.$api.auth.getArticles(1),
-          this.$api.auth.getComments(1),
-          this.$api.auth.getArticleCount(),
-          this.$api.auth.getCommentCount()
+          this.$api.auth.pagePost(1),
+          this.$api.auth.pageComment(1),
+          this.$api.auth.countPost(),
+          this.$api.auth.countComment()
         ])
         .then(this.$axios.spread(this.initData));
     }

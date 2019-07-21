@@ -41,12 +41,12 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
 
-    private final ArticleRepository articleRepository;
+    private final ArticleRepository<Article> articleRepository;
 
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    @CacheEvict(value = {COMMENT_CACHE_NAME, ArticleServiceImpl.ARTICLE_CACHE_NAME}, allEntries = true, beforeInvocation = true)
+    @CacheEvict(value = {COMMENT_CACHE_NAME, AbstractArticleServiceImpl.ARTICLE_CACHE_NAME}, allEntries = true, beforeInvocation = true)
     public void save(Comment comment) {
         if (null == comment) {
             throw new TipException("评论对象为空");
@@ -69,6 +69,7 @@ public class CommentServiceImpl implements CommentService {
         if (!StringUtils.isEmpty(comment.getWebsite()) && comment.getWebsite().length() > FameConsts.MAX_COMMENT_WEBSITE_COUNT) {
             throw new TipException("网址长度不能超过" + FameConsts.MAX_COMMENT_WEBSITE_COUNT);
         }
+
 
         Article article = articleRepository.findById(comment.getArticleId())
                 .orElseThrow(() -> new TipException("无法查询到对应评论文章"));
@@ -112,10 +113,8 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Cacheable(value = COMMENT_CACHE_NAME, key = "'comment_detail['+#id+']'")
     public CommentDto getCommentDetail(Integer id) {
-        Comment entity = commentRepository.findById(id).orElse(null);
-        if (null == entity) {
-            return null;
-        }
+        Comment entity = commentRepository.findById(id)
+                .orElseThrow(() -> new TipException("不存在该评论"));
         CommentDto comment = new CommentDto();
         BeanUtils.copyProperties(entity, comment);
         if (null != comment.getPId() && -1 != comment.getPId()) {
@@ -124,7 +123,7 @@ public class CommentServiceImpl implements CommentService {
         }
 
         Article article = articleRepository.findById(comment.getArticleId())
-                .orElseThrow(() -> new TipException("评论关联文章不存在"));
+                .orElseThrow(() -> new RuntimeException("评论关联文章不存在"));
         comment.setArticle(article);
         return comment;
     }

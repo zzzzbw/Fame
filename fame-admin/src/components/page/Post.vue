@@ -1,21 +1,16 @@
 <template>
   <div>
-    <el-form
-      label-position="top"
-      :rules="rules"
-      ref="articleForm"
-      :model="article"
-    >
+    <el-form label-position="top" :rules="rules" ref="postForm" :model="post">
       <el-row :gutter="30">
         <el-col :xs="24" :sm="16" :md="19" :lg="19">
           <el-form-item prop="title">
             <el-input
-              v-model="article.title"
+              v-model="post.title"
               placeholder="请输入文章标题"
             ></el-input>
           </el-form-item>
           <el-form-item prop="content">
-            <markdown-editor v-model="article.content" :onSave="onSave" />
+            <markdown-editor v-model="post.content" :onSave="onSave" />
             <!-- 键修饰符，键别名 -->
           </el-form-item>
         </el-col>
@@ -40,7 +35,7 @@
               </el-form-item>
               <el-form-item label="分类">
                 <el-select
-                  v-model="article.category"
+                  v-model="post.category"
                   filterable
                   placeholder="请选择文章分类"
                 >
@@ -55,7 +50,7 @@
               </el-form-item>
               <el-form-item label="状态">
                 <el-switch
-                  v-model="article.status"
+                  v-model="post.status"
                   active-value="publish"
                   inactive-value="draft"
                   active-text="公开"
@@ -65,7 +60,7 @@
               </el-form-item>
               <el-form-item label="创建日期">
                 <el-date-picker
-                  v-model="article.created"
+                  v-model="post.created"
                   type="datetime"
                   placeholder="创建日期"
                   size="small"
@@ -76,7 +71,7 @@
               </el-form-item>
               <el-form-item label="修改日期">
                 <el-date-picker
-                  v-model="article.modified"
+                  v-model="post.modified"
                   type="datetime"
                   placeholder="修改日期"
                   size="small"
@@ -102,13 +97,11 @@
                     <el-button
                       type="info"
                       size="small"
-                      v-if="this.article.id !== ''"
+                      v-if="this.post.id !== ''"
                     >
                       <a
                         :href="
-                          this.$serverConfig.frontUrl +
-                            'article/' +
-                            this.article.id
+                          this.$serverConfig.frontUrl + 'post/' + this.post.id
                         "
                         target="_blank"
                         style="color: #FFFFFF;"
@@ -181,7 +174,7 @@ export default {
       mediaDialog: false,
       isMobile: false,
       submitting: false,
-      article: {
+      post: {
         id: "",
         title: "",
         tags: "",
@@ -212,12 +205,12 @@ export default {
     };
   },
   methods: {
-    getArticle() {
+    getPost() {
       const id = this.$route.params.id;
       // 如果有id则表示编辑文章,获取文章信息
       if (id) {
-        this.$api.auth.getArticle(id).then(data => {
-          this.initArticle(data.data);
+        this.$api.auth.getPost(id).then(data => {
+          this.initPost(data.data);
         });
       } else {
         // 如果没有id则表示新增文章,不用清空文章信息
@@ -231,18 +224,18 @@ export default {
           created: Date.now(),
           modified: Date.now()
         };
-        this.initArticle(data);
+        this.initPost(data);
       }
     },
-    initArticle(data) {
-      this.article.id = data.id;
-      this.article.title = data.title;
-      this.article.tags = data.tags;
-      this.article.category = data.category;
-      this.article.content = data.content;
-      this.article.status = data.status;
-      this.article.created = new Date(data.created).getTime();
-      this.article.modified = Date.now();
+    initPost(data) {
+      this.post.id = data.id;
+      this.post.title = data.title;
+      this.post.tags = data.tags;
+      this.post.category = data.category;
+      this.post.content = data.content;
+      this.post.status = data.status;
+      this.post.created = new Date(data.created).getTime();
+      this.post.modified = Date.now();
       this.selectTags = this.$util.stringToTags(data.tags);
     },
     getTags() {
@@ -278,7 +271,7 @@ export default {
     showMediaDialog(page = 1) {
       this.isMobile = document.body.clientWidth < 768;
       this.mediaDialog = true;
-      this.$api.auth.getMedias(12, page).then(data => {
+      this.$api.auth.pageMedia(12, page).then(data => {
         this.mediaDialogData.mediaDatas = data.data.list;
         this.mediaDialogData.total = data.data.total;
         this.mediaDialogData.pageSize = data.data.pageSize;
@@ -299,7 +292,7 @@ export default {
     afterUpload(response) {
       if (response.success) {
         this.$api.auth
-          .getMedias(12, this.mediaDialogData.currentPage)
+          .pageMedia(12, this.mediaDialogData.currentPage)
           .then(data => {
             this.mediaDialogData.mediaDatas = data.data.list;
             this.mediaDialogData.total = data.data.total;
@@ -314,7 +307,7 @@ export default {
           });
       }
     },
-    submitArticle(formName, success) {
+    submitPost(formName, success) {
       if (this.submitting) {
         this.$util.message.warning("请不要提交过快!");
         return;
@@ -322,13 +315,13 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.submitting = true;
-          let params = this.article;
+          let params = this.post;
           params.tags = this.$util.tagsToString(this.selectTags);
-          this.$api.auth.saveArticle(params).then(data => {
+          this.$api.auth.savePost(params).then(data => {
             if (data.success) {
               success(data.data);
             } else {
-              this.$util.error("提交文章失败," + data.msg);
+              this.$util.message.error("提交文章失败," + data.msg);
             }
             this.submitting = false;
           });
@@ -337,21 +330,21 @@ export default {
     },
     onPublish() {
       const _this = this;
-      this.submitArticle("articleForm", function() {
+      this.submitPost("postForm", function() {
         _this.$util.message.success("发布文章成功!");
-        _this.$router.push("/admin/article");
+        _this.$router.push("/admin/post");
       });
     },
     onSave() {
       const _this = this;
-      this.submitArticle("articleForm", function(data) {
+      this.submitPost("postForm", function(data) {
         _this.$util.message.success("保存文章成功!");
         _this.$route.params.id = data;
-        _this.getArticle();
+        _this.getPost();
       });
     },
     init() {
-      this.getArticle();
+      this.getPost();
       this.getTags();
       this.getCategories();
     }
@@ -360,9 +353,9 @@ export default {
     this.init();
   },
   watch: {
-    // 监听route刷新绑定的article数据
+    // 监听route刷新绑定的post数据
     $route() {
-      this.getArticle();
+      this.getPost();
     }
   }
 };

@@ -17,8 +17,4 @@ public class ArticleQuery {
 
     private String status;
 
-    private String tag;
-
-    private String category;
-
 }

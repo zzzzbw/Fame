@@ -2,17 +2,22 @@ package com.zbw.fame.service.impl;
 
 import com.zbw.fame.model.domain.Article;
 import com.zbw.fame.model.domain.Middle;
+import com.zbw.fame.model.domain.Post;
 import com.zbw.fame.model.domain.Tag;
 import com.zbw.fame.repository.ArticleRepository;
 import com.zbw.fame.repository.MiddleRepository;
+import com.zbw.fame.repository.PostRepository;
 import com.zbw.fame.repository.TagRepository;
 import com.zbw.fame.service.MiddleService;
 import com.zbw.fame.service.TagService;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
+
+import static com.zbw.fame.service.impl.AbstractArticleServiceImpl.ARTICLE_CACHE_NAME;
 
 /**
  * @author zhangbowen
@@ -24,9 +29,9 @@ public class TagServiceImpl extends AbstractMetaServiceImpl<Tag> implements TagS
 
     public TagServiceImpl(MiddleRepository middleRepository,
                           TagRepository tagRepository,
-                          ArticleRepository articleRepository,
+                          PostRepository postRepository,
                           MiddleService middleService) {
-        super(middleRepository, tagRepository, articleRepository, middleService);
+        super(middleRepository, tagRepository, postRepository, middleService);
     }
 
     @Override
@@ -37,6 +42,7 @@ public class TagServiceImpl extends AbstractMetaServiceImpl<Tag> implements TagS
     }
 
     @Override
+    @CacheEvict(value = ARTICLE_CACHE_NAME, allEntries = true, beforeInvocation = true)
     @Transactional(rollbackFor = Throwable.class)
     public Integer delete(String name) {
         Integer metaId = super.delete(name);
@@ -44,9 +50,9 @@ public class TagServiceImpl extends AbstractMetaServiceImpl<Tag> implements TagS
         // 清除关联的文章标签
         List<Middle> middles = middleRepository.findAllByMId(metaId);
         for (Middle middle : middles) {
-            articleRepository.findById(middle.getAId()).ifPresent(article -> {
+            postRepository.findById(middle.getAId()).ifPresent(article -> {
                 article.setTags(this.resetTagStr(name, article.getTags()));
-                articleRepository.save(article);
+                postRepository.save(article);
             });
         }
         middleRepository.deleteAllByMId(metaId);
@@ -55,19 +61,20 @@ public class TagServiceImpl extends AbstractMetaServiceImpl<Tag> implements TagS
 
 
     @Override
+    @CacheEvict(value = ARTICLE_CACHE_NAME, allEntries = true, beforeInvocation = true)
     @Transactional(rollbackFor = Throwable.class)
         public Tag update(Integer id, String name) {
         Tag tag = super.update(id, name);
 
         // 更新文章中的标签列表
         Set<Integer> articleIds = middleService.getArticleIdsByMetaId(id);
-        List<Article> articles = articleRepository.findAllById(articleIds);
-        for (Article article : articles) {
-            String metaStr = article.getTags();
+        List<Post> posts = postRepository.findAllById(articleIds);
+        for (Post post : posts) {
+            String metaStr = post.getTags();
             String newMetaStr = metaStr.replace(tag.getName(), name);
             if (!newMetaStr.equals(metaStr)) {
-                article.setTags(newMetaStr);
-                articleRepository.save(article);
+                post.setTags(newMetaStr);
+                postRepository.save(post);
             }
         }
         return tag;

@@ -45,8 +45,18 @@ public interface MetaService<META> {
      */
     boolean saveOrRemoveMetas(String names, Integer articleId);
 
-    List<MetaInfo> getMetaInfosWithPublishArticle();
+    /**
+     * 获取前端属性信息
+     *
+     * @return List<MetaInfo>
+     */
+    List<MetaInfo> getFrontMetaInfos();
 
-    List<MetaInfo> getMetaInfosWithAllArticle();
+    /**
+     * 获取后台属性信息
+     *
+     * @return List<MetaInfo>
+     */
+    List<MetaInfo> getAdminMetaInfos();
 
 }

@@ -117,7 +117,7 @@ export default {
   },
   methods: {
     init() {
-      this.$api.auth.getComments(this.currentPage).then(data => {
+      this.$api.auth.pageComment(this.currentPage).then(data => {
         this.commentDatas = data.data.list;
         this.total = data.data.total;
         this.pageSize = data.data.pageSize;

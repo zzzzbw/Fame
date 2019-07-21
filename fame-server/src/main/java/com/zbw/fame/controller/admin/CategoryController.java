@@ -1,5 +1,6 @@
 package com.zbw.fame.controller.admin;
 
+import com.zbw.fame.model.domain.Category;
 import com.zbw.fame.service.CategoryService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/admin/category")
-public class CategoryController extends AbstractMetaController {
+public class CategoryController extends AbstractMetaController<Category> {
 
     public CategoryController(CategoryService categoryService) {
         super(categoryService);

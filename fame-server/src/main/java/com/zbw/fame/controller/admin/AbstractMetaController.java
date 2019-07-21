@@ -1,7 +1,7 @@
 package com.zbw.fame.controller.admin;
 
 import com.zbw.fame.controller.BaseController;
-import com.zbw.fame.service.CategoryService;
+import com.zbw.fame.model.domain.Meta;
 import com.zbw.fame.service.MetaService;
 import com.zbw.fame.util.RestResponse;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.*;
  * @since 2017/8/28 23:16
  */
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public abstract class AbstractMetaController extends BaseController {
+public abstract class AbstractMetaController<META extends Meta> extends BaseController {
 
-    private final MetaService metaService;
+    private final MetaService<META> metaService;
 
 
     /**
@@ -27,7 +27,7 @@ public abstract class AbstractMetaController extends BaseController {
      */
     @GetMapping
     public RestResponse getAll() {
-        return RestResponse.ok(metaService.getMetaInfosWithAllArticle());
+        return RestResponse.ok(metaService.getAdminMetaInfos());
     }
 
     /**

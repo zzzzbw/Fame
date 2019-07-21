@@ -21,24 +21,6 @@ public interface Types {
     String DELETE = "delete";
 
     /**
-     * 属性分类:归档
-     */
-    String CATEGORY = "category";
-    /**
-     * 属性分类:标签
-     */
-    String TAG = "tag";
-
-    /**
-     * 文章类型:博客
-     */
-    String POST = "post";
-    /**
-     * 文章类型:自定义页面
-     */
-    String PAGE = "page";
-
-    /**
      * 评论状态:正常
      */
     Integer COMMENT_STATUS_NORMAL = 0;

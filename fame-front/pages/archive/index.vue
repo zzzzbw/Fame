@@ -9,17 +9,17 @@
       <div class="timeline-content">
         <div class="tile">
           <div class="tile-content">
-            <p class="tile-subtitle">{{ archive.dateStr }}</p>
+            <p class="tile-subtitle">{{ archive.year }}</p>
             <p
-              v-for="article in archive.articles"
-              :key="article.id"
+              v-for="post in archive.postInfos"
+              :key="post.id"
               class="tile-title"
             >
               <label class="text-italic">{{
-                article.created | time('MM-dd')
+                post.created | time('MM-dd')
               }}</label>
-              <nuxt-link :to="{ path: '/article/' + article.id }"
-                >{{ article.title }}
+              <nuxt-link :to="{ path: '/article/' + post.id }"
+                >{{ post.title }}
               </nuxt-link>
             </p>
           </div>

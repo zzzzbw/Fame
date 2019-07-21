@@ -67,11 +67,6 @@ public interface FameConsts {
 
 
     /**
-     * 文章缓存key
-     */
-    String CACHE_ARTICLE_HITS = "cache_article_hits";
-
-    /**
      * 文章点击量缓存数
      */
     Integer CACHE_ARTICLE_HITS_SAVE = 3;

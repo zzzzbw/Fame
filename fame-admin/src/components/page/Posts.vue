@@ -44,7 +44,7 @@
       </el-row>
     </div>
 
-    <el-table :data="articleDatas" border stripe style="width: 100%">
+    <el-table :data="postDatas" border stripe style="width: 100%">
       <el-table-column prop="id" label="id" width="60"></el-table-column>
       <el-table-column prop="title" label="标题" show-overflow-tooltip>
         <template slot-scope="scope">
@@ -119,7 +119,7 @@ export default {
                 status: '',
                 title: ''
             },
-            articleDatas: [],
+            postDatas: [],
             total: 0,
             pageSize: 10,
             currentPage: 1
@@ -127,10 +127,10 @@ export default {
     },
     methods: {
         handleNew() {
-            this.$router.push('/admin/article/publish')
+            this.$router.push('/admin/post/publish')
         },
         handleEdit(id) {
-            this.$router.push('/admin/article/publish/' + id)
+            this.$router.push('/admin/post/publish/' + id)
         },
         handleDelete(id) {
             this.$confirm('此操作将永久删除该文章, 是否继续?', '提示', {
@@ -138,15 +138,15 @@ export default {
                 cancelButtonText: '取消',
                 type: 'danger'
             }).then(() => {
-                this.deleteArticle(id)
+                this.deletePost(id)
             }).catch(() => {
             })
         },
-        initArticleDatas(articles) {
-            this.articleDatas = []
+        initPostDatas(articles) {
+            this.postDatas = []
             for (let key in articles) {
                 let data = articles[key]
-                let article = {
+                let post = {
                     id: data.id,
                     title: data.title,
                     frontUrl: this.$serverConfig.frontUrl + 'article/' + data.id,
@@ -155,18 +155,18 @@ export default {
                     category: data.category || this.$util.STATIC.DEFAULT_CATEGORY,
                     status: this.$util.STATIC.STATUS_PUBLISH === data.status ? '公开' : '隐藏'
                 }
-                this.articleDatas.push(article)
+                this.postDatas.push(post)
             }
         },
-        deleteArticle(id) {
-            this.$api.auth.deleteArticle(id).then(() => {
+        deletePost(id) {
+            this.$api.auth.deletePost(id).then(() => {
                 this.$util.message.success('删除成功!')
                 this.init()
             })
         },
         init() {
-            this.$api.auth.getArticles(this.currentPage, this.tool.title, this.tool.status).then(data => {
-                this.initArticleDatas(data.data.list)
+            this.$api.auth.pagePost(this.currentPage, this.tool.title, this.tool.status).then(data => {
+                this.initPostDatas(data.data.list)
                 this.total = data.data.total
                 this.pageSize = data.data.pageSize
             })

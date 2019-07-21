@@ -12,7 +12,7 @@
                 {{ tag.name }}
               </span>
               <span style="float: right;clear: both">
-                <span class="meta-count">{{ tag.articleCount }}</span>
+                <span class="meta-count">{{ tag.postInfos.length }}</span>
                 <el-button
                   type="danger"
                   size="small"
@@ -50,7 +50,7 @@
                 {{ category.name }}
               </span>
               <span style="float: right;clear: both">
-                <span class="meta-count">{{ category.articleCount }}</span>
+                <span class="meta-count">{{ category.postInfos.length }}</span>
                 <el-button
                   type="danger"
                   size="small"

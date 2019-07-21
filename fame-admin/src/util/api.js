@@ -1,5 +1,4 @@
 import { get, post, del } from "../plugins/http";
-import util from "./fame";
 
 const auth = {
   login(user) {
@@ -31,10 +30,10 @@ const auth = {
   saveOptions(options) {
     return post("/admin/option/save", options);
   },
-  getArticleCount() {
-    return get("/admin/article/count");
+  countPost() {
+    return get("/admin/post/count");
   },
-  getArticles(page, title, status, category, tag) {
+  pagePost(page, title, status, category, tag) {
     const params = {
       page: page - 1,
       title: title,
@@ -42,18 +41,18 @@ const auth = {
       category: category,
       tag: tag
     };
-    return get("/admin/article", params);
+    return get("/admin/post", params);
   },
-  getArticle(id) {
-    return get("/admin/article/" + id);
+  getPost(id) {
+    return get("/admin/post/" + id);
   },
-  saveArticle(article) {
-    return post("/admin/article", article);
+  savePost(article) {
+    return post("/admin/post", article);
   },
-  deleteArticle(id) {
+  deletePost(id) {
     return del("/admin/article/" + id);
   },
-  getComments(page) {
+  pageComment(page) {
     const params = {
       page: page - 1
     };
@@ -65,7 +64,7 @@ const auth = {
   deleteComment(id) {
     return del("/admin/comment/" + id);
   },
-  getCommentCount() {
+  countComment() {
     return get("/admin/comment/count");
   },
   getAllCategories() {
@@ -110,30 +109,27 @@ const auth = {
     };
     return del("/admin/tag", params);
   },
-  getPages(page) {
+  pageNote(page) {
     const params = {
       page: page - 1
     };
-    return get("/admin/page", params);
+    return get("/admin/note", params);
   },
-  getPage(id) {
-    return get("/admin/page/" + id);
+  getNote(id) {
+    return get("/admin/note/" + id);
   },
-  savePage(page) {
-    return post("/admin/page", page);
+  saveNote(note) {
+    return post("/admin/note", note);
   },
-  deletePage(id) {
-    return del("/admin/page/" + id);
+  deleteNote(id) {
+    return del("/admin/note/" + id);
   },
-  getMedias(limit, page) {
+  pageMedia(limit, page) {
     const params = {
       limit: limit,
       page: page - 1
     };
     return get("/admin/media", params);
-  },
-  getMedia(id) {
-    return get("/admin/media/" + id);
   },
   deleteMedia(id) {
     return del("/admin/media/" + id);

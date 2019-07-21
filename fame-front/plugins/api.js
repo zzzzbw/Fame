@@ -6,10 +6,10 @@ const api = {
       page: page,
       limit: limit || 5
     }
-    return get('/article', params)
+    return get('/post', params)
   },
   getArticle(id) {
-    return get('/article/' + id)
+    return get('/post/' + id)
   },
   getCategories() {
     return get('/category')

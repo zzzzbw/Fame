@@ -1,5 +1,6 @@
 package com.zbw.fame.controller.admin;
 
+import com.zbw.fame.model.domain.Tag;
 import com.zbw.fame.service.TagService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/admin/tag")
-public class TagController extends AbstractMetaController {
+public class TagController extends AbstractMetaController<Tag> {
 
     public TagController(TagService tagService) {
         super(tagService);

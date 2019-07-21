@@ -4,17 +4,17 @@ import com.zbw.fame.exception.TipException;
 import com.zbw.fame.model.domain.Article;
 import com.zbw.fame.model.domain.Meta;
 import com.zbw.fame.model.domain.Middle;
-import com.zbw.fame.model.dto.ArticleInfo;
+import com.zbw.fame.model.domain.Post;
+import com.zbw.fame.model.dto.PostInfo;
 import com.zbw.fame.model.dto.MetaInfo;
-import com.zbw.fame.repository.ArticleRepository;
 import com.zbw.fame.repository.MetaRepository;
 import com.zbw.fame.repository.MiddleRepository;
+import com.zbw.fame.repository.PostRepository;
 import com.zbw.fame.service.MetaService;
 import com.zbw.fame.service.MiddleService;
 import com.zbw.fame.util.Types;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -34,7 +34,7 @@ public abstract class AbstractMetaServiceImpl<META extends Meta> implements Meta
 
     protected final MetaRepository<META> metaRepository;
 
-    protected final ArticleRepository articleRepository;
+    protected final PostRepository postRepository;
 
     protected final MiddleService middleService;
 
@@ -127,29 +127,29 @@ public abstract class AbstractMetaServiceImpl<META extends Meta> implements Meta
     }
 
     @Override
-    public List<MetaInfo> getMetaInfosWithPublishArticle() {
+    public List<MetaInfo> getFrontMetaInfos() {
         List<META> metas = metaRepository.findAll();
-        List<Article> articles = articleRepository.findAllByStatusNotAndType(Types.DELETE, Types.POST);
-        return getMetaInfos(metas, articles);
+        List<Post> posts = postRepository.findAllByStatusNotOrderByIdDesc(Types.DELETE);
+        return getMetaInfos(metas, posts);
     }
 
     @Override
-    public List<MetaInfo> getMetaInfosWithAllArticle() {
+    public List<MetaInfo> getAdminMetaInfos() {
         List<META> metas = metaRepository.findAll();
-        List<Article> articles = articleRepository.findAllByStatusAndType(Types.PUBLISH, Types.POST);
-        return getMetaInfos(metas, articles);
+        List<Post> posts = postRepository.findAllByStatusOrderByIdDesc(Types.PUBLISH);
+        return getMetaInfos(metas, posts);
     }
 
     /**
      * 获取MetaInfo列表
      *
-     * @param metas    要关联的属性列表
-     * @param articles 要关联的文章列表
+     * @param metas 要关联的属性列表
+     * @param posts 要关联的文章列表
      * @return List<MetaInfo>
      */
-    private List<MetaInfo> getMetaInfos(List<? extends Meta> metas, List<Article> articles) {
+    private List<MetaInfo> getMetaInfos(List<? extends Meta> metas, List<Post> posts) {
         // 转换成 key-domain Map
-        Map<Integer, Article> articleMap = articles.stream().collect(Collectors.toMap(Article::getId, article -> article));
+        Map<Integer, Post> postMap = posts.stream().collect(Collectors.toMap(Post::getId, post -> post));
         // 属性对应关联列表
         Map<Integer, List<Middle>> metaIdMiddleListMap = middleService.getMetaIdMiddleListMap();
 
@@ -160,30 +160,14 @@ public abstract class AbstractMetaServiceImpl<META extends Meta> implements Meta
 
             List<Middle> middleList = metaIdMiddleListMap.computeIfAbsent(meta.getId(), article -> new ArrayList<>());
 
-            List<ArticleInfo> articleInfoList = middleList.stream()
-                    .map(middle -> articleMap.get(middle.getAId()))
-                    .map(this::convertArticleToArticleInfo)
+            List<PostInfo> articleInfoList = middleList.stream()
+                    .map(middle -> postMap.get(middle.getAId()))
+                    .filter(Objects::nonNull)
+                    .map(PostInfo::new)
                     .collect(Collectors.toList());
-            metaInfo.setArticles(articleInfoList);
-            metaInfo.setArticleCount(articleInfoList.size());
+            metaInfo.setPostInfos(articleInfoList);
 
             return metaInfo;
         }).collect(Collectors.toList());
     }
-
-
-    /**
-     * 转换Article为ArticleInfo
-     *
-     * @param article Article
-     * @return ArticleInfo
-     */
-    private ArticleInfo convertArticleToArticleInfo(Article article) {
-        ArticleInfo info = new ArticleInfo();
-        info.setId(article.getId());
-        info.setTitle(article.getTitle());
-        return info;
-    }
-
-
 }

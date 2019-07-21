@@ -15,7 +15,7 @@
         <i class="el-icon-monitor"></i>
         <span slot="title">仪表盘</span>
       </el-menu-item>
-      <el-menu-item index="/admin/article">
+      <el-menu-item index="/admin/post">
         <i class="el-icon-document-copy"></i>
         <span slot="title">文章列表</span>
       </el-menu-item>
@@ -31,7 +31,7 @@
         <i class="el-icon-copy-document"></i>
         <span slot="title">媒体库</span>
       </el-menu-item>
-      <el-menu-item index="/admin/page">
+      <el-menu-item index="/admin/note">
         <i class="el-icon-document"></i>
         <span slot="title">页面列表</span>
       </el-menu-item>

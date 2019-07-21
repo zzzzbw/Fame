@@ -1,16 +1,16 @@
 <template>
   <div>
-    <el-form :rules="rules" ref="pageForm" :model="page">
+    <el-form :rules="rules" ref="noteForm" :model="note">
       <el-row :gutter="30">
         <el-col :xs="24" :sm="16" :md="19" :lg="19">
           <el-form-item prop="title">
             <el-input
-              v-model="page.title"
+              v-model="note.title"
               placeholder="请输入自定义页面标题"
             ></el-input>
           </el-form-item>
           <el-form-item prop="content">
-            <markdown-editor v-model="page.content" />
+            <markdown-editor v-model="note.content" />
           </el-form-item>
         </el-col>
         <el-col :xs="24" :sm="8" :md="5" :lg="5">
@@ -18,7 +18,7 @@
             <div class="panel-content">
               <el-form-item label="状态">
                 <el-switch
-                  v-model="page.status"
+                  v-model="note.status"
                   active-value="publish"
                   inactive-value="draft"
                   active-text="公开"
@@ -56,7 +56,7 @@ export default {
   data: function() {
     return {
       submitting: false,
-      page: {
+      note: {
         id: "",
         title: "",
         content: "",
@@ -73,23 +73,23 @@ export default {
     };
   },
   methods: {
-    getPage() {
+    getNote() {
       const id = this.$route.params.id;
       if (id) {
-        this.$api.auth.getPage(id).then(data => {
-          this.page.id = data.data.id;
-          this.page.title = data.data.title;
-          this.page.content = data.data.content;
-          this.page.status = data.data.status;
+        this.$api.auth.getNote(id).then(data => {
+          this.note.id = data.data.id;
+          this.note.title = data.data.title;
+          this.note.content = data.data.content;
+          this.note.status = data.data.status;
         });
       } else {
-        this.page.id = "";
-        this.page.title = "";
-        this.page.content = "";
-        this.page.status = this.$util.STATIC.STATUS_PUBLISH;
+        this.note.id = "";
+        this.note.title = "";
+        this.note.content = "";
+        this.note.status = this.$util.STATIC.STATUS_PUBLISH;
       }
     },
-    submitArticle(formName, success) {
+    submitNote(formName, success) {
       if (this.submitting) {
         this.$util.message.warning("请不要提交过快!");
         return;
@@ -97,7 +97,7 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           this.submitting = true;
-          this.$api.auth.savePage(this.page).then(data => {
+          this.$api.auth.saveNote(this.note).then(data => {
             if (data.success) {
               success(data.data);
             } else {
@@ -110,22 +110,22 @@ export default {
     },
     onPublish() {
       const _this = this;
-      this.submitArticle("pageForm", function() {
+      this.submitNote("noteForm", function() {
         _this.$util.message.success("发布页面成功!");
-        _this.$router.push("/admin/page");
+        _this.$router.push("/admin/note");
       });
     },
     onSave() {
       const _this = this;
-      this.submitArticle("pageForm", function(data) {
+      this.submitNote("noteForm", function(data) {
         _this.$util.message.success("保存页面成功!");
         _this.$route.params.id = data;
-        _this.getPage();
+        _this.getNote();
       });
     }
   },
   mounted() {
-    this.getPage();
+    this.getNote();
   }
 };
 </script>
