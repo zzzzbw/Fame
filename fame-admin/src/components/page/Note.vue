@@ -26,6 +26,14 @@
                 >
                 </el-switch>
               </el-form-item>
+              <el-form-item label="排序权重">
+                <el-input-number
+                  v-model="note.priority"
+                  :min="0"
+                  size="mini"
+                  controls-position="right"
+                ></el-input-number>
+              </el-form-item>
               <el-form-item>
                 <el-button-group>
                   <el-row>
@@ -60,7 +68,8 @@ export default {
         id: "",
         title: "",
         content: "",
-        status: ""
+        status: "",
+        priority: 0
       },
       rules: {
         title: [
@@ -81,12 +90,14 @@ export default {
           this.note.title = data.data.title;
           this.note.content = data.data.content;
           this.note.status = data.data.status;
+          this.note.priority = data.data.priority;
         });
       } else {
         this.note.id = "";
         this.note.title = "";
         this.note.content = "";
         this.note.status = this.$util.STATIC.STATUS_PUBLISH;
+        this.priority = 0;
       }
     },
     submitNote(formName, success) {
@@ -101,7 +112,7 @@ export default {
             if (data.success) {
               success(data.data);
             } else {
-              this.$util.error("提交文章失败文章失败," + data.msg);
+              this.$util.error("提交文章失败," + data.msg);
             }
             this.submitting = false;
           });

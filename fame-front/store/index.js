@@ -12,14 +12,28 @@ export const actions = {
     commit('article/SET_DETAIL', data)
   },
   // 文章列表
-  async getArticles({ commit }, page) {
-    const { data } = await api.getArticles(page)
+  async getArticles({ commit }, params) {
+    const { data } = await api.getArticles(
+      params.page,
+      params.limit,
+      params.sort
+    )
     const list = {
       data: data.list,
       totalPage: data.pages,
       currentPage: data.pageNum || 0
     }
     commit('article/SET_LIST', list)
+  },
+  // 自定义页面目录
+  async getNoteMenu({ commit }) {
+    const { data } = await api.getNoteMenu()
+    commit('note/SET_MENU', data)
+  },
+  // 自定义页面详情
+  async getNote({ commit }, id) {
+    const { data } = await api.getNote(id)
+    commit('note/SET_DETAIL', data)
   },
   // 分类列表
   async getCategories({ commit }) {
@@ -35,11 +49,6 @@ export const actions = {
   async getArchive({ commit }) {
     const { data } = await api.getArchives()
     commit('archive/SET_DATA', data)
-  },
-  // 自定义页面
-  async getPage({ commit }, title) {
-    const { data } = await api.getPage(title)
-    commit('article/SET_PAGE', data)
   },
   // 评论列表
   async getComments({ commit }, params) {
@@ -85,5 +94,6 @@ export const actions = {
   // 全局服务初始化
   async nuxtServerInit({ dispatch }) {
     await dispatch('getOptions')
+    await dispatch('getNoteMenu')
   }
 }

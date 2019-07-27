@@ -77,7 +77,12 @@ export default {
     }
   },
   fetch({ store, query }) {
-    return store.dispatch('getArticles', query.page || 0)
+    const params = {
+      page: query.page || 0,
+      limit: 5,
+      sort: ['priority','id']
+    }
+    return store.dispatch('getArticles', params)
   }
 }
 </script>

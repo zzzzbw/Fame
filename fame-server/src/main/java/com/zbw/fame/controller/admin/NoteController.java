@@ -39,7 +39,8 @@ public class NoteController extends AbstractArticleController<Note> {
     public RestResponse save(@RequestParam(value = "id", required = false) Integer id,
                              @RequestParam(value = "title") String title,
                              @RequestParam(value = "content") String content,
-                             @RequestParam(value = "status", defaultValue = Types.DRAFT) String status) {
+                             @RequestParam(value = "status", defaultValue = Types.DRAFT) String status,
+                             @RequestParam(value = "priority", defaultValue = "0") Integer priority) {
         User user = this.user();
         Note note = new Note();
         if (!StringUtils.isEmpty(id)) {
@@ -48,6 +49,7 @@ public class NoteController extends AbstractArticleController<Note> {
         note.setTitle(title);
         note.setContent(content);
         note.setStatus(status);
+        note.setPriority(priority);
         note.setAuthorId(user.getId());
         Integer noteId = noteService.save(note);
         return RestResponse.ok(noteId);

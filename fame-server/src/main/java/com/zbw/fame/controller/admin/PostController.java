@@ -34,6 +34,7 @@ public class PostController extends AbstractArticleController<Post> {
      * @param tags         文章标签
      * @param category     文章分类
      * @param status       {@link Types#DRAFT},{@link Types#PUBLISH}
+     * @param priority     排序权重
      * @param allowComment 是否允许评论
      * @return {@see RestResponse.ok()}
      */
@@ -44,6 +45,7 @@ public class PostController extends AbstractArticleController<Post> {
                              @RequestParam(value = "tags") String tags,
                              @RequestParam(value = "category") String category,
                              @RequestParam(value = "status", defaultValue = Types.DRAFT) String status,
+                             @RequestParam(value = "priority", defaultValue = "0") Integer priority,
                              @RequestParam(value = "allowComment", defaultValue = "false") Boolean allowComment,
                              @RequestParam(value = "created") Long created,
                              @RequestParam(value = "modified") Long modified) {
@@ -57,6 +59,7 @@ public class PostController extends AbstractArticleController<Post> {
         post.setTags(tags);
         post.setCategory(category);
         post.setStatus(status);
+        post.setPriority(priority);
         post.setAllowComment(allowComment);
         post.setAuthorId(user.getId());
         post.setCreated(new Date(created));

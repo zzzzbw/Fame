@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
@@ -213,6 +214,26 @@ public class FameUtil {
     }
 
     /**
+     * 根据字段倒叙排序
+     *
+     * @param properties 字段
+     * @return {@link Sort}
+     */
+    public static Sort sortDescBy(String... properties) {
+        return Sort.by(Sort.Direction.DESC, properties);
+    }
+
+
+    /**
+     * 根据id倒叙排序
+     *
+     * @return {@link Sort}
+     */
+    public static Sort sortDescById() {
+        return sortDescBy("id");
+    }
+
+    /**
      * 忽略大小写的indexOf
      *
      * @param str  被匹配的字符串
@@ -308,7 +329,7 @@ public class FameUtil {
     /**
      * 获取文件文件名,不包括后缀
      *
-     * @return
+     * @return 文件名
      */
     public static String getFileBaseName(String fileName) {
         if (StringUtils.isEmpty(fileName)) {

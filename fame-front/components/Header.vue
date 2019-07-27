@@ -35,6 +35,12 @@
 <script type="text/ecmascript-6">
 import _ from 'underscore'
 
+const staticMenu = [
+  { path: '/', name: '首页' },
+  { path: '/category', name: '分类' },
+  { path: '/tag', name: '标签' },
+  { path: '/archive', name: '归档' }
+]
 export default {
   directives: {
     fix: {
@@ -65,22 +71,29 @@ export default {
   },
   data() {
     return {
-      links: [
-        { path: '/', name: '首页' },
-        { path: '/category', name: '分类' },
-        { path: '/tag', name: '标签' },
-        { path: '/archive', name: '归档' },
-        { path: '/about', name: '关于' }
-      ],
+      links: [],
       menuOpen: false
     }
   },
   computed: {
     options() {
       return this.$store.state.option.data
+    },
+    noteMenu() {
+      return this.$store.state.note.menu
     }
   },
+  mounted() {
+    this.initMenu()
+  },
   methods: {
+    initMenu() {
+      const links = staticMenu
+      this.noteMenu.forEach(menu => {
+        links.push({ path: '/note/' + menu.id, name: menu.title })
+      })
+      this.links = links
+    },
     toggle() {
       this.menuOpen = !this.menuOpen
     },
@@ -193,12 +206,11 @@ a {
   width: 100%;
   overflow: hidden;
   background: rgba(255, 255, 255, 0.98);
-  -webkit-transition: max-height 0.3s ease;
   transition: max-height 0.3s ease;
 }
 
 .header-container .open {
-  max-height: 300px;
+  max-height: 768px;
   transition-delay: 0.1s;
 }
 

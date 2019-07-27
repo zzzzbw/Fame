@@ -15,6 +15,7 @@ import com.zbw.fame.util.Types;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -123,7 +124,7 @@ public class PostServiceImpl extends AbstractArticleServiceImpl<Post> implements
     @Cacheable(value = ARTICLE_CACHE_NAME, key = "'font_archives'")
     @Override
     public List<Archive> getArchives() {
-        List<Post> posts = articleRepository.findAllByStatusOrderByIdDesc(Types.PUBLISH);
+        List<Post> posts = articleRepository.findAllByStatus(Types.PUBLISH, FameUtil.sortDescById());
         List<Archive> archives = new ArrayList<>();
         String current = "";
         Calendar cal = Calendar.getInstance();

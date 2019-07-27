@@ -51,6 +51,12 @@ public class Article extends BaseEntity {
     private String status;
 
     /**
+     * 文章优先级
+     */
+    @Column(name = "priority", columnDefinition = "INT DEFAULT 0 NOT NULL")
+    private Integer priority;
+
+    /**
      * 是否允许评论
      */
     @Column(name = "allow_comment", columnDefinition = "BOOLEAN DEFAULT TRUE NOT NULL")
@@ -67,6 +73,9 @@ public class Article extends BaseEntity {
         super.prePersist();
         if (null == hits) {
             hits = 0;
+        }
+        if (null == priority) {
+            priority = 0;
         }
         if (null == allowComment) {
             allowComment = true;

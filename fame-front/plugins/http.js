@@ -5,10 +5,18 @@ import serverConfig from '../config/server-config'
 const Axios = axios.create({
   baseURL: serverConfig.api + '/api/', // 本地做反向代理
   timeout: 5000,
-  responseType: 'json',
   withCredentials: true, // 是否允许带cookie这些
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+  // 转换request参数，只有'PUT', 'POST', 'PATCH' and 'DELETE'方法才会生效
+  transformRequest: [
+    data => {
+      // 序列化参数数组时不设置索引，否则tomcat8.5以上无法接收特殊字符
+      return qs.stringify(data, { indices: false })
+    }
+  ],
+  // 序列化params参数
+  paramsSerializer: params => {
+    // 序列化参数数组时不设置索引，否则tomcat8.5以上无法接收特殊字符
+    return qs.stringify(params, { indices: false })
   },
   proxy: serverConfig.baseProxy
 })
@@ -16,14 +24,6 @@ const Axios = axios.create({
 // 请求拦截（配置发送请求的信息） 传参序列化
 Axios.interceptors.request.use(
   config => {
-    if (
-      config.method === 'post' ||
-      config.method === 'put' ||
-      config.method === 'delete'
-    ) {
-      // 序列化
-      config.data = qs.stringify(config.data)
-    }
     return config
   },
   error => {
@@ -39,7 +39,6 @@ Axios.interceptors.response.use(
   },
   function(error) {
     // 处理响应失败
-
     return Promise.reject(error)
   }
 )

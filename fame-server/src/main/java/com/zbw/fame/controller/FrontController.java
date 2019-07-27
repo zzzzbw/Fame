@@ -4,10 +4,7 @@ package com.zbw.fame.controller;
 import com.zbw.fame.model.domain.Comment;
 import com.zbw.fame.model.domain.Note;
 import com.zbw.fame.model.domain.Post;
-import com.zbw.fame.model.dto.Archive;
-import com.zbw.fame.model.dto.CommentDto;
-import com.zbw.fame.model.dto.MetaInfo;
-import com.zbw.fame.model.dto.Pagination;
+import com.zbw.fame.model.dto.*;
 import com.zbw.fame.service.*;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
@@ -52,13 +49,12 @@ public class FrontController extends BaseController {
      *
      * @param page  第几页
      * @param limit 每页数量
-     * @return {@see Pagination<Article>}
+     * @return {@see Pagination<Post>}
      */
     @GetMapping("post")
     public RestResponse home(@RequestParam(required = false, defaultValue = "0") Integer page,
                              @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit,
-                             @RequestParam(required = false, defaultValue = "id") List<String> sort
-    ) {
+                             @RequestParam(required = false, defaultValue = "id") List<String> sort) {
         Page<Post> posts = postService.pageFrontArticle(page, limit, sort);
         return RestResponse.ok(Pagination.of(posts));
     }
@@ -121,6 +117,17 @@ public class FrontController extends BaseController {
     public RestResponse archive() {
         List<Archive> archives = postService.getArchives();
         return RestResponse.ok(archives);
+    }
+
+    /**
+     * 获取自定义页面的列表,根据权重排序
+     *
+     * @return {@see List<NoteInfo>}
+     */
+    @GetMapping("note")
+    public RestResponse noteList() {
+        List<NoteInfo> notes = noteService.getFrontNoteList();
+        return RestResponse.ok(notes);
     }
 
     /**

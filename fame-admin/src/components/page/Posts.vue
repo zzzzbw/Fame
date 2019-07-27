@@ -3,20 +3,48 @@
     <div class="tool-container">
       <el-row>
         <el-col :xs="24" :sm="24" :md="16" :lg="18">
-          <div class="tool-container-item">
-            <span>
-              状态：
-            </span>
-            <el-radio-group v-model="tool.status" @change="init">
-              <el-radio-button label="">全部</el-radio-button>
-              <el-radio-button :label="this.$util.STATIC.STATUS_PUBLISH"
-                >公开
-              </el-radio-button>
-              <el-radio-button :label="this.$util.STATIC.STATUS_DRAFT"
-                >隐藏
-              </el-radio-button>
-            </el-radio-group>
-          </div>
+          <el-row :gutter="20">
+            <el-col :xs="24" :sm="24" :md="12" :lg="6">
+              <div class="tool-container-item">
+                <span>
+                  状态：
+                </span>
+                <el-radio-group
+                  size="small"
+                  v-model="tool.status"
+                  @change="init"
+                >
+                  <el-radio-button label="">全部</el-radio-button>
+                  <el-radio-button :label="this.$util.STATIC.STATUS_PUBLISH"
+                    >公开
+                  </el-radio-button>
+                  <el-radio-button :label="this.$util.STATIC.STATUS_DRAFT"
+                    >隐藏
+                  </el-radio-button>
+                </el-radio-group>
+              </div>
+            </el-col>
+            <el-col :xs="24" :sm="24" :md="12" :lg="6">
+              <div class="tool-container-item">
+                <span>
+                  类型：
+                </span>
+                <el-radio-group
+                  size="small"
+                  v-model="tool.status"
+                  @change="init"
+                >
+                  <el-radio-button label="">全部</el-radio-button>
+                  <el-radio-button :label="this.$util.STATIC.STATUS_PUBLISH"
+                    >公开
+                  </el-radio-button>
+                  <el-radio-button :label="this.$util.STATIC.STATUS_DRAFT"
+                    >隐藏
+                  </el-radio-button>
+                </el-radio-group>
+              </div>
+            </el-col>
+          </el-row>
         </el-col>
         <el-col :xs="24" :sm="24" :md="8" :lg="6">
           <el-row :gutter="20">
@@ -67,8 +95,24 @@
         <template slot-scope="scope">
           <el-tag
             :type="scope.row.status === '公开' ? 'success' : 'warning'"
+            effect="dark"
             disable-transitions
             >{{ scope.row.status }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="priority"
+        label="类型"
+        width="100"
+        show-overflow-tooltip
+      >
+        <template slot-scope="scope">
+          <el-tag
+            :type="scope.row.priority === '置顶' ? 'warning' : ''"
+            effect="dark"
+            disable-transitions
+            >{{ scope.row.priority }}
           </el-tag>
         </template>
       </el-table-column>
@@ -153,7 +197,8 @@ export default {
                     publish: this.$dayjs(data.created).format('YYYY-MM-DD HH:mm'),
                     modified: this.$dayjs(data.modified).format('YYYY-MM-DD HH:mm'),
                     category: data.category || this.$util.STATIC.DEFAULT_CATEGORY,
-                    status: this.$util.STATIC.STATUS_PUBLISH === data.status ? '公开' : '隐藏'
+                    status: this.$util.STATIC.STATUS_PUBLISH === data.status ? '公开' : '隐藏',
+                    priority: data.priority === 999 ? '置顶' : '普通'
                 }
                 this.postDatas.push(post)
             }

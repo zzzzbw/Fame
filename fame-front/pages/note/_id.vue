@@ -1,6 +1,6 @@
 <template>
-  <div id="about">
-    <div v-highlight class="markdown-body" v-html="content"></div>
+  <div id="note">
+    <div v-highlight class="markdown-body" v-html="note.content"></div>
 
     <big-img :visible.sync="showDialog" :img="img"></big-img>
   </div>
@@ -9,11 +9,10 @@
 <script type="text/ecmascript-6">
 import BigImg from '~/components/BigImg.vue'
 
-const pageTitle = 'About'
 
 export default {
   head () {
-    return { title: `关于` }
+    return { title: `${this.note.title}` }
   },
   components: {
     BigImg
@@ -25,19 +24,19 @@ export default {
     }
   },
   computed: {
-    content () {
-      return this.$store.state.article.page.content
+    note () {
+      return this.$store.state.note.detail
     }
   },
-  fetch ({ store }) {
-    return store.dispatch('getPage', pageTitle)
+  fetch ({ store, params }) {
+    return store.dispatch('getNote', params.id)
   },
   mounted () {
     this.mountedEvent()
   },
   methods: {
     mountedEvent () {
-      const markdown = document.getElementById('about').getElementsByClassName('markdown-body')[0]
+      const markdown = document.getElementById('note').getElementsByClassName('markdown-body')[0]
       const imgs = markdown.getElementsByTagName('img')
       const _this = this
       for (let i = 0; i < imgs.length; i++) {

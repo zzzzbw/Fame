@@ -12,6 +12,7 @@ import com.zbw.fame.repository.MiddleRepository;
 import com.zbw.fame.repository.PostRepository;
 import com.zbw.fame.service.MetaService;
 import com.zbw.fame.service.MiddleService;
+import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.Types;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,14 +130,14 @@ public abstract class AbstractMetaServiceImpl<META extends Meta> implements Meta
     @Override
     public List<MetaInfo> getFrontMetaInfos() {
         List<META> metas = metaRepository.findAll();
-        List<Post> posts = postRepository.findAllByStatusNotOrderByIdDesc(Types.DELETE);
+        List<Post> posts = postRepository.findAllByStatusNot(Types.DELETE, FameUtil.sortDescById());
         return getMetaInfos(metas, posts);
     }
 
     @Override
     public List<MetaInfo> getAdminMetaInfos() {
         List<META> metas = metaRepository.findAll();
-        List<Post> posts = postRepository.findAllByStatusOrderByIdDesc(Types.PUBLISH);
+        List<Post> posts = postRepository.findAllByStatus(Types.PUBLISH, FameUtil.sortDescById());
         return getMetaInfos(metas, posts);
     }
 

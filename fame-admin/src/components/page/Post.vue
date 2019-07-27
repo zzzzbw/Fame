@@ -48,13 +48,25 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="状态">
+              <el-form-item>
                 <el-switch
                   v-model="post.status"
                   active-value="publish"
                   inactive-value="draft"
                   active-text="公开"
                   inactive-text="隐藏"
+                >
+                </el-switch>
+              </el-form-item>
+              <el-form-item>
+                <el-switch
+                  v-model="post.priority"
+                  active-value="999"
+                  inactive-value="0"
+                  active-color="#ffd740"
+                  inactive-color="#DCDFE6"
+                  active-text="置顶"
+                  inactive-text="普通"
                 >
                 </el-switch>
               </el-form-item>
@@ -181,6 +193,7 @@ export default {
         category: "",
         content: "",
         status: "",
+        priority: 0,
         created: "",
         modified: ""
       },
@@ -221,6 +234,7 @@ export default {
           category: "",
           content: "",
           status: this.$util.STATIC.STATUS_PUBLISH,
+          priority: 0,
           created: Date.now(),
           modified: Date.now()
         };

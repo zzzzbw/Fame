@@ -1,10 +1,11 @@
 import { get, post } from './http'
 
 const api = {
-  getArticles(page, limit) {
+  getArticles(page, limit, sort) {
     const params = {
       page: page,
-      limit: limit || 5
+      limit: limit || 5,
+      sort: sort
     }
     return get('/post', params)
   },
@@ -17,8 +18,11 @@ const api = {
   getTags() {
     return get('/tag')
   },
-  getPage(title) {
-    return get('/page/' + title)
+  getNoteMenu() {
+    return get('/note')
+  },
+  getNote(id) {
+    return get('/note/' + id)
   },
   getArchives() {
     return get('/archive')

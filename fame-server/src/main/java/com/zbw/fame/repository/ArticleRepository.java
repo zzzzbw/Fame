@@ -30,9 +30,10 @@ public interface ArticleRepository<ARTICLE extends Article> extends JpaRepositor
      * 根据状态和类型查询文章
      *
      * @param status 状态
+     * @param sort   排序
      * @return List<ARTICLE>
      */
-    List<ARTICLE> findAllByStatusOrderByIdDesc(String status);
+    List<ARTICLE> findAllByStatus(String status, Sort sort);
 
     /**
      * 根据状态分页查询文章
@@ -47,9 +48,10 @@ public interface ArticleRepository<ARTICLE extends Article> extends JpaRepositor
      * 根据状态和类型查询文章
      *
      * @param notStatus 不属于的状态
+     * @param sort      排序
      * @return List<ARTICLE>
      */
-    List<ARTICLE> findAllByStatusNotOrderByIdDesc(String notStatus);
+    List<ARTICLE> findAllByStatusNot(String notStatus, Sort sort);
 
     /**
      * 根据状态计数
