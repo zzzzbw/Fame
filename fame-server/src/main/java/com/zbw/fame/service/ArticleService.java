@@ -61,9 +61,8 @@ public interface ArticleService<ARTICLE> {
      * 根据id删除文章
      *
      * @param id 文章id
-     * @return boolean
      */
-    boolean delete(Integer id);
+    void delete(Integer id);
 
     /**
      * 文章数量

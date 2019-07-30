@@ -6,9 +6,11 @@ import com.zbw.fame.model.domain.Comment;
 import com.zbw.fame.model.dto.CommentDto;
 import com.zbw.fame.model.enums.CommentAssessType;
 import com.zbw.fame.model.enums.CommentStatus;
+import com.zbw.fame.model.enums.LogType;
 import com.zbw.fame.repository.ArticleRepository;
 import com.zbw.fame.repository.CommentRepository;
 import com.zbw.fame.service.CommentService;
+import com.zbw.fame.service.LogService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -43,6 +46,12 @@ public class CommentServiceImpl implements CommentService {
     private final CommentRepository commentRepository;
 
     private final ArticleRepository<Article> articleRepository;
+
+    private final LogService logService;
+
+    private static String LOG_MESSAGE_CREATE_COMMENT = "新建评论";
+    private static String LOG_MESSAGE_DELETE_COMMENT = "删除评论";
+    private static String LOG_MESSAGE_BATCH_DELETE_COMMENT = "批量删除评论";
 
 
     @Override
@@ -76,6 +85,8 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new TipException("无法查询到对应评论文章"));
 
         commentRepository.save(comment);
+        logService.save(comment.toString(), LOG_MESSAGE_CREATE_COMMENT, LogType.COMMENT);
+
 
         // 增加文章的评论数
         article.setCommentCount(article.getCommentCount() + 1);
@@ -133,7 +144,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional(rollbackFor = Throwable.class)
     @CacheEvict(value = COMMENT_CACHE_NAME, allEntries = true, beforeInvocation = true)
-    public boolean deleteComment(Integer id) {
+    public void deleteComment(Integer id) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new TipException("不存在该评论"));
 
@@ -152,11 +163,10 @@ public class CommentServiceImpl implements CommentService {
         });
 
         comment.setStatus(CommentStatus.DELETE);
-        if (commentRepository.save(comment) != null) {
-            log.info("删除评论: {}", comment);
-            return true;
-        }
-        return false;
+
+        log.info("删除评论: {}", comment);
+        commentRepository.save(comment);
+        logService.save(comment.toString(), LOG_MESSAGE_DELETE_COMMENT, LogType.COMMENT);
     }
 
     @Override
@@ -167,6 +177,9 @@ public class CommentServiceImpl implements CommentService {
         record.setArticleId(articleId);
         List<Comment> list = commentRepository.findAll(Example.of(record));
         list.forEach(comment -> comment.setStatus(CommentStatus.DELETE));
+
+        String logData = "ids:" + list.stream().map(Comment::getId).map(String::valueOf).collect(Collectors.joining(","));
+        logService.save(logData, LOG_MESSAGE_BATCH_DELETE_COMMENT, LogType.COMMENT);
         return commentRepository.saveAll(list).size();
     }
 

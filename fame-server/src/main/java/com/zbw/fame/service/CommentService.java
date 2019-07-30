@@ -50,9 +50,8 @@ public interface CommentService {
      * 删除评论
      *
      * @param id 评论id
-     * @return 删除是否成功
      */
-    boolean deleteComment(Integer id);
+    void deleteComment(Integer id);
 
     /**
      * 根据文章id删除评论

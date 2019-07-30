@@ -5,11 +5,9 @@ import com.zbw.fame.model.domain.Post;
 import com.zbw.fame.model.dto.Archive;
 import com.zbw.fame.model.dto.PostInfo;
 import com.zbw.fame.model.enums.ArticleStatus;
+import com.zbw.fame.model.enums.LogType;
 import com.zbw.fame.repository.ArticleRepository;
-import com.zbw.fame.service.CategoryService;
-import com.zbw.fame.service.CommentService;
-import com.zbw.fame.service.PostService;
-import com.zbw.fame.service.TagService;
+import com.zbw.fame.service.*;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -37,14 +35,21 @@ public class PostServiceImpl extends AbstractArticleServiceImpl<Post> implements
 
     private final CommentService commentService;
 
+    private final LogService logService;
+
+    private static String LOG_MESSAGE_CREATE_POST = "新建文章";
+    private static String LOG_MESSAGE_DELETE_POST = "删除文章";
+
     public PostServiceImpl(ArticleRepository<Post> articleRepository,
                            CategoryService categoryService,
                            TagService tagService,
-                           CommentService commentService) {
+                           CommentService commentService,
+                           LogService logService) {
         super(articleRepository);
         this.categoryService = categoryService;
         this.tagService = tagService;
         this.commentService = commentService;
+        this.logService = logService;
     }
 
 
@@ -80,6 +85,7 @@ public class PostServiceImpl extends AbstractArticleServiceImpl<Post> implements
             articleRepository.saveAndFlush(oldPost);
         } else {
             articleRepository.saveAndFlush(post);
+            logService.save(post.toString(), LOG_MESSAGE_CREATE_POST, LogType.POST);
         }
 
         Integer id = post.getId();
@@ -93,21 +99,23 @@ public class PostServiceImpl extends AbstractArticleServiceImpl<Post> implements
     @Transactional(rollbackFor = Throwable.class)
     @CacheEvict(value = ARTICLE_CACHE_NAME, allEntries = true, beforeInvocation = true)
     @Override
-    public boolean delete(Integer id) {
+    public void delete(Integer id) {
         Post post = articleRepository.findById(id)
                 .orElseThrow(() -> new TipException("没有id为" + id + "的文章"));
         post.setStatus(ArticleStatus.DELETE);
-        if (articleRepository.save(post) != null) {
-            log.info("删除文章: {}", post);
-            int commentsResult = commentService.deleteCommentByArticleId(id);
-            log.info("删除对应的评论,数量: {}", commentsResult);
 
-            // 传空的属性，则移除该文章关联的属性
-            categoryService.saveOrRemoveMetas("", post.getId());
-            tagService.saveOrRemoveMetas("", post.getId());
-            return true;
-        }
-        return false;
+        log.info("删除文章: {}", post);
+        articleRepository.save(post);
+        logService.save(post.toString(), LOG_MESSAGE_DELETE_POST, LogType.POST);
+
+
+        int commentsResult = commentService.deleteCommentByArticleId(id);
+        log.info("删除对应的评论,数量: {}", commentsResult);
+
+        // 传空的属性，则移除该文章关联的属性
+        categoryService.saveOrRemoveMetas("", post.getId());
+        tagService.saveOrRemoveMetas("", post.getId());
+
     }
 
     @Transactional(rollbackFor = Throwable.class)

@@ -4,8 +4,10 @@ import com.zbw.fame.exception.TipException;
 import com.zbw.fame.model.domain.Note;
 import com.zbw.fame.model.dto.NoteInfo;
 import com.zbw.fame.model.enums.ArticleStatus;
+import com.zbw.fame.model.enums.LogType;
 import com.zbw.fame.repository.NoteRepository;
 import com.zbw.fame.service.CommentService;
+import com.zbw.fame.service.LogService;
 import com.zbw.fame.service.NoteService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
@@ -30,10 +32,17 @@ public class NoteServiceImpl extends AbstractArticleServiceImpl<Note> implements
 
     private final CommentService commentService;
 
+    private final LogService logService;
+
+    private static String LOG_MESSAGE_CREATE_NOTE = "新建页面";
+    private static String LOG_MESSAGE_DELETE_NOTE = "删除页面";
+
     public NoteServiceImpl(NoteRepository noteRepository,
-                           CommentService commentService) {
+                           CommentService commentService,
+                           LogService logService) {
         super(noteRepository);
         this.commentService = commentService;
+        this.logService = logService;
     }
 
 
@@ -78,6 +87,7 @@ public class NoteServiceImpl extends AbstractArticleServiceImpl<Note> implements
             articleRepository.saveAndFlush(oldNote);
         } else {
             articleRepository.saveAndFlush(note);
+            logService.save(note.toString(), LOG_MESSAGE_CREATE_NOTE, LogType.NOTE);
         }
 
         return note.getId();
@@ -87,16 +97,16 @@ public class NoteServiceImpl extends AbstractArticleServiceImpl<Note> implements
     @Transactional(rollbackFor = Throwable.class)
     @CacheEvict(value = ARTICLE_CACHE_NAME, allEntries = true, beforeInvocation = true)
     @Override
-    public boolean delete(Integer id) {
+    public void delete(Integer id) {
         Note note = articleRepository.findById(id)
                 .orElseThrow(() -> new TipException("没有id为" + id + "的文章"));
-        note.setStatus(ArticleStatus.DELETE);
-        if (articleRepository.save(note) != null) {
-            log.info("删除页面: {}", note);
-            int commentsResult = commentService.deleteCommentByArticleId(id);
-            log.info("删除对应的评论,数量: {}", commentsResult);
-            return true;
-        }
-        return false;
+
+        log.info("删除页面: {}", note);
+        articleRepository.save(note);
+
+        logService.save(note.toString(), LOG_MESSAGE_DELETE_NOTE, LogType.NOTE);
+
+        int commentsResult = commentService.deleteCommentByArticleId(id);
+        log.info("删除对应的评论,数量: {}", commentsResult);
     }
 }
