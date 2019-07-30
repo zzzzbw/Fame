@@ -3,13 +3,12 @@ package com.zbw.fame.service.impl;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.model.domain.Note;
 import com.zbw.fame.model.dto.NoteInfo;
-import com.zbw.fame.repository.ArticleRepository;
+import com.zbw.fame.model.enums.ArticleStatus;
 import com.zbw.fame.repository.NoteRepository;
 import com.zbw.fame.service.CommentService;
 import com.zbw.fame.service.NoteService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
-import com.zbw.fame.util.Types;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -41,7 +40,7 @@ public class NoteServiceImpl extends AbstractArticleServiceImpl<Note> implements
     @Cacheable(value = ARTICLE_CACHE_NAME, key = "'front_notes'")
     @Override
     public List<NoteInfo> getFrontNoteList() {
-        List<Note> noteList = articleRepository.findAllByStatus(Types.PUBLISH, FameUtil.sortDescBy("priority", "id"));
+        List<Note> noteList = articleRepository.findAllByStatus(ArticleStatus.PUBLISH, FameUtil.sortDescBy("priority", "id"));
         return noteList.stream().map(NoteInfo::new).collect(Collectors.toList());
     }
 
@@ -91,7 +90,7 @@ public class NoteServiceImpl extends AbstractArticleServiceImpl<Note> implements
     public boolean delete(Integer id) {
         Note note = articleRepository.findById(id)
                 .orElseThrow(() -> new TipException("没有id为" + id + "的文章"));
-        note.setStatus(Types.DELETE);
+        note.setStatus(ArticleStatus.DELETE);
         if (articleRepository.save(note) != null) {
             log.info("删除页面: {}", note);
             int commentsResult = commentService.deleteCommentByArticleId(id);

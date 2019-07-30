@@ -5,17 +5,18 @@ import com.zbw.fame.model.domain.Comment;
 import com.zbw.fame.model.domain.Note;
 import com.zbw.fame.model.domain.Post;
 import com.zbw.fame.model.dto.*;
+import com.zbw.fame.model.enums.CommentAssessType;
 import com.zbw.fame.service.*;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.RestResponse;
-import com.zbw.fame.util.Types;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Map;
 
@@ -170,9 +171,12 @@ public class FrontController extends BaseController {
      * @return {@see RestResponse.ok()}
      */
     @PostMapping("comment")
-    public RestResponse addComment(@RequestParam Integer articleId, @RequestParam(required = false) Integer pId,
-                                   @RequestParam String content, @RequestParam String name,
-                                   @RequestParam(required = false) String email, @RequestParam(required = false) String website) {
+    public RestResponse addComment(@RequestParam Integer articleId,
+                                   @RequestParam(required = false) Integer pId,
+                                   @RequestParam String content,
+                                   @RequestParam String name,
+                                   @RequestParam(required = false) String email,
+                                   @RequestParam(required = false) String website) {
         Comment comments = new Comment();
         comments.setArticleId(articleId);
         comments.setPId(pId);
@@ -197,11 +201,11 @@ public class FrontController extends BaseController {
      * 顶或踩评论
      *
      * @param commentId 评论id
-     * @param assess    {@link Types#AGREE},{@link Types#DISAGREE}
+     * @param assess    点评类型 {@link CommentAssessType}
      * @return {@see RestResponse.ok()}
      */
     @PostMapping("comment/{commentId}/assess")
-    public RestResponse assessComment(@PathVariable Integer commentId, @RequestParam String assess) {
+    public RestResponse assessComment(@PathVariable Integer commentId, @RequestParam CommentAssessType assess) {
         commentService.assessComment(commentId, assess);
         return RestResponse.ok();
     }

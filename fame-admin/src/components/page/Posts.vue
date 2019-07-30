@@ -15,11 +15,12 @@
                   @change="init"
                 >
                   <el-radio-button label="">全部</el-radio-button>
-                  <el-radio-button :label="this.$util.STATIC.STATUS_PUBLISH"
-                    >公开
+                  <el-radio-button
+                    :label="this.$static.ArticleStatus.PUBLISH.key"
+                    >{{ this.$static.ArticleStatus.PUBLISH.value }}
                   </el-radio-button>
-                  <el-radio-button :label="this.$util.STATIC.STATUS_DRAFT"
-                    >隐藏
+                  <el-radio-button :label="this.$static.ArticleStatus.DRAFT.key"
+                    >{{ this.$static.ArticleStatus.DRAFT.value }}
                   </el-radio-button>
                 </el-radio-group>
               </div>
@@ -35,10 +36,11 @@
                   @change="init"
                 >
                   <el-radio-button label="">全部</el-radio-button>
-                  <el-radio-button :label="this.$util.STATIC.STATUS_PUBLISH"
+                  <el-radio-button
+                    :label="this.$static.ArticleStatus.PUBLISH.key"
                     >公开
                   </el-radio-button>
-                  <el-radio-button :label="this.$util.STATIC.STATUS_DRAFT"
+                  <el-radio-button :label="this.$static.ArticleStatus.DRAFT.key"
                     >隐藏
                   </el-radio-button>
                 </el-radio-group>
@@ -197,7 +199,7 @@ export default {
                     publish: this.$dayjs(data.created).format('YYYY-MM-DD HH:mm'),
                     modified: this.$dayjs(data.modified).format('YYYY-MM-DD HH:mm'),
                     category: data.category || this.$util.STATIC.DEFAULT_CATEGORY,
-                    status: this.$util.STATIC.STATUS_PUBLISH === data.status ? '公开' : '隐藏',
+                    status: this.$static.ArticleStatus.getValue(data.status),
                     priority: data.priority === 999 ? '置顶' : '普通'
                 }
                 this.postDatas.push(post)

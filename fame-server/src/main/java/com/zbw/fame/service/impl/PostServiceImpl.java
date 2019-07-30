@@ -4,6 +4,7 @@ import com.zbw.fame.exception.TipException;
 import com.zbw.fame.model.domain.Post;
 import com.zbw.fame.model.dto.Archive;
 import com.zbw.fame.model.dto.PostInfo;
+import com.zbw.fame.model.enums.ArticleStatus;
 import com.zbw.fame.repository.ArticleRepository;
 import com.zbw.fame.service.CategoryService;
 import com.zbw.fame.service.CommentService;
@@ -11,11 +12,9 @@ import com.zbw.fame.service.PostService;
 import com.zbw.fame.service.TagService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
-import com.zbw.fame.util.Types;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -97,7 +96,7 @@ public class PostServiceImpl extends AbstractArticleServiceImpl<Post> implements
     public boolean delete(Integer id) {
         Post post = articleRepository.findById(id)
                 .orElseThrow(() -> new TipException("没有id为" + id + "的文章"));
-        post.setStatus(Types.DELETE);
+        post.setStatus(ArticleStatus.DELETE);
         if (articleRepository.save(post) != null) {
             log.info("删除文章: {}", post);
             int commentsResult = commentService.deleteCommentByArticleId(id);
@@ -124,7 +123,7 @@ public class PostServiceImpl extends AbstractArticleServiceImpl<Post> implements
     @Cacheable(value = ARTICLE_CACHE_NAME, key = "'font_archives'")
     @Override
     public List<Archive> getArchives() {
-        List<Post> posts = articleRepository.findAllByStatus(Types.PUBLISH, FameUtil.sortDescById());
+        List<Post> posts = articleRepository.findAllByStatus(ArticleStatus.PUBLISH, FameUtil.sortDescById());
         List<Archive> archives = new ArrayList<>();
         String current = "";
         Calendar cal = Calendar.getInstance();

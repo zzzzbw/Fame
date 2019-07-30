@@ -1,5 +1,6 @@
 package com.zbw.fame.model.query;
 
+import com.zbw.fame.model.enums.ArticleStatus;
 import lombok.Data;
 import lombok.ToString;
 
@@ -10,11 +11,10 @@ import lombok.ToString;
  * @since 2019/5/1 12:33
  */
 @Data
-@ToString
 public class ArticleQuery {
 
     private String title;
 
-    private String status;
+    private ArticleStatus status;
 
 }

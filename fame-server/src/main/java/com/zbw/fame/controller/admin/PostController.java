@@ -2,9 +2,9 @@ package com.zbw.fame.controller.admin;
 
 import com.zbw.fame.model.domain.Post;
 import com.zbw.fame.model.domain.User;
+import com.zbw.fame.model.enums.ArticleStatus;
 import com.zbw.fame.service.PostService;
 import com.zbw.fame.util.RestResponse;
-import com.zbw.fame.util.Types;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +33,7 @@ public class PostController extends AbstractArticleController<Post> {
      * @param content      文章内容
      * @param tags         文章标签
      * @param category     文章分类
-     * @param status       {@link Types#DRAFT},{@link Types#PUBLISH}
+     * @param status       文章状态 {@link ArticleStatus}
      * @param priority     排序权重
      * @param allowComment 是否允许评论
      * @return {@see RestResponse.ok()}
@@ -44,7 +44,7 @@ public class PostController extends AbstractArticleController<Post> {
                              @RequestParam(value = "content") String content,
                              @RequestParam(value = "tags") String tags,
                              @RequestParam(value = "category") String category,
-                             @RequestParam(value = "status", defaultValue = Types.DRAFT) String status,
+                             @RequestParam(value = "status") ArticleStatus status,
                              @RequestParam(value = "priority", defaultValue = "0") Integer priority,
                              @RequestParam(value = "allowComment", defaultValue = "false") Boolean allowComment,
                              @RequestParam(value = "created") Long created,

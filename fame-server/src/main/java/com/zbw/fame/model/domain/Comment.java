@@ -1,13 +1,11 @@
 package com.zbw.fame.model.domain;
 
-import com.zbw.fame.util.Types;
+import com.zbw.fame.model.enums.CommentStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.PrePersist;
+import javax.persistence.*;
 
 /**
  * 评论 Model
@@ -84,8 +82,9 @@ public class Comment extends BaseEntity {
     /**
      * 状态
      */
-    @Column(name = "status", columnDefinition = "INT DEFAULT 0 NOT NULL")
-    private Integer status;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", columnDefinition = "VARCHAR(32)")
+    private CommentStatus status;
 
     @PrePersist
     @Override
@@ -99,7 +98,7 @@ public class Comment extends BaseEntity {
             disagree = 0;
         }
         if (null == status) {
-            status = Types.COMMENT_STATUS_NORMAL;
+            status = CommentStatus.NORMAL;
         }
     }
 }

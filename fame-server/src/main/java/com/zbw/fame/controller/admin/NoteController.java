@@ -2,9 +2,9 @@ package com.zbw.fame.controller.admin;
 
 import com.zbw.fame.model.domain.Note;
 import com.zbw.fame.model.domain.User;
+import com.zbw.fame.model.enums.ArticleStatus;
 import com.zbw.fame.service.NoteService;
 import com.zbw.fame.util.RestResponse;
-import com.zbw.fame.util.Types;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,14 +32,14 @@ public class NoteController extends AbstractArticleController<Note> {
      * @param id      自定义页面id
      * @param title   标题
      * @param content 内容
-     * @param status  {@link Types#DRAFT},{@link Types#PUBLISH}
+     * @param status  页面状态 {@link ArticleStatus}
      * @return {@see String}
      */
     @PostMapping
     public RestResponse save(@RequestParam(value = "id", required = false) Integer id,
                              @RequestParam(value = "title") String title,
                              @RequestParam(value = "content") String content,
-                             @RequestParam(value = "status", defaultValue = Types.DRAFT) String status,
+                             @RequestParam(value = "status") ArticleStatus status,
                              @RequestParam(value = "priority", defaultValue = "0") Integer priority) {
         User user = this.user();
         Note note = new Note();

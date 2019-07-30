@@ -1,19 +1,18 @@
 package com.zbw.fame.service.impl;
 
 import com.zbw.fame.exception.TipException;
-import com.zbw.fame.model.domain.Article;
 import com.zbw.fame.model.domain.Meta;
 import com.zbw.fame.model.domain.Middle;
 import com.zbw.fame.model.domain.Post;
 import com.zbw.fame.model.dto.PostInfo;
 import com.zbw.fame.model.dto.MetaInfo;
+import com.zbw.fame.model.enums.ArticleStatus;
 import com.zbw.fame.repository.MetaRepository;
 import com.zbw.fame.repository.MiddleRepository;
 import com.zbw.fame.repository.PostRepository;
 import com.zbw.fame.service.MetaService;
 import com.zbw.fame.service.MiddleService;
 import com.zbw.fame.util.FameUtil;
-import com.zbw.fame.util.Types;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -130,14 +129,14 @@ public abstract class AbstractMetaServiceImpl<META extends Meta> implements Meta
     @Override
     public List<MetaInfo> getFrontMetaInfos() {
         List<META> metas = metaRepository.findAll();
-        List<Post> posts = postRepository.findAllByStatusNot(Types.DELETE, FameUtil.sortDescById());
+        List<Post> posts = postRepository.findAllByStatusNot(ArticleStatus.DELETE, FameUtil.sortDescById());
         return getMetaInfos(metas, posts);
     }
 
     @Override
     public List<MetaInfo> getAdminMetaInfos() {
         List<META> metas = metaRepository.findAll();
-        List<Post> posts = postRepository.findAllByStatus(Types.PUBLISH, FameUtil.sortDescById());
+        List<Post> posts = postRepository.findAllByStatus(ArticleStatus.PUBLISH, FameUtil.sortDescById());
         return getMetaInfos(metas, posts);
     }
 

@@ -1,11 +1,9 @@
 package com.zbw.fame.model.domain;
 
+import com.zbw.fame.model.enums.ArticleStatus;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.DiscriminatorType;
-import javax.persistence.Entity;
+import javax.persistence.*;
 
 /**
  * 文章 Model
@@ -47,8 +45,9 @@ public class Article extends BaseEntity {
     /**
      * 内容状态
      */
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", columnDefinition = "VARCHAR(32)")
-    private String status;
+    private ArticleStatus status;
 
     /**
      * 文章优先级

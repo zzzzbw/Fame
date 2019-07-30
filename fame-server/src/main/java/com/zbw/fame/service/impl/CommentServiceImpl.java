@@ -4,12 +4,13 @@ import com.zbw.fame.exception.TipException;
 import com.zbw.fame.model.domain.Article;
 import com.zbw.fame.model.domain.Comment;
 import com.zbw.fame.model.dto.CommentDto;
+import com.zbw.fame.model.enums.CommentAssessType;
+import com.zbw.fame.model.enums.CommentStatus;
 import com.zbw.fame.repository.ArticleRepository;
 import com.zbw.fame.repository.CommentRepository;
 import com.zbw.fame.service.CommentService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
-import com.zbw.fame.util.Types;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -86,7 +87,7 @@ public class CommentServiceImpl implements CommentService {
     public Page<Comment> getCommentsByArticleId(Integer page, Integer limit, Integer articleId) {
         Comment record = new Comment();
         record.setArticleId(articleId);
-        record.setStatus(Types.COMMENT_STATUS_NORMAL);
+        record.setStatus(CommentStatus.NORMAL);
         Page<Comment> result = commentRepository.findAll(Example.of(record), PageRequest.of(page, limit));
 
         result.forEach(comments -> {
@@ -100,7 +101,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Page<Comment> getAdminComments(Integer page, Integer limit) {
         Comment record = new Comment();
-        record.setStatus(Types.COMMENT_STATUS_NORMAL);
+        record.setStatus(CommentStatus.NORMAL);
         Page<Comment> result = commentRepository.findAll(Example.of(record), PageRequest.of(page, limit));
         result.forEach(comments -> {
             String content = FameUtil.contentTransform(comments.getContent(), false, false);
@@ -150,7 +151,7 @@ public class CommentServiceImpl implements CommentService {
             commentRepository.save(childComment);
         });
 
-        comment.setStatus(Types.COMMENT_STATUS_DELETE);
+        comment.setStatus(CommentStatus.DELETE);
         if (commentRepository.save(comment) != null) {
             log.info("删除评论: {}", comment);
             return true;
@@ -165,20 +166,20 @@ public class CommentServiceImpl implements CommentService {
         Comment record = new Comment();
         record.setArticleId(articleId);
         List<Comment> list = commentRepository.findAll(Example.of(record));
-        list.forEach(comment -> comment.setStatus(Types.COMMENT_STATUS_DELETE));
+        list.forEach(comment -> comment.setStatus(CommentStatus.DELETE));
         return commentRepository.saveAll(list).size();
     }
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
     @CacheEvict(value = COMMENT_CACHE_NAME, allEntries = true, beforeInvocation = true)
-    public void assessComment(Integer commentId, String assess) {
+    public void assessComment(Integer commentId, CommentAssessType assess) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new TipException("没有该评论"));
 
-        if (Types.AGREE.equals(assess)) {
+        if (CommentAssessType.AGREE.equals(assess)) {
             comment.setAgree(comment.getAgree() + 1);
-        } else if (Types.DISAGREE.equals(assess)) {
+        } else if (CommentAssessType.DISAGREE.equals(assess)) {
             comment.setDisagree(comment.getDisagree() + 1);
         } else {
             throw new TipException("assess参数错误");
@@ -190,7 +191,7 @@ public class CommentServiceImpl implements CommentService {
     @Cacheable(value = COMMENT_CACHE_NAME, key = "'comment_count'")
     public Long count() {
         Comment record = new Comment();
-        record.setStatus(Types.COMMENT_STATUS_NORMAL);
+        record.setStatus(CommentStatus.NORMAL);
         return commentRepository.count(Example.of(record));
     }
 

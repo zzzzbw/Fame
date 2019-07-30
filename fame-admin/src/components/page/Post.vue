@@ -51,10 +51,10 @@
               <el-form-item>
                 <el-switch
                   v-model="post.status"
-                  active-value="publish"
-                  inactive-value="draft"
-                  active-text="公开"
-                  inactive-text="隐藏"
+                  :active-value="this.$static.ArticleStatus.PUBLISH.key"
+                  :inactive-value="this.$static.ArticleStatus.DRAFT.key"
+                  :active-text="this.$static.ArticleStatus.PUBLISH.value"
+                  :inactive-text="this.$static.ArticleStatus.DRAFT.value"
                 >
                 </el-switch>
               </el-form-item>
@@ -233,7 +233,7 @@ export default {
           tags: "",
           category: "",
           content: "",
-          status: this.$util.STATIC.STATUS_PUBLISH,
+          status: this.$static.ArticleStatus.PUBLISH.key,
           priority: 0,
           created: Date.now(),
           modified: Date.now()

@@ -1,11 +1,14 @@
 package com.zbw.fame.model.domain;
 
+import com.zbw.fame.model.enums.LogType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.util.Date;
 
 /**
@@ -19,12 +22,6 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class Log extends BaseEntity {
-
-    /**
-     * 操作动作
-     */
-    @Column(name = "action", columnDefinition = "VARCHAR(255)")
-    private String action;
 
     /**
      * 操作数据
@@ -41,8 +38,9 @@ public class Log extends BaseEntity {
     /**
      * 操作类型
      */
+    @Enumerated(EnumType.STRING)
     @Column(name = "type", columnDefinition = "VARCHAR(255)")
-    private String type;
+    private LogType type;
 
     /**
      * ip地址

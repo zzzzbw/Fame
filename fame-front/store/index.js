@@ -77,7 +77,7 @@ export const actions = {
   },
   // 赞同评论
   async agreeComment({ commit }, commentId) {
-    const res = await api.assessComment(commentId, 'agree')
+    const res = await api.assessComment(commentId, 'AGREE')
     if (res && res.success) {
       commit('comment/AGREE_COMMENT', commentId)
     }
@@ -85,7 +85,7 @@ export const actions = {
   },
   // 反对评论
   async disagreeComment({ commit }, commentId) {
-    const res = await api.assessComment(commentId, 'disagree')
+    const res = await api.assessComment(commentId, 'DISAGREE')
     if (res && res.success) {
       commit('comment/DISAGREE_COMMENT', commentId)
     }

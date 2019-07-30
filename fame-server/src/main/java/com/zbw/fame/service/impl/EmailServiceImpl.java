@@ -1,12 +1,12 @@
 package com.zbw.fame.service.impl;
 
 import com.zbw.fame.model.domain.Comment;
+import com.zbw.fame.model.enums.LogType;
 import com.zbw.fame.service.EmailService;
 import com.zbw.fame.service.LogService;
 import com.zbw.fame.service.OptionService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.OptionKeys;
-import com.zbw.fame.util.Types;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,6 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -42,6 +41,9 @@ public class EmailServiceImpl implements EmailService {
 
     private final TemplateEngine templateEngine;
 
+    private static String LOG_MESSAGE_SEND_EMAIL_SUCCESS = "发送邮件成功";
+    private static String LOG_MESSAGE_SEND_EMAIL_FAIL = "发送邮件失败";
+
     @Override
     @Async
     public void sendEmailToAdmin(Comment comment) {
@@ -53,13 +55,13 @@ public class EmailServiceImpl implements EmailService {
         String content = templateEngine.process("mail_admin", context);
 
         String logData = content + ";  发送给管理员";
-        log.info("sendEmailToAdmin start: {}", new Date().toString());
+        log.info("sendEmailToAdmin start: {}", new Date());
         try {
             String emailUsername = optionService.get(OptionKeys.EMAIL_USERNAME);
             sendEmail(content, emailUsername);
-            logService.save(Types.LOG_ACTION_SEND_EMAIL, logData, Types.LOG_MESSAGE_SEND_EMAIL_SUCCESS, Types.LOG_TYPE_EMAIL);
+            logService.save(logData, LOG_MESSAGE_SEND_EMAIL_SUCCESS, LogType.EMAIL);
         } catch (Exception e) {
-            logService.save(Types.LOG_ACTION_SEND_EMAIL, logData, Types.LOG_MESSAGE_SEND_EMAIL_FAIL, Types.LOG_TYPE_EMAIL);
+            logService.save(logData, LOG_MESSAGE_SEND_EMAIL_FAIL, LogType.EMAIL);
             log.error(e.getMessage());
         }
     }
@@ -75,12 +77,12 @@ public class EmailServiceImpl implements EmailService {
         String content = templateEngine.process("mail_user", context);
 
         String logData = content + ";  发送给:" + replyEmail;
-        log.info("sendEmailToUser start: {}", new Date().toString());
+        log.info("sendEmailToUser start: {}", new Date());
         try {
             sendEmail(content, replyEmail);
-            logService.save(Types.LOG_ACTION_SEND_EMAIL, logData, Types.LOG_MESSAGE_SEND_EMAIL_SUCCESS, Types.LOG_TYPE_EMAIL);
+            logService.save(logData, LOG_MESSAGE_SEND_EMAIL_SUCCESS, LogType.EMAIL);
         } catch (Exception e) {
-            logService.save(Types.LOG_ACTION_SEND_EMAIL, logData, Types.LOG_MESSAGE_SEND_EMAIL_FAIL, Types.LOG_TYPE_EMAIL);
+            logService.save(logData, LOG_MESSAGE_SEND_EMAIL_FAIL, LogType.EMAIL);
             log.error(e.getMessage());
         }
     }

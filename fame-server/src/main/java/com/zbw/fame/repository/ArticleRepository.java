@@ -1,6 +1,7 @@
 package com.zbw.fame.repository;
 
 import com.zbw.fame.model.domain.Article;
+import com.zbw.fame.model.enums.ArticleStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -24,7 +25,7 @@ public interface ArticleRepository<ARTICLE extends Article> extends JpaRepositor
      * @param status 状态
      * @return Optional<ARTICLE>
      */
-    Optional<ARTICLE> findByIdAndStatus(Integer id, String status);
+    Optional<ARTICLE> findByIdAndStatus(Integer id, ArticleStatus status);
 
     /**
      * 根据状态和类型查询文章
@@ -33,7 +34,7 @@ public interface ArticleRepository<ARTICLE extends Article> extends JpaRepositor
      * @param sort   排序
      * @return List<ARTICLE>
      */
-    List<ARTICLE> findAllByStatus(String status, Sort sort);
+    List<ARTICLE> findAllByStatus(ArticleStatus status, Sort sort);
 
     /**
      * 根据状态分页查询文章
@@ -42,7 +43,7 @@ public interface ArticleRepository<ARTICLE extends Article> extends JpaRepositor
      * @param pageable 分页
      * @return Page<ARTICLE>
      */
-    Page<ARTICLE> findAllByStatus(String status, Pageable pageable);
+    Page<ARTICLE> findAllByStatus(ArticleStatus status, Pageable pageable);
 
     /**
      * 根据状态和类型查询文章
@@ -51,7 +52,7 @@ public interface ArticleRepository<ARTICLE extends Article> extends JpaRepositor
      * @param sort      排序
      * @return List<ARTICLE>
      */
-    List<ARTICLE> findAllByStatusNot(String notStatus, Sort sort);
+    List<ARTICLE> findAllByStatusNot(ArticleStatus notStatus, Sort sort);
 
     /**
      * 根据状态计数
@@ -59,6 +60,6 @@ public interface ArticleRepository<ARTICLE extends Article> extends JpaRepositor
      * @param notStatus 状态
      * @return count
      */
-    int countByStatusNot(String notStatus);
+    int countByStatusNot(ArticleStatus notStatus);
 
 }

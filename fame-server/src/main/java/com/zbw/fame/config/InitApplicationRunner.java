@@ -1,17 +1,16 @@
 package com.zbw.fame.config;
 
 import com.zbw.fame.model.domain.*;
+import com.zbw.fame.model.enums.ArticleStatus;
 import com.zbw.fame.repository.*;
 import com.zbw.fame.service.OptionService;
 import com.zbw.fame.util.OptionKeys;
-import com.zbw.fame.util.Types;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -141,7 +140,7 @@ public class InitApplicationRunner implements ApplicationRunner {
                 "> 想要了解更多详细信息，可以查看[文档](https://github.com/zzzzbw/Fame/blob/master/README.md)。");
         post.setTags(DEFAULT_TAG);
         post.setCategory(DEFAULT_CATEGORY);
-        post.setStatus(Types.PUBLISH);
+        post.setStatus(ArticleStatus.PUBLISH);
         post.setAuthorId(user.getId());
 
         postRepository.save(post);
@@ -215,7 +214,7 @@ public class InitApplicationRunner implements ApplicationRunner {
                 "* [知乎](https://www.zhihu.com/)\n" +
                 "### 也可以设置别的页面\n" +
                 "* 比如友链页面");
-        note.setStatus(Types.PUBLISH);
+        note.setStatus(ArticleStatus.PUBLISH);
         note.setAuthorId(user.getId());
 
         noteRepository.save(note);

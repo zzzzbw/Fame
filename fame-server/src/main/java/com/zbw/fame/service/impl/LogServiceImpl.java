@@ -1,6 +1,7 @@
 package com.zbw.fame.service.impl;
 
 import com.zbw.fame.model.domain.Log;
+import com.zbw.fame.model.enums.LogType;
 import com.zbw.fame.repository.LogRepository;
 import com.zbw.fame.service.LogService;
 import lombok.RequiredArgsConstructor;
@@ -24,21 +25,20 @@ public class LogServiceImpl implements LogService {
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    public void save(String action, String data, String message, String type) {
-        this.save(action, data, message, type, null, null);
+    public void save(String data, String message, LogType type) {
+        this.save(data, message, type, null, null);
     }
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    public void save(String action, String data, String message, String type, String ip) {
-        this.save(action, data, message, type, ip, null);
+    public void save(String data, String message, LogType type, String ip) {
+        this.save(data, message, type, ip, null);
     }
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    public void save(String action, String data, String message, String type, String ip, Integer userId) {
+    public void save(String data, String message, LogType type, String ip, Integer userId) {
         Log log = new Log();
-        log.setAction(action);
         log.setData(data);
         log.setMessage(message);
         log.setType(type);

@@ -17,7 +17,8 @@ Vue.filter("time", function(data, fmt) {
 Vue.config.productionTip = false;
 Vue.prototype.$api = Api;
 Vue.prototype.$axios = axios;
-Vue.prototype.$util = FameUtil;
+Vue.prototype.$util = FameUtil.FUNCTIONS;
+Vue.prototype.$static = FameUtil.STATIC;
 Vue.prototype.$dayjs = dayjs;
 Vue.prototype.$serverConfig = serverConfig;
 

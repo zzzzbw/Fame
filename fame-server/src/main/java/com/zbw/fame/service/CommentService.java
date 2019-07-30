@@ -2,7 +2,7 @@ package com.zbw.fame.service;
 
 import com.zbw.fame.model.domain.Comment;
 import com.zbw.fame.model.dto.CommentDto;
-import com.zbw.fame.util.Types;
+import com.zbw.fame.model.enums.CommentAssessType;
 import org.springframework.data.domain.Page;
 
 /**
@@ -66,9 +66,9 @@ public interface CommentService {
      * 顶或踩评论
      *
      * @param commentId 评论给id
-     * @param assess    {@link Types#AGREE},{@link Types#DISAGREE}
+     * @param assess    点评类型 {@link CommentAssessType}
      */
-    void assessComment(Integer commentId, String assess);
+    void assessComment(Integer commentId, CommentAssessType assess);
 
     /**
      * 评论数量

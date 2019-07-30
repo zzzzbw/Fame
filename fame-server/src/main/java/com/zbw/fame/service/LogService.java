@@ -1,6 +1,7 @@
 package com.zbw.fame.service;
 
 import com.zbw.fame.model.domain.Log;
+import com.zbw.fame.model.enums.LogType;
 import org.springframework.data.domain.Page;
 
 /**
@@ -14,35 +15,32 @@ public interface LogService {
     /**
      * 保存操作日志
      *
-     * @param action  日志动作
      * @param data    日志数据
      * @param message 日志信息
      * @param type    日志类型
      */
-    void save(String action, String data, String message, String type);
+    void save(String data, String message, LogType type);
 
     /**
      * 保存操作日志
      *
-     * @param action  日志动作
      * @param data    日志数据
      * @param message 日志信息
      * @param type    日志类型
      * @param ip      操作人ip
      */
-    void save(String action, String data, String message, String type, String ip);
+    void save(String data, String message, LogType type, String ip);
 
     /**
      * 保存操作日志
      *
-     * @param action  日志动作
      * @param data    日志数据
      * @param message 日志信息
      * @param type    日志类型
      * @param ip      操作人ip
      * @param userId  操作人id
      */
-    void save(String action, String data, String message, String type, String ip, Integer userId);
+    void save(String data, String message, LogType type, String ip, Integer userId);
 
     /**
      * 获取日志
