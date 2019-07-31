@@ -33,14 +33,9 @@ const auth = {
   countPost() {
     return get("/admin/post/count");
   },
-  pagePost(page, title, status, category, tag) {
-    const params = {
-      page: page - 1,
-      title: title,
-      status: status,
-      category: category,
-      tag: tag
-    };
+  pagePost(page, query) {
+    const params = query;
+    params.page = page - 1;
     return get("/admin/post", params);
   },
   getPost(id) {

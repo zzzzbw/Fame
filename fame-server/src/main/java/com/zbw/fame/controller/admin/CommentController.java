@@ -67,12 +67,8 @@ public class CommentController extends BaseController {
      */
     @DeleteMapping("{id}")
     public RestResponse delete(@PathVariable Integer id) {
-        if (commentService.deleteComment(id)) {
-
-            return RestResponse.ok();
-        } else {
-            return RestResponse.fail("删除评论失败");
-        }
+        commentService.deleteComment(id);
+        return RestResponse.ok();
     }
 
     /**

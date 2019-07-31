@@ -3,14 +3,14 @@
     <div class="tool-container">
       <el-row>
         <el-col :xs="24" :sm="24" :md="16" :lg="18">
-          <el-row :gutter="20">
-            <el-col :xs="24" :sm="24" :md="12" :lg="6">
+          <el-row>
+            <el-col :xs="24" :sm="24" :md="12" :lg="5">
               <div class="tool-container-item">
                 <span>
                   状态：
                 </span>
                 <el-radio-group
-                  size="small"
+                  size="mini"
                   v-model="tool.status"
                   @change="init"
                 >
@@ -25,23 +25,22 @@
                 </el-radio-group>
               </div>
             </el-col>
-            <el-col :xs="24" :sm="24" :md="12" :lg="6">
+            <el-col :xs="24" :sm="24" :md="12" :lg="5">
               <div class="tool-container-item">
                 <span>
                   类型：
                 </span>
                 <el-radio-group
-                  size="small"
-                  v-model="tool.status"
+                  size="mini"
+                  v-model="tool.priority"
                   @change="init"
                 >
                   <el-radio-button label="">全部</el-radio-button>
-                  <el-radio-button
-                    :label="this.$static.ArticleStatus.PUBLISH.key"
-                    >公开
+                  <el-radio-button :label="this.$static.PostPriority.NORMAL.key"
+                    >{{ this.$static.PostPriority.NORMAL.value }}
                   </el-radio-button>
-                  <el-radio-button :label="this.$static.ArticleStatus.DRAFT.key"
-                    >隐藏
+                  <el-radio-button :label="this.$static.PostPriority.TOP.key"
+                    >{{ this.$static.PostPriority.TOP.value }}
                   </el-radio-button>
                 </el-radio-group>
               </div>
@@ -55,6 +54,7 @@
                 <el-input
                   v-model="tool.title"
                   placeholder="搜索文章标题"
+                  size="small"
                   prefix-icon="el-icon-search"
                   clearable
                   style="max-width: 350px;"
@@ -64,7 +64,11 @@
             </el-col>
             <el-col :xs="24" :sm="24" :md="12" :lg="8">
               <div class="tool-container-item">
-                <el-button type="info" icon="el-icon-edit" @click="handleNew"
+                <el-button
+                  type="info"
+                  size="small"
+                  icon="el-icon-edit"
+                  @click="handleNew"
                   >新文章
                 </el-button>
               </div>
@@ -163,7 +167,8 @@ export default {
         return {
             tool: {
                 status: '',
-                title: ''
+                title: '',
+                priority: ''
             },
             postDatas: [],
             total: 0,
@@ -198,9 +203,9 @@ export default {
                     frontUrl: this.$serverConfig.frontUrl + 'article/' + data.id,
                     publish: this.$dayjs(data.created).format('YYYY-MM-DD HH:mm'),
                     modified: this.$dayjs(data.modified).format('YYYY-MM-DD HH:mm'),
-                    category: data.category || this.$util.STATIC.DEFAULT_CATEGORY,
+                    category: data.category || this.$static.DEFAULT_CATEGORY,
                     status: this.$static.ArticleStatus.getValue(data.status),
-                    priority: data.priority === 999 ? '置顶' : '普通'
+                    priority: this.$static.PostPriority.getValue(data.priority)
                 }
                 this.postDatas.push(post)
             }
@@ -212,7 +217,7 @@ export default {
             })
         },
         init() {
-            this.$api.auth.pagePost(this.currentPage, this.tool.title, this.tool.status).then(data => {
+            this.$api.auth.pagePost(this.currentPage, this.tool).then(data => {
                 this.initPostDatas(data.data.list)
                 this.total = data.data.total
                 this.pageSize = data.data.pageSize

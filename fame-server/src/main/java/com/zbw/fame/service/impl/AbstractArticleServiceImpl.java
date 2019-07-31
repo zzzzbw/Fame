@@ -74,6 +74,10 @@ public abstract class AbstractArticleServiceImpl<ARTICLE extends Article> implem
                 predicates.add(criteriaBuilder.like(root.get("title"), "%" + articleQuery.getTitle() + "%"));
             }
 
+            if (null != articleQuery.getPriority()) {
+                predicates.add(criteriaBuilder.equal(root.get("priority"), articleQuery.getPriority()));
+            }
+
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         }, PageRequest.of(page, limit));
         //只需要文章列表，不需要内容

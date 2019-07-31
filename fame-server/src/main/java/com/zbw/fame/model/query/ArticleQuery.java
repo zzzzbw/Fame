@@ -17,4 +17,6 @@ public class ArticleQuery {
 
     private ArticleStatus status;
 
+    private Integer priority;
+
 }

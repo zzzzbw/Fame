@@ -29,7 +29,7 @@
       </span>
     </div>
     <nav class="markdown-toc toc"></nav>
-    <comment :article-id="article.id"></comment>
+    <comment v-if="article.allowComment" :article-id="article.id"></comment>
     <big-img :visible.sync="isBigImg" :img="img"></big-img>
   </div>
 </template>
@@ -138,9 +138,6 @@ export default {
   color: #34495e;
   margin: 1.2em 0 0;
   font-size: 2em;
-}
-
-.article-info {
 }
 
 .article-date {

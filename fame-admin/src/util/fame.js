@@ -23,6 +23,24 @@ const STATIC = {
       }
     }
   },
+  PostPriority: {
+    NORMAL: {
+      key: 0,
+      value: "普通"
+    },
+    TOP: {
+      key: 999,
+      value: "置顶"
+    },
+    getValue: key => {
+      switch (key) {
+        case STATIC.PostPriority.NORMAL.key:
+          return STATIC.PostPriority.NORMAL.value;
+        case STATIC.PostPriority.TOP.key:
+          return STATIC.PostPriority.TOP.value;
+      }
+    }
+  },
   DEFAULT_CATEGORY: "默认分类"
 };
 

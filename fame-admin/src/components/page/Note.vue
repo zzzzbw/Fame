@@ -16,13 +16,13 @@
         <el-col :xs="24" :sm="8" :md="5" :lg="5">
           <div class="panel">
             <div class="panel-content">
-              <el-form-item label="状态">
+              <el-form-item>
                 <el-switch
                   v-model="note.status"
-                  active-value="publish"
-                  inactive-value="draft"
-                  active-text="公开"
-                  inactive-text="隐藏"
+                  :active-value="this.$static.ArticleStatus.PUBLISH.key"
+                  :inactive-value="this.$static.ArticleStatus.DRAFT.key"
+                  :active-text="this.$static.ArticleStatus.PUBLISH.value"
+                  :inactive-text="this.$static.ArticleStatus.DRAFT.value"
                 >
                 </el-switch>
               </el-form-item>
@@ -33,6 +33,15 @@
                   size="mini"
                   controls-position="right"
                 ></el-input-number>
+              </el-form-item>
+              <el-form-item>
+                <el-switch
+                  v-model="note.allowComment"
+                  active-color="#13ce66"
+                  active-text="开启评论"
+                  inactive-text="关闭"
+                >
+                </el-switch>
               </el-form-item>
               <el-form-item>
                 <el-button-group>
@@ -69,7 +78,8 @@ export default {
         title: "",
         content: "",
         status: "",
-        priority: 0
+        priority: 0,
+        allowComment: false
       },
       rules: {
         title: [
@@ -86,19 +96,24 @@ export default {
       const id = this.$route.params.id;
       if (id) {
         this.$api.auth.getNote(id).then(data => {
-          this.note.id = data.data.id;
-          this.note.title = data.data.title;
-          this.note.content = data.data.content;
-          this.note.status = data.data.status;
-          this.note.priority = data.data.priority;
+          this.initNote(data.data);
         });
       } else {
         this.note.id = "";
         this.note.title = "";
         this.note.content = "";
-        this.note.status = this.$util.STATIC.STATUS_PUBLISH;
+        this.note.status = this.$static.ArticleStatus.PUBLISH.key;
         this.priority = 0;
+        this.allowComment = false;
       }
+    },
+    initNote(data) {
+      this.note.id = data.id;
+      this.note.title = data.title;
+      this.note.content = data.content;
+      this.note.status = data.status;
+      this.note.priority = data.priority;
+      this.note.allowComment = data.allowComment;
     },
     submitNote(formName, success) {
       if (this.submitting) {

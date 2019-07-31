@@ -2,7 +2,11 @@
   <div>
     <div class="tool-container">
       <div class="tool-container-item" style="float: right;margin-right: 30px;">
-        <el-button type="info" icon="el-icon-edit" @click="handleNew"
+        <el-button
+          type="info"
+          size="small"
+          icon="el-icon-edit"
+          @click="handleNew"
           >新页面
         </el-button>
       </div>
@@ -97,7 +101,7 @@ export default {
                     title: data.title,
                     publish: this.$dayjs(data.created).format('YYYY-MM-DD HH:mm'),
                     modified: this.$dayjs(data.modified).format('YYYY-MM-DD HH:mm'),
-                    status: this.$util.STATIC.STATUS_PUBLISH === data.status ? '公开' : '隐藏'
+                    status: this.$static.ArticleStatus.getValue(data.status)
                 }
                 this.noteDatas.push(note)
             }

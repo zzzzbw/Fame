@@ -2,11 +2,13 @@
   <div id="note">
     <div v-highlight class="markdown-body" v-html="note.content"></div>
 
+    <comment v-if="note.allowComment" :article-id="note.id"></comment>
     <big-img :visible.sync="showDialog" :img="img"></big-img>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+import Comment from '~/components/Comment.vue'
 import BigImg from '~/components/BigImg.vue'
 
 
@@ -15,6 +17,7 @@ export default {
     return { title: `${this.note.title}` }
   },
   components: {
+    Comment,
     BigImg
   },
   data () {

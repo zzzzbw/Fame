@@ -61,12 +61,20 @@
               <el-form-item>
                 <el-switch
                   v-model="post.priority"
-                  active-value="999"
-                  inactive-value="0"
+                  :active-value="this.$static.PostPriority.TOP.key"
+                  :inactive-value="this.$static.PostPriority.NORMAL.key"
                   active-color="#ffd740"
-                  inactive-color="#DCDFE6"
-                  active-text="置顶"
-                  inactive-text="普通"
+                  :active-text="this.$static.PostPriority.TOP.value"
+                  :inactive-text="this.$static.PostPriority.NORMAL.value"
+                >
+                </el-switch>
+              </el-form-item>
+              <el-form-item>
+                <el-switch
+                  v-model="post.allowComment"
+                  active-color="#13ce66"
+                  active-text="开启评论"
+                  inactive-text="关闭"
                 >
                 </el-switch>
               </el-form-item>
@@ -194,6 +202,7 @@ export default {
         content: "",
         status: "",
         priority: 0,
+        allowComment: true,
         created: "",
         modified: ""
       },
@@ -226,7 +235,7 @@ export default {
           this.initPost(data.data);
         });
       } else {
-        // 如果没有id则表示新增文章,不用清空文章信息
+        // 如果没有id则表示新增文章,初始化文章信息
         const data = {
           id: "",
           title: "",
@@ -234,7 +243,8 @@ export default {
           category: "",
           content: "",
           status: this.$static.ArticleStatus.PUBLISH.key,
-          priority: 0,
+          priority: this.$static.PostPriority.NORMAL.key,
+          allowComment: true,
           created: Date.now(),
           modified: Date.now()
         };
@@ -248,6 +258,8 @@ export default {
       this.post.category = data.category;
       this.post.content = data.content;
       this.post.status = data.status;
+      this.post.priority = data.priority;
+      this.post.allowComment = data.allowComment;
       this.post.created = new Date(data.created).getTime();
       this.post.modified = Date.now();
       this.selectTags = this.$util.stringToTags(data.tags);

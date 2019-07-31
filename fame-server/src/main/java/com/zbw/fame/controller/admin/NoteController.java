@@ -40,7 +40,8 @@ public class NoteController extends AbstractArticleController<Note> {
                              @RequestParam(value = "title") String title,
                              @RequestParam(value = "content") String content,
                              @RequestParam(value = "status") ArticleStatus status,
-                             @RequestParam(value = "priority", defaultValue = "0") Integer priority) {
+                             @RequestParam(value = "priority", defaultValue = "0") Integer priority,
+                             @RequestParam(value = "allowComment", defaultValue = "false") Boolean allowComment) {
         User user = this.user();
         Note note = new Note();
         if (!StringUtils.isEmpty(id)) {
@@ -50,6 +51,7 @@ public class NoteController extends AbstractArticleController<Note> {
         note.setContent(content);
         note.setStatus(status);
         note.setPriority(priority);
+        note.setAllowComment(allowComment);
         note.setAuthorId(user.getId());
         Integer noteId = noteService.save(note);
         return RestResponse.ok(noteId);
