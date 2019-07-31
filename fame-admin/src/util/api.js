@@ -34,7 +34,7 @@ const auth = {
     return get("/admin/post/count");
   },
   pagePost(page, query) {
-    const params = query;
+    const params = query || {};
     params.page = page - 1;
     return get("/admin/post", params);
   },

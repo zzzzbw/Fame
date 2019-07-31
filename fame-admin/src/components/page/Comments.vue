@@ -87,21 +87,21 @@
         <el-col :xs="24" :sm="12" :md="9">{{ comment.agent }}</el-col>
       </el-row>
     </el-dialog>
-    <div class="admin-page">
-      <el-pagination
-        layout="total,prev, pager, next"
-        @current-change="init"
-        :current-page.sync="currentPage"
-        :page-size="pageSize"
-        :total="total"
-      >
-      </el-pagination>
-    </div>
+    <pagination
+      @changePage="changePage"
+      :pageSize="pageSize"
+      :total="total"
+    ></pagination>
   </div>
 </template>
 
 <script>
+import Pagination from "../common/Pagination";
+
 export default {
+  components: {
+    Pagination
+  },
   data: function() {
     return {
       commentDatas: [],
@@ -116,6 +116,10 @@ export default {
     };
   },
   methods: {
+    changePage(page) {
+      this.currentPage = page;
+      this.init();
+    },
     init() {
       this.$api.auth.pageComment(this.currentPage).then(data => {
         this.commentDatas = data.data.list;

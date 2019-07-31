@@ -148,21 +148,21 @@
         </template>
       </el-table-column>
     </el-table>
-    <div class="admin-page">
-      <el-pagination
-        layout="total, prev, pager, next"
-        @current-change="init"
-        :current-page.sync="currentPage"
-        :page-size="pageSize"
-        :total="total"
-      >
-      </el-pagination>
-    </div>
+    <pagination
+      @changePage="changePage"
+      :pageSize="pageSize"
+      :total="total"
+    ></pagination>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+import Pagination from '../common/Pagination'
+
 export default {
+    components: {
+        Pagination
+    },
     data: function () {
         return {
             tool: {
@@ -177,6 +177,10 @@ export default {
         }
     },
     methods: {
+        changePage(page){
+          this.currentPage = page;
+          this.init();
+        },
         handleNew() {
             this.$router.push('/admin/post/publish')
         },
@@ -266,11 +270,6 @@ export default {
 
 .tool-container-item {
   margin-bottom: 16px;
-}
-
-.admin-page {
-  margin-top: 30px;
-  text-align: center;
 }
 
 .meta {

@@ -18,27 +18,24 @@
         </el-col>
       </el-row>
     </div>
-    <div class="admin-page">
-      <el-pagination
-        layout="total, prev, pager, next"
-        @current-change="init"
-        :current-page.sync="currentPage"
-        :page-size="pageSize"
-        :total="total"
-      >
-      </el-pagination>
-    </div>
+    <pagination
+      @changePage="changePage"
+      :pageSize="pageSize"
+      :total="total"
+    ></pagination>
   </div>
 </template>
 
 <script>
 import Upload from "../common/Upload";
 import MediaItem from "../common/MediaItem";
+import Pagination from "../common/Pagination";
 
 export default {
   components: {
     MediaItem,
-    Upload
+    Upload,
+    Pagination
   },
   data: function() {
     return {
@@ -50,6 +47,10 @@ export default {
     };
   },
   methods: {
+    changePage(page) {
+      this.currentPage = page;
+      this.init();
+    },
     init() {
       this.$api.auth.pageMedia(12, this.currentPage).then(data => {
         this.mediaDatas = data.data.list;
