@@ -10,7 +10,6 @@ import lombok.Data;
  */
 @Data
 public class RestResponse<T> {
-
     private int code;
     private String msg;
     private T data;
@@ -51,16 +50,16 @@ public class RestResponse<T> {
         this.msg = msg;
     }
 
-    public static <T> RestResponse ok() {
+    public static RestResponse ok() {
         return new RestResponse(true);
     }
 
-    public static <T> RestResponse ok(T data) {
-        return new RestResponse<T>(true, data);
+    public static <T> RestResponse<T> ok(T data) {
+        return new RestResponse<>(true, data);
     }
 
-    public static <T> RestResponse ok(T data, int code) {
-        return new RestResponse<T>(true, data, code);
+    public static <T> RestResponse<T> ok(T data, int code) {
+        return new RestResponse<>(true, data, code);
     }
 
     public static RestResponse fail() {

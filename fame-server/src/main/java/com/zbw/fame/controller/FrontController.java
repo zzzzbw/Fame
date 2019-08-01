@@ -16,7 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Map;
 
@@ -53,9 +52,9 @@ public class FrontController extends BaseController {
      * @return {@see Pagination<Post>}
      */
     @GetMapping("post")
-    public RestResponse home(@RequestParam(required = false, defaultValue = "0") Integer page,
-                             @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit,
-                             @RequestParam(required = false, defaultValue = "id") List<String> sort) {
+    public RestResponse<Pagination<Post>> home(@RequestParam(required = false, defaultValue = "0") Integer page,
+                                               @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit,
+                                               @RequestParam(required = false, defaultValue = "id") List<String> sort) {
         Page<Post> posts = postService.pageFrontArticle(page, limit, sort);
         return RestResponse.ok(Pagination.of(posts));
     }
@@ -67,7 +66,7 @@ public class FrontController extends BaseController {
      * @return {@see Article}
      */
     @GetMapping("post/{id}")
-    public RestResponse post(@PathVariable Integer id) {
+    public RestResponse<Post> post(@PathVariable Integer id) {
         Post post = postService.getFrontArticle(id);
         this.updateHits(post);
         return RestResponse.ok(post);
@@ -93,7 +92,7 @@ public class FrontController extends BaseController {
      * @return {@see List<MetaInfo>}
      */
     @GetMapping("tag")
-    public RestResponse tag() {
+    public RestResponse<List<MetaInfo>> tag() {
         List<MetaInfo> metaInfos = tagService.getFrontMetaInfos();
         return RestResponse.ok(metaInfos);
     }
@@ -104,7 +103,7 @@ public class FrontController extends BaseController {
      * @return {@see List<MetaInfo>}
      */
     @GetMapping("category")
-    public RestResponse category() {
+    public RestResponse<List<MetaInfo>> category() {
         List<MetaInfo> metaInfos = categoryService.getFrontMetaInfos();
         return RestResponse.ok(metaInfos);
     }
@@ -115,7 +114,7 @@ public class FrontController extends BaseController {
      * @return {@see List<Archive>}
      */
     @GetMapping("archive")
-    public RestResponse archive() {
+    public RestResponse<List<Archive>> archive() {
         List<Archive> archives = postService.getArchives();
         return RestResponse.ok(archives);
     }
@@ -126,7 +125,7 @@ public class FrontController extends BaseController {
      * @return {@see List<NoteInfo>}
      */
     @GetMapping("note")
-    public RestResponse noteList() {
+    public RestResponse<List<NoteInfo>> noteList() {
         List<NoteInfo> notes = noteService.getFrontNoteList();
         return RestResponse.ok(notes);
     }
@@ -138,7 +137,7 @@ public class FrontController extends BaseController {
      * @return {@see Article}
      */
     @GetMapping("note/{id}")
-    public RestResponse note(@PathVariable Integer id) {
+    public RestResponse<Note> note(@PathVariable Integer id) {
         Note note = noteService.getFrontArticle(id);
         return RestResponse.ok(note);
     }
@@ -152,8 +151,8 @@ public class FrontController extends BaseController {
      * @return {@see Pagination<Comment>}
      */
     @GetMapping("comment")
-    public RestResponse getArticleComment(@RequestParam Integer articleId, @RequestParam(required = false, defaultValue = "0") Integer page,
-                                          @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
+    public RestResponse<Pagination<Comment>> getArticleComment(@RequestParam Integer articleId, @RequestParam(required = false, defaultValue = "0") Integer page,
+                                                               @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
         Page<Comment> comments = commentService.getCommentsByArticleId(page, limit, articleId);
         return RestResponse.ok(Pagination.of(comments));
     }
@@ -216,7 +215,7 @@ public class FrontController extends BaseController {
      * @return Map
      */
     @GetMapping("option")
-    public RestResponse getOption() {
+    public RestResponse<Map<String, String>> getOption() {
         Map<String, String> map = optionService.getFrontOptionMap();
         return RestResponse.ok(map);
     }

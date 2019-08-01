@@ -2,11 +2,14 @@ package com.zbw.fame.controller.admin;
 
 import com.zbw.fame.controller.BaseController;
 import com.zbw.fame.model.domain.Meta;
+import com.zbw.fame.model.dto.MetaInfo;
 import com.zbw.fame.service.MetaService;
 import com.zbw.fame.util.RestResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 属性(标签和分类)管理 Controller
@@ -26,7 +29,7 @@ public abstract class AbstractMetaController<META extends Meta> extends BaseCont
      * @return {@see List<MetaDto>}
      */
     @GetMapping
-    public RestResponse getAll() {
+    public RestResponse<List<MetaInfo>> getAll() {
         return RestResponse.ok(metaService.getAdminMetaInfos());
     }
 

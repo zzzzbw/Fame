@@ -28,13 +28,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 /**
  * 公用工具类
@@ -92,12 +91,7 @@ public class FameUtil {
      * @return {@link HttpSession}
      */
     public static HttpSession getSession() {
-        HttpSession session = null;
-        try {
-            session = getRequest().getSession();
-        } catch (Exception e) {
-        }
-        return session;
+        return getRequest().getSession();
     }
 
     /**
@@ -107,7 +101,17 @@ public class FameUtil {
      */
     public static HttpServletRequest getRequest() {
         ServletRequestAttributes attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        return attrs.getRequest();
+        return Objects.requireNonNull(attrs).getRequest();
+    }
+
+    /**
+     * 获取协议+域名
+     *
+     * @return 协议+域名字符串
+     */
+    public static String getDomain() {
+        StringBuffer url = getRequest().getRequestURL();
+        return url.delete(url.length() - getRequest().getRequestURI().length(), url.length()).toString();
     }
 
     /**
@@ -115,9 +119,15 @@ public class FameUtil {
      *
      * @return 域名字符串
      */
-    public static String getDomain() {
-        StringBuffer url = getRequest().getRequestURL();
-        return url.delete(url.length() - getRequest().getRequestURI().length(), url.length()).append("/").toString();
+    public static String getHostAddress() {
+        InetAddress address;
+        try {
+            address = InetAddress.getLocalHost();
+        } catch (UnknownHostException e) {
+            log.error("Get InetAddress error!", e);
+            return "";
+        }
+        return address.getHostAddress();
     }
 
     /**
@@ -151,7 +161,6 @@ public class FameUtil {
      */
     public static String getAgent() {
         return getRequest().getHeader(HttpHeaders.USER_AGENT);
-
     }
 
     /**
