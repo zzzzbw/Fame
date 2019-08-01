@@ -17,12 +17,12 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 发送邮件 Service 实现类
@@ -39,8 +39,6 @@ public class EmailServiceImpl implements EmailService {
 
     private final LogService logService;
 
-    private final TemplateEngine templateEngine;
-
     private static String LOG_MESSAGE_SEND_EMAIL_SUCCESS = "发送邮件成功";
     private static String LOG_MESSAGE_SEND_EMAIL_FAIL = "发送邮件失败";
 
@@ -51,8 +49,8 @@ public class EmailServiceImpl implements EmailService {
             return;
         }
 
-        Context context = getEmailContext(comment);
-        String content = templateEngine.process("mail_admin", context);
+        Map<String, String> params = getEmailParams(comment);
+        String content = FameConsts.getEmailTemplateAdminContent(params);
 
         String logData = content + ";  发送给管理员";
         log.info("sendEmailToAdmin start: {}", new Date());
@@ -73,8 +71,8 @@ public class EmailServiceImpl implements EmailService {
             return;
         }
 
-        Context context = getEmailContext(comment);
-        String content = templateEngine.process("mail_user", context);
+        Map<String, String> params = getEmailParams(comment);
+        String content = FameConsts.getEmailTemplateUserContent(params);
 
         String logData = content + ";  发送给:" + replyEmail;
         log.info("sendEmailToUser start: {}", new Date());
@@ -110,8 +108,8 @@ public class EmailServiceImpl implements EmailService {
      * @param comment 评论
      * @return {@see Context}
      */
-    private Context getEmailContext(Comment comment) {
-        Context context = new Context();
+    private Map<String, String> getEmailParams(Comment comment) {
+        Map<String, String> params = new HashMap<>();
 
         String websiteName = optionService.get(OptionKeys.BLOG_NAME);
         String website = optionService.get(OptionKeys.BLOG_WEBSITE);
@@ -122,12 +120,12 @@ public class EmailServiceImpl implements EmailService {
             website = website + "/";
         }
 
-        context.setVariable("websiteName", websiteName);
-        context.setVariable("website", website);
-        context.setVariable("name", comment.getName());
-        context.setVariable("content", comment.getContent());
-        context.setVariable("articleId", String.valueOf(comment.getArticleId()));
-        return context;
+        params.put("websiteName", websiteName);
+        params.put("website", website);
+        params.put("name", comment.getName());
+        params.put("content", comment.getContent());
+        params.put("articleId", String.valueOf(comment.getArticleId()));
+        return params;
     }
 
     /**

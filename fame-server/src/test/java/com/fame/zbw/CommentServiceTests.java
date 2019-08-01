@@ -3,6 +3,7 @@ package com.fame.zbw;
 import com.zbw.fame.model.domain.Comment;
 import com.zbw.fame.model.dto.Pagination;
 import com.zbw.fame.service.CommentService;
+import com.zbw.fame.service.EmailService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.mockito.exceptions.misusing.CannotVerifyStubOnlyMock;
@@ -18,6 +19,9 @@ public class CommentServiceTests extends BaseTests {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private EmailService emailService;
 
     @Test
     public void test1() {
@@ -47,5 +51,16 @@ public class CommentServiceTests extends BaseTests {
     @Test
     public void test5() {
         log.info("{}", commentService.count());
+    }
+
+    @Test
+    public void test6() throws InterruptedException {
+        Comment comment = new Comment();
+        comment.setName("zzzzbw");
+        comment.setContent("测试邮件内容");
+        comment.setArticleId(1);
+
+        emailService.sendEmailToAdmin(comment);
+        Thread.sleep(2000);
     }
 }

@@ -80,12 +80,6 @@
             </exclusions>
         </dependency>
 
-        <!-- thymeleaf 主要用于发送模板邮件 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-thymeleaf</artifactId>
-        </dependency>
-
         <!-- lombok插件 -->
         <dependency>
             <groupId>org.projectlombok</groupId>
