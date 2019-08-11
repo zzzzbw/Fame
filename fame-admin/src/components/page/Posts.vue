@@ -89,7 +89,9 @@
       </el-table-column>
       <el-table-column prop="category" label="分类" show-overflow-tooltip>
         <template slot-scope="scope">
-          <span class="meta">{{ scope.row.category }}</span>
+          <span :class="{ meta: scope.row.category }">{{
+            scope.row.category
+          }}</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -177,9 +179,9 @@ export default {
         }
     },
     methods: {
-        changePage(page){
-          this.currentPage = page;
-          this.init();
+        changePage(page) {
+            this.currentPage = page;
+            this.init();
         },
         handleNew() {
             this.$router.push('/admin/post/publish')
@@ -207,7 +209,7 @@ export default {
                     frontUrl: this.$serverConfig.frontUrl + 'article/' + data.id,
                     publish: this.$dayjs(data.created).format('YYYY-MM-DD HH:mm'),
                     modified: this.$dayjs(data.modified).format('YYYY-MM-DD HH:mm'),
-                    category: data.category || this.$static.DEFAULT_CATEGORY,
+                    category: data.category,
                     status: this.$static.ArticleStatus.getValue(data.status),
                     priority: this.$static.PostPriority.getValue(data.priority)
                 }

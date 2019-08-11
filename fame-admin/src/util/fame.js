@@ -40,8 +40,7 @@ const STATIC = {
           return STATIC.PostPriority.TOP.value;
       }
     }
-  },
-  DEFAULT_CATEGORY: "默认分类"
+  }
 };
 
 /************************************************************/

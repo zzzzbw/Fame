@@ -1,12 +1,4 @@
 /************************************************************/
-/**
- *  全局常量
- */
-const STATIC = {
-  DEFAULT_CATEGORY: '默认分类'
-}
-
-/************************************************************/
 
 /**
  * 通用工具类
@@ -112,7 +104,6 @@ function formatWebsite(url) {
 }
 
 export default {
-  STATIC,
   tagsToString,
   stringToTags,
   goAnchor,

@@ -2,7 +2,7 @@
   <div id="article">
     <h2 class="article-title text-bold">{{ article.title }}</h2>
     <div class="article-info">
-      <p class="article-category">
+      <p v-if="article.category" class="article-category">
         <span class="icon-folder"></span>
         {{ article.category | formatCategory }}
       </p>
@@ -18,7 +18,7 @@
       </p>
     </div>
     <div v-highlight class="markdown-body" v-html="article.content"></div>
-    <div class="article-tags">
+    <div v-if="article.tags" class="article-tags">
       <label class="label-tags">Tags:</label>
       <span
         v-for="tag in $util.stringToTags(article.tags)"

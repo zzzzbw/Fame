@@ -6,7 +6,7 @@
           >{{ article.title }}
         </nuxt-link>
       </h2>
-      <p class="article-date">
+      <p v-if="article.category" class="article-date">
         <span class="icon-folder"></span>
         {{ article.category | formatCategory }}
       </p>
