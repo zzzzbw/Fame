@@ -1,5 +1,6 @@
 package com.zbw.fame.service.impl;
 
+import com.zbw.fame.exception.NotFoundException;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.model.domain.Article;
 import com.zbw.fame.model.enums.ArticleStatus;
@@ -55,7 +56,7 @@ public abstract class AbstractArticleServiceImpl<ARTICLE extends Article> implem
     @Cacheable(value = ARTICLE_CACHE_NAME, key = "'front_article['+#id+']'")
     public ARTICLE getFrontArticle(Integer id) {
         ARTICLE article = articleRepository.findByIdAndStatus(id, ArticleStatus.PUBLISH)
-                .orElseThrow(() -> new TipException("该文章不存在"));
+                .orElseThrow(() -> new NotFoundException(FameUtil.getGenericClass(getClass())));
         String content = FameUtil.contentTransform(article.getContent(), false, true);
         article.setContent(content);
         return article;
@@ -88,7 +89,7 @@ public abstract class AbstractArticleServiceImpl<ARTICLE extends Article> implem
     @Override
     public ARTICLE getAdminArticle(Integer id) {
         ARTICLE article = articleRepository.findById(id)
-                .orElseThrow(() -> new TipException("该文章不存在"));
+                .orElseThrow(() -> new NotFoundException(FameUtil.getGenericClass(getClass())));
         String content = FameUtil.contentTransform(article.getContent(), false, false);
         article.setContent(content);
         return article;

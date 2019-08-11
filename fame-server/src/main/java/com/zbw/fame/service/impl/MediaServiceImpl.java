@@ -1,5 +1,6 @@
 package com.zbw.fame.service.impl;
 
+import com.zbw.fame.exception.NotFoundException;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.model.domain.Media;
 import com.zbw.fame.repository.MediaRepository;
@@ -105,9 +106,9 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    public boolean delete(Integer id) {
+    public void delete(Integer id) {
         Media media = mediaRepository.findById(id)
-                .orElseThrow(() -> new TipException("没有该媒体资源"));
+                .orElseThrow(() -> new NotFoundException(Media.class));
 
         mediaRepository.delete(media);
 
@@ -133,6 +134,5 @@ public class MediaServiceImpl implements MediaService {
                 }
             }
         }
-        return true;
     }
 }

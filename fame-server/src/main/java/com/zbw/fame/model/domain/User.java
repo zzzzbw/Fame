@@ -47,7 +47,7 @@ public class User extends BaseEntity {
     /**
      * 最后登陆时间
      */
-    @Column(name = "logged", columnDefinition = "TIMESTAMP NOT NULL DEFAULT current_timestamp ON UPDATE current_timestamp")
+    @Column(name = "logged", columnDefinition = "TIMESTAMP NOT NULL DEFAULT current_timestamp")
     private Date logged;
 
     @Override

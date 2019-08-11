@@ -4,6 +4,7 @@ import com.zbw.fame.model.domain.Post;
 import com.zbw.fame.model.domain.User;
 import com.zbw.fame.model.enums.ArticleStatus;
 import com.zbw.fame.service.PostService;
+import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.RestResponse;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -39,7 +40,7 @@ public class PostController extends AbstractArticleController<Post> {
      * @return {@see RestResponse.ok()}
      */
     @PostMapping
-    public RestResponse save(@RequestParam(value = "id", required = false) Integer id,
+    public RestResponse<Integer> save(@RequestParam(value = "id", required = false) Integer id,
                              @RequestParam(value = "title") String title,
                              @RequestParam(value = "content") String content,
                              @RequestParam(value = "tags") String tags,
@@ -49,7 +50,7 @@ public class PostController extends AbstractArticleController<Post> {
                              @RequestParam(value = "allowComment", defaultValue = "false") Boolean allowComment,
                              @RequestParam(value = "created") Long created,
                              @RequestParam(value = "modified") Long modified) {
-        User user = this.user();
+        User user = FameUtil.getLoginUser();
         Post post = new Post();
         if (!StringUtils.isEmpty(id)) {
             post.setId(id);

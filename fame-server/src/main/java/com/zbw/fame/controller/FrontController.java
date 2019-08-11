@@ -28,7 +28,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class FrontController extends BaseController {
+public class FrontController {
 
     private final PostService postService;
 
@@ -162,7 +162,7 @@ public class FrontController extends BaseController {
      * 发表评论
      *
      * @param articleId 文章id
-     * @param parentId       父评论id
+     * @param parentId  父评论id
      * @param content   评论内容
      * @param name      评论用户名
      * @param email     评论用户email

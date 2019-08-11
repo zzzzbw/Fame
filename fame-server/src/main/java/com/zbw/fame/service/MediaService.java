@@ -42,5 +42,5 @@ public interface MediaService {
      * @param id 媒体id
      * @return 删除成功
      */
-    boolean delete(Integer id);
+    void delete(Integer id);
 }

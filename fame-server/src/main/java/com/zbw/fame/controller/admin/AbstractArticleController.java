@@ -1,6 +1,5 @@
 package com.zbw.fame.controller.admin;
 
-import com.zbw.fame.controller.BaseController;
 import com.zbw.fame.model.dto.Pagination;
 import com.zbw.fame.model.domain.Article;
 import com.zbw.fame.model.query.ArticleQuery;
@@ -19,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
  * @since 2017/7/11 19:52
  */
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public abstract class AbstractArticleController<ARTICLE extends Article> extends BaseController {
+public abstract class AbstractArticleController<ARTICLE extends Article> {
 
     private final ArticleService<ARTICLE> articleService;
 
@@ -32,8 +31,8 @@ public abstract class AbstractArticleController<ARTICLE extends Article> extends
      * @return {@see Pagination<Article>}
      */
     @GetMapping
-    public RestResponse page(@RequestParam(required = false, defaultValue = "0") Integer page,
-                             @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit, ArticleQuery query) {
+    public RestResponse<Pagination<ARTICLE>> page(@RequestParam(required = false, defaultValue = "0") Integer page,
+                                                  @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit, ArticleQuery query) {
         Page<ARTICLE> articles = articleService.pageAdminArticle(page, limit, query);
         return RestResponse.ok(Pagination.of(articles));
     }
@@ -45,7 +44,7 @@ public abstract class AbstractArticleController<ARTICLE extends Article> extends
      * @return {@see Article}
      */
     @GetMapping("{id}")
-    public RestResponse get(@PathVariable Integer id) {
+    public RestResponse<ARTICLE> get(@PathVariable Integer id) {
         ARTICLE article = articleService.getAdminArticle(id);
         return RestResponse.ok(article);
     }
@@ -59,7 +58,7 @@ public abstract class AbstractArticleController<ARTICLE extends Article> extends
     @DeleteMapping("{id}")
     public RestResponse delete(@PathVariable Integer id) {
         articleService.delete(id);
-        return RestResponse.ok("删除文章成功");
+        return RestResponse.ok();
     }
 
     /**
@@ -68,7 +67,7 @@ public abstract class AbstractArticleController<ARTICLE extends Article> extends
      * @return {@see Integer}
      */
     @GetMapping("count")
-    public RestResponse count() {
+    public RestResponse<Long> count() {
         return RestResponse.ok(articleService.count());
     }
 

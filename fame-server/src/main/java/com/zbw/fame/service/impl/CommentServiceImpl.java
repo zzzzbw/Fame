@@ -1,5 +1,6 @@
 package com.zbw.fame.service.impl;
 
+import com.zbw.fame.exception.NotFoundException;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.model.domain.Article;
 import com.zbw.fame.model.domain.Comment;
@@ -82,7 +83,7 @@ public class CommentServiceImpl implements CommentService {
 
 
         Article article = articleRepository.findById(comment.getArticleId())
-                .orElseThrow(() -> new TipException("无法查询到对应评论文章"));
+                .orElseThrow(() -> new NotFoundException(Article.class));
 
         commentRepository.save(comment);
         logService.save(comment.toString(), LOG_MESSAGE_CREATE_COMMENT, LogType.COMMENT);
@@ -126,7 +127,7 @@ public class CommentServiceImpl implements CommentService {
     @Cacheable(value = COMMENT_CACHE_NAME, key = "'comment_detail['+#id+']'")
     public CommentDto getCommentDetail(Integer id) {
         Comment entity = commentRepository.findById(id)
-                .orElseThrow(() -> new TipException("不存在该评论"));
+                .orElseThrow(() -> new NotFoundException(Comment.class));
         CommentDto comment = new CommentDto();
         BeanUtils.copyProperties(entity, comment);
         if (null != comment.getParentId() && -1 != comment.getParentId()) {
@@ -135,7 +136,7 @@ public class CommentServiceImpl implements CommentService {
         }
 
         Article article = articleRepository.findById(comment.getArticleId())
-                .orElseThrow(() -> new TipException("评论关联文章不存在"));
+                .orElseThrow(() -> new NotFoundException(Article.class));
         comment.setArticle(article);
         return comment;
     }
@@ -146,11 +147,11 @@ public class CommentServiceImpl implements CommentService {
     @CacheEvict(value = COMMENT_CACHE_NAME, allEntries = true, beforeInvocation = true)
     public void deleteComment(Integer id) {
         Comment comment = commentRepository.findById(id)
-                .orElseThrow(() -> new TipException("不存在该评论"));
+                .orElseThrow(() -> new NotFoundException(Comment.class));
 
         // 减去文章中评论数
         Article article = articleRepository.findById(comment.getArticleId())
-                .orElseThrow(() -> new TipException("评论关联文章不存在"));
+                .orElseThrow(() -> new NotFoundException(Article.class));
         article.setCommentCount(article.getCommentCount() - 1);
         articleRepository.save(article);
 
@@ -188,7 +189,7 @@ public class CommentServiceImpl implements CommentService {
     @CacheEvict(value = COMMENT_CACHE_NAME, allEntries = true, beforeInvocation = true)
     public void assessComment(Integer commentId, CommentAssessType assess) {
         Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new TipException("没有该评论"));
+                .orElseThrow(() -> new NotFoundException(Comment.class));
 
         if (CommentAssessType.AGREE.equals(assess)) {
             comment.setAgree(comment.getAgree() + 1);

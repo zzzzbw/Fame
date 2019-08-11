@@ -1,10 +1,8 @@
 package com.zbw.fame.service.impl;
 
-import com.zbw.fame.model.domain.Article;
 import com.zbw.fame.model.domain.Middle;
 import com.zbw.fame.model.domain.Post;
 import com.zbw.fame.model.domain.Tag;
-import com.zbw.fame.repository.ArticleRepository;
 import com.zbw.fame.repository.MiddleRepository;
 import com.zbw.fame.repository.PostRepository;
 import com.zbw.fame.repository.TagRepository;

@@ -1,5 +1,6 @@
 package com.zbw.fame.service.impl;
 
+import com.zbw.fame.exception.NotFoundException;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.model.domain.Meta;
 import com.zbw.fame.model.domain.Middle;
@@ -42,7 +43,7 @@ public abstract class AbstractMetaServiceImpl<META extends Meta> implements Meta
     @Transactional(rollbackFor = Throwable.class)
     public Integer delete(String name) {
         META meta = metaRepository.findByName(name)
-                .orElseThrow(() -> new TipException("没有该名称的属性"));
+                .orElseThrow(() -> new NotFoundException(FameUtil.getGenericClass(getClass())));
         metaRepository.delete(meta);
         return meta.getId();
     }
@@ -55,7 +56,7 @@ public abstract class AbstractMetaServiceImpl<META extends Meta> implements Meta
         }
 
         META meta = metaRepository.findById(id)
-                .orElseThrow(() -> new TipException("没有该属性"));
+                .orElseThrow(() -> new NotFoundException(FameUtil.getGenericClass(getClass())));
         meta.setName(name);
         return metaRepository.save(meta);
     }

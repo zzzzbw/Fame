@@ -1,7 +1,9 @@
 package com.zbw.fame.service.impl;
 
+import com.zbw.fame.exception.NotFoundException;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.model.domain.Note;
+import com.zbw.fame.model.domain.Post;
 import com.zbw.fame.model.dto.NoteInfo;
 import com.zbw.fame.model.enums.ArticleStatus;
 import com.zbw.fame.model.enums.LogType;
@@ -81,7 +83,7 @@ public class NoteServiceImpl extends AbstractArticleServiceImpl<Note> implements
 
         if (null != note.getId()) {
             Note oldNote = articleRepository.findById(note.getId())
-                    .orElseThrow(() -> new TipException("修改文章id不存在"));
+                    .orElseThrow(() -> new NotFoundException(Note.class));
 
             FameUtil.copyPropertiesIgnoreNull(note, oldNote);
             articleRepository.saveAndFlush(oldNote);
@@ -99,7 +101,7 @@ public class NoteServiceImpl extends AbstractArticleServiceImpl<Note> implements
     @Override
     public void delete(Integer id) {
         Note note = articleRepository.findById(id)
-                .orElseThrow(() -> new TipException("没有id为" + id + "的文章"));
+                .orElseThrow(() -> new NotFoundException(Note.class));
 
         log.info("删除页面: {}", note);
         articleRepository.save(note);

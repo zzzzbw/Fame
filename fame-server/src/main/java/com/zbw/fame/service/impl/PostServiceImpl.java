@@ -1,5 +1,6 @@
 package com.zbw.fame.service.impl;
 
+import com.zbw.fame.exception.NotFoundException;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.model.domain.Post;
 import com.zbw.fame.model.dto.Archive;
@@ -79,7 +80,7 @@ public class PostServiceImpl extends AbstractArticleServiceImpl<Post> implements
 
         if (null != post.getId()) {
             Post oldPost = articleRepository.findById(post.getId())
-                    .orElseThrow(() -> new TipException("修改文章id不存在"));
+                    .orElseThrow(() -> new NotFoundException(Post.class));
 
             FameUtil.copyPropertiesIgnoreNull(post, oldPost);
             articleRepository.saveAndFlush(oldPost);
@@ -101,7 +102,7 @@ public class PostServiceImpl extends AbstractArticleServiceImpl<Post> implements
     @Override
     public void delete(Integer id) {
         Post post = articleRepository.findById(id)
-                .orElseThrow(() -> new TipException("没有id为" + id + "的文章"));
+                .orElseThrow(() -> new NotFoundException(Post.class));
         post.setStatus(ArticleStatus.DELETE);
 
         log.info("删除文章: {}", post);

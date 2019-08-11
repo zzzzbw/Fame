@@ -15,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
+import java.util.stream.Stream;
 
 /**
  * 管理后台 拦截器
@@ -37,36 +38,25 @@ public class AdminInterceptor implements HandlerInterceptor {
 
         log.info("用户访问地址: {}, Http类型: {}, ip地址: {}", url, request.getMethod(), ip);
 
-        if (url.contains(AUTH_URIS)) {
-            boolean auth = true;
-            //登录拦截忽略url
-            for (String param : IGNORE_URIS) {
-                if (StringUtils.endsWithIgnoreCase(url, param)) {
-                    auth = false;
-                }
-            }
-            //登录拦截
-            if (auth) {
-                User user = FameUtil.getLoginUser();
-                if (null == user) {
-                    // 要设置跨域，不然输出信息没有
-                    if (request.getHeader(HttpHeaders.ORIGIN) != null) {
-                        response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, request.getHeader(HttpHeaders.ORIGIN));
-                        response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
-                        response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, "POST, GET, PUT, DELETE");
-                        response.setHeader(HttpHeaders.ACCESS_CONTROL_MAX_AGE, "3600");
-                        response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "x-requested-with");
-                    }
-                    PrintWriter out = response.getWriter();
-                    ObjectMapper mapper = new ObjectMapper();
-                    out.print(mapper.writeValueAsString(RestResponse.fail(ErrorCode.NOT_LOGIN.getCode(), ErrorCode.NOT_LOGIN.getMsg())));
-                    out.flush();
-                    return false;
-                }
-            }
+        //登录拦截
+        if (url.contains(AUTH_URIS) && isAuthUrl(url)) {
+            // 调用方法查看是否有登录的用户
+            FameUtil.getLoginUser();
         }
 
         return true;
+    }
+
+
+    /**
+     * 判定是否要验证登录
+     *
+     * @param url 访问url
+     * @return 是否要验证
+     */
+    private boolean isAuthUrl(String url) {
+        return Stream.of(IGNORE_URIS)
+                .anyMatch(ignore -> StringUtils.endsWithIgnoreCase(ignore, url));
     }
 
     @Override
@@ -75,6 +65,5 @@ public class AdminInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception e) throws Exception {
-
     }
 }

@@ -4,6 +4,7 @@ import com.zbw.fame.model.domain.Note;
 import com.zbw.fame.model.domain.User;
 import com.zbw.fame.model.enums.ArticleStatus;
 import com.zbw.fame.service.NoteService;
+import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.RestResponse;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,13 +37,13 @@ public class NoteController extends AbstractArticleController<Note> {
      * @return {@see String}
      */
     @PostMapping
-    public RestResponse save(@RequestParam(value = "id", required = false) Integer id,
+    public RestResponse<Integer> save(@RequestParam(value = "id", required = false) Integer id,
                              @RequestParam(value = "title") String title,
                              @RequestParam(value = "content") String content,
                              @RequestParam(value = "status") ArticleStatus status,
                              @RequestParam(value = "priority", defaultValue = "0") Integer priority,
                              @RequestParam(value = "allowComment", defaultValue = "false") Boolean allowComment) {
-        User user = this.user();
+        User user = FameUtil.getLoginUser();
         Note note = new Note();
         if (!StringUtils.isEmpty(id)) {
             note.setId(id);

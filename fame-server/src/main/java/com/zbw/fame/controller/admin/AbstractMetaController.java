@@ -1,6 +1,5 @@
 package com.zbw.fame.controller.admin;
 
-import com.zbw.fame.controller.BaseController;
 import com.zbw.fame.model.domain.Meta;
 import com.zbw.fame.model.dto.MetaInfo;
 import com.zbw.fame.service.MetaService;
@@ -18,7 +17,7 @@ import java.util.List;
  * @since 2017/8/28 23:16
  */
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public abstract class AbstractMetaController<META extends Meta> extends BaseController {
+public abstract class AbstractMetaController<META extends Meta> {
 
     private final MetaService<META> metaService;
 

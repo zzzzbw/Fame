@@ -89,7 +89,7 @@ public class SwaggerGenerator extends BaseTests {
             return new ApiInfoBuilder()
                     .title("Fame API Documentation")
                     .description("Documentation for Fame API")
-                    .version("1.0")
+                    .version("1.0.0")
                     .termsOfServiceUrl("https://github.com/zzzzbw/Fame")
                     .contact(new Contact("zzzzbw", "https://zzzzbw.cn/", "zzzzbw@gmail.com"))
                     .build();

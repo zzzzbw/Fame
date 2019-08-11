@@ -6,6 +6,7 @@ import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.parser.ParserEmulationProfile;
 import com.vladsch.flexmark.util.options.MutableDataSet;
+import com.zbw.fame.exception.NotLoginException;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.model.domain.User;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.lang.reflect.ParameterizedType;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
@@ -79,10 +81,8 @@ public class FameUtil {
      */
     public static User getLoginUser() {
         HttpSession session = getSession();
-        if (null == session) {
-            return null;
-        }
-        return (User) session.getAttribute(FameConsts.USER_SESSION_KEY);
+        return (User) Optional.ofNullable(session.getAttribute(FameConsts.USER_SESSION_KEY))
+                .orElseThrow(NotLoginException::new);
     }
 
     /**
@@ -253,6 +253,17 @@ public class FameUtil {
         str = str.toUpperCase();
         flag = flag.toUpperCase();
         return str.indexOf(flag);
+    }
+
+    /**
+     * 获取泛型类
+     *
+     * @param clz 类
+     * @return 泛型类
+     */
+    public static Class<?> getGenericClass(Class clz) {
+        ParameterizedType parameterizedType = (ParameterizedType) clz.getGenericSuperclass();
+        return (Class<?>) parameterizedType.getActualTypeArguments()[0];
     }
 
 

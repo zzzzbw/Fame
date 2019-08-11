@@ -1,6 +1,5 @@
 package com.zbw.fame.controller.admin;
 
-import com.zbw.fame.controller.BaseController;
 import com.zbw.fame.model.domain.Media;
 import com.zbw.fame.model.dto.Pagination;
 import com.zbw.fame.service.MediaService;
@@ -23,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping("/api/admin/media")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class MediaController extends BaseController {
+public class MediaController {
 
     private final MediaService mediaService;
 
@@ -35,19 +34,20 @@ public class MediaController extends BaseController {
      * @return {@see Page<Media>}
      */
     @GetMapping
-    public RestResponse index(@RequestParam(required = false, defaultValue = "0") Integer page,
-                              @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
+    public RestResponse<Pagination<Media>> index(@RequestParam(required = false, defaultValue = "0") Integer page,
+                                                 @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
         Page<Media> medias = mediaService.pageAdminMedias(page, limit);
         return RestResponse.ok(Pagination.of(medias));
     }
 
     /**
      * 获取媒体详情
+     *
      * @param id id
      * @return Media
      */
     @GetMapping("{id}")
-    public RestResponse detail(@PathVariable Integer id) {
+    public RestResponse<Media> detail(@PathVariable Integer id) {
         Media media = mediaService.getMedia(id);
         return RestResponse.ok(media);
     }
@@ -61,9 +61,9 @@ public class MediaController extends BaseController {
      * @return {@see Media}
      */
     @PostMapping("upload")
-    public RestResponse upload(@RequestPart("file") MultipartFile file,
-                               @RequestParam String name,
-                               @RequestParam String path, HttpServletResponse response) {
+    public RestResponse<Media> upload(@RequestPart("file") MultipartFile file,
+                                      @RequestParam String name,
+                                      @RequestParam String path, HttpServletResponse response) {
         log.info("name:{}, path:{}", name, path);
         Media media = mediaService.upload(file, name, path);
         return RestResponse.ok(media);
@@ -77,10 +77,7 @@ public class MediaController extends BaseController {
      */
     @DeleteMapping("{id}")
     public RestResponse delete(@PathVariable Integer id) {
-        if (mediaService.delete(id)) {
-            return RestResponse.ok();
-        } else {
-            return RestResponse.fail("删除媒体文件失败");
-        }
+        mediaService.delete(id);
+        return RestResponse.ok();
     }
 }

@@ -1,15 +1,16 @@
 package com.zbw.fame.controller.admin;
 
-import com.zbw.fame.controller.BaseController;
 import com.zbw.fame.model.domain.User;
 import com.zbw.fame.service.UserService;
 import com.zbw.fame.util.FameConsts;
+import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.RestResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -21,7 +22,9 @@ import javax.servlet.http.HttpServletResponse;
 @RestController
 @RequestMapping("/api/admin")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class AuthController extends BaseController {
+public class AuthController {
+
+    private final HttpServletRequest request;
 
     private final UserService userService;
 
@@ -52,11 +55,6 @@ public class AuthController extends BaseController {
      */
     @PostMapping("logout")
     public RestResponse logout() {
-        User user = this.user();
-        if (null == user) {
-            return RestResponse.fail("没有用户登陆");
-        }
-
         request.getSession().removeAttribute(FameConsts.USER_SESSION_KEY);
         return RestResponse.ok();
     }
@@ -70,11 +68,7 @@ public class AuthController extends BaseController {
      */
     @PostMapping("reset/password")
     public RestResponse resetPassword(@RequestParam String oldPassword, @RequestParam String newPassword) {
-        User user = this.user();
-        if (null == user) {
-            return RestResponse.fail("没有用户登陆");
-        }
-
+        User user = FameUtil.getLoginUser();
         if (StringUtils.isEmpty(newPassword) || StringUtils.isEmpty(oldPassword)) {
             return RestResponse.fail("填写数据不能为空");
         }
@@ -92,15 +86,12 @@ public class AuthController extends BaseController {
      */
     @PostMapping("reset/user")
     public RestResponse resetUser(@RequestParam String username, @RequestParam String email) {
-        User user = this.user();
-        if (null == user) {
-            return RestResponse.fail("没有用户登陆");
-        }
+        User user = FameUtil.getLoginUser();
         if (StringUtils.isEmpty(username) || StringUtils.isEmpty(email)) {
             return RestResponse.fail("填写数据不能为空");
         }
 
-        boolean result = userService.resetUser(user.getUsername(),username,email);
+        boolean result = userService.resetUser(user.getUsername(), username, email);
         this.logout();
         return RestResponse.ok(result);
     }
@@ -111,12 +102,8 @@ public class AuthController extends BaseController {
      * @return {@see String}
      */
     @GetMapping("user")
-    public RestResponse getUser() {
-        User user = this.user();
-        if (null == user) {
-            return RestResponse.fail("没有用户登陆");
-        }
-
+    public RestResponse<User> getUser() {
+        User user = FameUtil.getLoginUser();
         return RestResponse.ok(user);
     }
 

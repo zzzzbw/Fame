@@ -1,6 +1,6 @@
 package com.zbw.fame.controller.admin;
 
-import com.zbw.fame.controller.BaseController;
+import com.zbw.fame.exception.NotFoundException;
 import com.zbw.fame.model.domain.Comment;
 import com.zbw.fame.model.dto.CommentDto;
 import com.zbw.fame.model.dto.Pagination;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/admin/comment")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class CommentController extends BaseController {
+public class CommentController {
 
     private final CommentService commentService;
 
@@ -34,8 +34,8 @@ public class CommentController extends BaseController {
      * @return {@see Pagination<Comment>}
      */
     @GetMapping
-    public RestResponse index(@RequestParam(required = false, defaultValue = "0") Integer page,
-                              @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
+    public RestResponse<Pagination<Comment>> index(@RequestParam(required = false, defaultValue = "0") Integer page,
+                                                   @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
         Page<Comment> comments = commentService.pageAdminComments(page, limit);
         return RestResponse.ok(Pagination.of(comments));
     }
@@ -47,11 +47,8 @@ public class CommentController extends BaseController {
      * @return {@see CommentDto}
      */
     @GetMapping("{id}")
-    public RestResponse detail(@PathVariable Integer id) {
+    public RestResponse<Comment> detail(@PathVariable Integer id) {
         CommentDto comment = commentService.getCommentDetail(id);
-        if (null == comment) {
-            return this.error404();
-        }
         if (null != comment.getParentComment()) {
             comment.getParentComment().setContent(FameUtil.mdToHtml(comment.getParentComment().getContent()));
         }
@@ -77,7 +74,7 @@ public class CommentController extends BaseController {
      * @return {@see Integer}
      */
     @GetMapping("count")
-    public RestResponse count() {
+    public RestResponse<Long> count() {
         return RestResponse.ok(commentService.count());
     }
 
