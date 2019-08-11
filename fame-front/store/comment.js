@@ -10,12 +10,12 @@ export const mutations = {
     state.pagination = data
     // 设置评论的父评论
     for (const comment of state.pagination.list) {
-      if (comment.pid && comment.pid !== -1) {
-        const pComment = state.pagination.list.find(o =>
-          Object.is(o.id, comment.pid)
+      if (comment.parentId && comment.parentId !== -1) {
+        const parentComment = state.pagination.list.find(o =>
+          Object.is(o.id, comment.parentId)
         )
-        if (pComment) {
-          comment.pComment = pComment
+        if (parentComment) {
+          comment.parentComment = parentComment
         }
       }
     }

@@ -35,10 +35,10 @@ const api = {
     }
     return get('comment', params)
   },
-  postComment(articleId, pId, content, name, email, website) {
+  postComment(articleId, parentId, content, name, email, website) {
     const params = {
       articleId: articleId,
-      pId: pId,
+      parentId: parentId,
       content: content,
       name: name,
       email: email,

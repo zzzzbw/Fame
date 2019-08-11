@@ -34,7 +34,7 @@ public class MediaServiceImpl implements MediaService {
     private final MediaRepository mediaRepository;
 
     @Override
-    public Page<Media> getAdminMedias(Integer page, Integer limit) {
+    public Page<Media> pageAdminMedias(Integer page, Integer limit) {
         return mediaRepository.findAll(PageRequest.of(page, limit));
     }
 

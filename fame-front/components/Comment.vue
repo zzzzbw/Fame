@@ -97,13 +97,13 @@
               </div>
               <div v-highlight class="comment-item-content markdown-body">
                 <div
-                  v-if="comment.pId !== -1 && comment.pComment"
+                  v-if="comment.parentId !== -1 && comment.parentComment"
                   class="comment-item-reply-box"
                 >
-                  <a class="user-name">{{ comment.pComment.name }}</a>
+                  <a class="user-name">{{ comment.parentComment.name }}</a>
                   <div
                     class="comment-item-replay-content"
-                    v-html="comment.pComment.content"
+                    v-html="comment.parentComment.content"
                   ></div>
                 </div>
                 <div v-html="comment.content"></div>

@@ -28,8 +28,8 @@ public class Comment extends BaseEntity {
     /**
      * 父评论id
      */
-    @Column(name = "p_id", columnDefinition = "INT")
-    private Integer pId;
+    @Column(name = "parent_id", columnDefinition = "INT")
+    private Integer parentId;
 
     /**
      * 评论内容

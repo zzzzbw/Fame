@@ -36,7 +36,7 @@ public interface CommentService {
      * @param limit 每页数量
      * @return Page<Comment>
      */
-    Page<Comment> getAdminComments(Integer page, Integer limit);
+    Page<Comment> pageAdminComments(Integer page, Integer limit);
 
     /**
      * 获取评论详情

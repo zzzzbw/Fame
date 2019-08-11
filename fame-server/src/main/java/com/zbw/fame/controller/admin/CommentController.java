@@ -36,7 +36,7 @@ public class CommentController extends BaseController {
     @GetMapping
     public RestResponse index(@RequestParam(required = false, defaultValue = "0") Integer page,
                               @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
-        Page<Comment> comments = commentService.getAdminComments(page, limit);
+        Page<Comment> comments = commentService.pageAdminComments(page, limit);
         return RestResponse.ok(Pagination.of(comments));
     }
 
@@ -52,8 +52,8 @@ public class CommentController extends BaseController {
         if (null == comment) {
             return this.error404();
         }
-        if (null != comment.getPComment()) {
-            comment.getPComment().setContent(FameUtil.mdToHtml(comment.getPComment().getContent()));
+        if (null != comment.getParentComment()) {
+            comment.getParentComment().setContent(FameUtil.mdToHtml(comment.getParentComment().getContent()));
         }
         comment.setContent(FameUtil.mdToHtml(comment.getContent()));
         return RestResponse.ok(comment);

@@ -162,7 +162,7 @@ public class FrontController extends BaseController {
      * 发表评论
      *
      * @param articleId 文章id
-     * @param pId       父评论id
+     * @param parentId       父评论id
      * @param content   评论内容
      * @param name      评论用户名
      * @param email     评论用户email
@@ -171,14 +171,14 @@ public class FrontController extends BaseController {
      */
     @PostMapping("comment")
     public RestResponse addComment(@RequestParam Integer articleId,
-                                   @RequestParam(required = false) Integer pId,
+                                   @RequestParam(required = false) Integer parentId,
                                    @RequestParam String content,
                                    @RequestParam String name,
                                    @RequestParam(required = false) String email,
                                    @RequestParam(required = false) String website) {
         Comment comments = new Comment();
         comments.setArticleId(articleId);
-        comments.setPId(pId);
+        comments.setParentId(parentId);
         comments.setContent(content);
         comments.setName(name);
         comments.setEmail(email);
@@ -190,8 +190,8 @@ public class FrontController extends BaseController {
         //发送邮件提醒
         CommentDto commentDetail = commentService.getCommentDetail(comments.getId());
         emailService.sendEmailToAdmin(commentDetail);
-        if (null != commentDetail.getPComment() && !StringUtils.isEmpty(commentDetail.getPComment().getEmail())) {
-            emailService.sendEmailToUser(commentDetail, commentDetail.getPComment().getEmail());
+        if (null != commentDetail.getParentComment() && !StringUtils.isEmpty(commentDetail.getParentComment().getEmail())) {
+            emailService.sendEmailToUser(commentDetail, commentDetail.getParentComment().getEmail());
         }
         return RestResponse.ok();
     }

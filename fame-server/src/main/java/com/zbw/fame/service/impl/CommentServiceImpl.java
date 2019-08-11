@@ -110,7 +110,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Page<Comment> getAdminComments(Integer page, Integer limit) {
+    public Page<Comment> pageAdminComments(Integer page, Integer limit) {
         Comment record = new Comment();
         record.setStatus(CommentStatus.NORMAL);
         Page<Comment> result = commentRepository.findAll(Example.of(record), PageRequest.of(page, limit));
@@ -129,13 +129,13 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new TipException("不存在该评论"));
         CommentDto comment = new CommentDto();
         BeanUtils.copyProperties(entity, comment);
-        if (null != comment.getPId() && -1 != comment.getPId()) {
-            Comment pComment = commentRepository.findById(comment.getPId()).orElse(null);
-            comment.setPComment(pComment);
+        if (null != comment.getParentId() && -1 != comment.getParentId()) {
+            Comment parentComment = commentRepository.findById(comment.getParentId()).orElse(null);
+            comment.setParentComment(parentComment);
         }
 
         Article article = articleRepository.findById(comment.getArticleId())
-                .orElseThrow(() -> new RuntimeException("评论关联文章不存在"));
+                .orElseThrow(() -> new TipException("评论关联文章不存在"));
         comment.setArticle(article);
         return comment;
     }
@@ -156,9 +156,9 @@ public class CommentServiceImpl implements CommentService {
 
         // 去除子评论中关联
         Comment record = new Comment();
-        record.setPId(id);
+        record.setParentId(id);
         commentRepository.findOne(Example.of(record)).ifPresent(childComment -> {
-            childComment.setPId(null);
+            childComment.setParentId(null);
             commentRepository.save(childComment);
         });
 

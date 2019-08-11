@@ -137,10 +137,10 @@ export default {
       if (data.article) {
         this.comment.title = data.article.title;
       }
-      if (data.pComment) {
+      if (data.parentComment) {
         this.hasReplay = true;
-        this.comment.replayName = data.pComment.name;
-        this.comment.replay = data.pComment.content;
+        this.comment.replayName = data.parentComment.name;
+        this.comment.replay = data.parentComment.content;
       } else {
         this.hasReplay = false;
       }

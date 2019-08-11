@@ -17,7 +17,7 @@ public interface MediaService {
      * @param limit 每页数量
      * @return Page<Media>
      */
-    Page<Media> getAdminMedias(Integer page, Integer limit);
+    Page<Media> pageAdminMedias(Integer page, Integer limit);
 
     /**
      * 获取媒体详情

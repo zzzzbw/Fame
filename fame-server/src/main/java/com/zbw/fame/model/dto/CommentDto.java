@@ -23,5 +23,5 @@ public class CommentDto extends Comment {
     /**
      * 父评论
      */
-    private Comment pComment;
+    private Comment parentComment;
 }
