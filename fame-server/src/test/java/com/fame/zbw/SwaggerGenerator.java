@@ -12,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -81,7 +82,8 @@ public class SwaggerGenerator extends BaseTests {
                     .paths(PathSelectors.ant("/api/**"))
                     .build()
                     .apiInfo(apiInfo())
-                    .useDefaultResponseMessages(false);
+                    .useDefaultResponseMessages(false)
+                    .ignoredParameterTypes(MultipartFile.class);
         }
 
 

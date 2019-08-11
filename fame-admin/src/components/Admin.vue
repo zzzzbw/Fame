@@ -88,7 +88,7 @@ export default {
 }
 
 .el-card {
-  height: 100%;
+  overflow: auto;
 }
 
 @media screen and (max-width: 600px) {
