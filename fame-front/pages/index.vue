@@ -1,28 +1,26 @@
 <template>
   <div>
-    <div v-for="article in articles" :key="article.id" class="article-item">
+    <div v-for="post in posts" :key="post.id" class="article-item">
       <h2 class="article-head text-bold">
-        <nuxt-link :to="{ path: '/article/' + article.id }"
-          >{{ article.title }}
+        <nuxt-link :to="{ path: '/post/' + post.id }"
+          >{{ post.title }}
         </nuxt-link>
       </h2>
-      <p v-if="article.category" class="article-date">
+      <p v-if="post.category" class="article-date">
         <span class="icon-folder"></span>
-        {{ article.category | formatCategory }}
+        {{ post.category | formatCategory }}
       </p>
       <p class="article-date text-italic">
         <span class="icon-calendar"></span>
-        {{ article.created | time('yyyy-MM-dd') }}
+        {{ post.created | time('yyyy-MM-dd') }}
       </p>
+      <p class="article-date"><span class="icon-eye"></span> {{ post.hits }}</p>
       <p class="article-date">
-        <span class="icon-eye"></span> {{ article.hits }}
-      </p>
-      <p class="article-date">
-        <span class="icon-bubble2"> {{ article.commentCount }} </span>
+        <span class="icon-bubble2"> {{ post.commentCount }} </span>
       </p>
       <div class="article-tags">
         <label
-          v-for="tag in $util.stringToTags(article.tags)"
+          v-for="tag in $util.stringToTags(post.tags)"
           :key="tag"
           class="article-tag"
         >
@@ -32,11 +30,11 @@
       <div
         v-highlight
         class="article-summary markdown-body"
-        v-html="article.content"
+        v-html="post.content"
       ></div>
       <nuxt-link
         class="article-more text-primary"
-        :to="{ path: '/article/' + article.id }"
+        :to="{ path: '/post/' + post.id }"
         >Read more
       </nuxt-link>
     </div>
@@ -66,14 +64,14 @@ export default {
     return { title: `Blog` }
   },
   computed: {
-    articles() {
-      return this.$store.state.article.list.data
+    posts() {
+      return this.$store.state.post.list.data
     },
     totalPage() {
-      return this.$store.state.article.list.totalPage
+      return this.$store.state.post.list.totalPage
     },
     currentPage() {
-      return this.$store.state.article.list.currentPage
+      return this.$store.state.post.list.currentPage
     }
   },
   fetch({ store, query }) {
@@ -82,7 +80,7 @@ export default {
       limit: 5,
       sort: ['priority','id']
     }
-    return store.dispatch('getArticles', params)
+    return store.dispatch('getPosts', params)
   }
 }
 </script>

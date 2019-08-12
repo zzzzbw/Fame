@@ -5,7 +5,7 @@
         v-for="tag in tags"
         :key="tag.id"
         class="tag-link"
-        @click="changeArticles(tag.name)"
+        @click="changePosts(tag.name)"
       >
         <span
           class="tag chip"
@@ -21,9 +21,7 @@
         <div class="tag-title">{{ tagTitle }}</div>
         <ul class="tag-ul">
           <li v-for="post in postInfos" :key="post.id" class="article-title">
-            <nuxt-link
-              :to="{ path: '/article/' + post.id }"
-              class="text-primary"
+            <nuxt-link :to="{ path: '/post/' + post.id }" class="text-primary"
               >{{ post.title }}
             </nuxt-link>
           </li>
@@ -72,7 +70,7 @@ export default {
         }
       }
     },
-    changeArticles (name) {
+    changePosts (name) {
       const tag = this.tags.find(tag => Object.is(tag.name, name))
       if (tag) {
         this.activeTag = name

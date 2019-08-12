@@ -15,16 +15,14 @@ const config = [
         description: options.meta_description || defaultConfig.meta_description
       }
 
-      const articleResp = await api.getArticles(1, 999)
+      const articleResp = await api.getPosts(0, 999)
       const articles = articleResp.data.list
       articles.forEach(article => {
         feed.addItem({
           title: article.title,
           id: article.id,
           link:
-            tools.formatWebsite(options.blog_website) +
-            '/article/' +
-            article.id,
+            tools.formatWebsite(options.blog_website) + '/post/' + article.id,
           description: article.content,
           content: article.content
         })

@@ -1,7 +1,7 @@
 import { get, post } from './http'
 
 const api = {
-  getArticles(page, limit, sort) {
+  getPosts(page, limit, sort) {
     const params = {
       page: page,
       limit: limit || 5,
@@ -9,7 +9,7 @@ const api = {
     }
     return get('/post', params)
   },
-  getArticle(id) {
+  getPost(id) {
     return get('/post/' + id)
   },
   getCategories() {

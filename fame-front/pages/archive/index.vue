@@ -18,7 +18,7 @@
               <label class="text-italic">{{
                 post.created | time('MM-dd')
               }}</label>
-              <nuxt-link :to="{ path: '/article/' + post.id }"
+              <nuxt-link :to="{ path: '/post/' + post.id }"
                 >{{ post.title }}
               </nuxt-link>
             </p>

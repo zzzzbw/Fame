@@ -1,27 +1,25 @@
 <template>
   <div id="article">
-    <h2 class="article-title text-bold">{{ article.title }}</h2>
+    <h2 class="article-title text-bold">{{ post.title }}</h2>
     <div class="article-info">
-      <p v-if="article.category" class="article-category">
+      <p v-if="post.category" class="article-category">
         <span class="icon-folder"></span>
-        {{ article.category | formatCategory }}
+        {{ post.category | formatCategory }}
       </p>
       <p class="article-date">
         <span class="icon-calendar"></span>
-        {{ article.created | time('yyyy-MM-dd') }}
+        {{ post.created | time('yyyy-MM-dd') }}
       </p>
+      <p class="article-date"><span class="icon-eye"></span> {{ post.hits }}</p>
       <p class="article-date">
-        <span class="icon-eye"></span> {{ article.hits }}
-      </p>
-      <p class="article-date">
-        <span class="icon-bubble2"> {{ article.commentCount }} </span>
+        <span class="icon-bubble2"> {{ post.commentCount }} </span>
       </p>
     </div>
-    <div v-highlight class="markdown-body" v-html="article.content"></div>
-    <div v-if="article.tags" class="article-tags">
+    <div v-highlight class="markdown-body" v-html="post.content"></div>
+    <div v-if="post.tags" class="article-tags">
       <label class="label-tags">Tags:</label>
       <span
-        v-for="tag in $util.stringToTags(article.tags)"
+        v-for="tag in $util.stringToTags(post.tags)"
         :key="tag"
         class="article-tag"
       >
@@ -29,7 +27,7 @@
       </span>
     </div>
     <nav class="markdown-toc toc"></nav>
-    <comment v-if="article.allowComment" :article-id="article.id"></comment>
+    <comment v-if="post.allowComment" :article-id="post.id"></comment>
     <big-img :visible.sync="isBigImg" :img="img"></big-img>
   </div>
 </template>
@@ -41,7 +39,7 @@ import BigImg from '~/components/BigImg.vue'
 
 export default {
   head () {
-    return { title: `${this.article.title}` }
+    return { title: `${this.post.title}` }
   },
   components: {
     Comment,
@@ -54,12 +52,12 @@ export default {
     }
   },
   computed: {
-    article () {
-      return this.$store.state.article.detail
+    post () {
+      return this.$store.state.post.detail
     }
   },
   fetch ({ store, params }) {
-    return store.dispatch('getArticle', params.id)
+    return store.dispatch('getPost', params.id)
   },
   mounted () {
     this.tocInit()

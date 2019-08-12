@@ -130,14 +130,14 @@ public abstract class AbstractMetaServiceImpl<META extends Meta> implements Meta
     @Override
     public List<MetaInfo> getFrontMetaInfos() {
         List<META> metas = metaRepository.findAll();
-        List<Post> posts = postRepository.findAllByStatusNot(ArticleStatus.DELETE, FameUtil.sortDescById());
+        List<Post> posts = postRepository.findAllByStatus(ArticleStatus.PUBLISH, FameUtil.sortDescById());
         return getMetaInfos(metas, posts);
     }
 
     @Override
     public List<MetaInfo> getAdminMetaInfos() {
         List<META> metas = metaRepository.findAll();
-        List<Post> posts = postRepository.findAllByStatus(ArticleStatus.PUBLISH, FameUtil.sortDescById());
+        List<Post> posts = postRepository.findAllByStatusNot(ArticleStatus.DELETE, FameUtil.sortDescById());
         return getMetaInfos(metas, posts);
     }
 

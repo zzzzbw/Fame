@@ -15,9 +15,9 @@ const config = {
       ) {
         url = tools.formatWebsite(optionsRes.data.blog_website)
       }
-      return api.getArticles(1, 999).then(articleRes => {
+      return api.getPosts(0, 999).then(articleRes => {
         const routes = articleRes.data.list.map(
-          article => url + '/article/' + article.id
+          article => url + '/post/' + article.id
         )
         STATIC_ROUTE.forEach(route => {
           routes.push(url + route)
