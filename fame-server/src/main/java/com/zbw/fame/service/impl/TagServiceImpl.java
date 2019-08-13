@@ -46,14 +46,14 @@ public class TagServiceImpl extends AbstractMetaServiceImpl<Tag> implements TagS
         Integer metaId = super.delete(name);
 
         // 清除关联的文章标签
-        List<Middle> middles = middleRepository.findAllByMId(metaId);
+        List<Middle> middles = middleRepository.findAllByMetaId(metaId);
         for (Middle middle : middles) {
             postRepository.findById(middle.getArticleId()).ifPresent(article -> {
                 article.setTags(this.resetTagStr(name, article.getTags()));
                 postRepository.save(article);
             });
         }
-        middleRepository.deleteAllByMId(metaId);
+        middleRepository.deleteAllByMetaId(metaId);
         return metaId;
     }
 

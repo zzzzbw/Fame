@@ -46,14 +46,14 @@ public class CategoryServiceImpl extends AbstractMetaServiceImpl<Category> imple
         Integer metaId = super.delete(name);
 
         // 清除关联的文章分类
-        List<Middle> middles = middleRepository.findAllByMId(metaId);
+        List<Middle> middles = middleRepository.findAllByMetaId(metaId);
         for (Middle middle : middles) {
             postRepository.findById(middle.getArticleId()).ifPresent(post -> {
                 post.setCategory("");
                 postRepository.save(post);
             });
         }
-        middleRepository.deleteAllByMId(metaId);
+        middleRepository.deleteAllByMetaId(metaId);
         return metaId;
     }
 

@@ -31,7 +31,7 @@ public class MiddleServiceImpl implements MiddleService {
 
     @Override
     public Set<Integer> getMetaIdsByArticleId(Integer articleId) {
-        return middleRepository.findAllByAId(articleId)
+        return middleRepository.findAllByArticleId(articleId)
                 .stream()
                 .map(Middle::getMetaId)
                 .collect(Collectors.toSet());
@@ -39,7 +39,7 @@ public class MiddleServiceImpl implements MiddleService {
 
     @Override
     public Set<Integer> getArticleIdsByMetaId(Integer metaId){
-        return middleRepository.findAllByMId(metaId)
+        return middleRepository.findAllByMetaId(metaId)
                 .stream()
                 .map(Middle::getArticleId)
                 .collect(Collectors.toSet());

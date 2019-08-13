@@ -111,7 +111,7 @@ public abstract class AbstractMetaServiceImpl<META extends Meta> implements Meta
         List<META> metas = findMetaByArticleId(articleId);
         for (META meta : metas) {
             if (!nameSet.contains(meta.getName())) {
-                middleRepository.deleteByAIdAndMId(articleId, meta.getId());
+                middleRepository.deleteByArticleIdAndMetaId(articleId, meta.getId());
             }
         }
     }

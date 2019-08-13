@@ -14,41 +14,41 @@ public interface MiddleRepository extends JpaRepository<Middle, Integer> {
     /**
      * 获取文章下关联的属性
      *
-     * @param aId 文章id
+     * @param articleId 文章id
      * @return 关联
      */
-    List<Middle> findAllByAId(Integer aId);
+    List<Middle> findAllByArticleId(Integer articleId);
 
     /**
      * 获取属性下关联的文章
      *
-     * @param mId 属性id
+     * @param metaId 属性id
      * @return 关联
      */
-    List<Middle> findAllByMId(Integer mId);
+    List<Middle> findAllByMetaId(Integer metaId);
 
     /**
      * 删除文章下关联的属性
      *
-     * @param aId 文章id
+     * @param articleId 文章id
      * @return 删除数量
      */
-    int deleteAllByAId(Integer aId);
+    int deleteAllByArticleId(Integer articleId);
 
     /**
      * 删除属性下关联的文章
      *
-     * @param mId 属性id
+     * @param metaId 属性id
      * @return 删除数量
      */
-    int deleteAllByMId(Integer mId);
+    int deleteAllByMetaId(Integer metaId);
 
     /**
      * 根据文章id和属性id删除关联
      *
-     * @param aId 文章id
-     * @param mId 属性id
+     * @param articleId 文章id
+     * @param metaId 属性id
      * @return 删除数量
      */
-    int deleteByAIdAndMId(Integer aId, Integer mId);
+    int deleteByArticleIdAndMetaId(Integer articleId, Integer metaId);
 }
