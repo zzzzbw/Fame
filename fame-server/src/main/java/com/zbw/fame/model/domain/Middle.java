@@ -19,9 +19,9 @@ import javax.persistence.Entity;
 @Data
 public class Middle extends BaseEntity {
 
-    @Column(name = "a_id", columnDefinition = "INT NOT NULL")
-    private Integer aId;
+    @Column(name = "article_id", columnDefinition = "INT NOT NULL")
+    private Integer articleId;
 
-    @Column(name = "m_id", columnDefinition = "INT NOT NULL")
-    private Integer mId;
+    @Column(name = "meta_id", columnDefinition = "INT NOT NULL")
+    private Integer metaId;
 }

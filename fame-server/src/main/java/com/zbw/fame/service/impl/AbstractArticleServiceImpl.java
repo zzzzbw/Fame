@@ -80,7 +80,7 @@ public abstract class AbstractArticleServiceImpl<ARTICLE extends Article> implem
             }
 
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-        }, PageRequest.of(page, limit));
+        }, PageRequest.of(page, limit, FameUtil.sortDescById()));
         //只需要文章列表，不需要内容
         result.forEach(article -> article.setContent(""));
         return result;

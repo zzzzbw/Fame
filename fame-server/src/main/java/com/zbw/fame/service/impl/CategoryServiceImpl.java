@@ -1,10 +1,8 @@
 package com.zbw.fame.service.impl;
 
-import com.zbw.fame.model.domain.Article;
 import com.zbw.fame.model.domain.Category;
 import com.zbw.fame.model.domain.Middle;
 import com.zbw.fame.model.domain.Post;
-import com.zbw.fame.repository.ArticleRepository;
 import com.zbw.fame.repository.CategoryRepository;
 import com.zbw.fame.repository.MiddleRepository;
 import com.zbw.fame.repository.PostRepository;
@@ -50,7 +48,7 @@ public class CategoryServiceImpl extends AbstractMetaServiceImpl<Category> imple
         // 清除关联的文章分类
         List<Middle> middles = middleRepository.findAllByMId(metaId);
         for (Middle middle : middles) {
-            postRepository.findById(middle.getAId()).ifPresent(post -> {
+            postRepository.findById(middle.getArticleId()).ifPresent(post -> {
                 post.setCategory("");
                 postRepository.save(post);
             });

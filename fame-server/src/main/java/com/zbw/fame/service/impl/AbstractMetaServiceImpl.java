@@ -162,7 +162,7 @@ public abstract class AbstractMetaServiceImpl<META extends Meta> implements Meta
             List<Middle> middleList = metaIdMiddleListMap.computeIfAbsent(meta.getId(), article -> new ArrayList<>());
 
             List<PostInfo> articleInfoList = middleList.stream()
-                    .map(middle -> postMap.get(middle.getAId()))
+                    .map(middle -> postMap.get(middle.getArticleId()))
                     .filter(Objects::nonNull)
                     .map(PostInfo::new)
                     .collect(Collectors.toList());

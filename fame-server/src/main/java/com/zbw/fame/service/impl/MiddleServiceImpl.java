@@ -26,14 +26,14 @@ public class MiddleServiceImpl implements MiddleService {
     public Map<Integer, List<Middle>> getMetaIdMiddleListMap() {
         // 属性对应关联列表
         List<Middle> middles = middleRepository.findAll();
-        return middles.stream().collect(Collectors.groupingBy(Middle::getMId));
+        return middles.stream().collect(Collectors.groupingBy(Middle::getMetaId));
     }
 
     @Override
     public Set<Integer> getMetaIdsByArticleId(Integer articleId) {
         return middleRepository.findAllByAId(articleId)
                 .stream()
-                .map(Middle::getMId)
+                .map(Middle::getMetaId)
                 .collect(Collectors.toSet());
     }
 
@@ -41,7 +41,7 @@ public class MiddleServiceImpl implements MiddleService {
     public Set<Integer> getArticleIdsByMetaId(Integer metaId){
         return middleRepository.findAllByMId(metaId)
                 .stream()
-                .map(Middle::getAId)
+                .map(Middle::getArticleId)
                 .collect(Collectors.toSet());
     }
 }
