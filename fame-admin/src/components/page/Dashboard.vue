@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-row :gutter="50">
+    <el-row :gutter="40">
       <el-col :xs="24" :sm="12" :md="12" :lg="12">
         <el-card>
           <div class="message">
@@ -26,7 +26,7 @@
         </el-card>
       </el-col>
     </el-row>
-    <el-row :gutter="50">
+    <el-row :gutter="40">
       <el-col :xs="24" :sm="12" :md="12" :lg="12">
         <el-card>
           <div slot="header">

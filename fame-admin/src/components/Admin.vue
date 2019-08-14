@@ -88,6 +88,7 @@ export default {
 }
 
 .el-card {
+  height: 100%;
   overflow: auto;
 }
 
