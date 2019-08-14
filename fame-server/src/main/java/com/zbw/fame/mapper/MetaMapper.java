@@ -22,7 +22,7 @@ public interface MetaMapper extends Mapper<Meta> {
      * @param type      属性类型
      * @return List<Meta>
      */
-    @Select("SELECT * FROM fame.meta WHERE type = #{type} AND id IN (SELECT m_id FROM fame.middle WHERE a_id = #{articleId})")
+    @Select("SELECT * FROM meta WHERE type = #{type} AND id IN (SELECT m_id FROM middle WHERE a_id = #{articleId})")
     List<Meta> selectByArticle(@Param("articleId") Integer articleId, @Param("type") String type);
 
     /**
@@ -31,7 +31,7 @@ public interface MetaMapper extends Mapper<Meta> {
      * @param type 属性类型
      * @return List<MetaDto>
      */
-    @Select("select * from fame.meta meta where meta.type = #{type}")
+    @Select("select * from meta meta where meta.type = #{type}")
     @Results({
             @Result(id = true, column = "id", property = "id"),
             @Result(column = "name", property = "name"),
@@ -47,7 +47,7 @@ public interface MetaMapper extends Mapper<Meta> {
      * @param type 属性类型
      * @return List<MetaDto>
      */
-    @Select("select * from fame.meta meta where meta.type = #{type}")
+    @Select("select * from meta meta where meta.type = #{type}")
     @Results({
             @Result(id = true, column = "id", property = "id"),
             @Result(column = "name", property = "name"),

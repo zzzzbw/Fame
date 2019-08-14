@@ -81,6 +81,12 @@
             <version>${pagehelper-spring-boot.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.hsqldb</groupId>
+            <artifactId>hsqldb</artifactId>
+            <version>2.4.1</version>
+        </dependency>
+
         <!-- markdown解析 -->
         <dependency>
             <groupId>com.vladsch.flexmark</groupId>

@@ -1,6 +1,12 @@
-.idea
 Fame.iml
 .DS_Store
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+out/
 
 ### Java template
 # Compiled class file

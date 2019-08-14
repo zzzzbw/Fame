@@ -23,8 +23,8 @@ public interface ArticleMapper extends Mapper<Article> {
      * @param metaId 属性id
      * @return List<Article>
      */
-    @Select("SELECT * FROM fame.article WHERE id IN (SELECT a_id FROM fame.middle WHERE m_id = #{metaId}) " +
-            "AND fame.article.type = '" + Types.POST + "' order by created desc")
+    @Select("SELECT * FROM article WHERE id IN (SELECT a_id FROM middle WHERE m_id = #{metaId}) " +
+            "AND article.type = '" + Types.POST + "' order by created desc")
     List<Article> selectByMeta(@Param("metaId") Integer metaId);
 
     /**
@@ -33,9 +33,9 @@ public interface ArticleMapper extends Mapper<Article> {
      * @param metaId 属性id
      * @return Integer
      */
-    @Select("SELECT count(*) FROM fame.article WHERE id " +
-            "IN (SELECT a_id FROM fame.middle WHERE m_id = #{metaId}) " +
-            "AND fame.article.type = '" + Types.POST + "' AND fame.article.status != '" + Types.DELETE + "'")
+    @Select("SELECT count(*) FROM article WHERE id " +
+            "IN (SELECT a_id FROM middle WHERE m_id = #{metaId}) " +
+            "AND article.type = '" + Types.POST + "' AND article.status != '" + Types.DELETE + "'")
     Integer selectCountByMeta(@Param("metaId") Integer metaId);
 
     /**
@@ -44,9 +44,9 @@ public interface ArticleMapper extends Mapper<Article> {
      * @param metaId 属性id
      * @return List<Article>
      */
-    @Select("SELECT * FROM fame.article WHERE id " +
-            "IN (SELECT a_id FROM fame.middle WHERE m_id = #{metaId}) " +
-            "AND fame.article.status = '" + Types.PUBLISH + "' AND fame.article.type = '" + Types.POST + "' order by created desc")
+    @Select("SELECT * FROM article WHERE id " +
+            "IN (SELECT a_id FROM middle WHERE m_id = #{metaId}) " +
+            "AND article.status = '" + Types.PUBLISH + "' AND article.type = '" + Types.POST + "' order by created desc")
     List<ArticleInfoDto> selectPublishByMeta(@Param("metaId") Integer metaId);
 
     /**
@@ -55,8 +55,8 @@ public interface ArticleMapper extends Mapper<Article> {
      * @param metaId 属性id
      * @return Integer
      */
-    @Select("SELECT count(*) FROM fame.article WHERE id " +
-            "IN (SELECT a_id FROM fame.middle WHERE m_id = #{metaId}) " +
-            "AND fame.article.status = '" + Types.PUBLISH + "' AND fame.article.type = '" + Types.POST + "'")
+    @Select("SELECT count(*) FROM article WHERE id " +
+            "IN (SELECT a_id FROM middle WHERE m_id = #{metaId}) " +
+            "AND article.status = '" + Types.PUBLISH + "' AND article.type = '" + Types.POST + "'")
     Integer selectPublishCountByMeta(@Param("metaId") Integer metaId);
 }

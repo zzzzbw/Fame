@@ -6,6 +6,9 @@ import com.zbw.fame.service.OptionService;
 import com.zbw.fame.util.OptionKeys;
 import com.zbw.fame.util.Types;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.jdbc.ScriptRunner;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
@@ -14,8 +17,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.Resource;
+import javax.sql.DataSource;
+import java.io.IOException;
+import java.io.Reader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * springboot初始化完成后执行的动作
@@ -45,6 +54,9 @@ public class InitApplicationRunner implements ApplicationRunner {
     @Autowired
     private OptionService optionService;
 
+    @Resource
+    private SqlSessionFactory sqlSessionFactory;
+
     private static final String DEFAULT_TAG = "First";
 
     private static final String DEFAULT_CATEGORY = "New";
@@ -60,6 +72,11 @@ public class InitApplicationRunner implements ApplicationRunner {
     @Transactional(rollbackFor = Throwable.class)
     @Override
     public void run(ApplicationArguments args) throws Exception {
+        log.info("initializing Fame database after spring boot loading completed");
+        long startInitDatabaseTime = System.currentTimeMillis();
+        runScript(sqlSessionFactory.getConfiguration().getEnvironment().getDataSource(),
+                "initHsql.sql");
+        log.info("Initializing database in " + (System.currentTimeMillis() - startInitDatabaseTime) + " ms");
         log.info("Initializing Fame after springboot loading completed...");
         long startTime = System.currentTimeMillis();
 
@@ -208,5 +225,21 @@ public class InitApplicationRunner implements ApplicationRunner {
         article.setAuthorId(user.getId());
 
         articleMapper.insertSelective(article);
+    }
+
+    public static void runScript(DataSource ds, String resource) throws IOException, SQLException {
+        try (Connection connection = ds.getConnection()) {
+            ScriptRunner runner = new ScriptRunner(connection);
+            runner.setAutoCommit(true);
+            runner.setSendFullScript(false);
+            runner.setStopOnError(false);
+            runScript(runner, resource);
+        }
+    }
+
+    public static void runScript(ScriptRunner runner, String resource) throws IOException, SQLException {
+        try (Reader reader = Resources.getResourceAsReader(resource)) {
+            runner.runScript(reader);
+        }
     }
 }

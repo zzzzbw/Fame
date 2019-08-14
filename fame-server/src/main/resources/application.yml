@@ -4,7 +4,7 @@ server:
 spring:
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
   #mail
   mail:
@@ -21,6 +21,12 @@ spring:
   jackson:
     date-format: yyyy/MM/dd HH:mm:ss
     time-zone: GMT+8
+logging:
+  file:
+    max-size: 10MB
+    max-history: 15
+  level:
+    root: info
 
 
 

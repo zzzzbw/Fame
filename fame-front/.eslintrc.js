@@ -18,6 +18,8 @@ module.exports = {
   // add your custom rules here
   rules: {
     'vue/no-v-html': 'off', //markdown后端渲染
-    'no-console': 'off'
+    'no-console': 'off',
+    "prettier/prettier": ["error", {
+        "endOfLine":"auto"}],
   }
 }
