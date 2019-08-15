@@ -4,6 +4,7 @@ import com.zbw.fame.model.domain.*;
 import com.zbw.fame.model.enums.ArticleStatus;
 import com.zbw.fame.repository.*;
 import com.zbw.fame.service.OptionService;
+import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.OptionKeys;
 import lombok.RequiredArgsConstructor;
@@ -14,10 +15,8 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
-
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 /**
  * springboot初始化完成后执行的动作
@@ -97,6 +96,7 @@ public class InitApplicationRunner implements ApplicationRunner {
         createDefaultTagIfAbsent(post);
         createDefaultCommentIfAbsent(post);
         createDefaultNoteIfAbsent(user);
+        createDefaultOptionIfAbsent();
         optionService.save(OptionKeys.FAME_INIT, Boolean.TRUE.toString());
         log.info("Create default data success");
     }
@@ -211,5 +211,15 @@ public class InitApplicationRunner implements ApplicationRunner {
         note.setAuthorId(user.getId());
 
         noteRepository.save(note);
+    }
+
+    private void createDefaultOptionIfAbsent() {
+        log.info("Create default option...");
+        if (StringUtils.isEmpty(optionService.get(OptionKeys.EMAIL_SUBJECT))) {
+            optionService.save(OptionKeys.EMAIL_SUBJECT, FameConsts.DEFAULT_EMAIL_TEMPLATE_SUBJECT);
+        }
+        if (StringUtils.isEmpty(optionService.get(OptionKeys.SUMMARY_FLAG))) {
+            optionService.save(OptionKeys.SUMMARY_FLAG, FameConsts.DEFAULT_SUMMARY_FLAG);
+        }
     }
 }

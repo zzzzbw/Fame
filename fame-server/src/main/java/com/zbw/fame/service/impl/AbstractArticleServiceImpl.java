@@ -1,13 +1,14 @@
 package com.zbw.fame.service.impl;
 
 import com.zbw.fame.exception.NotFoundException;
-import com.zbw.fame.exception.TipException;
 import com.zbw.fame.model.domain.Article;
 import com.zbw.fame.model.enums.ArticleStatus;
 import com.zbw.fame.model.query.ArticleQuery;
 import com.zbw.fame.repository.ArticleRepository;
 import com.zbw.fame.service.ArticleService;
+import com.zbw.fame.service.OptionService;
 import com.zbw.fame.util.FameUtil;
+import com.zbw.fame.util.OptionKeys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,14 +40,18 @@ public abstract class AbstractArticleServiceImpl<ARTICLE extends Article> implem
 
     protected final ArticleRepository<ARTICLE> articleRepository;
 
+    protected final OptionService optionService;
+
 
     @Override
     @Cacheable(value = ARTICLE_CACHE_NAME, key = "'font_articles['+#page+':'+#limit+':'+#sort+']'")
     public Page<ARTICLE> pageFrontArticle(Integer page, Integer limit, List<String> sort) {
         Pageable pageable = PageRequest.of(page, limit, new Sort(Sort.Direction.DESC, sort));
         Page<ARTICLE> result = articleRepository.findAllByStatus(ArticleStatus.PUBLISH, pageable);
+
+        String summaryFlag = optionService.get(OptionKeys.SUMMARY_FLAG);
         result.forEach(article -> {
-            String content = FameUtil.contentTransform(article.getContent(), true, true);
+            String content = FameUtil.contentTransform(article.getContent(), true, true, summaryFlag);
             article.setContent(content);
         });
         return result;
@@ -57,7 +62,7 @@ public abstract class AbstractArticleServiceImpl<ARTICLE extends Article> implem
     public ARTICLE getFrontArticle(Integer id) {
         ARTICLE article = articleRepository.findByIdAndStatus(id, ArticleStatus.PUBLISH)
                 .orElseThrow(() -> new NotFoundException(FameUtil.getGenericClass(getClass())));
-        String content = FameUtil.contentTransform(article.getContent(), false, true);
+        String content = FameUtil.contentTransform(article.getContent(), false, true, null);
         article.setContent(content);
         return article;
     }
@@ -90,7 +95,7 @@ public abstract class AbstractArticleServiceImpl<ARTICLE extends Article> implem
     public ARTICLE getAdminArticle(Integer id) {
         ARTICLE article = articleRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(FameUtil.getGenericClass(getClass())));
-        String content = FameUtil.contentTransform(article.getContent(), false, false);
+        String content = FameUtil.contentTransform(article.getContent(), false, false, null);
         article.setContent(content);
         return article;
     }

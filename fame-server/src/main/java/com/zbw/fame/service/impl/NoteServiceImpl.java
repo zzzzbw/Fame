@@ -11,6 +11,7 @@ import com.zbw.fame.repository.NoteRepository;
 import com.zbw.fame.service.CommentService;
 import com.zbw.fame.service.LogService;
 import com.zbw.fame.service.NoteService;
+import com.zbw.fame.service.OptionService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -40,9 +41,10 @@ public class NoteServiceImpl extends AbstractArticleServiceImpl<Note> implements
     private static String LOG_MESSAGE_DELETE_NOTE = "删除页面";
 
     public NoteServiceImpl(NoteRepository noteRepository,
+                           OptionService optionService,
                            CommentService commentService,
                            LogService logService) {
-        super(noteRepository);
+        super(noteRepository, optionService);
         this.commentService = commentService;
         this.logService = logService;
     }

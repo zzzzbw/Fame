@@ -42,11 +42,12 @@ public class PostServiceImpl extends AbstractArticleServiceImpl<Post> implements
     private static String LOG_MESSAGE_DELETE_POST = "删除文章";
 
     public PostServiceImpl(ArticleRepository<Post> articleRepository,
+                           OptionService optionService,
                            CategoryService categoryService,
                            TagService tagService,
                            CommentService commentService,
                            LogService logService) {
-        super(articleRepository);
+        super(articleRepository, optionService);
         this.categoryService = categoryService;
         this.tagService = tagService;
         this.commentService = commentService;

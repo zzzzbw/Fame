@@ -20,6 +20,12 @@
               placeholder="请输入博客底部信息,可以使用html语句"
             />
           </el-form-item>
+          <el-form-item label="文章预览分隔符:" prop="summary_flag">
+            <el-input
+              v-model="options.summary_flag"
+              placeholder="文章预览分隔符,用于分割文章的预览部分，如不输入则预览255个字符"
+            />
+          </el-form-item>
           <el-form-item>
             <el-button
               type="primary"
@@ -221,6 +227,7 @@ export default {
                 blog_name: '',
                 blog_website: '',
                 blog_footer: '',
+                summary_flag: '',
                 meta_title: '',
                 meta_description: '',
                 meta_keywords: '',

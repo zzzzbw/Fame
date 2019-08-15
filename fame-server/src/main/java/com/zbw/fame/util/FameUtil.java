@@ -179,10 +179,13 @@ public class FameUtil {
      *
      * @return 截取的预览字符串
      */
-    public static String getSummary(String content) {
-        int index = FameUtil.ignoreCaseIndexOf(content, FameConsts.PREVIEW_FLAG);
-        if (-1 == index) {
-            index = content.length() > FameConsts.MAX_PREVIEW_COUNT ? FameConsts.MAX_PREVIEW_COUNT : content.length();
+    public static String getSummary(String content, String flag) {
+        int index = 0;
+        if (!StringUtils.isEmpty(flag)) {
+            index = FameUtil.ignoreCaseIndexOf(content, flag);
+        }
+        if (StringUtils.isEmpty(flag) || -1 == index) {
+            index = content.length() > FameConsts.MAX_SUMMARY_COUNT ? FameConsts.MAX_SUMMARY_COUNT : content.length();
         }
         return content.substring(0, index);
     }
@@ -206,14 +209,15 @@ public class FameUtil {
     /**
      * 根据条件转换markdown内容
      *
-     * @param content   markdown内容
-     * @param isSummary 是否为摘要
-     * @param isHtml    是否为 html 格式
+     * @param content     markdown内容
+     * @param isSummary   是否为摘要
+     * @param isHtml      是否为 html 格式
+     * @param summaryFlag 预览分隔符
      */
-    public static String contentTransform(String content, boolean isSummary, boolean isHtml) {
+    public static String contentTransform(String content, boolean isSummary, boolean isHtml, String summaryFlag) {
         if (isSummary || isHtml) {
             if (isSummary) {
-                content = FameUtil.getSummary(content);
+                content = FameUtil.getSummary(content, summaryFlag);
             }
             if (isHtml) {
                 content = FameUtil.mdToHtml(content);

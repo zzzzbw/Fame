@@ -136,7 +136,7 @@ public class EmailServiceImpl implements EmailService {
      * @throws MessagingException
      */
     private void sendEmail(String content, String to) throws MessagingException {
-        String subject = optionService.get(OptionKeys.EMAIL_SUBJECT, FameConsts.EMAIL_TEMPLATE_DEFAULT_SUBJECT);
+        String subject = optionService.get(OptionKeys.EMAIL_SUBJECT, FameConsts.DEFAULT_EMAIL_TEMPLATE_SUBJECT);
         String host = optionService.get(OptionKeys.EMAIL_HOST);
         Integer port = optionService.get(OptionKeys.EMAIL_PORT, 25);
         String username = optionService.get(OptionKeys.EMAIL_USERNAME);

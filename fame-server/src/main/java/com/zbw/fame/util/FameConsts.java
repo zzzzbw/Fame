@@ -39,12 +39,12 @@ public interface FameConsts {
     /**
      * 默认预览字数
      */
-    Integer MAX_PREVIEW_COUNT = 255;
+    Integer MAX_SUMMARY_COUNT = 255;
 
     /**
-     * 默认预览标记
+     * 默认预览分隔符
      */
-    String PREVIEW_FLAG = "<!--read more-->";
+    String DEFAULT_SUMMARY_FLAG = "<!--read more-->";
 
     /**
      * 评论最大字数
@@ -76,7 +76,7 @@ public interface FameConsts {
     /**
      * 发送邮件的标题
      */
-    String EMAIL_TEMPLATE_DEFAULT_SUBJECT = "来自Fame博客网站发送的邮件";
+    String DEFAULT_EMAIL_TEMPLATE_SUBJECT = "来自Fame博客网站发送的邮件";
 
     /**
      * 获取发送给管理员的邮件内容

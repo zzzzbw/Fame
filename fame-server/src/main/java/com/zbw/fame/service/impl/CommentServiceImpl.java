@@ -103,7 +103,7 @@ public class CommentServiceImpl implements CommentService {
         Page<Comment> result = commentRepository.findAll(Example.of(record), PageRequest.of(page, limit, FameUtil.sortDescById()));
 
         result.forEach(comments -> {
-            String content = FameUtil.contentTransform(comments.getContent(), false, true);
+            String content = FameUtil.contentTransform(comments.getContent(), false, true, null);
             comments.setContent(content);
         });
 
@@ -116,7 +116,7 @@ public class CommentServiceImpl implements CommentService {
         record.setStatus(CommentStatus.NORMAL);
         Page<Comment> result = commentRepository.findAll(Example.of(record), PageRequest.of(page, limit, FameUtil.sortDescById()));
         result.forEach(comments -> {
-            String content = FameUtil.contentTransform(comments.getContent(), false, false);
+            String content = FameUtil.contentTransform(comments.getContent(), false, false, null);
             comments.setContent(content);
         });
 

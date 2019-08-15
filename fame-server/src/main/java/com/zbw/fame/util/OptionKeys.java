@@ -17,6 +17,11 @@ public interface OptionKeys {
     String FAME_INIT = "fame_init";
 
     /**
+     * 文章预览分隔符
+     */
+    String SUMMARY_FLAG = "summary_flag";
+
+    /**
      * 博客名
      */
     String BLOG_NAME = "blog_name";
