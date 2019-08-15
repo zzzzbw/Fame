@@ -56,7 +56,7 @@ public class AdminInterceptor implements HandlerInterceptor {
      */
     private boolean isAuthUrl(String url) {
         return Stream.of(IGNORE_URIS)
-                .anyMatch(ignore -> StringUtils.endsWithIgnoreCase(ignore, url));
+                .noneMatch(ignore -> StringUtils.endsWithIgnoreCase(url, ignore));
     }
 
     @Override
