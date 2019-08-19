@@ -3,7 +3,7 @@ import qs from 'qs'
 import serverConfig from '../config/server-config'
 
 const Axios = axios.create({
-  baseURL: serverConfig.api + '/api/', // 本地做反向代理
+  baseURL: serverConfig.url + '/api/', // 本地做反向代理
   timeout: 5000,
   withCredentials: true, // 是否允许带cookie这些
   // 转换request参数，只有'PUT', 'POST', 'PATCH' and 'DELETE'方法才会生效
@@ -18,7 +18,7 @@ const Axios = axios.create({
     // 序列化参数数组时不设置索引，否则tomcat8.5以上无法接收特殊字符
     return qs.stringify(params, { indices: false })
   },
-  proxy: serverConfig.baseProxy
+  proxy: serverConfig.proxy
 })
 
 // 请求拦截（配置发送请求的信息） 传参序列化

@@ -99,6 +99,9 @@ export default {
   loading: {
     color: '#5764c6'
   },
+  env: {
+    NODE_ENV: process.env.NODE_ENV
+  },
   /*
    ** Build configuration
    */
