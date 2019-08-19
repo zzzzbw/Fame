@@ -4,7 +4,7 @@ export default ({ app, store }) => {
   /*
    ** Only run on client-side and only in production mode
    */
-  if (process.env.NODE_ENV !== 'production') return
+  if (process.env.NODE_ENV === 'development') return
 
   const options = store.state.option.data
   if (!options || !options.google_analytics || options.google_analytics === '')
