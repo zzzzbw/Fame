@@ -28,13 +28,13 @@ export default {
             type: 'success',
             message: '登出成功!'
           })
-          this.$router.push('/admin/login')
+          this.$router.push('/login')
         } else {
           this.$message({
             type: 'error',
             message: data.msg || '登出失败!'
           })
-          this.$router.push('/admin/login')
+          this.$router.push('/login')
         }
       })
     }

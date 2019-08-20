@@ -57,7 +57,7 @@ const responseInterceptor = {
       let msg = null;
       switch (response.data.code) {
         case 999:
-          router.push("/admin/login");
+          router.push("/login");
           msg = "未登录,请先登录";
           if (!loginError) {
             loginError = true;

@@ -77,23 +77,19 @@ const Setting = resolve => {
 
 const router = new Router({
   mode: "history",
+  base: "admin",
   linkActiveClass: "active",
   routes: [
     {
-      path: "/",
-      component: Admin,
-      redirect: "/admin"
-    },
-    {
-      path: "/admin/login",
+      path: "/login",
       name: "Login",
       component: Login
     },
     {
-      path: "/admin",
+      path: "/",
       name: "Admin",
       component: Admin,
-      redirect: "/admin/dashboard",
+      redirect: "/dashboard",
       children: [
         {
           path: "dashboard",

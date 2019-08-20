@@ -184,10 +184,10 @@ export default {
             this.init();
         },
         handleNew() {
-            this.$router.push('/admin/post/publish')
+            this.$router.push('/post/publish')
         },
         handleEdit(id) {
-            this.$router.push('/admin/post/publish/' + id)
+            this.$router.push('/post/publish/' + id)
         },
         handleDelete(id) {
             this.$confirm('此操作将永久删除该文章, 是否继续?', '提示', {

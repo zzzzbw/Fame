@@ -56,7 +56,7 @@ export default {
                 if (valid) {
                     this.$api.auth.login(this.userForm).then(data => {
                         if (data.success) {
-                            this.$router.push('/admin')
+                            this.$router.push('/')
                             this.$util.message.success('登录成功!')
                         } else {
                             this.$util.message.error('登录失败,' + data.msg)

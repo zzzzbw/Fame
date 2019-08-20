@@ -86,11 +86,6 @@ export default {
   border: 1px solid #e6ebf5;
 }
 
-.admin-page {
-  margin-top: 30px;
-  text-align: center;
-}
-
 .media-list .block {
   padding: 12px;
   text-align: center;

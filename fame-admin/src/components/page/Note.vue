@@ -138,7 +138,7 @@ export default {
       const _this = this;
       this.submitNote("noteForm", function() {
         _this.$util.message.success("发布页面成功!");
-        _this.$router.push("/admin/note");
+        _this.$router.push("/note");
       });
     },
     onSave() {

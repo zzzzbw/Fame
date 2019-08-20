@@ -358,7 +358,7 @@ export default {
       const _this = this;
       this.submitPost("postForm", function() {
         _this.$util.message.success("发布文章成功!");
-        _this.$router.push("/admin/post");
+        _this.$router.push("/post");
       });
     },
     onSave() {

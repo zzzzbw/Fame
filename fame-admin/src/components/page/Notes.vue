@@ -81,10 +81,10 @@ export default {
           this.init();
         },
         handleNew() {
-            this.$router.push('/admin/note/publish')
+            this.$router.push('/note/publish')
         },
         handleEdit(id) {
-            this.$router.push('/admin/note/publish/' + id)
+            this.$router.push('/note/publish/' + id)
         },
         handleDelete(id) {
             this.$confirm('此操作将永久删除该自定义页面, 是否继续?', '提示', {
@@ -166,10 +166,5 @@ export default {
 
 .tool-container-item {
   margin-bottom: 16px;
-}
-
-.admin-page {
-  margin-top: 30px;
-  text-align: center;
 }
 </style>

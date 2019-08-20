@@ -1,9 +1,7 @@
 <template>
   <div>
     <el-breadcrumb separator="/">
-      <el-breadcrumb-item :to="{ path: '/admin/dashboard' }"
-        >首页
-      </el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/' }">首页 </el-breadcrumb-item>
       <el-breadcrumb-item
         v-for="item in levelList"
         :key="item.name"
@@ -16,7 +14,7 @@
 
 <script>
 const config = [
-  { name: "PostList", title: "文章列表", link: "/admin/post" },
+  { name: "PostList", title: "文章列表", link: "/post" },
   {
     name: "PostNew",
     title: "新建文章",
@@ -30,7 +28,7 @@ const config = [
   { name: "CommentList", title: "评论列表" },
   { name: "MetaList", title: "标签/分类" },
   { name: "MediaList", title: "媒体库" },
-  { name: "NoteList", title: "页面列表", link: "/admin/note" },
+  { name: "NoteList", title: "页面列表", link: "/note" },
   { name: "NoteNew", title: "新建页面", parent: "NoteList" },
   { name: "NoteEdit", title: "编辑页面", parent: "NoteList" },
   { name: "Setting", title: "网站设置" }

@@ -188,11 +188,6 @@ export default {
 </script>
 
 <style scoped>
-.admin-page {
-  margin-top: 30px;
-  text-align: center;
-}
-
 .comment-dialog .comment-row-detail {
   width: 90%;
   margin: 15px auto !important;
