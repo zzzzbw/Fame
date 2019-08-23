@@ -85,8 +85,10 @@ VALUES ('fame', '3e6693e83d186225b85b09e71c974d2d', '', 'admin');
 
 INSERT INTO article (title, created, modified, content, author_id, hits, tags, category, status, type)
 VALUES ('Hello world', now(), now(), '
-欢迎使用[Fame](https://github.com/zzzzbw/Fame)! 这是你的第一篇博客。快点来写点什么吧
-> 想要了解更多详细信息，可以查看[文档](https://github.com/zzzzbw/Fame/blob/master/README.md)。', 1, 0, 'First', 'New', 'publish', 'post');
+欢迎使用', 1, 0, 'First', 'New', 'publish', 'post');
+
+INSERT INTO article (title, created, modified, content, author_id, hits, tags, category, status, type)
+VALUES ('第一篇博客', now(), now(), '这个我的第一篇博客，欢迎查看', 1, 0, 'First', 'New', 'publish', 'post');
 
 INSERT INTO comment (article_id, content, name, email, website, agree, disagree, ip, agent)
 VALUES ('1', '## 测试评论
