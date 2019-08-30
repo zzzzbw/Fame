@@ -1,7 +1,7 @@
 
 CREATE TABLE sys_option
 (
-    id           INT NOT NULL IDENTITY,
+    id           INT PRIMARY KEY NOT NULL IDENTITY,
     option_key   VARCHAR(100)    NOT NULL UNIQUE,
     option_value VARCHAR(1023)   NOT NULL,
     created      TIMESTAMP   DEFAULT current_timestamp    NOT NULL ,
@@ -21,7 +21,7 @@ CREATE TABLE user
 
 CREATE TABLE article
 (
-    id            INT     NOT NULL IDENTITY,
+    id            INT  PRIMARY KEY   NOT NULL IDENTITY,
     title         VARCHAR(255)         NOT NULL,
     created       TIMESTAMP      DEFAULT current_timestamp      NOT NULL ,
     modified      TIMESTAMP      DEFAULT current_timestamp ON UPDATE current_timestamp      NOT NULL ,
@@ -115,3 +115,4 @@ VALUES ('About', now(), now(), '# About me
 
 INSERT INTO sys_option (option_key, option_value)
 VALUES ('fame_init', 'true');
+

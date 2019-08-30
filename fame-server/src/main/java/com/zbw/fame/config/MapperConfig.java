@@ -21,6 +21,7 @@ public class MapperConfig {
         mapperScannerConfigurer.setBasePackage("com.zbw.fame.mapper");
         Properties propertiesMapper = new Properties();
         propertiesMapper.setProperty("mappers","tk.mybatis.mapper.common.Mapper");
+        propertiesMapper.setProperty("IDENTITY","HSQLDB");
         mapperScannerConfigurer.setProperties(propertiesMapper);
         return mapperScannerConfigurer;
     }

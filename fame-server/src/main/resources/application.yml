@@ -5,7 +5,12 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    database-platform: org.hibernate.dialect.HSQLDialect
+  datasource:
+    driverClassName: org.hsqldb.jdbcDriver
+    url: jdbc:hsqldb:mem:fame
+    username: sa
+    password:
   #mail
   mail:
     properties:
@@ -26,7 +31,7 @@ logging:
     max-size: 10MB
     max-history: 15
   level:
-    root: info
+    root: debug
 
 
 
