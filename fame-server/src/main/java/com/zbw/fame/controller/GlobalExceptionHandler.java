@@ -3,7 +3,6 @@ package com.zbw.fame.controller;
 import com.zbw.fame.exception.NotFoundException;
 import com.zbw.fame.exception.NotLoginException;
 import com.zbw.fame.exception.TipException;
-import com.zbw.fame.model.domain.Comment;
 import com.zbw.fame.util.ErrorCode;
 import com.zbw.fame.util.RestResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -15,9 +14,8 @@ import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,8 +45,7 @@ import java.io.IOException;
  * @since 2017/8/30 12:25
  */
 @Slf4j
-@RestController
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
 
@@ -90,14 +87,6 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(value = NotLoginException.class)
     public RestResponse NotLoginErrorHandler(HttpServletRequest req, HttpServletResponse rep, NotLoginException e) {
-        // 要设置跨域，不然输出信息没有
-        if (req.getHeader(HttpHeaders.ORIGIN) != null) {
-            rep.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, req.getHeader(HttpHeaders.ORIGIN));
-            rep.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
-            rep.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, "POST, GET, PUT, DELETE");
-            rep.setHeader(HttpHeaders.ACCESS_CONTROL_MAX_AGE, "3600");
-            rep.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "x-requested-with");
-        }
         return RestResponse.fail(ErrorCode.NOT_LOGIN.getCode(), ErrorCode.NOT_LOGIN.getMsg());
     }
 

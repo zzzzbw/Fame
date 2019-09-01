@@ -1,7 +1,7 @@
 package com.zbw.fame.interceptor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zbw.fame.model.domain.User;
+import com.zbw.fame.exception.NotLoginException;
 import com.zbw.fame.util.ErrorCode;
 import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.RestResponse;
@@ -41,7 +41,23 @@ public class AdminInterceptor implements HandlerInterceptor {
         //登录拦截
         if (url.contains(AUTH_URIS) && isAuthUrl(url)) {
             // 调用方法查看是否有登录的用户
-            FameUtil.getLoginUser();
+            try {
+                FameUtil.getLoginUser();
+            } catch (NotLoginException e) {
+                // 要设置跨域，不然输出信息没有
+                if (request.getHeader(HttpHeaders.ORIGIN) != null) {
+                    response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, request.getHeader(HttpHeaders.ORIGIN));
+                    response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
+                    response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, "POST, GET, PUT, DELETE");
+                    response.setHeader(HttpHeaders.ACCESS_CONTROL_MAX_AGE, "3600");
+                    response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "x-requested-with");
+                }
+                PrintWriter out = response.getWriter();
+                String json = new ObjectMapper().writeValueAsString(RestResponse.fail(ErrorCode.NOT_LOGIN.getCode(), ErrorCode.NOT_LOGIN.getMsg()));
+                out.print(json);
+                out.flush();
+                return false;
+            }
         }
 
         return true;

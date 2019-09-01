@@ -61,7 +61,7 @@ const FUNCTIONS = {
    * @returns {string}
    */
   getServerMediaUrl: url => {
-    return this.getServerUrl() + "media/" + url;
+    return FUNCTIONS.getServerUrl() + "media/" + url;
   },
   /**
    * 标签转字符串
