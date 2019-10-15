@@ -112,11 +112,8 @@ CREATE TABLE log
 INSERT INTO user (username, password_md5, email, screen_name)
 VALUES ('fame', '3e6693e83d186225b85b09e71c974d2d', '', 'admin');
 
-# 2019-10-14 
-# By GPSGH
-# 描述: 将article表中status数据改为大写
-# 更改原因: status 字段对应的 java枚举为大写PUBLISH
-# 备注: 有的开发环境没有配置大小写敏感的话，按照Document配置完成后，进行访问会报错，为了新人体验提出此PR
+
+-- 描述: 将article表中status数据改为大写
 INSERT INTO article (title, created, modified, content, author_id, hits, tags, category, status, type)
 VALUES ('Hello world', now(), now(), '
 欢迎使用[Fame](https://github.com/zzzzbw/Fame)! 这是你的第一篇博客。快点来写点什么吧
