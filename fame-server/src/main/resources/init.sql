@@ -112,6 +112,8 @@ CREATE TABLE log
 INSERT INTO user (username, password_md5, email, screen_name)
 VALUES ('fame', '3e6693e83d186225b85b09e71c974d2d', '', 'admin');
 
+
+-- 描述: 将article表中status数据改为大写
 INSERT INTO article (title, created, modified, content, author_id, hits, tags, category, status, type)
 VALUES ('Hello world', now(), now(), '
 欢迎使用[Fame](https://github.com/zzzzbw/Fame)! 这是你的第一篇博客。快点来写点什么吧
@@ -122,7 +124,8 @@ public static void main(String[] args){
 }
 ```
 
-> 想要了解更多详细信息，可以查看[文档](https://github.com/zzzzbw/Fame/blob/master/README.md)。', 1, 0, 'First', 'New', 'publish', 'post');
+> 想要了解更多详细信息，可以查看[文档](https://github.com/zzzzbw/Fame/blob/master/README.md)。', 1, 0, 'First', 'New', 'PUBLISH', 'post');
+
 
 INSERT INTO comment (article_id, content, name, email, website, agree, disagree, ip, agent)
 VALUES ('1', '## 测试评论
@@ -147,7 +150,7 @@ VALUES ('About', now(), now(), '# About me
 * [知乎](https://www.zhihu.com/)
 
 ### 也可以设置别的页面
-* 比如友链页面', 1, NULL, NULL, 'publish', 'page');
+* 比如友链页面', 1, NULL, NULL, 'PUBLISH', 'page');
 
 INSERT INTO sys_option (option_key, option_value)
 VALUES ('fame_init', 'true');
