@@ -38,12 +38,12 @@
 
 <script>
 export default {
-  name: "MediaItem",
+  name: 'MediaItem',
   props: {
     media: {
       type: Object,
       default: function() {
-        return { id: "", name: "", url: "", thumbUrl: "", suffix: "" };
+        return { id: '', name: '', url: '', thumbUrl: '', suffix: '' }
       }
     },
     afterDelete: {
@@ -53,39 +53,39 @@ export default {
   },
   methods: {
     copyUrl(url) {
-      this.$util.copyText(this.$util.getServerMediaUrl(url));
-      this.$util.message.success("复制链接到剪切板成功");
+      this.$util.copyText(this.$util.getServerMediaUrl(url))
+      this.$util.message.success('复制链接到剪切板成功')
     },
     copyMarkdownUrl(name, url) {
-      const realUrl = this.$util.getServerMediaUrl(url);
-      let text = "![" + name + "](" + realUrl + ")";
-      this.$util.copyText(text);
-      this.$util.message.success("复制Markdown格式链接到剪切板成功");
+      const realUrl = this.$util.getServerMediaUrl(url)
+      let text = '![' + name + '](' + realUrl + ')'
+      this.$util.copyText(text)
+      this.$util.message.success('复制Markdown格式链接到剪切板成功')
     },
     handleDelete(id) {
-      this.$confirm("此操作将永久删除该文章, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "danger"
+      this.$confirm('此操作将永久删除该文章, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'danger'
       })
         .then(() => {
           this.$api.auth.deleteMedia(id).then(data => {
             if (data.success) {
-              this.$util.message.success("删除成功");
-              this.afterDelete(data);
+              this.$util.message.success('删除成功')
+              this.afterDelete(data)
             } else {
-              this.$util.message.error(data.msg);
+              this.$util.message.error(data.msg)
             }
-          });
+          })
         })
-        .catch(() => {});
+        .catch(() => {})
     },
     showDetailDialog() {
-      const url = this.$util.getServerMediaUrl(this.media.url);
-      window.open(url, "_blank");
+      const url = this.$util.getServerMediaUrl(this.media.url)
+      window.open(url, '_blank')
     }
   }
-};
+}
 </script>
 
 <style scoped>

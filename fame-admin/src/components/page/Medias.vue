@@ -27,9 +27,9 @@
 </template>
 
 <script>
-import Upload from "../common/Upload";
-import MediaItem from "../common/MediaItem";
-import Pagination from "../common/Pagination";
+import Upload from '../common/Upload'
+import MediaItem from '../common/MediaItem'
+import Pagination from '../common/Pagination'
 
 export default {
   components: {
@@ -44,41 +44,41 @@ export default {
       pageSize: 10,
       currentPage: 1,
       uploadDialog: false
-    };
+    }
   },
   methods: {
     changePage(page) {
-      this.currentPage = page;
-      this.init();
+      this.currentPage = page
+      this.init()
     },
     init() {
       this.$api.auth.pageMedia(12, this.currentPage).then(data => {
-        this.mediaDatas = data.data.list;
-        this.total = data.data.total;
-        this.pageSize = data.data.pageSize;
+        this.mediaDatas = data.data.list
+        this.total = data.data.total
+        this.pageSize = data.data.pageSize
         for (let media of this.mediaDatas) {
-          if (media.thumbUrl && media.thumbUrl !== "") {
-            media.showUrl = this.$util.getServerMediaUrl(media.thumbUrl);
+          if (media.thumbUrl && media.thumbUrl !== '') {
+            media.showUrl = this.$util.getServerMediaUrl(media.thumbUrl)
           } else {
-            media.showUrl = this.$util.getServerMediaUrl(media.url);
+            media.showUrl = this.$util.getServerMediaUrl(media.url)
           }
         }
-      });
+      })
     },
     showUploadDialog() {
-      this.uploadDialog = true;
+      this.uploadDialog = true
     },
     afterUpload(response) {
       if (response.success) {
-        this.init();
+        this.init()
       }
     }
   },
   mounted() {
-    this.currentPage = Number(this.$route.query.page) || 1;
-    this.init();
+    this.currentPage = Number(this.$route.query.page) || 1
+    this.init()
   }
-};
+}
 </script>
 
 <style scoped>

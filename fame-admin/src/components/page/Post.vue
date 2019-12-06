@@ -179,9 +179,9 @@
 </template>
 
 <script>
-import MarkdownEditor from "../common/MarkdownEditor";
-import MediaItem from "../common/MediaItem";
-import Upload from "../common/Upload";
+import MarkdownEditor from '../common/MarkdownEditor'
+import MediaItem from '../common/MediaItem'
+import Upload from '../common/Upload'
 
 export default {
   components: {
@@ -195,23 +195,23 @@ export default {
       isMobile: false,
       submitting: false,
       post: {
-        id: "",
-        title: "",
-        tags: "",
-        category: "",
-        content: "",
-        status: "",
+        id: '',
+        title: '',
+        tags: '',
+        category: '',
+        content: '',
+        status: '',
         priority: 0,
         allowComment: true,
-        created: "",
-        modified: ""
+        created: '',
+        modified: ''
       },
       rules: {
         title: [
-          { required: true, message: "文章标题必须输入", trigger: "blur" }
+          { required: true, message: '文章标题必须输入', trigger: 'blur' }
         ],
         content: [
-          { required: true, message: "文章内容不能为空", trigger: "blur" }
+          { required: true, message: '文章内容不能为空', trigger: 'blur' }
         ]
       },
       selectTags: [],
@@ -224,45 +224,45 @@ export default {
         pageSize: 10,
         currentPage: 1
       }
-    };
+    }
   },
   methods: {
     getPost() {
-      const id = this.$route.params.id;
+      const id = this.$route.params.id
       // 如果有id则表示编辑文章,获取文章信息
       if (id) {
         this.$api.auth.getPost(id).then(data => {
-          this.initPost(data.data);
-        });
+          this.initPost(data.data)
+        })
       } else {
         // 如果没有id则表示新增文章,初始化文章信息
         const data = {
-          id: "",
-          title: "",
-          tags: "",
-          category: "",
-          content: "",
+          id: '',
+          title: '',
+          tags: '',
+          category: '',
+          content: '',
           status: this.$static.ArticleStatus.PUBLISH.key,
           priority: this.$static.PostPriority.NORMAL.key,
           allowComment: true,
           created: Date.now(),
           modified: Date.now()
-        };
-        this.initPost(data);
+        }
+        this.initPost(data)
       }
     },
     initPost(data) {
-      this.post.id = data.id;
-      this.post.title = data.title;
-      this.post.tags = data.tags;
-      this.post.category = data.category;
-      this.post.content = data.content;
-      this.post.status = data.status;
-      this.post.priority = data.priority;
-      this.post.allowComment = data.allowComment;
-      this.post.created = new Date(data.created).getTime();
-      this.post.modified = Date.now();
-      this.selectTags = this.$util.stringToTags(data.tags);
+      this.post.id = data.id
+      this.post.title = data.title
+      this.post.tags = data.tags
+      this.post.category = data.category
+      this.post.content = data.content
+      this.post.status = data.status
+      this.post.priority = data.priority
+      this.post.allowComment = data.allowComment
+      this.post.created = new Date(data.created).getTime()
+      this.post.modified = Date.now()
+      this.selectTags = this.$util.stringToTags(data.tags)
     },
     getTags() {
       this.$api.auth.getAllTags().then(data => {
@@ -271,13 +271,13 @@ export default {
             let tag = {
               value: data.data[key].name,
               label: data.data[key].name
-            };
-            this.tags.push(tag);
+            }
+            this.tags.push(tag)
           }
         } else {
-          this.$util.message.error("获取标签列表失败");
+          this.$util.message.error('获取标签列表失败')
         }
-      });
+      })
     },
     getCategories() {
       this.$api.auth.getAllCategories().then(data => {
@@ -286,33 +286,33 @@ export default {
             let category = {
               value: data.data[key].name,
               label: data.data[key].name
-            };
-            this.categories.push(category);
+            }
+            this.categories.push(category)
           }
         } else {
-          this.$util.message.error("获取分类列表失败");
+          this.$util.message.error('获取分类列表失败')
         }
-      });
+      })
     },
     showMediaDialog(page = 1) {
-      this.isMobile = document.body.clientWidth < 768;
-      this.mediaDialog = true;
+      this.isMobile = document.body.clientWidth < 768
+      this.mediaDialog = true
       this.$api.auth.pageMedia(12, page).then(data => {
-        this.mediaDialogData.mediaDatas = data.data.list;
-        this.mediaDialogData.total = data.data.total;
-        this.mediaDialogData.pageSize = data.data.pageSize;
+        this.mediaDialogData.mediaDatas = data.data.list
+        this.mediaDialogData.total = data.data.total
+        this.mediaDialogData.pageSize = data.data.pageSize
         for (let media of this.mediaDialogData.mediaDatas) {
-          if (media.thumbUrl && media.thumbUrl !== "") {
-            media.showUrl = this.$util.getServerMediaUrl(media.thumbUrl);
+          if (media.thumbUrl && media.thumbUrl !== '') {
+            media.showUrl = this.$util.getServerMediaUrl(media.thumbUrl)
           } else {
-            media.showUrl = this.$util.getServerMediaUrl(media.url);
+            media.showUrl = this.$util.getServerMediaUrl(media.url)
           }
         }
-      });
+      })
     },
     afterDeleteMedia(data) {
       if (data.success) {
-        this.showMediaDialog(1);
+        this.showMediaDialog(1)
       }
     },
     afterUpload(response) {
@@ -320,71 +320,71 @@ export default {
         this.$api.auth
           .pageMedia(12, this.mediaDialogData.currentPage)
           .then(data => {
-            this.mediaDialogData.mediaDatas = data.data.list;
-            this.mediaDialogData.total = data.data.total;
-            this.mediaDialogData.pageSize = data.data.pageSize;
+            this.mediaDialogData.mediaDatas = data.data.list
+            this.mediaDialogData.total = data.data.total
+            this.mediaDialogData.pageSize = data.data.pageSize
             for (let media of this.mediaDialogData.mediaDatas) {
-              if (media.thumbUrl && media.thumbUrl !== "") {
-                media.showUrl = this.$util.getServerMediaUrl(media.thumbUrl);
+              if (media.thumbUrl && media.thumbUrl !== '') {
+                media.showUrl = this.$util.getServerMediaUrl(media.thumbUrl)
               } else {
-                media.showUrl = this.$util.getServerMediaUrl(media.url);
+                media.showUrl = this.$util.getServerMediaUrl(media.url)
               }
             }
-          });
+          })
       }
     },
     submitPost(formName, success) {
       if (this.submitting) {
-        this.$util.message.warning("请不要提交过快!");
-        return;
+        this.$util.message.warning('请不要提交过快!')
+        return
       }
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.submitting = true;
-          let params = this.post;
-          params.tags = this.$util.tagsToString(this.selectTags);
+          this.submitting = true
+          let params = this.post
+          params.tags = this.$util.tagsToString(this.selectTags)
           this.$api.auth.savePost(params).then(data => {
             if (data.success) {
-              success(data.data);
+              success(data.data)
             } else {
-              this.$util.message.error("提交文章失败," + data.msg);
+              this.$util.message.error('提交文章失败,' + data.msg)
             }
-            this.submitting = false;
-          });
+            this.submitting = false
+          })
         }
-      });
+      })
     },
     onPublish() {
-      const _this = this;
-      this.submitPost("postForm", function() {
-        _this.$util.message.success("发布文章成功!");
-        _this.$router.push("/post");
-      });
+      const _this = this
+      this.submitPost('postForm', function() {
+        _this.$util.message.success('发布文章成功!')
+        _this.$router.push('/post')
+      })
     },
     onSave() {
-      const _this = this;
-      this.submitPost("postForm", function(data) {
-        _this.$util.message.success("保存文章成功!");
-        _this.$route.params.id = data;
-        _this.getPost();
-      });
+      const _this = this
+      this.submitPost('postForm', function(data) {
+        _this.$util.message.success('保存文章成功!')
+        _this.$route.params.id = data
+        _this.getPost()
+      })
     },
     init() {
-      this.getPost();
-      this.getTags();
-      this.getCategories();
+      this.getPost()
+      this.getTags()
+      this.getCategories()
     }
   },
   mounted() {
-    this.init();
+    this.init()
   },
   watch: {
     // 监听route刷新绑定的post数据
     $route() {
-      this.getPost();
+      this.getPost()
     }
   }
-};
+}
 </script>
 
 <style scoped>

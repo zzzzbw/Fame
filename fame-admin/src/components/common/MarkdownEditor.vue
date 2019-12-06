@@ -10,22 +10,22 @@
 </template>
 
 <script>
-import { mavonEditor } from "mavon-editor";
-import "mavon-editor/dist/css/index.css";
+import { mavonEditor } from 'mavon-editor'
+import 'mavon-editor/dist/css/index.css'
 
 export default {
-  name: "MarkdownEditor",
+  name: 'MarkdownEditor',
   components: {
     mavonEditor
   },
   model: {
-    prop: "value",
-    event: "change"
+    prop: 'value',
+    event: 'change'
   },
   props: {
     value: {
       type: String,
-      default: ""
+      default: ''
     },
     onSave: {
       type: Function,
@@ -34,9 +34,9 @@ export default {
   },
   data: function() {
     return {
-      content: "",
+      content: '',
       markdownOption: {
-        codeStyle: "tomorrow",
+        codeStyle: 'tomorrow',
         toolbars: {
           bold: true, // 粗体
           italic: true, // 斜体
@@ -66,27 +66,27 @@ export default {
         },
         fullScreen: this.markdownFullScreen
       }
-    };
+    }
   },
   methods: {
     markdownFullScreen(status) {
       if (status) {
-        this.$root.$emit("indexUp");
+        this.$root.$emit('indexUp')
       } else {
-        this.$root.$emit("indexDown");
+        this.$root.$emit('indexDown')
       }
     }
   },
   watch: {
     value(val) {
-      this.value = val;
-      this.content = this.value;
+      this.value = val
+      this.content = this.value
     },
     content() {
-      this.$emit("change", this.content);
+      this.$emit('change', this.content)
     }
   }
-};
+}
 </script>
 
 <style scoped>

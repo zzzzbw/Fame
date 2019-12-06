@@ -98,7 +98,7 @@ export default {
       this.menuOpen = !this.menuOpen
     },
     to(url, query) {
-      this.$router.push({ path: url, query: query })
+      this.$router.push({ path: url, query })
       this.toggle()
     }
   }

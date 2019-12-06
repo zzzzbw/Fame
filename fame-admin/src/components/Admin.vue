@@ -51,9 +51,9 @@ export default {
 </script>
 
 <style scoped>
-@import "../assets/css/main.css";
-@import "../assets/css/admin.css";
-@import "../assets/css/icon.css";
+@import '../assets/css/main.css';
+@import '../assets/css/admin.css';
+@import '../assets/css/icon.css';
 
 .container {
   position: fixed;

@@ -9,15 +9,15 @@
 export default {
   data: function() {
     return {
-      state: "",
-      message: ""
-    };
+      state: '',
+      message: ''
+    }
   },
   mounted() {
-    this.state = this.$route.params.state || 404;
-    this.message = this.$route.params.message || "Page Not found";
+    this.state = this.$route.params.state || 404
+    this.message = this.$route.params.message || 'Page Not found'
   }
-};
+}
 </script>
 
 <style scoped>

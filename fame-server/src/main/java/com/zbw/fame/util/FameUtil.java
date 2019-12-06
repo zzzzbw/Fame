@@ -229,6 +229,16 @@ public class FameUtil {
     /**
      * 根据字段倒叙排序
      *
+     * @param properties 排序字段列表
+     * @return {@link Sort}
+     */
+    public static Sort sortDescBy(List<String> properties) {
+        return sortDescBy(properties.toArray(new String[0]));
+    }
+
+    /**
+     * 根据字段倒叙排序
+     *
      * @param properties 字段
      * @return {@link Sort}
      */

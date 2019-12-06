@@ -1,5 +1,5 @@
-import { Message } from "element-ui";
-import serverConfig from "../../server-config";
+import { Message } from 'element-ui'
+import serverConfig from '../../server-config'
 /************************************************************/
 /**
  *  全局常量
@@ -7,41 +7,41 @@ import serverConfig from "../../server-config";
 const STATIC = {
   ArticleStatus: {
     PUBLISH: {
-      key: "PUBLISH",
-      value: "公开"
+      key: 'PUBLISH',
+      value: '公开'
     },
     DRAFT: {
-      key: "DRAFT",
-      value: "隐藏"
+      key: 'DRAFT',
+      value: '隐藏'
     },
     getValue: key => {
       switch (key) {
         case STATIC.ArticleStatus.PUBLISH.key:
-          return STATIC.ArticleStatus.PUBLISH.value;
+          return STATIC.ArticleStatus.PUBLISH.value
         case STATIC.ArticleStatus.DRAFT.key:
-          return STATIC.ArticleStatus.DRAFT.value;
+          return STATIC.ArticleStatus.DRAFT.value
       }
     }
   },
   PostPriority: {
     NORMAL: {
       key: 0,
-      value: "普通"
+      value: '普通'
     },
     TOP: {
       key: 999,
-      value: "置顶"
+      value: '置顶'
     },
     getValue: key => {
       switch (key) {
         case STATIC.PostPriority.NORMAL.key:
-          return STATIC.PostPriority.NORMAL.value;
+          return STATIC.PostPriority.NORMAL.value
         case STATIC.PostPriority.TOP.key:
-          return STATIC.PostPriority.TOP.value;
+          return STATIC.PostPriority.TOP.value
       }
     }
   }
-};
+}
 
 /************************************************************/
 /**
@@ -53,7 +53,7 @@ const FUNCTIONS = {
    * @returns {string}
    */
   getServerUrl: () => {
-    return serverConfig.api;
+    return serverConfig.api
   },
   /**
    * 获取服务器媒体链接
@@ -61,7 +61,7 @@ const FUNCTIONS = {
    * @returns {string}
    */
   getServerMediaUrl: url => {
-    return FUNCTIONS.getServerUrl() + "media/" + url;
+    return FUNCTIONS.getServerUrl() + 'media/' + url
   },
   /**
    * 标签转字符串
@@ -69,11 +69,11 @@ const FUNCTIONS = {
    * @returns {string}
    */
   tagsToString: tags => {
-    let str = "";
+    let str = ''
     for (let i = 0; i < tags.length; i++) {
-      str += tags[i] + ",";
+      str += tags[i] + ','
     }
-    return str.substr(0, str.length - 1);
+    return str.substr(0, str.length - 1)
   },
   /**
    * 字符串转标签
@@ -81,12 +81,12 @@ const FUNCTIONS = {
    * @returns {Array}
    */
   stringToTags: str => {
-    if (str !== null && str !== "") {
-      let tags;
-      tags = str.split(",");
-      return tags;
+    if (str !== null && str !== '') {
+      let tags
+      tags = str.split(',')
+      return tags
     } else {
-      return [];
+      return []
     }
   },
   /**
@@ -94,13 +94,13 @@ const FUNCTIONS = {
    * @param text
    */
   copyText: text => {
-    const oInput = document.createElement("input");
-    oInput.value = text;
-    document.body.appendChild(oInput);
-    oInput.select(); // 选择对象
-    document.execCommand("Copy"); // 执行浏览器复制命令
-    oInput.className = "oInput";
-    oInput.style.display = "none";
+    const oInput = document.createElement('input')
+    oInput.value = text
+    document.body.appendChild(oInput)
+    oInput.select() // 选择对象
+    document.execCommand('Copy') // 执行浏览器复制命令
+    oInput.className = 'oInput'
+    oInput.style.display = 'none'
   },
   /**
    * 通用提示信息
@@ -110,34 +110,34 @@ const FUNCTIONS = {
     success: function(message) {
       Message({
         showClose: true,
-        message: message || "成功",
-        type: "success"
-      });
+        message: message || '成功',
+        type: 'success'
+      })
     },
     warning: function(message) {
       Message({
         showClose: true,
-        message: message || "警告",
-        type: "warning"
-      });
+        message: message || '警告',
+        type: 'warning'
+      })
     },
     info: function(message) {
       Message({
         showClose: true,
-        message: message || "提示"
-      });
+        message: message || '提示'
+      })
     },
     error: function(message) {
       Message({
         showClose: true,
-        message: message || "异常",
-        type: "error"
-      });
+        message: message || '异常',
+        type: 'error'
+      })
     }
   }
-};
+}
 
 export default {
   STATIC,
   FUNCTIONS
-};
+}

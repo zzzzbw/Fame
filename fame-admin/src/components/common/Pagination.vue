@@ -14,7 +14,7 @@
 
 <script>
 export default {
-  name: "Pagination",
+  name: 'Pagination',
   props: {
     pageSize: {
       type: Number,
@@ -26,15 +26,15 @@ export default {
     }
   },
   data() {
-    return { currentPage: 1 };
+    return { currentPage: 1 }
   },
   methods: {
     changePage() {
-      this.$emit("changePage", this.currentPage);
+      this.$emit('changePage', this.currentPage)
     }
   },
   created() {}
-};
+}
 </script>
 
 <style scoped>

@@ -96,7 +96,7 @@
 </template>
 
 <script>
-import Pagination from "../common/Pagination";
+import Pagination from '../common/Pagination'
 
 export default {
   components: {
@@ -112,79 +112,79 @@ export default {
       detailVisible: false,
       hasReplay: false,
       isMobile: false,
-      dialogWidth: "60%"
-    };
+      dialogWidth: '60%'
+    }
   },
   methods: {
     changePage(page) {
-      this.currentPage = page;
-      this.init();
+      this.currentPage = page
+      this.init()
     },
     init() {
       this.$api.auth.pageComment(this.currentPage).then(data => {
-        this.commentDatas = data.data.list;
-        this.total = data.data.total;
-        this.pageSize = data.data.pageSize;
+        this.commentDatas = data.data.list
+        this.total = data.data.total
+        this.pageSize = data.data.pageSize
         for (let comment of this.commentDatas) {
           comment.created = this.$dayjs(comment.created).format(
-            "YYYY-MM-DD HH:mm"
-          );
+            'YYYY-MM-DD HH:mm'
+          )
         }
-      });
+      })
     },
     initDetail(data) {
-      this.comment = data;
+      this.comment = data
       if (data.article) {
-        this.comment.title = data.article.title;
+        this.comment.title = data.article.title
       }
       if (data.parentComment) {
-        this.hasReplay = true;
-        this.comment.replayName = data.parentComment.name;
-        this.comment.replay = data.parentComment.content;
+        this.hasReplay = true
+        this.comment.replayName = data.parentComment.name
+        this.comment.replay = data.parentComment.content
       } else {
-        this.hasReplay = false;
+        this.hasReplay = false
       }
     },
     handleDetail(id) {
       this.$api.auth.getCommentDetail(id).then(data => {
-        this.initDetail(data.data);
-        this.detailVisible = true;
+        this.initDetail(data.data)
+        this.detailVisible = true
         if (document.body.clientWidth < 768) {
-          this.isMobile = true;
-          this.dialogWidth = "100%";
+          this.isMobile = true
+          this.dialogWidth = '100%'
         } else {
-          this.isMobile = false;
-          this.dialogWidth = "60%";
+          this.isMobile = false
+          this.dialogWidth = '60%'
         }
-      });
+      })
     },
     handleDelete(id) {
-      this.$confirm("此操作将永久删除该评论,是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "danger"
+      this.$confirm('此操作将永久删除该评论,是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'danger'
       })
         .then(() => {
-          this.deleteComment(id);
+          this.deleteComment(id)
         })
-        .catch(() => {});
+        .catch(() => {})
     },
     deleteComment(id) {
       this.$api.auth.deleteComment(id).then(data => {
         if (data.success) {
-          this.$util.message.success("删除成功!");
-          this.init();
+          this.$util.message.success('删除成功!')
+          this.init()
         } else {
-          this.$util.message.error("删除失败 " + data.msg);
+          this.$util.message.error('删除失败 ' + data.msg)
         }
-      });
+      })
     }
   },
   mounted() {
-    this.currentPage = Number(this.$route.query.page) || 1;
-    this.init();
+    this.currentPage = Number(this.$route.query.page) || 1
+    this.init()
   }
-};
+}
 </script>
 
 <style scoped>

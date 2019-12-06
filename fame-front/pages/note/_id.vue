@@ -13,12 +13,12 @@ import BigImg from '~/components/BigImg.vue'
 
 
 export default {
-  head () {
-    return { title: `${this.note.title}` }
-  },
   components: {
     Comment,
     BigImg
+  },
+  fetch ({ store, params }) {
+    return store.dispatch('getNote', params.id)
   },
   data () {
     return {
@@ -30,9 +30,6 @@ export default {
     note () {
       return this.$store.state.note.detail
     }
-  },
-  fetch ({ store, params }) {
-    return store.dispatch('getNote', params.id)
   },
   mounted () {
     this.mountedEvent()
@@ -50,6 +47,9 @@ export default {
         })
       }
     }
+  },
+  head () {
+    return { title: `${this.note.title}` }
   }
 }
 </script>

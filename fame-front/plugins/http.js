@@ -52,7 +52,7 @@ Axios.interceptors.response.use(
 export function get(url, params = {}) {
   return new Promise((resolve, reject) => {
     Axios.get(url, {
-      params: params
+      params
     })
       .then(response => {
         resolve(response.data)
@@ -110,7 +110,7 @@ export function put(url, params = {}) {
 export function del(url, params = {}) {
   return new Promise((resolve, reject) => {
     Axios.delete(url, {
-      params: params
+      params
     })
       .then(response => {
         resolve(response.data)

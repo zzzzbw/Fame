@@ -38,12 +38,12 @@ import Comment from '~/components/Comment.vue'
 import BigImg from '~/components/BigImg.vue'
 
 export default {
-  head () {
-    return { title: `${this.post.title}` }
-  },
   components: {
     Comment,
     BigImg
+  },
+  fetch ({ store, params }) {
+    return store.dispatch('getPost', params.id)
   },
   data () {
     return {
@@ -55,9 +55,6 @@ export default {
     post () {
       return this.$store.state.post.detail
     }
-  },
-  fetch ({ store, params }) {
-    return store.dispatch('getPost', params.id)
   },
   mounted () {
     this.tocInit()
@@ -88,13 +85,16 @@ export default {
       tocbot.init({
         tocSelector: '.markdown-toc',
         contentSelector: '.markdown-body',
-        headingSelector: headingSelector
+        headingSelector
       })
       // 延时显示，防止闪烁
       setTimeout(function() {
         document.getElementsByClassName('markdown-toc')[0].style.opacity = 1
       }, 500)
     }
+  },
+  head () {
+    return { title: `${this.post.title}` }
   }
 }
 </script>

@@ -43,10 +43,10 @@
 </template>
 
 <script>
-import serverConfig from "../../../server-config";
+import serverConfig from '../../../server-config'
 
 export default {
-  name: "Upload",
+  name: 'Upload',
   props: {
     afterUpload: {
       type: Function,
@@ -56,58 +56,58 @@ export default {
   data: function() {
     return {
       uploadVisible: false,
-      uploadAction: serverConfig.api + "api/admin/media/upload",
+      uploadAction: serverConfig.api + 'api/admin/media/upload',
       uploadData: {
-        name: "",
-        path: ""
+        name: '',
+        path: ''
       }
-    };
+    }
   },
   methods: {
     clearUploadFile() {
-      this.$refs.upload.clearFiles();
+      this.$refs.upload.clearFiles()
     },
     beforeUpload(file) {
-      let fileName = file.name;
-      let extension = fileName.substring(file.name.lastIndexOf(".") + 1);
-      if (extension === "") {
-        this.$util.message.error(fileName + "文件格式不正确");
-        return false;
+      let fileName = file.name
+      let extension = fileName.substring(file.name.lastIndexOf('.') + 1)
+      if (extension === '') {
+        this.$util.message.error(fileName + '文件格式不正确')
+        return false
       }
 
-      const size = file.size / (1024 * 1024);
+      const size = file.size / (1024 * 1024)
       if (size > 10) {
-        this.$util.message.error(fileName + "大于10m");
-        return false;
+        this.$util.message.error(fileName + '大于10m')
+        return false
       }
 
       if (
-        extension.toLowerCase() !== "jpg" &&
-        extension.toLowerCase() !== "png" &&
-        extension.toLowerCase() !== "gif" &&
-        extension.toLowerCase() !== "jpeg" &&
-        extension.toLowerCase() !== "svg"
+        extension.toLowerCase() !== 'jpg' &&
+        extension.toLowerCase() !== 'png' &&
+        extension.toLowerCase() !== 'gif' &&
+        extension.toLowerCase() !== 'jpeg' &&
+        extension.toLowerCase() !== 'svg'
       ) {
-        this.$util.message.error(fileName + "不为图片格式");
-        return false;
+        this.$util.message.error(fileName + '不为图片格式')
+        return false
       }
-      this.uploadData.name = file.name;
-      this.uploadData.path = this.$dayjs(new Date()).format("YYYY/MM");
+      this.uploadData.name = file.name
+      this.uploadData.path = this.$dayjs(new Date()).format('YYYY/MM')
     },
     successUpload(response, file) {
       if (response.success) {
-        this.$util.message.success("上传" + file.name + "成功!");
+        this.$util.message.success('上传' + file.name + '成功!')
       } else {
-        this.$util.message.error("上传" + file.name + "失败!" + response.msg);
+        this.$util.message.error('上传' + file.name + '失败!' + response.msg)
       }
-      this.afterUpload(response, file);
+      this.afterUpload(response, file)
     },
     errorUpload(err, file) {
-      this.$util.message.error("网络异常,上传" + file.name + "失败!");
-      console.log(err);
+      this.$util.message.error('网络异常,上传' + file.name + '失败!')
+      console.log(err)
     }
   }
-};
+}
 </script>
 
 <style>

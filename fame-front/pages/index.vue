@@ -60,8 +60,13 @@ export default {
   transition(to, from) {
     return 'move'
   },
-  head() {
-    return { title: `Blog` }
+  fetch({ store, query }) {
+    const params = {
+      page: query.page || 0,
+      limit: 5,
+      sort: ['priority','id']
+    }
+    return store.dispatch('getPosts', params)
   },
   computed: {
     posts() {
@@ -74,13 +79,8 @@ export default {
       return this.$store.state.post.list.currentPage
     }
   },
-  fetch({ store, query }) {
-    const params = {
-      page: query.page || 0,
-      limit: 5,
-      sort: ['priority','id']
-    }
-    return store.dispatch('getPosts', params)
+  head() {
+    return { title: `Blog` }
   }
 }
 </script>

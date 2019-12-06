@@ -63,48 +63,48 @@ export default {
       articleCount: 0,
       comments: [],
       articles: []
-    };
+    }
   },
   methods: {
     countComment(data) {
       if (!data.success) {
-        return;
+        return
       }
-      this.commentCount = data.data;
+      this.commentCount = data.data
     },
     countPost(data) {
       if (!data.success) {
-        return;
+        return
       }
-      this.articleCount = data.data;
+      this.articleCount = data.data
     },
     pageComment(data) {
       if (!data.success) {
-        return;
+        return
       }
       for (let key in data.data.list) {
-        let comment = data.data.list[key];
+        let comment = data.data.list[key]
         if (comment.content.length > 200) {
-          comment.content = comment.content.substring(0, 80) + "...";
+          comment.content = comment.content.substring(0, 80) + '...'
         }
-        this.comments.push(comment);
+        this.comments.push(comment)
       }
     },
     pagePost(data) {
       if (!data.success) {
-        return;
+        return
       }
       for (let key in data.data.list) {
-        let d = data.data.list[key];
-        let article = d.title;
-        this.articles.push(article);
+        let d = data.data.list[key]
+        let article = d.title
+        this.articles.push(article)
       }
     },
     initData(postData, commentData, postCountData, commentCountData) {
-      this.pagePost(postData);
-      this.pageComment(commentData);
-      this.countPost(postCountData);
-      this.countComment(commentCountData);
+      this.pagePost(postData)
+      this.pageComment(commentData)
+      this.countPost(postCountData)
+      this.countComment(commentCountData)
     },
     init() {
       this.$axios
@@ -114,13 +114,13 @@ export default {
           this.$api.auth.countPost(),
           this.$api.auth.countComment()
         ])
-        .then(this.$axios.spread(this.initData));
+        .then(this.$axios.spread(this.initData))
     }
   },
   mounted() {
-    this.init();
+    this.init()
   }
-};
+}
 </script>
 
 <style scoped>

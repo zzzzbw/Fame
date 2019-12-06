@@ -23,6 +23,7 @@ import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -46,7 +47,7 @@ public abstract class AbstractArticleServiceImpl<ARTICLE extends Article> implem
     @Override
     @Cacheable(value = ARTICLE_CACHE_NAME, key = "'font_articles['+#page+':'+#limit+':'+#sort+']'")
     public Page<ARTICLE> pageFrontArticle(Integer page, Integer limit, List<String> sort) {
-        Pageable pageable = PageRequest.of(page, limit, new Sort(Sort.Direction.DESC, sort));
+        Pageable pageable = PageRequest.of(page, limit, FameUtil.sortDescBy(sort));
         Page<ARTICLE> result = articleRepository.findAllByStatus(ArticleStatus.PUBLISH, pageable);
 
         String summaryFlag = optionService.get(OptionKeys.SUMMARY_FLAG);
