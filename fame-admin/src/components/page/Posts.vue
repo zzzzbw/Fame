@@ -206,7 +206,7 @@ export default {
                 let post = {
                     id: data.id,
                     title: data.title,
-                    frontUrl: this.$serverConfig.frontUrl + 'post/' + data.id,
+                    frontUrl: this.$util.getServerFrontPostUrl(data.id),
                     publish: this.$dayjs(data.created).format('YYYY-MM-DD HH:mm'),
                     modified: this.$dayjs(data.modified).format('YYYY-MM-DD HH:mm'),
                     category: data.category,

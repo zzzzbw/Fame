@@ -52,16 +52,19 @@
       custom-class="comment-dialog"
     >
       <el-row :gutter="10">
-        <el-col :xs="24" :sm="12" :md="3">所属文章:</el-col>
-        <el-col :xs="24" :sm="12" :md="9">{{ comment.title }}</el-col>
-        <el-col :xs="24" :sm="12" :md="3">称呼:</el-col>
-        <el-col :xs="24" :sm="12" :md="9">{{ comment.name }}</el-col>
+        <p class="comment-article-title">
+          文章:
+          <el-link :href="comment.postUrl" target="_blank" type="primary">{{ comment.title }}</el-link>
+        </p>
+
       </el-row>
-      <el-row :gutter="10">
-        <el-col :xs="24" :sm="12" :md="3">邮箱:</el-col>
-        <el-col :xs="24" :sm="12" :md="9">{{ comment.email }}</el-col>
-        <el-col :xs="24" :sm="12" :md="3">网址:</el-col>
-        <el-col :xs="24" :sm="12" :md="9">{{ comment.website }}</el-col>
+      <el-row :gutter="10" class="comment-row-detail">
+        <el-col :xs="24" :sm="2" :md="2">称呼:</el-col>
+        <el-col :xs="24" :sm="6" :md="6">{{ comment.name }}</el-col>
+        <el-col :xs="24" :sm="2" :md="2">邮箱:</el-col>
+        <el-col :xs="24" :sm="6" :md="6">{{ comment.email }}</el-col>
+        <el-col :xs="24" :sm="2" :md="2">网址:</el-col>
+        <el-col :xs="24" :sm="6" :md="6">{{ comment.website }}</el-col>
       </el-row>
       <el-row :gutter="10" class="comment-row-detail">
         <el-col :span="24">
@@ -74,13 +77,11 @@
           <div v-html="comment.content" class="markdown-body"></div>
         </el-col>
       </el-row>
-      <el-row :gutter="10">
+      <el-row :gutter="10" class="comment-row-detail">
         <el-col :xs="24" :sm="12" :md="3">赞:</el-col>
         <el-col :xs="24" :sm="12" :md="9">{{ comment.agree }}</el-col>
         <el-col :xs="24" :sm="12" :md="3">踩:</el-col>
         <el-col :xs="24" :sm="12" :md="9">{{ comment.disagree }}</el-col>
-      </el-row>
-      <el-row :gutter="10">
         <el-col :xs="24" :sm="12" :md="3">ip:</el-col>
         <el-col :xs="24" :sm="12" :md="9">{{ comment.ip }}</el-col>
         <el-col :xs="24" :sm="12" :md="3">agent:</el-col>
@@ -136,6 +137,7 @@ export default {
       this.comment = data
       if (data.article) {
         this.comment.title = data.article.title
+        this.comment.postUrl = this.$util.getServerFrontPostUrl(data.article.id)
       }
       if (data.parentComment) {
         this.hasReplay = true
@@ -188,6 +190,17 @@ export default {
 </script>
 
 <style scoped>
+  .comment-dialog .comment-article-title {
+    font-size: 24px;
+    width: 85%;
+    margin: auto !important;
+  }
+
+  .comment-dialog .comment-article-title a {
+    font-size: 20px;
+    text-decoration: underline;
+  }
+
 .comment-dialog .comment-row-detail {
   width: 90%;
   margin: 15px auto !important;
