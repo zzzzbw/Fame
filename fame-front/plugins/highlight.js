@@ -1,4 +1,4 @@
-import hljs from 'highlight.js/lib/highlight'
+import hljs from 'highlight.js/lib/core'
 
 hljs.registerLanguage('java', require('highlight.js/lib/languages/java'))
 hljs.registerLanguage('go', require('highlight.js/lib/languages/go'))
