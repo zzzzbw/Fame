@@ -1,6 +1,6 @@
 export const state = () => ({
   menu: [],
-  detail: {}
+  detail: {},
 })
 
 export const mutations = {
@@ -9,5 +9,5 @@ export const mutations = {
   },
   SET_MENU(state, data) {
     state.menu = data
-  }
+  },
 }

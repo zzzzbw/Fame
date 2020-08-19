@@ -10,8 +10,8 @@ export default {
   props: {
     error: {
       type: Error,
-      default: null
-    }
+      default: null,
+    },
   },
   computed: {
     statusCode() {
@@ -19,13 +19,13 @@ export default {
     },
     message() {
       return this.error.message || `<%= messages.client_error %>`
-    }
+    },
   },
   head() {
     return {
-      title: this.error.statusCode
+      title: this.error.statusCode,
     }
-  }
+  },
 }
 </script>
 

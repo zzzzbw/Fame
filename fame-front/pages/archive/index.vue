@@ -37,11 +37,11 @@ export default {
   computed: {
     archives() {
       return this.$store.state.archive.data
-    }
+    },
   },
   head() {
     return { title: `归档` }
-  }
+  },
 }
 </script>
 

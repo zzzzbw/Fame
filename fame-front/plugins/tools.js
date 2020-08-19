@@ -108,5 +108,5 @@ export default {
   stringToTags,
   goAnchor,
   jump,
-  formatWebsite
+  formatWebsite,
 }

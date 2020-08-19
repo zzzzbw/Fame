@@ -6,7 +6,7 @@ const STATIC_ROUTE = ['/', '/about', '/archive', '/category']
 
 const config = {
   routes() {
-    return api.getOptions().then(optionsRes => {
+    return api.getOptions().then((optionsRes) => {
       let url = ''
       if (
         optionsRes.success &&
@@ -15,20 +15,20 @@ const config = {
       ) {
         url = tools.formatWebsite(optionsRes.data.blog_website)
       }
-      return api.getPosts(0, 999).then(articleRes => {
+      return api.getPosts(0, 999).then((articleRes) => {
         const routes = articleRes.data.list.map(
-          article => url + '/post/' + article.id
+          (article) => url + '/post/' + article.id
         )
-        STATIC_ROUTE.forEach(route => {
+        STATIC_ROUTE.forEach((route) => {
           routes.push(url + route)
         })
         return routes
       })
     })
   },
-  exclude: STATIC_ROUTE
+  exclude: STATIC_ROUTE,
 }
 
 export default {
-  config
+  config,
 }

@@ -1,7 +1,7 @@
 const config = {
   env: '',
   url: '',
-  proxy: false
+  proxy: false,
 }
 
 config.env = process.env.NODE_ENV
@@ -16,7 +16,7 @@ switch (config.env) {
     config.proxy = {
       protocol: 'http',
       host: 'fame-nginx',
-      port: 80
+      port: 80,
     }
     break
   default:

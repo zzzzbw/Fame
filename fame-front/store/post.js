@@ -2,9 +2,9 @@ export const state = () => ({
   list: {
     data: [],
     totalPage: 0,
-    currentPage: 0
+    currentPage: 0,
   },
-  detail: {}
+  detail: {},
 })
 
 export const mutations = {
@@ -13,5 +13,5 @@ export const mutations = {
   },
   SET_LIST(state, data) {
     state.list = data
-  }
+  },
 }

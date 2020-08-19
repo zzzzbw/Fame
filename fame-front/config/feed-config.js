@@ -12,28 +12,28 @@ const config = [
       feed.options = {
         title: options.meta_title || defaultConfig.meta_title,
         link: tools.formatWebsite(options.blog_website) + '/feed.xml',
-        description: options.meta_description || defaultConfig.meta_description
+        description: options.meta_description || defaultConfig.meta_description,
       }
 
       const articleResp = await api.getPosts(0, 999)
       const articles = articleResp.data.list
-      articles.forEach(article => {
+      articles.forEach((article) => {
         feed.addItem({
           title: article.title,
           id: article.id,
           link:
             tools.formatWebsite(options.blog_website) + '/post/' + article.id,
           description: article.content,
-          content: article.content
+          content: article.content,
         })
       })
       feed.addCategory('Nuxt.js')
     }, // The create function (see below)
     cacheTime: 1000 * 60 * 15, // How long should the feed be cached
-    type: 'rss2' // Can be: rss2, atom1, json1
-  }
+    type: 'rss2', // Can be: rss2, atom1, json1
+  },
 ]
 
 export default {
-  config
+  config,
 }

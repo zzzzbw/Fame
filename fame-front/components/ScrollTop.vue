@@ -1,6 +1,6 @@
 <template>
   <div ref="scrollTop" class="scroll-top" @click="toTop">
-    <span class="icon-arrow-up" style="font-size: 28px"></span>
+    <span class="icon-arrow-up" style="font-size: 28px;"></span>
   </div>
 </template>
 
