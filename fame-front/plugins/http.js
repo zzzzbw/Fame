@@ -1,6 +1,6 @@
+import serverConfig from '../config/server-config'
 import axios from 'axios'
 import qs from 'qs'
-import serverConfig from '../config/server-config'
 
 const Axios = axios.create({
   baseURL: serverConfig.url + '/api/', // 本地做反向代理
