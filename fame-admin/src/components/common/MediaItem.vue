@@ -42,14 +42,14 @@ export default {
   props: {
     media: {
       type: Object,
-      default: function() {
+      default: function () {
         return { id: '', name: '', url: '', thumbUrl: '', suffix: '' }
-      }
+      },
     },
     afterDelete: {
       type: Function,
-      default: function() {}
-    }
+      default: function () {},
+    },
   },
   methods: {
     copyUrl(url) {
@@ -66,10 +66,10 @@ export default {
       this.$confirm('此操作将永久删除该文章, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'danger'
+        type: 'danger',
       })
         .then(() => {
-          this.$api.auth.deleteMedia(id).then(data => {
+          this.$api.auth.deleteMedia(id).then((data) => {
             if (data.success) {
               this.$util.message.success('删除成功')
               this.afterDelete(data)
@@ -83,8 +83,8 @@ export default {
     showDetailDialog() {
       const url = this.$util.getServerMediaUrl(this.media.url)
       window.open(url, '_blank')
-    }
-  }
+    },
+  },
 }
 </script>
 

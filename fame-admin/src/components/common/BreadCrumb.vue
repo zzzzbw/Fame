@@ -18,12 +18,12 @@ const config = [
   {
     name: 'PostNew',
     title: '新建文章',
-    parent: 'PostList'
+    parent: 'PostList',
   },
   {
     name: 'PostEdit',
     title: '编辑文章',
-    parent: 'PostList'
+    parent: 'PostList',
   },
   { name: 'CommentList', title: '评论列表' },
   { name: 'MetaList', title: '标签/分类' },
@@ -31,14 +31,14 @@ const config = [
   { name: 'NoteList', title: '页面列表', link: '/note' },
   { name: 'NoteNew', title: '新建页面', parent: 'NoteList' },
   { name: 'NoteEdit', title: '编辑页面', parent: 'NoteList' },
-  { name: 'Setting', title: '网站设置' }
+  { name: 'Setting', title: '网站设置' },
 ]
 
 export default {
   name: 'BreadCrumb',
   data() {
     return {
-      levelList: []
+      levelList: [],
     }
   },
   methods: {
@@ -52,7 +52,7 @@ export default {
     },
     getBreadcrumb(name) {
       let breadCrumbItem = null
-      config.forEach(c => {
+      config.forEach((c) => {
         if (c.name === name) {
           breadCrumbItem = c
         }
@@ -64,7 +64,7 @@ export default {
       if (breadCrumbItem.parent && breadCrumbItem.parent !== '') {
         this.getBreadcrumb(breadCrumbItem.parent)
       }
-    }
+    },
   },
   watch: {
     $route(route) {
@@ -73,11 +73,11 @@ export default {
         return
       }
       this.initLevelList()
-    }
+    },
   },
   created() {
     this.initLevelList()
-  }
+  },
 }
 </script>
 

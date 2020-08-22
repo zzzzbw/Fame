@@ -78,7 +78,7 @@
       </el-row>
     </div>
 
-    <el-table :data="postDatas" border stripe style="width: 100%">
+    <el-table :data="postDatas" border stripe style="width: 100%;">
       <el-table-column prop="id" label="id" width="60"></el-table-column>
       <el-table-column prop="title" label="标题" show-overflow-tooltip>
         <template slot-scope="scope">
@@ -127,13 +127,13 @@
       <el-table-column label="发布日期" width="160" show-overflow-tooltip>
         <template slot-scope="scope">
           <i class="el-icon-time"></i>
-          <span style="margin-left: 10px">{{ scope.row.publish }}</span>
+          <span style="margin-left: 10px;">{{ scope.row.publish }}</span>
         </template>
       </el-table-column>
       <el-table-column label="修改日期" width="160" show-overflow-tooltip>
         <template slot-scope="scope">
           <i class="el-icon-time"></i>
-          <span style="margin-left: 10px">{{ scope.row.modified }}</span>
+          <span style="margin-left: 10px;">{{ scope.row.modified }}</span>
         </template>
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="150">

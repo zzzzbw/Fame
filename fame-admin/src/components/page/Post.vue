@@ -124,7 +124,7 @@
                           this.$serverConfig.frontUrl + 'post/' + this.post.id
                         "
                         target="_blank"
-                        style="color: #FFFFFF;"
+                        style="color: #ffffff;"
                         >查看</a
                       >
                     </el-button>
@@ -148,7 +148,7 @@
       <div class="media-list">
         <el-row>
           <el-col
-            style="padding: 6px"
+            style="padding: 6px;"
             :xs="24"
             :sm="12"
             :md="12"
@@ -187,9 +187,9 @@ export default {
   components: {
     MarkdownEditor,
     MediaItem,
-    Upload
+    Upload,
   },
-  data: function() {
+  data: function () {
     return {
       mediaDialog: false,
       isMobile: false,
@@ -204,15 +204,15 @@ export default {
         priority: 0,
         allowComment: true,
         created: '',
-        modified: ''
+        modified: '',
       },
       rules: {
         title: [
-          { required: true, message: '文章标题必须输入', trigger: 'blur' }
+          { required: true, message: '文章标题必须输入', trigger: 'blur' },
         ],
         content: [
-          { required: true, message: '文章内容不能为空', trigger: 'blur' }
-        ]
+          { required: true, message: '文章内容不能为空', trigger: 'blur' },
+        ],
       },
       selectTags: [],
       tags: [],
@@ -222,8 +222,8 @@ export default {
         mediaDatas: [],
         total: 0,
         pageSize: 10,
-        currentPage: 1
-      }
+        currentPage: 1,
+      },
     }
   },
   methods: {
@@ -231,7 +231,7 @@ export default {
       const id = this.$route.params.id
       // 如果有id则表示编辑文章,获取文章信息
       if (id) {
-        this.$api.auth.getPost(id).then(data => {
+        this.$api.auth.getPost(id).then((data) => {
           this.initPost(data.data)
         })
       } else {
@@ -246,7 +246,7 @@ export default {
           priority: this.$static.PostPriority.NORMAL.key,
           allowComment: true,
           created: Date.now(),
-          modified: Date.now()
+          modified: Date.now(),
         }
         this.initPost(data)
       }
@@ -265,12 +265,12 @@ export default {
       this.selectTags = this.$util.stringToTags(data.tags)
     },
     getTags() {
-      this.$api.auth.getAllTags().then(data => {
+      this.$api.auth.getAllTags().then((data) => {
         if (data.success) {
           for (let key in data.data) {
             let tag = {
               value: data.data[key].name,
-              label: data.data[key].name
+              label: data.data[key].name,
             }
             this.tags.push(tag)
           }
@@ -280,12 +280,12 @@ export default {
       })
     },
     getCategories() {
-      this.$api.auth.getAllCategories().then(data => {
+      this.$api.auth.getAllCategories().then((data) => {
         if (data.success) {
           for (let key in data.data) {
             let category = {
               value: data.data[key].name,
-              label: data.data[key].name
+              label: data.data[key].name,
             }
             this.categories.push(category)
           }
@@ -297,7 +297,7 @@ export default {
     showMediaDialog(page = 1) {
       this.isMobile = document.body.clientWidth < 768
       this.mediaDialog = true
-      this.$api.auth.pageMedia(12, page).then(data => {
+      this.$api.auth.pageMedia(12, page).then((data) => {
         this.mediaDialogData.mediaDatas = data.data.list
         this.mediaDialogData.total = data.data.total
         this.mediaDialogData.pageSize = data.data.pageSize
@@ -319,7 +319,7 @@ export default {
       if (response.success) {
         this.$api.auth
           .pageMedia(12, this.mediaDialogData.currentPage)
-          .then(data => {
+          .then((data) => {
             this.mediaDialogData.mediaDatas = data.data.list
             this.mediaDialogData.total = data.data.total
             this.mediaDialogData.pageSize = data.data.pageSize
@@ -338,12 +338,12 @@ export default {
         this.$util.message.warning('请不要提交过快!')
         return
       }
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate((valid) => {
         if (valid) {
           this.submitting = true
           let params = this.post
           params.tags = this.$util.tagsToString(this.selectTags)
-          this.$api.auth.savePost(params).then(data => {
+          this.$api.auth.savePost(params).then((data) => {
             if (data.success) {
               success(data.data)
             } else {
@@ -356,14 +356,14 @@ export default {
     },
     onPublish() {
       const _this = this
-      this.submitPost('postForm', function() {
+      this.submitPost('postForm', function () {
         _this.$util.message.success('发布文章成功!')
         _this.$router.push('/post')
       })
     },
     onSave() {
       const _this = this
-      this.submitPost('postForm', function(data) {
+      this.submitPost('postForm', function (data) {
         _this.$util.message.success('保存文章成功!')
         _this.$route.params.id = data
         _this.getPost()
@@ -373,7 +373,7 @@ export default {
       this.getPost()
       this.getTags()
       this.getCategories()
-    }
+    },
   },
   mounted() {
     this.init()
@@ -382,8 +382,8 @@ export default {
     // 监听route刷新绑定的post数据
     $route() {
       this.getPost()
-    }
-  }
+    },
+  },
 }
 </script>
 

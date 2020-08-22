@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-table :data="commentDatas" border style="width: 100%">
+    <el-table :data="commentDatas" border style="width: 100%;">
       <el-table-column prop="id" label="id" width="60"></el-table-column>
       <el-table-column
         prop="name"
@@ -25,7 +25,7 @@
       >
         <template slot-scope="scope">
           <i class="el-icon-time"></i>
-          <span style="margin-left: 10px">{{ scope.row.created }}</span>
+          <span style="margin-left: 10px;">{{ scope.row.created }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="150">
@@ -54,9 +54,10 @@
       <el-row :gutter="10">
         <p class="comment-article-title">
           文章:
-          <el-link :href="comment.postUrl" target="_blank" type="primary">{{ comment.title }}</el-link>
+          <el-link :href="comment.postUrl" target="_blank" type="primary">{{
+            comment.title
+          }}</el-link>
         </p>
-
       </el-row>
       <el-row :gutter="10" class="comment-row-detail">
         <el-col :xs="24" :sm="2" :md="2">称呼:</el-col>
@@ -101,9 +102,9 @@ import Pagination from '../common/Pagination'
 
 export default {
   components: {
-    Pagination
+    Pagination,
   },
-  data: function() {
+  data: function () {
     return {
       commentDatas: [],
       comment: {},
@@ -113,7 +114,7 @@ export default {
       detailVisible: false,
       hasReplay: false,
       isMobile: false,
-      dialogWidth: '60%'
+      dialogWidth: '60%',
     }
   },
   methods: {
@@ -122,7 +123,7 @@ export default {
       this.init()
     },
     init() {
-      this.$api.auth.pageComment(this.currentPage).then(data => {
+      this.$api.auth.pageComment(this.currentPage).then((data) => {
         this.commentDatas = data.data.list
         this.total = data.data.total
         this.pageSize = data.data.pageSize
@@ -148,7 +149,7 @@ export default {
       }
     },
     handleDetail(id) {
-      this.$api.auth.getCommentDetail(id).then(data => {
+      this.$api.auth.getCommentDetail(id).then((data) => {
         this.initDetail(data.data)
         this.detailVisible = true
         if (document.body.clientWidth < 768) {
@@ -164,7 +165,7 @@ export default {
       this.$confirm('此操作将永久删除该评论,是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'danger'
+        type: 'danger',
       })
         .then(() => {
           this.deleteComment(id)
@@ -172,7 +173,7 @@ export default {
         .catch(() => {})
     },
     deleteComment(id) {
-      this.$api.auth.deleteComment(id).then(data => {
+      this.$api.auth.deleteComment(id).then((data) => {
         if (data.success) {
           this.$util.message.success('删除成功!')
           this.init()
@@ -180,26 +181,26 @@ export default {
           this.$util.message.error('删除失败 ' + data.msg)
         }
       })
-    }
+    },
   },
   mounted() {
     this.currentPage = Number(this.$route.query.page) || 1
     this.init()
-  }
+  },
 }
 </script>
 
 <style scoped>
-  .comment-dialog .comment-article-title {
-    font-size: 24px;
-    width: 85%;
-    margin: auto !important;
-  }
+.comment-dialog .comment-article-title {
+  font-size: 24px;
+  width: 85%;
+  margin: auto !important;
+}
 
-  .comment-dialog .comment-article-title a {
-    font-size: 20px;
-    text-decoration: underline;
-  }
+.comment-dialog .comment-article-title a {
+  font-size: 20px;
+  text-decoration: underline;
+}
 
 .comment-dialog .comment-row-detail {
   width: 90%;

@@ -50,17 +50,17 @@ export default {
   props: {
     afterUpload: {
       type: Function,
-      default: function() {}
-    }
+      default: function () {},
+    },
   },
-  data: function() {
+  data: function () {
     return {
       uploadVisible: false,
       uploadAction: serverConfig.api + 'api/admin/media/upload',
       uploadData: {
         name: '',
-        path: ''
-      }
+        path: '',
+      },
     }
   },
   methods: {
@@ -105,8 +105,8 @@ export default {
     errorUpload(err, file) {
       this.$util.message.error('网络异常,上传' + file.name + '失败!')
       console.log(err)
-    }
-  }
+    },
+  },
 }
 </script>
 

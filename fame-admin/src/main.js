@@ -9,7 +9,7 @@ import serverConfig from '../server-config'
 import './plugins/element.js'
 
 // 时间过滤器
-Vue.filter('time', function(data, fmt) {
+Vue.filter('time', function (data, fmt) {
   fmt = fmt || 'YYYY-MM-DD hh:mm'
   return dayjs(data).format(fmt)
 })
@@ -23,6 +23,6 @@ Vue.prototype.$dayjs = dayjs
 Vue.prototype.$serverConfig = serverConfig
 
 new Vue({
-  render: h => h(App),
-  router
+  render: (h) => h(App),
+  router,
 }).$mount('#app')

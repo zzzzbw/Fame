@@ -13,14 +13,14 @@ const auth = {
   resetUser(username, email) {
     const params = {
       username: username,
-      email: email
+      email: email,
     }
     return post('/admin/reset/user', params)
   },
   resetPassword(oldPassword, newPassword) {
     const params = {
       oldPassword: oldPassword,
-      newPassword: newPassword
+      newPassword: newPassword,
     }
     return post('/admin/reset/password', params)
   },
@@ -49,7 +49,7 @@ const auth = {
   },
   pageComment(page) {
     const params = {
-      page: page - 1
+      page: page - 1,
     }
     return get('/admin/comment', params)
   },
@@ -70,43 +70,43 @@ const auth = {
   },
   saveCategory(name) {
     const params = {
-      name: name
+      name: name,
     }
     return post('/admin/category', params)
   },
   saveTag(name) {
     const params = {
-      name: name
+      name: name,
     }
     return post('/admin/tag', params)
   },
   updateCategory(id, name) {
     const params = {
-      name: name
+      name: name,
     }
     return post('/admin/category/' + id, params)
   },
   updateTag(id, name) {
     const params = {
-      name: name
+      name: name,
     }
     return post('/admin/tag/' + id, params)
   },
   deleteCategory(name) {
     const params = {
-      name: name
+      name: name,
     }
     return del('/admin/category', params)
   },
   deleteTag(name) {
     const params = {
-      name: name
+      name: name,
     }
     return del('/admin/tag', params)
   },
   pageNote(page) {
     const params = {
-      page: page - 1
+      page: page - 1,
     }
     return get('/admin/note', params)
   },
@@ -122,15 +122,15 @@ const auth = {
   pageMedia(limit, page) {
     const params = {
       limit: limit,
-      page: page - 1
+      page: page - 1,
     }
     return get('/admin/media', params)
   },
   deleteMedia(id) {
     return del('/admin/media/' + id)
-  }
+  },
 }
 
 export default {
-  auth
+  auth,
 }

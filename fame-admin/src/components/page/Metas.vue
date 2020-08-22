@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row :gutter="30">
-      <el-col :xs="24" :sm="12" :md="12" :lg="12" style="margin-top: 30px">
+      <el-col :xs="24" :sm="12" :md="12" :lg="12" style="margin-top: 30px;">
         <el-card>
           <div slot="header">
             <span>标签列表</span>
@@ -11,7 +11,7 @@
               <span class="meta" @click="clickTag(tag.id, tag.name)">
                 {{ tag.name }}
               </span>
-              <span style="float: right;clear: both">
+              <span style="float: right; clear: both;">
                 <span class="meta-count">{{ tag.postInfos.length }}</span>
                 <el-button
                   type="danger"
@@ -30,13 +30,13 @@
           <el-button
             type="success"
             size="small"
-            style="float: right;clear: both"
+            style="float: right; clear: both;"
             @click="saveOrUpdateTag"
             >保存标签
           </el-button>
         </el-card>
       </el-col>
-      <el-col :xs="24" :sm="12" :md="12" :lg="12" style="margin-top: 30px">
+      <el-col :xs="24" :sm="12" :md="12" :lg="12" style="margin-top: 30px;">
         <el-card>
           <div slot="header">
             <span>分类列表</span>
@@ -49,7 +49,7 @@
               >
                 {{ category.name }}
               </span>
-              <span style="float: right;clear: both">
+              <span style="float: right; clear: both;">
                 <span class="meta-count">{{ category.postInfos.length }}</span>
                 <el-button
                   type="danger"
@@ -68,7 +68,7 @@
           <el-button
             type="success"
             size="small"
-            style="float: right;clear: both"
+            style="float: right; clear: both;"
             @click="saveOrUpdateCategory"
             >保存分类
           </el-button>

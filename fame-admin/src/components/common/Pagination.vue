@@ -18,12 +18,12 @@ export default {
   props: {
     pageSize: {
       type: Number,
-      default: 0
+      default: 0,
     },
     total: {
       type: Number,
-      default: 1
-    }
+      default: 1,
+    },
   },
   data() {
     return { currentPage: 1 }
@@ -31,9 +31,9 @@ export default {
   methods: {
     changePage() {
       this.$emit('changePage', this.currentPage)
-    }
+    },
   },
-  created() {}
+  created() {},
 }
 </script>
 

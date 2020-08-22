@@ -68,9 +68,9 @@ import MarkdownEditor from '../common/MarkdownEditor'
 
 export default {
   components: {
-    MarkdownEditor
+    MarkdownEditor,
   },
-  data: function() {
+  data: function () {
     return {
       submitting: false,
       note: {
@@ -79,23 +79,23 @@ export default {
         content: '',
         status: '',
         priority: 0,
-        allowComment: false
+        allowComment: false,
       },
       rules: {
         title: [
-          { required: true, message: '文章标题必须输入', trigger: 'blur' }
+          { required: true, message: '文章标题必须输入', trigger: 'blur' },
         ],
         content: [
-          { required: true, message: '文章内容不能为空', trigger: 'blur' }
-        ]
-      }
+          { required: true, message: '文章内容不能为空', trigger: 'blur' },
+        ],
+      },
     }
   },
   methods: {
     getNote() {
       const id = this.$route.params.id
       if (id) {
-        this.$api.auth.getNote(id).then(data => {
+        this.$api.auth.getNote(id).then((data) => {
           this.initNote(data.data)
         })
       } else {
@@ -120,10 +120,10 @@ export default {
         this.$util.message.warning('请不要提交过快!')
         return
       }
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate((valid) => {
         if (valid) {
           this.submitting = true
-          this.$api.auth.saveNote(this.note).then(data => {
+          this.$api.auth.saveNote(this.note).then((data) => {
             if (data.success) {
               success(data.data)
             } else {
@@ -136,23 +136,23 @@ export default {
     },
     onPublish() {
       const _this = this
-      this.submitNote('noteForm', function() {
+      this.submitNote('noteForm', function () {
         _this.$util.message.success('发布页面成功!')
         _this.$router.push('/note')
       })
     },
     onSave() {
       const _this = this
-      this.submitNote('noteForm', function(data) {
+      this.submitNote('noteForm', function (data) {
         _this.$util.message.success('保存页面成功!')
         _this.$route.params.id = data
         _this.getNote()
       })
-    }
+    },
   },
   mounted() {
     this.getNote()
-  }
+  },
 }
 </script>
 

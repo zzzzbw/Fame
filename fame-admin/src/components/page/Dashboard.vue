@@ -10,7 +10,7 @@
           <div class="icon">
             <i class="el-icon-tickets"></i>
           </div>
-          <div style="clear: both"></div>
+          <div style="clear: both;"></div>
         </el-card>
       </el-col>
       <el-col :xs="24" :sm="12" :md="12" :lg="12">
@@ -22,7 +22,7 @@
           <div class="icon red">
             <i class="el-icon-chat-line-round"></i>
           </div>
-          <div style="clear: both"></div>
+          <div style="clear: both;"></div>
         </el-card>
       </el-col>
     </el-row>
@@ -62,7 +62,7 @@ export default {
       commentCount: 0,
       articleCount: 0,
       comments: [],
-      articles: []
+      articles: [],
     }
   },
   methods: {
@@ -112,14 +112,14 @@ export default {
           this.$api.auth.pagePost(1),
           this.$api.auth.pageComment(1),
           this.$api.auth.countPost(),
-          this.$api.auth.countComment()
+          this.$api.auth.countComment(),
         ])
         .then(this.$axios.spread(this.initData))
-    }
+    },
   },
   mounted() {
     this.init()
-  }
+  },
 }
 </script>
 

@@ -16,23 +16,23 @@ import 'mavon-editor/dist/css/index.css'
 export default {
   name: 'MarkdownEditor',
   components: {
-    mavonEditor
+    mavonEditor,
   },
   model: {
     prop: 'value',
-    event: 'change'
+    event: 'change',
   },
   props: {
     value: {
       type: String,
-      default: ''
+      default: '',
     },
     onSave: {
       type: Function,
-      default: function() {}
-    }
+      default: function () {},
+    },
   },
-  data: function() {
+  data: function () {
     return {
       content: '',
       markdownOption: {
@@ -62,10 +62,10 @@ export default {
           trash: true, // 清空
           /* 2.2.1 */
           subfield: true, // 单双栏模式
-          preview: true // 预览
+          preview: true, // 预览
         },
-        fullScreen: this.markdownFullScreen
-      }
+        fullScreen: this.markdownFullScreen,
+      },
     }
   },
   methods: {
@@ -75,7 +75,7 @@ export default {
       } else {
         this.$root.$emit('indexDown')
       }
-    }
+    },
   },
   watch: {
     value(val) {
@@ -84,8 +84,8 @@ export default {
     },
     content() {
       this.$emit('change', this.content)
-    }
-  }
+    },
+  },
 }
 </script>
 

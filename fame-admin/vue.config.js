@@ -1,6 +1,6 @@
 module.exports = {
-  publicPath: "/admin/",
+  publicPath: '/admin/',
   devServer: {
-    port: 8010
-  }
-};
+    port: 8010,
+  },
+}

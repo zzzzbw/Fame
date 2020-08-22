@@ -7,16 +7,16 @@
 
 <script>
 export default {
-  data: function() {
+  data: function () {
     return {
       state: '',
-      message: ''
+      message: '',
     }
   },
   mounted() {
     this.state = this.$route.params.state || 404
     this.message = this.$route.params.message || 'Page Not found'
-  }
+  },
 }
 </script>
 

@@ -35,15 +35,15 @@ export default {
   components: {
     MediaItem,
     Upload,
-    Pagination
+    Pagination,
   },
-  data: function() {
+  data: function () {
     return {
       mediaDatas: [],
       total: 0,
       pageSize: 10,
       currentPage: 1,
-      uploadDialog: false
+      uploadDialog: false,
     }
   },
   methods: {
@@ -52,7 +52,7 @@ export default {
       this.init()
     },
     init() {
-      this.$api.auth.pageMedia(12, this.currentPage).then(data => {
+      this.$api.auth.pageMedia(12, this.currentPage).then((data) => {
         this.mediaDatas = data.data.list
         this.total = data.data.total
         this.pageSize = data.data.pageSize
@@ -72,12 +72,12 @@ export default {
       if (response.success) {
         this.init()
       }
-    }
+    },
   },
   mounted() {
     this.currentPage = Number(this.$route.query.page) || 1
     this.init()
-  }
+  },
 }
 </script>
 

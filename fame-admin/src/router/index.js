@@ -24,7 +24,7 @@ const router = new Router({
     {
       path: '/login',
       name: 'Login',
-      component: Login
+      component: Login,
     },
     {
       path: '/',
@@ -35,71 +35,71 @@ const router = new Router({
         {
           path: 'dashboard',
           name: 'Dashboard',
-          component: Dashboard
+          component: Dashboard,
         },
         {
           path: 'post/publish/:id',
           name: 'PostEdit',
-          component: PostEdit
+          component: PostEdit,
         },
         {
           path: 'post/publish',
           name: 'PostNew',
-          component: PostEdit
+          component: PostEdit,
         },
         {
           path: 'post',
           name: 'PostList',
-          component: PostList
+          component: PostList,
         },
         {
           path: 'comment',
           name: 'CommentList',
-          component: CommentList
+          component: CommentList,
         },
         {
           path: 'meta',
           name: 'MetaList',
-          component: MetaList
+          component: MetaList,
         },
         {
           path: 'media',
           name: 'MediaList',
-          component: MediaList
+          component: MediaList,
         },
         {
           path: 'note',
           name: 'NoteList',
-          component: NoteList
+          component: NoteList,
         },
         {
           path: 'note/publish/:id',
           name: 'NoteEdit',
-          component: NoteEdit
+          component: NoteEdit,
         },
         {
           path: 'note/publish',
           name: 'NoteNew',
-          component: NoteEdit
+          component: NoteEdit,
         },
         {
           path: 'setting',
           name: 'Setting',
-          component: Setting
-        }
-      ]
+          component: Setting,
+        },
+      ],
     },
     {
       path: '/error/:state/:message',
       name: 'ErrorMessage',
-      component: Error
+      component: Error,
     },
     {
       path: '*',
       name: 'Error',
-      component: Error
-    }
-  ]
+      component: Error,
+    },
+  ],
 })
 
 export default router
