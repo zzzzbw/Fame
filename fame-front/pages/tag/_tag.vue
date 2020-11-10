@@ -33,9 +33,6 @@
 
 <script type="text/ecmascript-6">
 export default {
-  fetch ({ store }) {
-    return store.dispatch('getTags')
-  },
   data() {
     return {
       postInfos: [],
@@ -43,6 +40,12 @@ export default {
       activeTag: '',
       show: false
     }
+  },
+  fetch ({ store }) {
+    return store.dispatch('getTags')
+  },
+  head () {
+    return { title: `标签` }
   },
   computed: {
     tags () {
@@ -77,9 +80,6 @@ export default {
         this.show = true
       }
     }
-  },
-  head () {
-    return { title: `标签` }
   }
 }
 </script>

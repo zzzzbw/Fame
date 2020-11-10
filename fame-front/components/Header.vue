@@ -3,7 +3,7 @@
     <div class="header-container">
       <nuxt-link class="logo" :to="'/'">
         <img src="/logo.png" width="26px" height="26px" />
-        <span class="text-primary" style="margin-left: 10px;">{{
+        <span class="text-primary" style="margin-left: 10px">{{
           options.blog_name || 'Fame'
         }}</span>
       </nuxt-link>
@@ -14,7 +14,7 @@
       </ul>
       <div class="header-menu">
         <div class="header-menu-icon" @click="toggle">
-          <span class="icon-th-list" style="font-size: 24px;"></span>
+          <span class="icon-th-list" style="font-size: 24px"></span>
         </div>
         <div class="header-menu-list" :class="{ open: menuOpen }">
           <ul>

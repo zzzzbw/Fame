@@ -41,6 +41,9 @@ export default {
   fetch ({ store }) {
     return store.dispatch('getCategories')
   },
+  head () {
+    return { title: `分类` }
+  },
   computed: {
     categories () {
       return this.$store.state.category.data
@@ -50,9 +53,6 @@ export default {
     goAnchor (id) {
       this.$util.goAnchor(id)
     }
-  },
-  head () {
-    return { title: `分类` }
   }
 }
 </script>

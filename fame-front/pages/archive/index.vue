@@ -34,13 +34,13 @@ export default {
   fetch({ store }) {
     return store.dispatch('getArchive')
   },
+  head() {
+    return { title: `归档` }
+  },
   computed: {
     archives() {
       return this.$store.state.archive.data
     },
-  },
-  head() {
-    return { title: `归档` }
   },
 }
 </script>

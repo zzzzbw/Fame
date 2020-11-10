@@ -42,14 +42,17 @@ export default {
     Comment,
     BigImg
   },
-  fetch ({ store, params }) {
-    return store.dispatch('getPost', params.id)
-  },
   data () {
     return {
       isBigImg: false,
       img: ''
     }
+  },
+  fetch ({ store, params }) {
+    return store.dispatch('getPost', params.id)
+  },
+  head () {
+    return { title: `${this.post.title}` }
   },
   computed: {
     post () {
@@ -92,9 +95,6 @@ export default {
         document.getElementsByClassName('markdown-toc')[0].style.opacity = 1
       }, 500)
     }
-  },
-  head () {
-    return { title: `${this.post.title}` }
   }
 }
 </script>

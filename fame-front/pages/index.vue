@@ -55,7 +55,6 @@
 
 <script type="text/ecmascript-6">
 export default {
-  watchQuery: ['page'],
   key: (to) => to.fullPath,
   transition(to, from) {
     return 'move'
@@ -68,6 +67,9 @@ export default {
     }
     return store.dispatch('getPosts', params)
   },
+  head() {
+    return { title: `Blog` }
+  },
   computed: {
     posts() {
       return this.$store.state.post.list.data
@@ -79,9 +81,7 @@ export default {
       return this.$store.state.post.list.currentPage
     }
   },
-  head() {
-    return { title: `Blog` }
-  }
+  watchQuery: ['page']
 }
 </script>
 

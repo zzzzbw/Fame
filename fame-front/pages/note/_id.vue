@@ -17,14 +17,17 @@ export default {
     Comment,
     BigImg
   },
-  fetch ({ store, params }) {
-    return store.dispatch('getNote', params.id)
-  },
   data () {
     return {
       showDialog: false,
       img: ''
     }
+  },
+  fetch ({ store, params }) {
+    return store.dispatch('getNote', params.id)
+  },
+  head () {
+    return { title: `${this.note.title}` }
   },
   computed: {
     note () {
@@ -47,9 +50,6 @@ export default {
         })
       }
     }
-  },
-  head () {
-    return { title: `${this.note.title}` }
   }
 }
 </script>
