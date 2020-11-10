@@ -16,39 +16,39 @@ export default {
       { 'http-equiv': 'Cache-Control' },
       {
         name: 'viewport',
-        content: 'width=device-width, initial-scale=1, user-scalable=no'
+        content: 'width=device-width, initial-scale=1, user-scalable=no',
       },
       {
         hid: 'description',
         name: 'description',
-        content: defaultConfig.meta_description
+        content: defaultConfig.meta_description,
       },
       {
         hid: 'keywords',
         name: 'keywords',
-        content: defaultConfig.meta_keywords
+        content: defaultConfig.meta_keywords,
       },
       { hid: 'author', name: 'author', content: defaultConfig.meta_author },
       {
         hid: 'google-site-verification',
         name: 'google-site-verification',
-        content: defaultConfig.google_site_verification
+        content: defaultConfig.google_site_verification,
       },
       {
         hid: 'baidu-site-verification',
         name: 'baidu-site-verification',
-        content: defaultConfig.baidu_site_verification
-      }
+        content: defaultConfig.baidu_site_verification,
+      },
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       {
         rel: 'stylesheet',
         type: 'text/css',
-        href: 'https://fonts.font.im/css?family=Roboto|Source+Code+Pro'
-      }
+        href: 'https://fonts.googleapis.com/css?family=Bree+Serif',
+      },
     ],
-    noscript: [{ innerHTML: 'This website requires JavaScript.' }]
+    noscript: [{ innerHTML: 'This website requires JavaScript.' }],
   },
   /*
    ** Global CSS
@@ -69,12 +69,12 @@ export default {
     { src: '~plugins/ga.js', mode: 'client' },
     { src: '~plugins/filters.js' },
     { src: '~plugins/global.js' },
-    { src: '~plugins/tools.js' }
+    { src: '~plugins/tools.js' },
   ],
   router: {
     linkActiveClass: 'active',
     // nuxt 的bug,scrollToTop不生效，要重写scrollBehavior方法
-    scrollBehavior: function(to, from, savedPosition) {
+    scrollBehavior(to, from, savedPosition) {
       if (savedPosition) {
         return savedPosition
       } else {
@@ -82,7 +82,7 @@ export default {
         if (to.matched.length < 2) {
           position = { x: 0, y: 0 }
         } else if (
-          to.matched.some(r => r.components.default.options.scrollToTop)
+          to.matched.some((r) => r.components.default.options.scrollToTop)
         ) {
           position = { x: 0, y: 0 }
         }
@@ -91,16 +91,16 @@ export default {
         }
         return position
       }
-    }
+    },
   },
   /*
    ** Customize the progress bar color
    */
   loading: {
-    color: '#5764c6'
+    color: '#5764c6',
   },
   env: {
-    NODE_ENV: process.env.NODE_ENV
+    NODE_ENV: process.env.NODE_ENV,
   },
   /*
    ** Build configuration
@@ -116,9 +116,9 @@ export default {
           enforce: 'pre',
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
-          exclude: /(node_modules)/
+          exclude: /(node_modules)/,
         })
       }
-    }
-  }
+    },
+  },
 }
