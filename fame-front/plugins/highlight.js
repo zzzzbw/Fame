@@ -27,6 +27,10 @@ hljs.registerLanguage(
   'typescript',
   require('highlight.js/lib/languages/typescript')
 )
+hljs.registerLanguage(
+  'powershell',
+  require('highlight.js/lib/languages/powershell')
+)
 
 // export default hljs
 export function highlight(el) {
