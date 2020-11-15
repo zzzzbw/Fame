@@ -278,6 +278,7 @@ table tr td:last-child {
   font-family: Consolas, Roboto, monospace !important;
   font-size: 0.92rem;
   background-color: #f7f7f7;
+  word-break: break-word;
 }
 
 /* heighlight. */
