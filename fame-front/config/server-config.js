@@ -20,7 +20,7 @@ switch (config.env) {
     }
     break
   default:
-    config.url = 'http://127.0.0.1:9090'
+    config.url = 'http://localhost:9090'
     config.proxy = false
 }
 
