@@ -71,16 +71,15 @@ export default {
   methods: {
     markdownFullScreen(status) {
       if (status) {
-        this.$root.$emit('indexUp')
+        this.$root.$emit('index-up')
       } else {
-        this.$root.$emit('indexDown')
+        this.$root.$emit('index-down')
       }
     },
   },
   watch: {
     value(val) {
-      this.value = val
-      this.content = this.value
+      this.content = val
     },
     content() {
       this.$emit('change', this.content)

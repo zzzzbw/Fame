@@ -124,7 +124,7 @@
                           this.$serverConfig.frontUrl + 'post/' + this.post.id
                         "
                         target="_blank"
-                        style="color: #ffffff;"
+                        style="color: #ffffff"
                         >查看</a
                       >
                     </el-button>
@@ -148,7 +148,7 @@
       <div class="media-list">
         <el-row>
           <el-col
-            style="padding: 6px;"
+            style="padding: 6px"
             :xs="24"
             :sm="12"
             :md="12"

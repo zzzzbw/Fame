@@ -11,7 +11,7 @@
     <div @click="showDetailDialog(media.id)">
       <span class="media-title">{{ media.name }}</span>
     </div>
-    <div style="margin-bottom: 14px;">
+    <div style="margin-bottom: 14px">
       <el-button-group>
         <el-button
           size="mini"

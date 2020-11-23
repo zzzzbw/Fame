@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-table :data="commentDatas" border style="width: 100%;">
+    <el-table :data="commentDatas" border style="width: 100%">
       <el-table-column prop="id" label="id" width="60"></el-table-column>
       <el-table-column
         prop="name"
@@ -25,7 +25,7 @@
       >
         <template slot-scope="scope">
           <i class="el-icon-time"></i>
-          <span style="margin-left: 10px;">{{ scope.row.created }}</span>
+          <span style="margin-left: 10px">{{ scope.row.created }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="150">

@@ -10,7 +10,7 @@
           <div class="icon">
             <i class="el-icon-tickets"></i>
           </div>
-          <div style="clear: both;"></div>
+          <div style="clear: both"></div>
         </el-card>
       </el-col>
       <el-col :xs="24" :sm="12" :md="12" :lg="12">
@@ -22,7 +22,7 @@
           <div class="icon red">
             <i class="el-icon-chat-line-round"></i>
           </div>
-          <div style="clear: both;"></div>
+          <div style="clear: both"></div>
         </el-card>
       </el-col>
     </el-row>

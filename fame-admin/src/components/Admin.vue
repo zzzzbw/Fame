@@ -44,8 +44,8 @@ export default {
         }
     },
     created() {
-        this.$root.$on('indexDown', this.indexDown)
-        this.$root.$on('indexUp', this.indexUp)
+        this.$root.$on('index-down', this.indexDown)
+        this.$root.$on('index-up', this.indexUp)
     }
 }
 </script>
