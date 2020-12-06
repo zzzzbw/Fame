@@ -19,7 +19,7 @@
       </el-row>
     </div>
     <pagination
-      @changePage="changePage"
+      @change-page="changePage"
       :pageSize="pageSize"
       :total="total"
     ></pagination>

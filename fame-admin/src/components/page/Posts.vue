@@ -147,7 +147,7 @@
       </el-table-column>
     </el-table>
     <pagination
-      @changePage="changePage"
+      @change-page="changePage"
       :pageSize="pageSize"
       :total="total"
     ></pagination>

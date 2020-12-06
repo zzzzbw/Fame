@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     changePage() {
-      this.$emit('changePage', this.currentPage)
+      this.$emit('change-page', this.currentPage)
     },
   },
   created() {},

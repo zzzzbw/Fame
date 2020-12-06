@@ -90,7 +90,7 @@
       </el-row>
     </el-dialog>
     <pagination
-      @changePage="changePage"
+      @change-page="changePage"
       :pageSize="pageSize"
       :total="total"
     ></pagination>
