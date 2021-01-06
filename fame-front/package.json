@@ -16,7 +16,7 @@
     "cross-env": "^7.0.2",
     "@nuxtjs/feed": "^2.0.0",
     "@nuxtjs/sitemap": "^2.4.0",
-    "axios": "0.21.0",
+    "axios": "0.21.1",
     "gravatar": "^1.8.1",
     "highlight.js": "^10.3.2",
     "nuxt": "^2.14.7",
