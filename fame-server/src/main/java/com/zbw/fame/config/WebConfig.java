@@ -40,7 +40,7 @@ public class WebConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
                         .allowCredentials(true)
-                        .allowedOrigins("*")
+                        .allowedOriginPatterns("*")
                         .allowedMethods("GET", "POST", "PUT", "DELETE");
             }
 
