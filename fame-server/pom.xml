@@ -34,12 +34,6 @@
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
 
-        <!-- cache -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-cache</artifactId>
-        </dependency>
-
         <!-- h2数据库 -->
         <dependency>
             <groupId>com.h2database</groupId>
@@ -74,7 +68,7 @@
             </exclusions>
         </dependency>
 
-        <!-- springfox-swagger2 -->
+        <!-- springfox-swagger -->
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>

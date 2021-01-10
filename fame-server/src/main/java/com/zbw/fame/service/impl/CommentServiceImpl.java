@@ -18,14 +18,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,8 +40,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class CommentServiceImpl implements CommentService {
 
-    public static final String COMMENT_CACHE_NAME = "comments";
-
     private final CommentRepository commentRepository;
 
     private final ArticleRepository<Article> articleRepository;
@@ -56,28 +52,26 @@ public class CommentServiceImpl implements CommentService {
 
 
     @Override
-    @Transactional(rollbackFor = Throwable.class)
-    @CacheEvict(value = {COMMENT_CACHE_NAME, AbstractArticleServiceImpl.ARTICLE_CACHE_NAME}, allEntries = true, beforeInvocation = true)
-    public void save(Comment comment) {
+    @Transactional(rollbackFor = Throwable.class)  public void save(Comment comment) {
         if (null == comment) {
             throw new TipException("评论对象为空");
         }
-        if (StringUtils.isEmpty(comment.getContent())) {
+        if (ObjectUtils.isEmpty(comment.getContent())) {
             throw new TipException("评论不能为空");
         }
         if (comment.getContent().length() > FameConsts.MAX_COMMENT_CONTENT_COUNT) {
             throw new TipException("评论字数不能超过" + FameConsts.MAX_COMMENT_CONTENT_COUNT);
         }
-        if (StringUtils.isEmpty(comment.getName())) {
+        if (ObjectUtils.isEmpty(comment.getName())) {
             throw new TipException("名称不能为空");
         }
         if (comment.getName().length() > FameConsts.MAX_COMMENT_NAME_COUNT) {
             throw new TipException("名称字数不能超过" + FameConsts.MAX_COMMENT_NAME_COUNT);
         }
-        if (!StringUtils.isEmpty(comment.getEmail()) && comment.getEmail().length() > FameConsts.MAX_COMMENT_EMAIL_COUNT) {
+        if (!ObjectUtils.isEmpty(comment.getEmail()) && comment.getEmail().length() > FameConsts.MAX_COMMENT_EMAIL_COUNT) {
             throw new TipException("邮箱字数不能超过" + FameConsts.MAX_COMMENT_EMAIL_COUNT);
         }
-        if (!StringUtils.isEmpty(comment.getWebsite()) && comment.getWebsite().length() > FameConsts.MAX_COMMENT_WEBSITE_COUNT) {
+        if (!ObjectUtils.isEmpty(comment.getWebsite()) && comment.getWebsite().length() > FameConsts.MAX_COMMENT_WEBSITE_COUNT) {
             throw new TipException("网址长度不能超过" + FameConsts.MAX_COMMENT_WEBSITE_COUNT);
         }
 
@@ -95,8 +89,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    @Cacheable(value = COMMENT_CACHE_NAME, key = "'article_comments['+#page+':'+#limit+':'+#articleId+']'")
-    public Page<Comment> getCommentsByArticleId(Integer page, Integer limit, Integer articleId) {
+      public Page<Comment> getCommentsByArticleId(Integer page, Integer limit, Integer articleId) {
         Comment record = new Comment();
         record.setArticleId(articleId);
         record.setStatus(CommentStatus.NORMAL);
@@ -124,7 +117,6 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    @Cacheable(value = COMMENT_CACHE_NAME, key = "'comment_detail['+#id+']'")
     public CommentDto getCommentDetail(Integer id) {
         Comment entity = commentRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(Comment.class));
@@ -143,9 +135,7 @@ public class CommentServiceImpl implements CommentService {
 
 
     @Override
-    @Transactional(rollbackFor = Throwable.class)
-    @CacheEvict(value = COMMENT_CACHE_NAME, allEntries = true, beforeInvocation = true)
-    public void deleteComment(Integer id) {
+    @Transactional(rollbackFor = Throwable.class)    public void deleteComment(Integer id) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(Comment.class));
 
@@ -171,9 +161,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    @Transactional(rollbackFor = Throwable.class)
-    @CacheEvict(value = COMMENT_CACHE_NAME, allEntries = true, beforeInvocation = true)
-    public int deleteCommentByArticleId(Integer articleId) {
+    @Transactional(rollbackFor = Throwable.class)    public int deleteCommentByArticleId(Integer articleId) {
         Comment record = new Comment();
         record.setArticleId(articleId);
         List<Comment> list = commentRepository.findAll(Example.of(record));
@@ -185,9 +173,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    @Transactional(rollbackFor = Throwable.class)
-    @CacheEvict(value = COMMENT_CACHE_NAME, allEntries = true, beforeInvocation = true)
-    public void assessComment(Integer commentId, CommentAssessType assess) {
+    @Transactional(rollbackFor = Throwable.class)    public void assessComment(Integer commentId, CommentAssessType assess) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundException(Comment.class));
 
@@ -202,7 +188,6 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    @Cacheable(value = COMMENT_CACHE_NAME, key = "'comment_count'")
     public Long count() {
         Comment record = new Comment();
         record.setStatus(CommentStatus.NORMAL);

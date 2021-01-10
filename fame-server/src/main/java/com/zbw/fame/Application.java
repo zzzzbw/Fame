@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 @SpringBootApplication
 @EnableAsync
-@EnableCaching
 @EnableTransactionManagement
 public class Application {
 

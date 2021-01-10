@@ -3,7 +3,6 @@ package com.zbw.fame.service.impl;
 import com.zbw.fame.exception.NotFoundException;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.model.domain.Note;
-import com.zbw.fame.model.domain.Post;
 import com.zbw.fame.model.dto.NoteInfo;
 import com.zbw.fame.model.enums.ArticleStatus;
 import com.zbw.fame.model.enums.LogType;
@@ -15,11 +14,9 @@ import com.zbw.fame.service.OptionService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -50,7 +47,6 @@ public class NoteServiceImpl extends AbstractArticleServiceImpl<Note> implements
     }
 
 
-    @Cacheable(value = ARTICLE_CACHE_NAME, key = "'front_notes'")
     @Override
     public List<NoteInfo> getFrontNoteList() {
         List<Note> noteList = articleRepository.findAllByStatus(ArticleStatus.PUBLISH, FameUtil.sortDescBy("priority", "id"));
@@ -59,20 +55,19 @@ public class NoteServiceImpl extends AbstractArticleServiceImpl<Note> implements
 
 
     @Transactional(rollbackFor = Throwable.class)
-    @CacheEvict(value = ARTICLE_CACHE_NAME, allEntries = true, beforeInvocation = true)
     @Override
     public Integer save(Note note) {
         if (null == note) {
             throw new TipException("自定义页面对象为空");
         }
-        if (StringUtils.isEmpty(note.getTitle())) {
+        if (ObjectUtils.isEmpty(note.getTitle())) {
             throw new TipException("自定义页面标题不能为空");
         }
         if (note.getTitle().length() > FameConsts.MAX_TITLE_COUNT) {
             throw new TipException("自定义页面标题字数不能超过" + FameConsts.MAX_TITLE_COUNT);
         }
 
-        if (StringUtils.isEmpty(note.getContent())) {
+        if (ObjectUtils.isEmpty(note.getContent())) {
             throw new TipException("自定义页面内容不能为空");
         }
         if (note.getContent().length() > FameConsts.MAX_CONTENT_COUNT) {
@@ -99,7 +94,6 @@ public class NoteServiceImpl extends AbstractArticleServiceImpl<Note> implements
 
 
     @Transactional(rollbackFor = Throwable.class)
-    @CacheEvict(value = ARTICLE_CACHE_NAME, allEntries = true, beforeInvocation = true)
     @Override
     public void delete(Integer id) {
         Note note = articleRepository.findById(id)

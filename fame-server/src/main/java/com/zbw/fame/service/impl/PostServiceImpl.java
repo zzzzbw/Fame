@@ -12,11 +12,9 @@ import com.zbw.fame.service.*;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
+import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -56,20 +54,19 @@ public class PostServiceImpl extends AbstractArticleServiceImpl<Post> implements
 
 
     @Transactional(rollbackFor = Throwable.class)
-    @CacheEvict(value = ARTICLE_CACHE_NAME, allEntries = true, beforeInvocation = true)
     @Override
     public Integer save(Post post) {
         if (null == post) {
             throw new TipException("文章对象为空");
         }
-        if (StringUtils.isEmpty(post.getTitle())) {
+        if (ObjectUtils.isEmpty(post.getTitle())) {
             throw new TipException("文章标题不能为空");
         }
         if (post.getTitle().length() > FameConsts.MAX_TITLE_COUNT) {
             throw new TipException("文章标题字数不能超过" + FameConsts.MAX_TITLE_COUNT);
         }
 
-        if (StringUtils.isEmpty(post.getContent())) {
+        if (ObjectUtils.isEmpty(post.getContent())) {
             throw new TipException("文章内容不能为空");
         }
         if (post.getContent().length() > FameConsts.MAX_CONTENT_COUNT) {
@@ -99,7 +96,6 @@ public class PostServiceImpl extends AbstractArticleServiceImpl<Post> implements
 
 
     @Transactional(rollbackFor = Throwable.class)
-    @CacheEvict(value = ARTICLE_CACHE_NAME, allEntries = true, beforeInvocation = true)
     @Override
     public void delete(Integer id) {
         Post post = articleRepository.findById(id)
@@ -121,7 +117,6 @@ public class PostServiceImpl extends AbstractArticleServiceImpl<Post> implements
     }
 
     @Transactional(rollbackFor = Throwable.class)
-    @CacheEvict(value = ARTICLE_CACHE_NAME, allEntries = true, beforeInvocation = true)
     @Override
     public boolean updateHits(Integer postId, Integer hits) {
         Post post = articleRepository.findById(postId)
@@ -130,7 +125,6 @@ public class PostServiceImpl extends AbstractArticleServiceImpl<Post> implements
         return articleRepository.saveAndFlush(post) != null;
     }
 
-    @Cacheable(value = ARTICLE_CACHE_NAME, key = "'font_archives'")
     @Override
     public List<Archive> getArchives() {
         List<Post> posts = articleRepository.findAllByStatus(ArticleStatus.PUBLISH, FameUtil.sortDescById());

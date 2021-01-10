@@ -12,18 +12,15 @@ import com.zbw.fame.util.OptionKeys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
+import org.springframework.util.ObjectUtils;
 
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -37,7 +34,6 @@ import java.util.List;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public abstract class AbstractArticleServiceImpl<ARTICLE extends Article> implements ArticleService<ARTICLE> {
 
-    public static final String ARTICLE_CACHE_NAME = "articles";
 
     protected final ArticleRepository<ARTICLE> articleRepository;
 
@@ -45,7 +41,6 @@ public abstract class AbstractArticleServiceImpl<ARTICLE extends Article> implem
 
 
     @Override
-    @Cacheable(value = ARTICLE_CACHE_NAME, key = "'font_articles['+#page+':'+#limit+':'+#sort+']'")
     public Page<ARTICLE> pageFrontArticle(Integer page, Integer limit, List<String> sort) {
         Pageable pageable = PageRequest.of(page, limit, FameUtil.sortDescBy(sort));
         Page<ARTICLE> result = articleRepository.findAllByStatus(ArticleStatus.PUBLISH, pageable);
@@ -59,7 +54,6 @@ public abstract class AbstractArticleServiceImpl<ARTICLE extends Article> implem
     }
 
     @Override
-    @Cacheable(value = ARTICLE_CACHE_NAME, key = "'front_article['+#id+']'")
     public ARTICLE getFrontArticle(Integer id) {
         ARTICLE article = articleRepository.findByIdAndStatus(id, ArticleStatus.PUBLISH)
                 .orElseThrow(() -> new NotFoundException(FameUtil.getGenericClass(getClass())));
@@ -74,10 +68,10 @@ public abstract class AbstractArticleServiceImpl<ARTICLE extends Article> implem
             List<Predicate> predicates = new ArrayList<>();
 
             predicates.add(criteriaBuilder.notEqual(root.get("status"), ArticleStatus.DELETE));
-            if (!StringUtils.isEmpty(articleQuery.getStatus())) {
+            if (!ObjectUtils.isEmpty(articleQuery.getStatus())) {
                 predicates.add(criteriaBuilder.equal(root.get("status"), articleQuery.getStatus()));
             }
-            if (!StringUtils.isEmpty(articleQuery.getTitle())) {
+            if (!ObjectUtils.isEmpty(articleQuery.getTitle())) {
                 predicates.add(criteriaBuilder.like(root.get("title"), "%" + articleQuery.getTitle() + "%"));
             }
 
@@ -103,7 +97,6 @@ public abstract class AbstractArticleServiceImpl<ARTICLE extends Article> implem
 
 
     @Override
-    @Cacheable(value = ARTICLE_CACHE_NAME, key = "'article_count'")
     public long count() {
         return articleRepository.countByStatusNot(ArticleStatus.DELETE);
     }

@@ -8,14 +8,11 @@ import com.zbw.fame.repository.MiddleRepository;
 import com.zbw.fame.repository.PostRepository;
 import com.zbw.fame.service.CategoryService;
 import com.zbw.fame.service.MiddleService;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
-
-import static com.zbw.fame.service.impl.AbstractArticleServiceImpl.ARTICLE_CACHE_NAME;
 
 /**
  * @author zhangbowen
@@ -40,7 +37,6 @@ public class CategoryServiceImpl extends AbstractMetaServiceImpl<Category> imple
     }
 
     @Override
-    @CacheEvict(value = ARTICLE_CACHE_NAME, allEntries = true, beforeInvocation = true)
     @Transactional(rollbackFor = Throwable.class)
     public Integer delete(String name) {
         Integer metaId = super.delete(name);
@@ -59,7 +55,6 @@ public class CategoryServiceImpl extends AbstractMetaServiceImpl<Category> imple
 
 
     @Override
-    @CacheEvict(value = ARTICLE_CACHE_NAME, allEntries = true, beforeInvocation = true)
     @Transactional(rollbackFor = Throwable.class)
     public Category update(Integer id, String name) {
         Category category = super.update(id, name);
