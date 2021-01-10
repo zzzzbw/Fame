@@ -18,7 +18,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <flexmark.version>0.34.58</flexmark.version>
-        <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
+        <springfox-swagger2.version>3.0.0</springfox-swagger2.version>
     </properties>
 
     <dependencies>
