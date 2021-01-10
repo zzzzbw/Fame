@@ -1,10 +1,18 @@
 #datasource
 spring:
   datasource:
-    driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://fame-mysql:3306/fame?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:file:~/.fame/db/fame
     username: root
     password: root
+  h2:
+    console:
+      settings:
+        web-allow-others: false
+      path: /h2-console
+      enabled: false
+
   jpa:
     show-sql: false
 #log
@@ -14,4 +22,5 @@ logging:
     org:
       springframework:
         web: INFO
-  file: log/fame.log
+  file:
+    name: log/fame.log
