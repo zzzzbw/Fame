@@ -63,7 +63,7 @@ public class CommentController {
      * @return {@see RestResponse.ok()}
      */
     @DeleteMapping("{id}")
-    public RestResponse delete(@PathVariable Integer id) {
+    public RestResponse<RestResponse.Empty> delete(@PathVariable Integer id) {
         commentService.deleteComment(id);
         return RestResponse.ok();
     }

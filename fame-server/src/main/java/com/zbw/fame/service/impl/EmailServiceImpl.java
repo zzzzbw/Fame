@@ -16,6 +16,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import javax.mail.MessagingException;
@@ -99,7 +100,7 @@ public class EmailServiceImpl implements EmailService {
 
         String adminUserEmail = optionService.get(OptionKeys.EMAIL_USERNAME, "");
         // 如果是管理员的回复则不必通知管理员
-        return StringUtils.isEmpty(adminUserEmail) || !adminUserEmail.equals(email);
+        return ObjectUtils.isEmpty(adminUserEmail) || !adminUserEmail.equals(email);
     }
 
     /**
@@ -115,7 +116,7 @@ public class EmailServiceImpl implements EmailService {
         String website = optionService.get(OptionKeys.BLOG_WEBSITE);
 
         // 如果网址最后没有/,则补上
-        if (!StringUtils.isEmpty(website)
+        if (!ObjectUtils.isEmpty(website)
                 && website.lastIndexOf("/") != website.length()) {
             website = website + "/";
         }

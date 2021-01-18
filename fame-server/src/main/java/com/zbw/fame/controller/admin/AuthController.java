@@ -7,6 +7,7 @@ import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.RestResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,8 +39,8 @@ public class AuthController {
      * @return {@see RestResponse.ok()}
      */
     @PostMapping("login")
-    public RestResponse login(HttpServletResponse response, @RequestParam String username, @RequestParam String password, String rememberMe) {
-        if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
+    public RestResponse<RestResponse.Empty> login(HttpServletResponse response, @RequestParam String username, @RequestParam String password, String rememberMe) {
+        if (ObjectUtils.isEmpty(username) || ObjectUtils.isEmpty(password)) {
             return RestResponse.fail("用户名和密码不能为空");
         }
         User user = userService.login(username, password);
@@ -54,7 +55,7 @@ public class AuthController {
      * @return {@see RestResponse.ok()}
      */
     @PostMapping("logout")
-    public RestResponse logout() {
+    public RestResponse<RestResponse.Empty> logout() {
         request.getSession().removeAttribute(FameConsts.USER_SESSION_KEY);
         return RestResponse.ok();
     }
@@ -67,9 +68,9 @@ public class AuthController {
      * @return {@see Boolean}
      */
     @PostMapping("reset/password")
-    public RestResponse resetPassword(@RequestParam String oldPassword, @RequestParam String newPassword) {
+    public RestResponse<Boolean> resetPassword(@RequestParam String oldPassword, @RequestParam String newPassword) {
         User user = FameUtil.getLoginUser();
-        if (StringUtils.isEmpty(newPassword) || StringUtils.isEmpty(oldPassword)) {
+        if (ObjectUtils.isEmpty(newPassword) || ObjectUtils.isEmpty(oldPassword)) {
             return RestResponse.fail("填写数据不能为空");
         }
 
@@ -85,9 +86,9 @@ public class AuthController {
      * @return {@see Boolean}
      */
     @PostMapping("reset/user")
-    public RestResponse resetUser(@RequestParam String username, @RequestParam String email) {
+    public RestResponse<Boolean> resetUser(@RequestParam String username, @RequestParam String email) {
         User user = FameUtil.getLoginUser();
-        if (StringUtils.isEmpty(username) || StringUtils.isEmpty(email)) {
+        if (ObjectUtils.isEmpty(username) || ObjectUtils.isEmpty(email)) {
             return RestResponse.fail("填写数据不能为空");
         }
 

@@ -50,8 +50,8 @@ public class RestResponse<T> {
         this.msg = msg;
     }
 
-    public static RestResponse ok() {
-        return new RestResponse(true);
+    public static <T> RestResponse<T> ok() {
+        return new RestResponse<>(true);
     }
 
     public static <T> RestResponse<T> ok(T data) {
@@ -62,19 +62,22 @@ public class RestResponse<T> {
         return new RestResponse<>(true, data, code);
     }
 
-    public static RestResponse fail() {
-        return new RestResponse(false);
+    public static <T> RestResponse<T> fail() {
+        return new RestResponse<>(false);
     }
 
-    public static RestResponse fail(int code) {
-        return new RestResponse(false, code);
+    public static <T> RestResponse<T> fail(int code) {
+        return new RestResponse<>(false, code);
     }
 
-    public static RestResponse fail(String msg) {
-        return new RestResponse(false, msg);
+    public static <T> RestResponse<T> fail(String msg) {
+        return new RestResponse<>(false, msg);
     }
 
-    public static RestResponse fail(int code, String msg) {
-        return new RestResponse(false, code, msg);
+    public static <T> RestResponse<T> fail(int code, String msg) {
+        return new RestResponse<>(false, code, msg);
+    }
+
+    public static class Empty {
     }
 }

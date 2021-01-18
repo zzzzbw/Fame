@@ -6,6 +6,7 @@ import com.zbw.fame.model.enums.ArticleStatus;
 import com.zbw.fame.service.NoteService;
 import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.RestResponse;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,7 +46,7 @@ public class NoteController extends AbstractArticleController<Note> {
                              @RequestParam(value = "allowComment", defaultValue = "false") Boolean allowComment) {
         User user = FameUtil.getLoginUser();
         Note note = new Note();
-        if (!StringUtils.isEmpty(id)) {
+        if (!ObjectUtils.isEmpty(id)) {
             note.setId(id);
         }
         note.setTitle(title);

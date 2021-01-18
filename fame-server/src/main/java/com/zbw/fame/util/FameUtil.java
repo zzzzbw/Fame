@@ -16,6 +16,7 @@ import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.DigestUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -181,10 +182,10 @@ public class FameUtil {
      */
     public static String getSummary(String content, String flag) {
         int index = 0;
-        if (!StringUtils.isEmpty(flag)) {
+        if (!ObjectUtils.isEmpty(flag)) {
             index = FameUtil.ignoreCaseIndexOf(content, flag);
         }
-        if (StringUtils.isEmpty(flag) || -1 == index) {
+        if (ObjectUtils.isEmpty(flag) || -1 == index) {
             index = content.length() > FameConsts.MAX_SUMMARY_COUNT ? FameConsts.MAX_SUMMARY_COUNT : content.length();
         }
         return content.substring(0, index);
@@ -198,7 +199,7 @@ public class FameUtil {
      * @return html字符串
      */
     public static String mdToHtml(String md) {
-        if (StringUtils.isEmpty(md)) {
+        if (ObjectUtils.isEmpty(md)) {
             return "";
         }
 
@@ -366,7 +367,7 @@ public class FameUtil {
      * @return 文件名
      */
     public static String getFileBaseName(String fileName) {
-        if (StringUtils.isEmpty(fileName)) {
+        if (ObjectUtils.isEmpty(fileName)) {
             return "";
         }
         int index = fileName.lastIndexOf(".");
@@ -384,7 +385,7 @@ public class FameUtil {
      * @return 文件后缀
      */
     public static String getFileSuffix(String fileName) {
-        if (StringUtils.isEmpty(fileName)) {
+        if (ObjectUtils.isEmpty(fileName)) {
             return "";
         }
         int index = fileName.lastIndexOf(".");

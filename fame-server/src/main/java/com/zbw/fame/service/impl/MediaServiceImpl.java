@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -50,7 +51,7 @@ public class MediaServiceImpl implements MediaService {
         if (null == file || file.isEmpty()) {
             throw new TipException("上传文件不能为空");
         }
-        if (StringUtils.isEmpty(name)) {
+        if (ObjectUtils.isEmpty(name)) {
             throw new TipException("文件名不能为空");
         }
         if (name.length() > 255) {
@@ -124,7 +125,7 @@ public class MediaServiceImpl implements MediaService {
             }
         }
 
-        if (!StringUtils.isEmpty(media.getThumbUrl())) {
+        if (!ObjectUtils.isEmpty(media.getThumbUrl())) {
             Path thumbnailPath = uploadPath.resolve(media.getThumbUrl());
             if (Files.exists(thumbnailPath)) {
                 try {

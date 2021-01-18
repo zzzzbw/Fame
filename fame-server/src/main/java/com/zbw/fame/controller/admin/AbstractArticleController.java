@@ -56,7 +56,7 @@ public abstract class AbstractArticleController<ARTICLE extends Article> {
      * @return {@see RestResponse.ok()}
      */
     @DeleteMapping("{id}")
-    public RestResponse delete(@PathVariable Integer id) {
+    public RestResponse<RestResponse.Empty> delete(@PathVariable Integer id) {
         articleService.delete(id);
         return RestResponse.ok();
     }

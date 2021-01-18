@@ -17,6 +17,7 @@ import com.zbw.fame.util.FameUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
@@ -51,7 +52,7 @@ public abstract class AbstractMetaServiceImpl<META extends Meta> implements Meta
     @Override
     @Transactional(rollbackFor = Throwable.class)
     public META update(Integer id, String name) {
-        if (StringUtils.isEmpty(name)) {
+        if (ObjectUtils.isEmpty(name)) {
             throw new TipException("属性名不能为空");
         }
 
@@ -88,7 +89,7 @@ public abstract class AbstractMetaServiceImpl<META extends Meta> implements Meta
         }
         String[] nameArr = nameStr.split(",");
         for (String name : nameArr) {
-            if (StringUtils.isEmpty(name)) {
+            if (ObjectUtils.isEmpty(name)) {
                 continue;
             }
             if (!metaSet.contains(name)) {

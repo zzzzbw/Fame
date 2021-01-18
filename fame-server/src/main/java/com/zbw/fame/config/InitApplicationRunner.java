@@ -15,6 +15,7 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
@@ -215,10 +216,10 @@ public class InitApplicationRunner implements ApplicationRunner {
 
     private void createDefaultOptionIfAbsent() {
         log.info("Create default option...");
-        if (StringUtils.isEmpty(optionService.get(OptionKeys.EMAIL_SUBJECT))) {
+        if (ObjectUtils.isEmpty(optionService.get(OptionKeys.EMAIL_SUBJECT))) {
             optionService.save(OptionKeys.EMAIL_SUBJECT, FameConsts.DEFAULT_EMAIL_TEMPLATE_SUBJECT);
         }
-        if (StringUtils.isEmpty(optionService.get(OptionKeys.SUMMARY_FLAG))) {
+        if (ObjectUtils.isEmpty(optionService.get(OptionKeys.SUMMARY_FLAG))) {
             optionService.save(OptionKeys.SUMMARY_FLAG, FameConsts.DEFAULT_SUMMARY_FLAG);
         }
     }

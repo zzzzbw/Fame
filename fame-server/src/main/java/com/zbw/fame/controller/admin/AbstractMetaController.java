@@ -39,7 +39,7 @@ public abstract class AbstractMetaController<META extends Meta> {
      * @return {@see RestResponse.ok()}
      */
     @DeleteMapping
-    public RestResponse delete(@RequestParam String name) {
+    public RestResponse<RestResponse.Empty> delete(@RequestParam String name) {
         metaService.delete(name);
         return RestResponse.ok();
     }
@@ -51,7 +51,7 @@ public abstract class AbstractMetaController<META extends Meta> {
      * @return {@see RestResponse.ok()}
      */
     @PostMapping
-    public RestResponse save(@RequestParam String name) {
+    public RestResponse<RestResponse.Empty> save(@RequestParam String name) {
         metaService.save(name);
         return RestResponse.ok();
     }
@@ -64,7 +64,7 @@ public abstract class AbstractMetaController<META extends Meta> {
      * @return {@see RestResponse.ok()}
      */
     @PostMapping("{id}")
-    public RestResponse update(@PathVariable Integer id, @RequestParam String name) {
+    public RestResponse<RestResponse.Empty> update(@PathVariable Integer id, @RequestParam String name) {
         metaService.update(id, name);
         return RestResponse.ok();
     }

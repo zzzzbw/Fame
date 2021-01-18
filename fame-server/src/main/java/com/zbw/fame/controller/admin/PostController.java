@@ -6,6 +6,7 @@ import com.zbw.fame.model.enums.ArticleStatus;
 import com.zbw.fame.service.PostService;
 import com.zbw.fame.util.FameUtil;
 import com.zbw.fame.util.RestResponse;
+import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -52,7 +53,7 @@ public class PostController extends AbstractArticleController<Post> {
                              @RequestParam(value = "modified") Long modified) {
         User user = FameUtil.getLoginUser();
         Post post = new Post();
-        if (!StringUtils.isEmpty(id)) {
+        if (!ObjectUtils.isEmpty(id)) {
             post.setId(id);
         }
         post.setTitle(title);

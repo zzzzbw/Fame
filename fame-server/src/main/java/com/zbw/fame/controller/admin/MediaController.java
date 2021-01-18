@@ -76,7 +76,7 @@ public class MediaController {
      * @return {@see RestResponse.ok()}
      */
     @DeleteMapping("{id}")
-    public RestResponse delete(@PathVariable Integer id) {
+    public RestResponse<RestResponse.Empty> delete(@PathVariable Integer id) {
         mediaService.delete(id);
         return RestResponse.ok();
     }

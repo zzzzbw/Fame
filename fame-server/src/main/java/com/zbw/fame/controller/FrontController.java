@@ -42,8 +42,6 @@ public class FrontController {
 
     private final CommentService commentService;
 
-    private final EmailService emailService;
-
     private final OptionService optionService;
 
     /**
@@ -159,12 +157,12 @@ public class FrontController {
      * @return {@see RestResponse.ok()}
      */
     @PostMapping("comment")
-    public RestResponse addComment(@RequestParam Integer articleId,
-                                   @RequestParam(required = false) Integer parentId,
-                                   @RequestParam String content,
-                                   @RequestParam String name,
-                                   @RequestParam(required = false) String email,
-                                   @RequestParam(required = false) String website) {
+    public RestResponse<RestResponse.Empty> addComment(@RequestParam Integer articleId,
+                                                       @RequestParam(required = false) Integer parentId,
+                                                       @RequestParam String content,
+                                                       @RequestParam String name,
+                                                       @RequestParam(required = false) String email,
+                                                       @RequestParam(required = false) String website) {
         Comment comments = new Comment();
         comments.setArticleId(articleId);
         comments.setParentId(parentId);
@@ -188,7 +186,7 @@ public class FrontController {
      * @return {@see RestResponse.ok()}
      */
     @PostMapping("comment/{commentId}/assess")
-    public RestResponse assessComment(@PathVariable Integer commentId, @RequestParam CommentAssessType assess) {
+    public RestResponse<RestResponse.Empty> assessComment(@PathVariable Integer commentId, @RequestParam CommentAssessType assess) {
         commentService.assessComment(commentId, assess);
         return RestResponse.ok();
     }
