@@ -16,7 +16,13 @@ public class ArticleServiceTests extends BaseTests {
     private PostService postService;
 
     @Test
-    public void test1() {
+    public void getFrontArticle() {
         postService.getFrontArticle(100);
+    }
+
+    @Test
+    public void visitPost() throws InterruptedException {
+        postService.visitPost(1);
+        Thread.sleep(1000); // 等待异步线程完成
     }
 }

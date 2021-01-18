@@ -4,7 +4,10 @@ package com.zbw.fame.controller;
 import com.zbw.fame.model.domain.Comment;
 import com.zbw.fame.model.domain.Note;
 import com.zbw.fame.model.domain.Post;
-import com.zbw.fame.model.dto.*;
+import com.zbw.fame.model.dto.Archive;
+import com.zbw.fame.model.dto.MetaInfo;
+import com.zbw.fame.model.dto.NoteInfo;
+import com.zbw.fame.model.dto.Pagination;
 import com.zbw.fame.model.enums.CommentAssessType;
 import com.zbw.fame.service.*;
 import com.zbw.fame.util.FameConsts;
@@ -13,7 +16,6 @@ import com.zbw.fame.util.RestResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -68,21 +70,8 @@ public class FrontController {
     @GetMapping("post/{id}")
     public RestResponse<Post> post(@PathVariable Integer id) {
         Post post = postService.getFrontArticle(id);
-        this.updateHits(post);
+        postService.visitPost(post.getId());
         return RestResponse.ok(post);
-    }
-
-    /**
-     * 点击量添加
-     *
-     * @param post 文章实体
-     */
-    private void updateHits(Post post) {
-        int hits = post.getHits() + 1;
-        post.setHits(hits);
-        if (hits % FameConsts.CACHE_ARTICLE_HITS_SAVE == 0) {
-            postService.updateHits(post.getId(), hits);
-        }
     }
 
 
@@ -187,12 +176,7 @@ public class FrontController {
         comments.setAgent(FameUtil.getAgent());
         commentService.save(comments);
 
-        //发送邮件提醒
-        CommentDto commentDetail = commentService.getCommentDetail(comments.getId());
-        emailService.sendEmailToAdmin(commentDetail);
-        if (null != commentDetail.getParentComment() && !StringUtils.isEmpty(commentDetail.getParentComment().getEmail())) {
-            emailService.sendEmailToUser(commentDetail, commentDetail.getParentComment().getEmail());
-        }
+        commentService.newComment(comments.getId());
         return RestResponse.ok();
     }
 

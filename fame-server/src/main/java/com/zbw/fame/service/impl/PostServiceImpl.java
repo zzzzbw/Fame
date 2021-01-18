@@ -2,6 +2,7 @@ package com.zbw.fame.service.impl;
 
 import com.zbw.fame.exception.NotFoundException;
 import com.zbw.fame.exception.TipException;
+import com.zbw.fame.listener.event.PostHitsEvent;
 import com.zbw.fame.model.domain.Post;
 import com.zbw.fame.model.dto.Archive;
 import com.zbw.fame.model.dto.PostInfo;
@@ -12,6 +13,7 @@ import com.zbw.fame.service.*;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -36,6 +38,8 @@ public class PostServiceImpl extends AbstractArticleServiceImpl<Post> implements
 
     private final LogService logService;
 
+    private final ApplicationEventPublisher eventPublisher;
+
     private static String LOG_MESSAGE_CREATE_POST = "新建文章";
     private static String LOG_MESSAGE_DELETE_POST = "删除文章";
 
@@ -44,12 +48,14 @@ public class PostServiceImpl extends AbstractArticleServiceImpl<Post> implements
                            CategoryService categoryService,
                            TagService tagService,
                            CommentService commentService,
-                           LogService logService) {
+                           LogService logService,
+                           ApplicationEventPublisher eventPublisher) {
         super(articleRepository, optionService);
         this.categoryService = categoryService;
         this.tagService = tagService;
         this.commentService = commentService;
         this.logService = logService;
+        this.eventPublisher = eventPublisher;
     }
 
 
@@ -116,13 +122,20 @@ public class PostServiceImpl extends AbstractArticleServiceImpl<Post> implements
 
     }
 
+    @Override
+    public void visitPost(Integer postId) {
+        eventPublisher.publishEvent(new PostHitsEvent(this, postId));
+    }
+
     @Transactional(rollbackFor = Throwable.class)
     @Override
-    public boolean updateHits(Integer postId, Integer hits) {
-        Post post = articleRepository.findById(postId)
-                .orElseThrow(() -> new TipException("文章不能为空"));
-        post.setHits(hits);
-        return articleRepository.saveAndFlush(post) != null;
+    public void increaseHits(Integer postId, Integer hits) {
+
+        int update = articleRepository.increaseHits(postId, hits);
+        if (update < 1) {
+            log.info("post increaseHits fail! postId: {}", postId);
+            throw new TipException("文章更新点击量失败");
+        }
     }
 
     @Override

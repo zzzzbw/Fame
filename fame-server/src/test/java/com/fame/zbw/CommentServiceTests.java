@@ -63,4 +63,10 @@ public class CommentServiceTests extends BaseTests {
         emailService.sendEmailToAdmin(comment);
         Thread.sleep(2000);
     }
+
+    @Test
+    public void newComment() throws InterruptedException {
+        commentService.newComment(1);
+        Thread.sleep(2000);
+    }
 }

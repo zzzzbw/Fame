@@ -12,13 +12,20 @@ import java.util.List;
 public interface PostService extends ArticleService<Post> {
 
     /**
-     * 更新文章点击量
+     * 访问文章
      *
      * @param postId 文章id
-     * @param hits      点击量
-     * @return
      */
-    boolean updateHits(Integer postId, Integer hits);
+    void visitPost(Integer postId);
+
+
+    /**
+     * 增加文章点击量
+     *
+     * @param postId 文章id
+     * @param hits   点击量
+     */
+    void increaseHits(Integer postId, Integer hits);
 
 
     /**

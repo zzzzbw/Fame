@@ -75,4 +75,11 @@ public interface CommentService {
      * @return 数量
      */
     Long count();
+
+    /**
+     * 新增评论
+     *
+     * @param commentId 评论id
+     */
+    void newComment(Integer commentId);
 }

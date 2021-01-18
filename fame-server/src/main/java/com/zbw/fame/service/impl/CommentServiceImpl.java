@@ -2,6 +2,7 @@ package com.zbw.fame.service.impl;
 
 import com.zbw.fame.exception.NotFoundException;
 import com.zbw.fame.exception.TipException;
+import com.zbw.fame.listener.event.CommentNewEvent;
 import com.zbw.fame.model.domain.Article;
 import com.zbw.fame.model.domain.Comment;
 import com.zbw.fame.model.dto.CommentDto;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -46,13 +48,17 @@ public class CommentServiceImpl implements CommentService {
 
     private final LogService logService;
 
+    private final ApplicationEventPublisher eventPublisher;
+
+
     private static String LOG_MESSAGE_CREATE_COMMENT = "新建评论";
     private static String LOG_MESSAGE_DELETE_COMMENT = "删除评论";
     private static String LOG_MESSAGE_BATCH_DELETE_COMMENT = "批量删除评论";
 
 
     @Override
-    @Transactional(rollbackFor = Throwable.class)  public void save(Comment comment) {
+    @Transactional(rollbackFor = Throwable.class)
+    public void save(Comment comment) {
         if (null == comment) {
             throw new TipException("评论对象为空");
         }
@@ -89,7 +95,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-      public Page<Comment> getCommentsByArticleId(Integer page, Integer limit, Integer articleId) {
+    public Page<Comment> getCommentsByArticleId(Integer page, Integer limit, Integer articleId) {
         Comment record = new Comment();
         record.setArticleId(articleId);
         record.setStatus(CommentStatus.NORMAL);
@@ -135,7 +141,8 @@ public class CommentServiceImpl implements CommentService {
 
 
     @Override
-    @Transactional(rollbackFor = Throwable.class)    public void deleteComment(Integer id) {
+    @Transactional(rollbackFor = Throwable.class)
+    public void deleteComment(Integer id) {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(Comment.class));
 
@@ -161,7 +168,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    @Transactional(rollbackFor = Throwable.class)    public int deleteCommentByArticleId(Integer articleId) {
+    @Transactional(rollbackFor = Throwable.class)
+    public int deleteCommentByArticleId(Integer articleId) {
         Comment record = new Comment();
         record.setArticleId(articleId);
         List<Comment> list = commentRepository.findAll(Example.of(record));
@@ -173,7 +181,8 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    @Transactional(rollbackFor = Throwable.class)    public void assessComment(Integer commentId, CommentAssessType assess) {
+    @Transactional(rollbackFor = Throwable.class)
+    public void assessComment(Integer commentId, CommentAssessType assess) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new NotFoundException(Comment.class));
 
@@ -192,6 +201,11 @@ public class CommentServiceImpl implements CommentService {
         Comment record = new Comment();
         record.setStatus(CommentStatus.NORMAL);
         return commentRepository.count(Example.of(record));
+    }
+
+    @Override
+    public void newComment(Integer commentId) {
+        eventPublisher.publishEvent(new CommentNewEvent(this, commentId));
     }
 
 }

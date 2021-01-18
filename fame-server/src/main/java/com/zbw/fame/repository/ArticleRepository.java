@@ -7,8 +7,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
-import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +19,10 @@ import java.util.Optional;
  * @since 2019/6/24 10:14
  */
 public interface ArticleRepository<ARTICLE extends Article> extends JpaRepository<ARTICLE, Integer>, JpaSpecificationExecutor<ARTICLE> {
+
+    @Modifying
+    @Query("update Article set hits = hits + :hits where id = :id")
+    int increaseHits(@Param("id") Integer id, @Param("hits") int hits);
 
     /**
      * 根据id和状态查询文章
