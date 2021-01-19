@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * @author zhangbowen
+ * @author zzzzbw
  * @since 2019/7/9 17:37
  */
 public interface MediaService {

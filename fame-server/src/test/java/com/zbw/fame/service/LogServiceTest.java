@@ -1,18 +1,18 @@
-package com.fame.zbw;
+package com.zbw.fame.service;
 
 import com.zbw.fame.model.domain.Log;
-import com.zbw.fame.service.LogService;
+import com.zbw.fame.BaseTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 
 /**
- * @author zhangbowen
+ * @author zzzzbw
  * @since 2019/6/24 13:54
  */
 @Slf4j
-public class LogServiceTests extends BaseTests {
+public class LogServiceTest extends BaseTest {
 
     @Autowired
     private LogService logService;

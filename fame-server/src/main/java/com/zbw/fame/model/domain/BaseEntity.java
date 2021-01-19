@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * BaseModel类
  *
- * @author zbw
+ * @author zzzzbw
  * @since 2017/7/5 23:59
  */
 @MappedSuperclass

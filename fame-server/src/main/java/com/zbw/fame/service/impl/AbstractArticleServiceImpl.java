@@ -3,7 +3,7 @@ package com.zbw.fame.service.impl;
 import com.zbw.fame.exception.NotFoundException;
 import com.zbw.fame.model.domain.Article;
 import com.zbw.fame.model.enums.ArticleStatus;
-import com.zbw.fame.model.query.ArticleQuery;
+import com.zbw.fame.model.param.ArticleQuery;
 import com.zbw.fame.repository.ArticleRepository;
 import com.zbw.fame.service.ArticleService;
 import com.zbw.fame.service.OptionService;
@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * 文章 Service 实现类
  *
- * @author zbw
+ * @author zzzzbw
  * @since 2017/8/21 22:02
  */
 @Slf4j

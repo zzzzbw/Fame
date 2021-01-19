@@ -5,7 +5,7 @@ import com.zbw.fame.model.domain.Comment;
 /**
  * 发送邮件 Service 接口
  *
- * @author zbw
+ * @author zzzzbw
  * @since 2018/4/9 15:51
  */
 public interface EmailService {

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 /**
- * @author zbw
+ * @author zzzzbw
  * @since 2019-05-21 21:14
  */
 @Slf4j
@@ -35,7 +35,7 @@ public class OptionController {
      * 保存所有设置
      *
      * @param options 设置key-value
-     * @return {@see RestResponse.ok()}
+     * @return {@link RestResponse#ok()}
      */
     @PostMapping("save")
     public RestResponse<RestResponse.Empty> saveAllOptions(@RequestParam Map<String, String> options) {

@@ -4,7 +4,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 /**
- * @author zhangbowen
+ * @author zzzzbw
  * @since 2019/7/19 14:55
  */
 @Entity

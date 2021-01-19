@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * 文章信息Dto,用于一些列表页
  *
- * @author zbw
+ * @author zzzzbw
  * @since 2018/8/28 14:34
  */
 @Data

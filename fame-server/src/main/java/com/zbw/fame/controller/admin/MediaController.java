@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * @author zhangbowen
+ * @author zzzzbw
  * @since 2019/7/9 17:34
  */
 @Slf4j
@@ -73,7 +73,7 @@ public class MediaController {
      * 删除媒体文件
      *
      * @param id 媒体id
-     * @return {@see RestResponse.ok()}
+     * @return {@link RestResponse#ok()}
      */
     @DeleteMapping("{id}")
     public RestResponse<RestResponse.Empty> delete(@PathVariable Integer id) {

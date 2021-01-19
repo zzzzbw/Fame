@@ -1,17 +1,16 @@
-package com.fame.zbw;
+package com.zbw.fame.service;
 
-import com.zbw.fame.service.CategoryService;
-import com.zbw.fame.service.TagService;
+import com.zbw.fame.BaseTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * @author zhangbowen
+ * @author zzzzbw
  * @since 2019/6/24 13:54
  */
 @Slf4j
-public class MetaServiceTests extends BaseTests {
+public class MetaServiceTest extends BaseTest {
 
     @Autowired
     private CategoryService categoryService;

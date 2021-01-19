@@ -8,7 +8,7 @@ import javax.persistence.Entity;
 /**
  * 关联标签和文章的中间 Model
  *
- * @author zbw
+ * @author zzzzbw
  * @since 2017/9/17 23:37
  */
 @Entity

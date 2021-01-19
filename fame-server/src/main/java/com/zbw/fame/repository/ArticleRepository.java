@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * @author zhangbowen
+ * @author zzzzbw
  * @since 2019/6/24 10:14
  */
 public interface ArticleRepository<ARTICLE extends Article> extends JpaRepository<ARTICLE, Integer>, JpaSpecificationExecutor<ARTICLE> {

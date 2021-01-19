@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * @author zhangbowen
+ * @author zzzzbw
  * @since 2019/6/24 10:14
  */
 public interface MetaRepository<META extends Meta> extends JpaRepository<META, Integer> {

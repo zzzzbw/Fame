@@ -15,6 +15,7 @@ import com.zbw.fame.service.CommentService;
 import com.zbw.fame.service.LogService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -34,7 +35,7 @@ import java.util.stream.Collectors;
 /**
  * 评论 Service 实现类
  *
- * @author zbw
+ * @author zzzzbw
  * @since 2018/1/19 16:57
  */
 @Slf4j
@@ -58,30 +59,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    public void save(Comment comment) {
-        if (null == comment) {
-            throw new TipException("评论对象为空");
-        }
-        if (ObjectUtils.isEmpty(comment.getContent())) {
-            throw new TipException("评论不能为空");
-        }
-        if (comment.getContent().length() > FameConsts.MAX_COMMENT_CONTENT_COUNT) {
-            throw new TipException("评论字数不能超过" + FameConsts.MAX_COMMENT_CONTENT_COUNT);
-        }
-        if (ObjectUtils.isEmpty(comment.getName())) {
-            throw new TipException("名称不能为空");
-        }
-        if (comment.getName().length() > FameConsts.MAX_COMMENT_NAME_COUNT) {
-            throw new TipException("名称字数不能超过" + FameConsts.MAX_COMMENT_NAME_COUNT);
-        }
-        if (!ObjectUtils.isEmpty(comment.getEmail()) && comment.getEmail().length() > FameConsts.MAX_COMMENT_EMAIL_COUNT) {
-            throw new TipException("邮箱字数不能超过" + FameConsts.MAX_COMMENT_EMAIL_COUNT);
-        }
-        if (!ObjectUtils.isEmpty(comment.getWebsite()) && comment.getWebsite().length() > FameConsts.MAX_COMMENT_WEBSITE_COUNT) {
-            throw new TipException("网址长度不能超过" + FameConsts.MAX_COMMENT_WEBSITE_COUNT);
-        }
-
-
+    public void save(@NonNull Comment comment) {
         Article article = articleRepository.findById(comment.getArticleId())
                 .orElseThrow(() -> new NotFoundException(Article.class));
 

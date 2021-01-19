@@ -11,7 +11,7 @@ import javax.persistence.Entity;
 /**
  * 博文 Model
  *
- * @author zbw
+ * @author zzzzbw
  * @since 2019/7/21 19:24
  */
 @Entity

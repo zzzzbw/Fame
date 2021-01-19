@@ -1,16 +1,16 @@
-package com.fame.zbw;
+package com.zbw.fame.service;
 
-import com.zbw.fame.service.PostService;
+import com.zbw.fame.BaseTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
- * @author zhangbowen
+ * @author zzzzbw
  * @since 2019/6/24 18:23
  */
 @Slf4j
-public class ArticleServiceTests extends BaseTests {
+public class ArticleServiceTest extends BaseTest {
 
     @Autowired
     private PostService postService;

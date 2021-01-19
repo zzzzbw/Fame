@@ -8,7 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 
 /**
- * @author zhangbowen
+ * @author zzzzbw
  * @since 2019/7/9 16:09
  */
 @Entity

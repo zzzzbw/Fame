@@ -6,7 +6,7 @@ import lombok.Data;
 /**
  * 自定义页面Dto,通常用于前端目录
  *
- * @author zhangbowen
+ * @author zzzzbw
  * @since 2019/7/29 15:48
  */
 @Data

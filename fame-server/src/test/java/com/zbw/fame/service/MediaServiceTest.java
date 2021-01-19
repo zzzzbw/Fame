@@ -1,14 +1,13 @@
-package com.fame.zbw;
+package com.zbw.fame.service;
 
-import com.zbw.fame.service.MediaService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
+import com.zbw.fame.BaseTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,11 +17,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- * @author zhangbowen
+ * @author zzzzbw
  * @since 2019/7/9 17:58
  */
 @Slf4j
-public class MediaServiceTests extends BaseTests {
+public class MediaServiceTest extends BaseTest {
 
     @Autowired
     private MediaService mediaService;

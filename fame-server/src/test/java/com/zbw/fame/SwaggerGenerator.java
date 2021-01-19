@@ -1,15 +1,11 @@
-package com.fame.zbw;
+package com.zbw.fame;
 
-import com.zbw.fame.Application;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,16 +28,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * @author zbw
+ * @author zzzzbw
  * @since 2019/8/3 13:08
  */
 @Slf4j
-@AutoConfigureMockMvc
 @SpringBootTest(classes = {Application.class, SwaggerGenerator.SwaggerTestsConfig.class})
-public class SwaggerGenerator extends BaseTests {
-
-    @Autowired
-    private MockMvc mockMvc;
+public class SwaggerGenerator extends BaseMvcTest {
 
     private static final String SWAGGER_URL = "/v2/api-docs";
 

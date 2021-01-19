@@ -3,7 +3,7 @@ package com.zbw.fame.util;
 /**
  * 错误返回信息 Enum
  *
- * @author zbw
+ * @author zzzzbw
  * @since 2017/8/30 16:00
  */
 public enum ErrorCode {

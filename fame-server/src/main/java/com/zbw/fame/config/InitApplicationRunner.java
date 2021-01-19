@@ -22,7 +22,7 @@ import org.springframework.web.client.RestTemplate;
 /**
  * springboot初始化完成后执行的动作
  *
- * @author zbw
+ * @author zzzzbw
  * @since 2019/05/18 16:54
  */
 @Slf4j

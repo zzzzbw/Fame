@@ -6,7 +6,7 @@ import lombok.Data;
 /**
  * 网站设置 Dto
  *
- * @author zbw
+ * @author zzzzbw
  * @since 2017/10/15 21:48
  */
 @Data

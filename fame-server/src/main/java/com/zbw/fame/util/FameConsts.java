@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * 常量工具类
  *
- * @author zbw
+ * @author zzzzbw
  * @since 2017/7/9 22:21
  */
 public interface FameConsts {
@@ -49,28 +49,28 @@ public interface FameConsts {
     /**
      * 评论最大字数
      */
-    Integer MAX_COMMENT_CONTENT_COUNT = 1000;
+    int MAX_COMMENT_CONTENT_COUNT = 1023;
 
     /**
      * 评论名称最大字数
      */
-    Integer MAX_COMMENT_NAME_COUNT = 255;
+    int MAX_COMMENT_NAME_COUNT = 255;
 
     /**
      * 评论邮件最大字数
      */
-    Integer MAX_COMMENT_EMAIL_COUNT = 255;
+    int MAX_COMMENT_EMAIL_COUNT = 255;
 
     /**
      * 评论网址最大字数
      */
-    Integer MAX_COMMENT_WEBSITE_COUNT = 255;
+    int MAX_COMMENT_WEBSITE_COUNT = 255;
 
 
     /**
      * 文章点击量缓存数
      */
-    Integer CACHE_ARTICLE_HITS_SAVE = 3;
+    int CACHE_ARTICLE_HITS_SAVE = 3;
 
 
     /**

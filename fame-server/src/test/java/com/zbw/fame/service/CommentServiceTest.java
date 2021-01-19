@@ -1,21 +1,19 @@
-package com.fame.zbw;
+package com.zbw.fame.service;
 
 import com.zbw.fame.model.domain.Comment;
 import com.zbw.fame.model.dto.Pagination;
-import com.zbw.fame.service.CommentService;
-import com.zbw.fame.service.EmailService;
+import com.zbw.fame.BaseTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
-import org.mockito.exceptions.misusing.CannotVerifyStubOnlyMock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 
 /**
- * @author zhangbowen
+ * @author zzzzbw
  * @since 2019/6/24 14:12
  */
 @Slf4j
-public class CommentServiceTests extends BaseTests {
+public class CommentServiceTest extends BaseTest {
 
     @Autowired
     private CommentService commentService;
@@ -68,5 +66,9 @@ public class CommentServiceTests extends BaseTests {
     public void newComment() throws InterruptedException {
         commentService.newComment(1);
         Thread.sleep(2000);
+    }
+
+    public void addCommentController() {
+
     }
 }

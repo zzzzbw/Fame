@@ -15,9 +15,7 @@ import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
-import org.springframework.util.DigestUtils;
-import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
+import org.springframework.util.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -29,7 +27,9 @@ import javax.imageio.stream.ImageOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyDescriptor;
 import java.io.*;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -37,11 +37,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * 公用工具类
  *
- * @author zbw
+ * @author zzzzbw
  * @since 2017/7/9 22:08
  */
 @Slf4j
@@ -76,7 +77,25 @@ public class FameUtil {
 
 
     /**
-     * 获取session中的users对象
+     * 设置User对象到登录缓存中
+     *
+     * @param user 登录用户
+     */
+    public static void setLoginUser(User user) {
+        HttpSession session = getSession();
+        session.setAttribute(FameConsts.USER_SESSION_KEY, user);
+    }
+
+    /**
+     * 清除登录中的用户
+     */
+    public static void clearLoginUser() {
+        HttpSession session = getSession();
+        session.removeAttribute(FameConsts.USER_SESSION_KEY);
+    }
+
+    /**
+     * 获取session中的User对象
      *
      * @return session中的用户
      */
@@ -276,7 +295,7 @@ public class FameUtil {
      * @param clz 类
      * @return 泛型类
      */
-    public static Class<?> getGenericClass(Class clz) {
+    public static Class<?> getGenericClass(Class<?> clz) {
         ParameterizedType parameterizedType = (ParameterizedType) clz.getGenericSuperclass();
         return (Class<?>) parameterizedType.getActualTypeArguments()[0];
     }
@@ -291,7 +310,7 @@ public class FameUtil {
      * @return 值
      */
     @SuppressWarnings("unchecked")
-    public static <T> T convertStringToType(String value, Class type) {
+    public static <T> T convertStringToType(String value, Class<?> type) {
         if (type.equals(Boolean.class) || type.equals(boolean.class)) {
             return (T) Boolean.valueOf(value);
         } else if (type.equals(Integer.class) || type.equals(int.class)) {
@@ -314,6 +333,29 @@ public class FameUtil {
     }
 
     /**
+     * 转换数据类型
+     *
+     * @param source    源对象
+     * @param targetClz 转换目标对象类
+     * @return 转换后对象
+     */
+    public static <T> T convertTo(Object source, Class<T> targetClz) {
+        if (null == source) {
+            return null;
+        }
+        T targetInstance;
+        try {
+            Constructor<T> tConstructor = ReflectionUtils.accessibleConstructor(targetClz);
+            targetInstance = tConstructor.newInstance();
+            copyPropertiesIgnoreNull(source, targetInstance);
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new TipException(e);
+        }
+        return targetInstance;
+    }
+
+    /**
      * 复制非Null的属性
      *
      * @param source 源对象
@@ -331,10 +373,10 @@ public class FameUtil {
      */
     public static String[] getNullPropertyNames(Object source) {
         final BeanWrapper src = new BeanWrapperImpl(source);
-        java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
+        PropertyDescriptor[] pds = src.getPropertyDescriptors();
 
-        Set<String> emptyNames = new HashSet<String>();
-        for (java.beans.PropertyDescriptor pd : pds) {
+        Set<String> emptyNames = new HashSet<>();
+        for (PropertyDescriptor pd : pds) {
             Object srcValue = src.getPropertyValue(pd.getName());
             if (srcValue == null) {
                 emptyNames.add(pd.getName());

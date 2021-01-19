@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * @author zhangbowen
+ * @author zzzzbw
  * @since 2019/6/24 10:14
  */
 public interface UserRepository extends JpaRepository<User, Integer> {

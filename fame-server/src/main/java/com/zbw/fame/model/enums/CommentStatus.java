@@ -3,7 +3,7 @@ package com.zbw.fame.model.enums;
 /**
  * 评论状态
  *
- * @author zhangbowen
+ * @author zzzzbw
  * @since 2019/7/30 13:57
  */
 public enum CommentStatus {

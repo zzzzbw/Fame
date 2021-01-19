@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * json通用返回类
  *
- * @author zbw
+ * @author zzzzbw
  * @since 2017/7/12 19:59
  */
 @Data

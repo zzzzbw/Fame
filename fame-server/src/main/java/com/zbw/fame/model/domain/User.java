@@ -11,7 +11,7 @@ import java.util.Date;
 /**
  * 用户 Model
  *
- * @author zbw
+ * @author zzzzbw
  * @since 2017/7/9 22:09
  */
 @Entity

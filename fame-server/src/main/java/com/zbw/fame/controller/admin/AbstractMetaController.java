@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * 属性(标签和分类)管理 Controller
  *
- * @author zbw
+ * @author zzzzbw
  * @since 2017/8/28 23:16
  */
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -36,10 +36,10 @@ public abstract class AbstractMetaController<META extends Meta> {
      * 根据name删除分类
      *
      * @param name 属性名
-     * @return {@see RestResponse.ok()}
+     * @return {@link RestResponse#ok()}
      */
-    @DeleteMapping
-    public RestResponse<RestResponse.Empty> delete(@RequestParam String name) {
+    @DeleteMapping("{name}")
+    public RestResponse<RestResponse.Empty> delete(@PathVariable String name) {
         metaService.delete(name);
         return RestResponse.ok();
     }
@@ -48,10 +48,10 @@ public abstract class AbstractMetaController<META extends Meta> {
      * 添加一个分类
      *
      * @param name 属性名
-     * @return {@see RestResponse.ok()}
+     * @return {@link RestResponse#ok()}
      */
-    @PostMapping
-    public RestResponse<RestResponse.Empty> save(@RequestParam String name) {
+    @PostMapping("{name}")
+    public RestResponse<RestResponse.Empty> save(@PathVariable String name) {
         metaService.save(name);
         return RestResponse.ok();
     }
@@ -61,10 +61,10 @@ public abstract class AbstractMetaController<META extends Meta> {
      *
      * @param id   属性id
      * @param name 新属性名
-     * @return {@see RestResponse.ok()}
+     * @return {@link RestResponse#ok()}
      */
-    @PostMapping("{id}")
-    public RestResponse<RestResponse.Empty> update(@PathVariable Integer id, @RequestParam String name) {
+    @PutMapping("{id}/{name}")
+    public RestResponse<RestResponse.Empty> update(@PathVariable Integer id, @PathVariable String name) {
         metaService.update(id, name);
         return RestResponse.ok();
     }

@@ -9,6 +9,7 @@ import com.zbw.fame.model.dto.MetaInfo;
 import com.zbw.fame.model.dto.NoteInfo;
 import com.zbw.fame.model.dto.Pagination;
 import com.zbw.fame.model.enums.CommentAssessType;
+import com.zbw.fame.model.param.AddCommentParam;
 import com.zbw.fame.service.*;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.FameUtil;
@@ -18,13 +19,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Map;
 
 /**
  * 博客前台 Controller
  *
- * @author zbw
+ * @author zzzzbw
  * @since 2017/7/15 18:29
  */
 @RestController
@@ -148,33 +150,13 @@ public class FrontController {
     /**
      * 发表评论
      *
-     * @param articleId 文章id
-     * @param parentId  父评论id
-     * @param content   评论内容
-     * @param name      评论用户名
-     * @param email     评论用户email
-     * @param website   评论用户网址
-     * @return {@see RestResponse.ok()}
+     * @return {@link RestResponse#ok()}
      */
     @PostMapping("comment")
-    public RestResponse<RestResponse.Empty> addComment(@RequestParam Integer articleId,
-                                                       @RequestParam(required = false) Integer parentId,
-                                                       @RequestParam String content,
-                                                       @RequestParam String name,
-                                                       @RequestParam(required = false) String email,
-                                                       @RequestParam(required = false) String website) {
-        Comment comments = new Comment();
-        comments.setArticleId(articleId);
-        comments.setParentId(parentId);
-        comments.setContent(content);
-        comments.setName(name);
-        comments.setEmail(email);
-        comments.setWebsite(website);
-        comments.setIp(FameUtil.getIp());
-        comments.setAgent(FameUtil.getAgent());
-        commentService.save(comments);
-
-        commentService.newComment(comments.getId());
+    public RestResponse<RestResponse.Empty> addComment(@RequestBody @Valid AddCommentParam param) {
+        Comment comment = FameUtil.convertTo(param, Comment.class);
+        commentService.save(comment);
+        commentService.newComment(comment.getId());
         return RestResponse.ok();
     }
 
@@ -183,7 +165,7 @@ public class FrontController {
      *
      * @param commentId 评论id
      * @param assess    点评类型 {@link CommentAssessType}
-     * @return {@see RestResponse.ok()}
+     * @return {@link RestResponse#ok()}
      */
     @PostMapping("comment/{commentId}/assess")
     public RestResponse<RestResponse.Empty> assessComment(@PathVariable Integer commentId, @RequestParam CommentAssessType assess) {

@@ -6,7 +6,7 @@ import com.zbw.fame.model.dto.NoteInfo;
 import java.util.List;
 
 /**
- * @author zbw
+ * @author zzzzbw
  * @since 2019/7/21 20:01
  */
 public interface NoteService extends ArticleService<Note> {

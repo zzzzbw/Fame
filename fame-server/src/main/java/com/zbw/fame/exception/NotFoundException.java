@@ -3,7 +3,7 @@ package com.zbw.fame.exception;
 import lombok.Getter;
 
 /**
- * @author zbw
+ * @author zzzzbw
  * @since 2019/8/11 14:14
  */
 @Getter

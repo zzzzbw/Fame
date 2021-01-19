@@ -1,6 +1,6 @@
 package com.zbw.fame.service;
 
-import com.zbw.fame.model.query.ArticleQuery;
+import com.zbw.fame.model.param.ArticleQuery;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * 文章 Service 接口
  *
- * @author zbw
+ * @author zzzzbw
  * @since 2017/8/21 22:01
  */
 public interface ArticleService<ARTICLE> {

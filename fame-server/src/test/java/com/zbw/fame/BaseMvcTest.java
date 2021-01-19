@@ -1,0 +1,52 @@
+package com.zbw.fame;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.Objects;
+
+/**
+ * @author by ZHANGBOWEN469
+ * @since 2021/01/20 14:13
+ */
+@AutoConfigureMockMvc
+public abstract class BaseMvcTest extends BaseTest {
+
+    @Autowired
+    protected MockMvc mockMvc;
+
+    protected MvcResult getJson(String url, Object... uriVars) {
+        try {
+            MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(url, uriVars)
+                    .accept(MediaType.APPLICATION_JSON);
+            return mockMvc.perform(builder)
+                    .andReturn();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected MvcResult postJson(String url, Object requestBody, Object... uriVars) {
+        try {
+
+            MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
+                    .post(url, uriVars)
+                    .accept(MediaType.APPLICATION_JSON);
+
+            if (!Objects.isNull(requestBody)) {
+                String content = new ObjectMapper().writeValueAsString(requestBody);
+                builder.content(content);
+            }
+            return mockMvc.perform(builder)
+                    .andReturn();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+}

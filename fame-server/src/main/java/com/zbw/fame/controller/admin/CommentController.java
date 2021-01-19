@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * 后台评论管理 Controller
  *
- * @author zbw
+ * @author zzzzbw
  * @since 2018/1/21 10:47
  */
 @RestController
@@ -60,7 +60,7 @@ public class CommentController {
      * 删除评论
      *
      * @param id 评论id
-     * @return {@see RestResponse.ok()}
+     * @return {@link RestResponse#ok()}
      */
     @DeleteMapping("{id}")
     public RestResponse<RestResponse.Empty> delete(@PathVariable Integer id) {

@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page;
 /**
  * 日志 Service 接口
  *
- * @author zbw
+ * @author zzzzbw
  * @since 2017/10/11 10:42
  */
 public interface LogService {

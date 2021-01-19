@@ -4,7 +4,7 @@ import com.zbw.fame.model.domain.Media;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * @author zhangbowen
+ * @author zzzzbw
  * @since 2019/7/09 17:45
  */
 public interface MediaRepository extends JpaRepository<Media, Integer> {

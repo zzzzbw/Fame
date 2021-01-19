@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 /**
- * @author zhangbowen
+ * @author zzzzbw
  * @since 2019/6/24 10:14
  */
 public interface MiddleRepository extends JpaRepository<Middle, Integer> {

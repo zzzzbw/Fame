@@ -10,7 +10,7 @@ import javax.persistence.*;
 /**
  * 评论 Model
  *
- * @author zbw
+ * @author zzzzbw
  * @since 2018/1/19 16:27
  */
 @Entity

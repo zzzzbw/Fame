@@ -2,7 +2,7 @@ package com.zbw.fame.controller.admin;
 
 import com.zbw.fame.model.dto.Pagination;
 import com.zbw.fame.model.domain.Article;
-import com.zbw.fame.model.query.ArticleQuery;
+import com.zbw.fame.model.param.ArticleQuery;
 import com.zbw.fame.service.ArticleService;
 import com.zbw.fame.util.FameConsts;
 import com.zbw.fame.util.RestResponse;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * 后台文章管理 Controller
  *
- * @author zbw
+ * @author zzzzbw
  * @since 2017/7/11 19:52
  */
 @RequiredArgsConstructor(onConstructor_ = @Autowired)

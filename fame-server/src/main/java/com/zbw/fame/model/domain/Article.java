@@ -8,7 +8,7 @@ import javax.persistence.*;
 /**
  * 文章 Model
  *
- * @author zbw
+ * @author zzzzbw
  * @since 2017/7/8 9:29
  */
 @Entity

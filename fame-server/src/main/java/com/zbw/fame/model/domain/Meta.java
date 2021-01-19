@@ -10,7 +10,7 @@ import javax.persistence.Entity;
 /**
  * 属性(分类和标签) Model
  *
- * @author zbw
+ * @author zzzzbw
  * @since 2017/8/28 23:04
  */
 @Entity

@@ -1,4 +1,4 @@
-package com.zbw.fame.controller;
+package com.zbw.fame.config;
 
 import com.zbw.fame.exception.NotFoundException;
 import com.zbw.fame.exception.NotLoginException;
@@ -8,7 +8,6 @@ import com.zbw.fame.util.RestResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
@@ -41,7 +40,7 @@ import java.io.IOException;
 /**
  * 全局异常处理 Controller
  *
- * @author zbw
+ * @author zzzzbw
  * @since 2017/8/30 12:25
  */
 @Slf4j
@@ -57,7 +56,7 @@ public class GlobalExceptionHandler {
      * @return {@link RestResponse}
      */
     @ExceptionHandler(value = TipException.class)
-    public RestResponse tipErrorHandler(HttpServletRequest req, TipException e) {
+    public RestResponse<RestResponse.Empty> tipErrorHandler(HttpServletRequest req, TipException e) {
         return RestResponse.fail(e.getMessage());
     }
 
@@ -69,7 +68,7 @@ public class GlobalExceptionHandler {
      * @return {@link RestResponse}
      */
     @ExceptionHandler(value = NotFoundException.class)
-    public RestResponse NotFoundErrorHandler(HttpServletRequest req, NotFoundException e) {
+    public RestResponse<RestResponse.Empty> NotFoundErrorHandler(HttpServletRequest req, NotFoundException e) {
         String message = "";
         if (null != e.getClz()) {
             message = e.getClz().getSimpleName();
@@ -86,7 +85,7 @@ public class GlobalExceptionHandler {
      * @return {@link RestResponse}
      */
     @ExceptionHandler(value = NotLoginException.class)
-    public RestResponse NotLoginErrorHandler(HttpServletRequest req, HttpServletResponse rep, NotLoginException e) {
+    public RestResponse<RestResponse.Empty> NotLoginErrorHandler(HttpServletRequest req, HttpServletResponse rep, NotLoginException e) {
         return RestResponse.fail(ErrorCode.NOT_LOGIN.getCode(), ErrorCode.NOT_LOGIN.getMsg());
     }
 
@@ -99,7 +98,7 @@ public class GlobalExceptionHandler {
      * @return {@link RestResponse}
      */
     @ExceptionHandler(RuntimeException.class)
-    public RestResponse runtimeExceptionHandler(HttpServletRequest req, HttpServletResponse rep, RuntimeException re) {
+    public RestResponse<RestResponse.Empty> runtimeExceptionHandler(HttpServletRequest req, HttpServletResponse rep, RuntimeException re) {
         log.error("---RuntimeException Handler---Host {}, invokes url {},  ERROR: {}", req.getRemoteHost(), req.getRequestURL(), re.getMessage(), re);
         rep.setStatus(ErrorCode.RUNTIME.getCode());
         return RestResponse.fail(ErrorCode.RUNTIME.getCode(), ErrorCode.RUNTIME.getMsg());
@@ -114,7 +113,7 @@ public class GlobalExceptionHandler {
      * @return {@link RestResponse}
      */
     @ExceptionHandler(NullPointerException.class)
-    public RestResponse nullPointerExceptionHandler(HttpServletRequest req, HttpServletResponse rep, NullPointerException ex) {
+    public RestResponse<RestResponse.Empty> nullPointerExceptionHandler(HttpServletRequest req, HttpServletResponse rep, NullPointerException ex) {
         log.error("---NullPointerException Handler---Host {}, invokes url {},  ERROR: {}", req.getRemoteHost(), req.getRequestURL(), ex.getMessage(), ex);
         rep.setStatus(ErrorCode.NULL_POINTER.getCode());
         return RestResponse.fail(ErrorCode.NULL_POINTER.getCode(), ErrorCode.NULL_POINTER.getMsg());
@@ -129,7 +128,7 @@ public class GlobalExceptionHandler {
      * @return {@link RestResponse}
      */
     @ExceptionHandler(ClassCastException.class)
-    public RestResponse classCastExceptionHandler(HttpServletRequest req, HttpServletResponse rep, ClassCastException ex) {
+    public RestResponse<RestResponse.Empty> classCastExceptionHandler(HttpServletRequest req, HttpServletResponse rep, ClassCastException ex) {
         log.error("---classCastException Handler---Host {}, invokes url {},  ERROR: {}", req.getRemoteHost(), req.getRequestURL(), ex.getMessage(), ex);
         rep.setStatus(ErrorCode.CLASS_CAST.getCode());
         return RestResponse.fail(ErrorCode.CLASS_CAST.getCode(), ErrorCode.CLASS_CAST.getMsg());
@@ -144,7 +143,7 @@ public class GlobalExceptionHandler {
      * @return {@link RestResponse}
      */
     @ExceptionHandler(IOException.class)
-    public RestResponse classCastExceptionHandler(HttpServletRequest req, HttpServletResponse rep, IOException ex) {
+    public RestResponse<RestResponse.Empty> classCastExceptionHandler(HttpServletRequest req, HttpServletResponse rep, IOException ex) {
         log.error("---classCastException Handler---Host {}, invokes url {},  ERROR: {}", req.getRemoteHost(), req.getRequestURL(), ex.getMessage(), ex);
         rep.setStatus(ErrorCode.IO.getCode());
         return RestResponse.fail(ErrorCode.IO.getCode(), ErrorCode.IO.getMsg());
@@ -159,7 +158,7 @@ public class GlobalExceptionHandler {
      * @return {@link RestResponse}
      */
     @ExceptionHandler(NoSuchMethodException.class)
-    public RestResponse noSuchMethodExceptionHandler(HttpServletRequest req, HttpServletResponse rep, NoSuchMethodException ex) {
+    public RestResponse<RestResponse.Empty> noSuchMethodExceptionHandler(HttpServletRequest req, HttpServletResponse rep, NoSuchMethodException ex) {
         log.error("---noSuchMethodException Handler---Host {}, invokes url {},  ERROR: {}", req.getRemoteHost(), req.getRequestURL(), ex.getMessage(), ex);
         rep.setStatus(ErrorCode.NO_SUCH_METHOD.getCode());
         return RestResponse.fail(ErrorCode.NO_SUCH_METHOD.getCode(), ErrorCode.NO_SUCH_METHOD.getMsg());
@@ -174,7 +173,7 @@ public class GlobalExceptionHandler {
      * @return {@link RestResponse}
      */
     @ExceptionHandler(IndexOutOfBoundsException.class)
-    public RestResponse indexOutOfBoundsExceptionHandler(HttpServletRequest req, HttpServletResponse rep, IndexOutOfBoundsException ex) {
+    public RestResponse<RestResponse.Empty> indexOutOfBoundsExceptionHandler(HttpServletRequest req, HttpServletResponse rep, IndexOutOfBoundsException ex) {
         log.error("---indexOutOfBoundsException Handler---Host {}, invokes url {},  ERROR: {}", req.getRemoteHost(), req.getRequestURL(), ex.getMessage(), ex);
         rep.setStatus(ErrorCode.INDEX_OUTOF_BOUNDS.getCode());
         return RestResponse.fail(ErrorCode.INDEX_OUTOF_BOUNDS.getCode(), ErrorCode.INDEX_OUTOF_BOUNDS.getMsg());
@@ -188,7 +187,7 @@ public class GlobalExceptionHandler {
      * @return {@link RestResponse}
      */
     @ExceptionHandler({HttpMessageNotReadableException.class, TypeMismatchException.class, MissingServletRequestParameterException.class})
-    public RestResponse request400(HttpServletRequest req, HttpServletResponse rep, Exception ex) {
+    public RestResponse<RestResponse.Empty> request400(HttpServletRequest req, HttpServletResponse rep, Exception ex) {
         log.error("---request400 Handler---Host {}, invokes url {},  ERROR: {}", req.getRemoteHost(), req.getRequestURL(), ex.getMessage(), ex);
         rep.setStatus(ErrorCode.BAD_REQUEST.getCode());
         return RestResponse.fail(ErrorCode.BAD_REQUEST.getCode(), ErrorCode.BAD_REQUEST.getMsg());
@@ -202,7 +201,7 @@ public class GlobalExceptionHandler {
      * @return {@link RestResponse}
      */
     @ExceptionHandler(NoHandlerFoundException.class)
-    public RestResponse request404(HttpServletRequest req, HttpServletResponse rep, Exception ex) {
+    public RestResponse<RestResponse.Empty> request404(HttpServletRequest req, HttpServletResponse rep, Exception ex) {
         log.error("---request404 Handler---Host {}, invokes url {},  ERROR: {}", req.getRemoteHost(), req.getRequestURL(), ex.getMessage(), ex);
         rep.setStatus(ErrorCode.NOT_FOUND.getCode());
         return RestResponse.fail(ErrorCode.NOT_FOUND.getCode(), ErrorCode.NOT_FOUND.getMsg());
@@ -216,7 +215,7 @@ public class GlobalExceptionHandler {
      * @return {@link RestResponse}
      */
     @ExceptionHandler({HttpRequestMethodNotSupportedException.class})
-    public RestResponse request405(HttpServletRequest req, HttpServletResponse rep, Exception ex) {
+    public RestResponse<RestResponse.Empty> request405(HttpServletRequest req, HttpServletResponse rep, Exception ex) {
         log.error("---request405 Handler---Host {}, invokes url {},  ERROR: {}", req.getRemoteHost(), req.getRequestURL(), ex.getMessage(), ex);
         rep.setStatus(ErrorCode.METHOD_BOT_ALLOWED.getCode());
         return RestResponse.fail(ErrorCode.METHOD_BOT_ALLOWED.getCode(), ErrorCode.METHOD_BOT_ALLOWED.getMsg());
@@ -230,7 +229,7 @@ public class GlobalExceptionHandler {
      * @return {@link RestResponse}
      */
     @ExceptionHandler({HttpMediaTypeNotAcceptableException.class})
-    public RestResponse request406(HttpServletRequest req, HttpServletResponse rep, Exception ex) {
+    public RestResponse<RestResponse.Empty> request406(HttpServletRequest req, HttpServletResponse rep, Exception ex) {
         log.error("---request406 Handler---Host {}, invokes url {},  ERROR: {}", req.getRemoteHost(), req.getRequestURL(), ex.getMessage(), ex);
         rep.setStatus(ErrorCode.NOT_ACCEPTABLE.getCode());
         return RestResponse.fail(ErrorCode.NOT_ACCEPTABLE.getCode(), ErrorCode.NOT_ACCEPTABLE.getMsg());
@@ -244,7 +243,7 @@ public class GlobalExceptionHandler {
      * @return {@link RestResponse}
      */
     @ExceptionHandler({ConversionNotSupportedException.class, HttpMessageNotWritableException.class})
-    public RestResponse server500(HttpServletRequest req, HttpServletResponse rep, Exception ex) {
+    public RestResponse<RestResponse.Empty> server500(HttpServletRequest req, HttpServletResponse rep, Exception ex) {
         log.error("---server500 Handler---Host {}, invokes url {},  ERROR: {}", req.getRemoteHost(), req.getRequestURL(), ex.getMessage(), ex);
         rep.setStatus(ErrorCode.INTERNAL_SERVER_ERROR.getCode());
         return RestResponse.fail(ErrorCode.INTERNAL_SERVER_ERROR.getCode(), ErrorCode.INTERNAL_SERVER_ERROR.getMsg());
@@ -258,7 +257,7 @@ public class GlobalExceptionHandler {
      * @return {@link Exception}
      */
     @ExceptionHandler(value = Exception.class)
-    public RestResponse defaultErrorHandler(HttpServletRequest req, HttpServletResponse rep, Exception e) {
+    public RestResponse<RestResponse.Empty> defaultErrorHandler(HttpServletRequest req, HttpServletResponse rep, Exception e) {
         log.error("---DefaultException Handler---Host {}, invokes url {}, ERROR TYPE: {},  ERROR: {}", req.getRemoteHost(), req.getRequestURL(), e.getClass(), e.getMessage());
         e.printStackTrace();
         return RestResponse.fail(e.getMessage());

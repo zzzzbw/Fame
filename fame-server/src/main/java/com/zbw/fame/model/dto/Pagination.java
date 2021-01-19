@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 分页Bean
  *
- * @author zbw
+ * @author zzzzbw
  * @since 2017/10/23 11:44
  */
 @Data
@@ -22,9 +22,9 @@ public class Pagination<T> {
     private String orderBy;
     private List<T> list;
 
-    @SuppressWarnings("unchecked")
+
     public static <S> Pagination<S> of(Page<S> page) {
-        return new Pagination(
+        return new Pagination<>(
                 page.getNumber(),
                 page.getSize(),
                 page.getTotalElements(),
