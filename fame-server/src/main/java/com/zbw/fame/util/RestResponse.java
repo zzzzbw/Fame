@@ -33,6 +33,7 @@ public class RestResponse<T> {
         this.code = code;
     }
 
+
     private RestResponse(boolean success, int code) {
         this.success = success;
         this.code = code;

@@ -10,7 +10,7 @@ import com.zbw.fame.service.CommentService;
 import com.zbw.fame.service.LogService;
 import com.zbw.fame.service.NoteService;
 import com.zbw.fame.service.OptionService;
-import com.zbw.fame.util.FameUtil;
+import com.zbw.fame.util.FameUtils;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -47,7 +47,7 @@ public class NoteServiceImpl extends AbstractArticleServiceImpl<Note> implements
 
     @Override
     public List<NoteInfo> getFrontNoteList() {
-        List<Note> noteList = articleRepository.findAllByStatus(ArticleStatus.PUBLISH, FameUtil.sortDescBy("priority", "id"));
+        List<Note> noteList = articleRepository.findAllByStatus(ArticleStatus.PUBLISH, FameUtils.sortDescBy("priority", "id"));
         return noteList.stream().map(NoteInfo::new).collect(Collectors.toList());
     }
 
@@ -59,7 +59,7 @@ public class NoteServiceImpl extends AbstractArticleServiceImpl<Note> implements
             Note oldNote = articleRepository.findById(note.getId())
                     .orElseThrow(() -> new NotFoundException(Note.class));
 
-            FameUtil.copyPropertiesIgnoreNull(note, oldNote);
+            FameUtils.copyPropertiesIgnoreNull(note, oldNote);
             articleRepository.saveAndFlush(oldNote);
         } else {
             articleRepository.saveAndFlush(note);

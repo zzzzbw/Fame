@@ -7,7 +7,7 @@ import com.zbw.fame.model.param.ArticleQuery;
 import com.zbw.fame.repository.ArticleRepository;
 import com.zbw.fame.service.ArticleService;
 import com.zbw.fame.service.OptionService;
-import com.zbw.fame.util.FameUtil;
+import com.zbw.fame.util.FameUtils;
 import com.zbw.fame.util.OptionKeys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,12 +42,12 @@ public abstract class AbstractArticleServiceImpl<ARTICLE extends Article> implem
 
     @Override
     public Page<ARTICLE> pageFrontArticle(Integer page, Integer limit, List<String> sort) {
-        Pageable pageable = PageRequest.of(page, limit, FameUtil.sortDescBy(sort));
+        Pageable pageable = PageRequest.of(page, limit, FameUtils.sortDescBy(sort));
         Page<ARTICLE> result = articleRepository.findAllByStatus(ArticleStatus.PUBLISH, pageable);
 
         String summaryFlag = optionService.get(OptionKeys.SUMMARY_FLAG);
         result.forEach(article -> {
-            String content = FameUtil.contentTransform(article.getContent(), true, true, summaryFlag);
+            String content = FameUtils.contentTransform(article.getContent(), true, true, summaryFlag);
             article.setContent(content);
         });
         return result;
@@ -56,8 +56,8 @@ public abstract class AbstractArticleServiceImpl<ARTICLE extends Article> implem
     @Override
     public ARTICLE getFrontArticle(Integer id) {
         ARTICLE article = articleRepository.findByIdAndStatus(id, ArticleStatus.PUBLISH)
-                .orElseThrow(() -> new NotFoundException(FameUtil.getGenericClass(getClass())));
-        String content = FameUtil.contentTransform(article.getContent(), false, true, null);
+                .orElseThrow(() -> new NotFoundException(FameUtils.getGenericClass(getClass())));
+        String content = FameUtils.contentTransform(article.getContent(), false, true, null);
         article.setContent(content);
         return article;
     }
@@ -80,7 +80,7 @@ public abstract class AbstractArticleServiceImpl<ARTICLE extends Article> implem
             }
 
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
-        }, PageRequest.of(page, limit, FameUtil.sortDescById()));
+        }, PageRequest.of(page, limit, FameUtils.sortDescById()));
         //只需要文章列表，不需要内容
         result.forEach(article -> article.setContent(""));
         return result;
@@ -89,8 +89,8 @@ public abstract class AbstractArticleServiceImpl<ARTICLE extends Article> implem
     @Override
     public ARTICLE getAdminArticle(Integer id) {
         ARTICLE article = articleRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(FameUtil.getGenericClass(getClass())));
-        String content = FameUtil.contentTransform(article.getContent(), false, false, null);
+                .orElseThrow(() -> new NotFoundException(FameUtils.getGenericClass(getClass())));
+        String content = FameUtils.contentTransform(article.getContent(), false, false, null);
         article.setContent(content);
         return article;
     }

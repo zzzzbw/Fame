@@ -10,13 +10,11 @@ import com.zbw.fame.model.enums.ArticleStatus;
 import com.zbw.fame.model.enums.LogType;
 import com.zbw.fame.repository.ArticleRepository;
 import com.zbw.fame.service.*;
-import com.zbw.fame.util.FameConsts;
-import com.zbw.fame.util.FameUtil;
+import com.zbw.fame.util.FameUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -62,31 +60,12 @@ public class PostServiceImpl extends AbstractArticleServiceImpl<Post> implements
     @Transactional(rollbackFor = Throwable.class)
     @Override
     public Integer save(Post post) {
-        if (null == post) {
-            throw new TipException("文章对象为空");
-        }
-        if (ObjectUtils.isEmpty(post.getTitle())) {
-            throw new TipException("文章标题不能为空");
-        }
-        if (post.getTitle().length() > FameConsts.MAX_TITLE_COUNT) {
-            throw new TipException("文章标题字数不能超过" + FameConsts.MAX_TITLE_COUNT);
-        }
-
-        if (ObjectUtils.isEmpty(post.getContent())) {
-            throw new TipException("文章内容不能为空");
-        }
-        if (post.getContent().length() > FameConsts.MAX_CONTENT_COUNT) {
-            throw new TipException("文章内容字数不能超过" + FameConsts.MAX_CONTENT_COUNT);
-        }
-        if (null == post.getAuthorId()) {
-            throw new TipException("请先登陆后发布文章");
-        }
 
         if (null != post.getId()) {
             Post oldPost = articleRepository.findById(post.getId())
                     .orElseThrow(() -> new NotFoundException(Post.class));
 
-            FameUtil.copyPropertiesIgnoreNull(post, oldPost);
+            FameUtils.copyPropertiesIgnoreNull(post, oldPost);
             articleRepository.saveAndFlush(oldPost);
         } else {
             articleRepository.saveAndFlush(post);
@@ -140,7 +119,7 @@ public class PostServiceImpl extends AbstractArticleServiceImpl<Post> implements
 
     @Override
     public List<Archive> getArchives() {
-        List<Post> posts = articleRepository.findAllByStatus(ArticleStatus.PUBLISH, FameUtil.sortDescById());
+        List<Post> posts = articleRepository.findAllByStatus(ArticleStatus.PUBLISH, FameUtils.sortDescById());
         List<Archive> archives = new ArrayList<>();
         String current = "";
         Calendar cal = Calendar.getInstance();

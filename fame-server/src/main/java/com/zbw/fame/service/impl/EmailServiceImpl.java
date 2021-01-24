@@ -5,7 +5,7 @@ import com.zbw.fame.model.enums.LogType;
 import com.zbw.fame.service.EmailService;
 import com.zbw.fame.service.LogService;
 import com.zbw.fame.service.OptionService;
-import com.zbw.fame.util.FameConsts;
+import com.zbw.fame.util.FameConst;
 import com.zbw.fame.util.OptionKeys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,6 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -51,7 +50,7 @@ public class EmailServiceImpl implements EmailService {
         }
 
         Map<String, String> params = getEmailParams(comment);
-        String content = FameConsts.getEmailTemplateAdminContent(params);
+        String content = FameConst.getEmailTemplateAdminContent(params);
 
         String logData = content + ";  发送给管理员";
         log.info("sendEmailToAdmin start: {}", new Date());
@@ -73,7 +72,7 @@ public class EmailServiceImpl implements EmailService {
         }
 
         Map<String, String> params = getEmailParams(comment);
-        String content = FameConsts.getEmailTemplateUserContent(params);
+        String content = FameConst.getEmailTemplateUserContent(params);
 
         String logData = content + ";  发送给:" + replyEmail;
         log.info("sendEmailToUser start: {}", new Date());
@@ -137,7 +136,7 @@ public class EmailServiceImpl implements EmailService {
      * @throws MessagingException
      */
     private void sendEmail(String content, String to) throws MessagingException {
-        String subject = optionService.get(OptionKeys.EMAIL_SUBJECT, FameConsts.DEFAULT_EMAIL_TEMPLATE_SUBJECT);
+        String subject = optionService.get(OptionKeys.EMAIL_SUBJECT, FameConst.DEFAULT_EMAIL_TEMPLATE_SUBJECT);
         String host = optionService.get(OptionKeys.EMAIL_HOST);
         Integer port = optionService.get(OptionKeys.EMAIL_PORT, 25);
         String username = optionService.get(OptionKeys.EMAIL_USERNAME);

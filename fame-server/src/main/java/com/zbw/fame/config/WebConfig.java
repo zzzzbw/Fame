@@ -1,8 +1,7 @@
 package com.zbw.fame.config;
 
 import com.zbw.fame.interceptor.AdminInterceptor;
-import com.zbw.fame.util.FameConsts;
-import com.zbw.fame.util.FameUtil;
+import com.zbw.fame.util.FameConst;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -11,9 +10,6 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.net.URI;
-import java.nio.file.FileSystems;
 
 /**
  * web 配置
@@ -53,7 +49,7 @@ public class WebConfig {
             // 资源
             @Override
             public void addResourceHandlers(ResourceHandlerRegistry registry) {
-                String mediaResource = FILE_PROTOCOL + FameConsts.USER_HOME + FameConsts.FAME_HOME + FameConsts.MEDIA_DIR;
+                String mediaResource = FILE_PROTOCOL + FameConst.USER_HOME + FameConst.FAME_HOME + FameConst.MEDIA_DIR;
                 log.info("MediaResource:{}", mediaResource);
 
                 registry.addResourceHandler(MEDIA_PATH_PATTERNS)

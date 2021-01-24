@@ -2,16 +2,11 @@ package com.zbw.fame.controller.admin;
 
 import com.zbw.fame.model.domain.Post;
 import com.zbw.fame.model.domain.User;
-import com.zbw.fame.model.enums.ArticleStatus;
 import com.zbw.fame.model.param.SavePostParam;
 import com.zbw.fame.service.PostService;
-import com.zbw.fame.util.FameUtil;
+import com.zbw.fame.util.FameUtils;
 import com.zbw.fame.util.RestResponse;
-import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Date;
 
 /**
  * @author zzzzbw
@@ -35,9 +30,9 @@ public class PostController extends AbstractArticleController<Post> {
      */
     @PostMapping
     public RestResponse<Integer> save(SavePostParam param) {
-        Post post = FameUtil.convertTo(param, Post.class);
+        Post post = FameUtils.convertTo(param, Post.class);
         // TODO created、modified时间转换
-        User user = FameUtil.getLoginUser();
+        User user = FameUtils.getLoginUser();
         post.setAuthorId(user.getId());
         Integer postId = postService.save(post);
         return RestResponse.ok(postId);

@@ -4,7 +4,7 @@ import com.zbw.fame.model.dto.Pagination;
 import com.zbw.fame.model.domain.Article;
 import com.zbw.fame.model.param.ArticleQuery;
 import com.zbw.fame.service.ArticleService;
-import com.zbw.fame.util.FameConsts;
+import com.zbw.fame.util.FameConst;
 import com.zbw.fame.util.RestResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public abstract class AbstractArticleController<ARTICLE extends Article> {
      */
     @GetMapping
     public RestResponse<Pagination<ARTICLE>> page(@RequestParam(required = false, defaultValue = "0") Integer page,
-                                                  @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit, ArticleQuery query) {
+                                                  @RequestParam(required = false, defaultValue = FameConst.PAGE_SIZE) Integer limit, ArticleQuery query) {
         Page<ARTICLE> articles = articleService.pageAdminArticle(page, limit, query);
         return RestResponse.ok(Pagination.of(articles));
     }

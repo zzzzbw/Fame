@@ -9,7 +9,7 @@ import java.util.Map;
  * @author zzzzbw
  * @since 2017/7/9 22:21
  */
-public interface FameConsts {
+public interface FameConst {
 
     /**
      * 登陆用户session key
@@ -68,13 +68,7 @@ public interface FameConsts {
 
 
     /**
-     * 文章点击量缓存数
-     */
-    int CACHE_ARTICLE_HITS_SAVE = 3;
-
-
-    /**
-     * 发送邮件的标题
+     * 发送邮件的默认标题
      */
     String DEFAULT_EMAIL_TEMPLATE_SUBJECT = "来自Fame博客网站发送的邮件";
 

@@ -13,12 +13,11 @@ import com.zbw.fame.repository.MiddleRepository;
 import com.zbw.fame.repository.PostRepository;
 import com.zbw.fame.service.MetaService;
 import com.zbw.fame.service.MiddleService;
-import com.zbw.fame.util.FameUtil;
+import com.zbw.fame.util.FameUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -44,7 +43,7 @@ public abstract class AbstractMetaServiceImpl<META extends Meta> implements Meta
     @Transactional(rollbackFor = Throwable.class)
     public Integer delete(String name) {
         META meta = metaRepository.findByName(name)
-                .orElseThrow(() -> new NotFoundException(FameUtil.getGenericClass(getClass())));
+                .orElseThrow(() -> new NotFoundException(FameUtils.getGenericClass(getClass())));
         metaRepository.delete(meta);
         return meta.getId();
     }
@@ -57,7 +56,7 @@ public abstract class AbstractMetaServiceImpl<META extends Meta> implements Meta
         }
 
         META meta = metaRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(FameUtil.getGenericClass(getClass())));
+                .orElseThrow(() -> new NotFoundException(FameUtils.getGenericClass(getClass())));
         meta.setName(name);
         return metaRepository.save(meta);
     }
@@ -131,14 +130,14 @@ public abstract class AbstractMetaServiceImpl<META extends Meta> implements Meta
     @Override
     public List<MetaInfo> getFrontMetaInfos() {
         List<META> metas = metaRepository.findAll();
-        List<Post> posts = postRepository.findAllByStatus(ArticleStatus.PUBLISH, FameUtil.sortDescById());
+        List<Post> posts = postRepository.findAllByStatus(ArticleStatus.PUBLISH, FameUtils.sortDescById());
         return getMetaInfos(metas, posts);
     }
 
     @Override
     public List<MetaInfo> getAdminMetaInfos() {
         List<META> metas = metaRepository.findAll();
-        List<Post> posts = postRepository.findAllByStatusNot(ArticleStatus.DELETE, FameUtil.sortDescById());
+        List<Post> posts = postRepository.findAllByStatusNot(ArticleStatus.DELETE, FameUtils.sortDescById());
         return getMetaInfos(metas, posts);
     }
 

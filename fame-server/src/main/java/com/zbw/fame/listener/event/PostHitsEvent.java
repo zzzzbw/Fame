@@ -18,6 +18,7 @@ public class PostHitsEvent extends ApplicationEvent {
      *
      * @param source the object on which the event initially occurred or with
      *               which the event is associated (never {@code null})
+     * @param postId 文章id
      */
     public PostHitsEvent(Object source, @NonNull Integer postId) {
         super(source);

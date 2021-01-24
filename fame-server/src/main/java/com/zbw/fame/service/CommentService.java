@@ -79,7 +79,7 @@ public interface CommentService {
     /**
      * 新增评论
      *
-     * @param commentId 评论id
+     * @param comment 评论id
      */
-    void newComment(Integer commentId);
+    void newComment(Comment comment);
 }

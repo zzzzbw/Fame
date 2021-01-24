@@ -12,7 +12,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.Objects;
 
 /**
- * @author by ZHANGBOWEN469
+ * @author by zzzzbw
  * @since 2021/01/20 14:13
  */
 @AutoConfigureMockMvc
@@ -24,9 +24,9 @@ public abstract class BaseMvcTest extends BaseTest {
     protected MvcResult getJson(String url, Object... uriVars) {
         try {
             MockHttpServletRequestBuilder builder = MockMvcRequestBuilders.get(url, uriVars)
+                    .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON);
-            return mockMvc.perform(builder)
-                    .andReturn();
+            return mockMvc.perform(builder).andReturn();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -34,17 +34,16 @@ public abstract class BaseMvcTest extends BaseTest {
 
     protected MvcResult postJson(String url, Object requestBody, Object... uriVars) {
         try {
-
             MockHttpServletRequestBuilder builder = MockMvcRequestBuilders
                     .post(url, uriVars)
+                    .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON);
 
             if (!Objects.isNull(requestBody)) {
                 String content = new ObjectMapper().writeValueAsString(requestBody);
                 builder.content(content);
             }
-            return mockMvc.perform(builder)
-                    .andReturn();
+            return mockMvc.perform(builder).andReturn();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

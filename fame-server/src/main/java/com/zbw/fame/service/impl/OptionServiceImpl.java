@@ -3,7 +3,7 @@ package com.zbw.fame.service.impl;
 import com.zbw.fame.model.domain.SysOption;
 import com.zbw.fame.repository.OptionRepository;
 import com.zbw.fame.service.OptionService;
-import com.zbw.fame.util.FameUtil;
+import com.zbw.fame.util.FameUtils;
 import com.zbw.fame.util.OptionKeys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +40,7 @@ public class OptionServiceImpl implements OptionService {
         SysOption sysOption = optionRepository.findByOptionKey(key);
         return (T) (sysOption == null || ObjectUtils.isEmpty(sysOption.getOptionValue()) ?
                 defaultValue :
-                FameUtil.convertStringToType(sysOption.getOptionValue(), defaultValue.getClass()));
+                FameUtils.convertStringToType(sysOption.getOptionValue(), defaultValue.getClass()));
     }
 
     @Override

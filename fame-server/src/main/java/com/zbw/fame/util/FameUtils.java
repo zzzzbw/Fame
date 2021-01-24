@@ -37,7 +37,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.function.Function;
 
 /**
  * 公用工具类
@@ -46,7 +45,7 @@ import java.util.function.Function;
  * @since 2017/7/9 22:08
  */
 @Slf4j
-public class FameUtil {
+public class FameUtils {
 
     /**
      * markdown 扩展设置
@@ -71,7 +70,7 @@ public class FameUtil {
     /**
      * 禁止实例化
      */
-    private FameUtil() {
+    private FameUtils() {
         throw new TipException("Constructor not allow");
     }
 
@@ -83,7 +82,7 @@ public class FameUtil {
      */
     public static void setLoginUser(User user) {
         HttpSession session = getSession();
-        session.setAttribute(FameConsts.USER_SESSION_KEY, user);
+        session.setAttribute(FameConst.USER_SESSION_KEY, user);
     }
 
     /**
@@ -91,7 +90,7 @@ public class FameUtil {
      */
     public static void clearLoginUser() {
         HttpSession session = getSession();
-        session.removeAttribute(FameConsts.USER_SESSION_KEY);
+        session.removeAttribute(FameConst.USER_SESSION_KEY);
     }
 
     /**
@@ -101,7 +100,7 @@ public class FameUtil {
      */
     public static User getLoginUser() {
         HttpSession session = getSession();
-        return (User) Optional.ofNullable(session.getAttribute(FameConsts.USER_SESSION_KEY))
+        return (User) Optional.ofNullable(session.getAttribute(FameConst.USER_SESSION_KEY))
                 .orElseThrow(NotLoginException::new);
     }
 
@@ -157,21 +156,16 @@ public class FameUtil {
      */
     public static String getIp() {
         String unknown = "unknown";
+        String[] ipHeaders = new String[]{"X-Forwarded-For", "X-Real-IP", "Proxy-Client-IP", "WL-Proxy-Client-IP", "HTTP_CLIENT_IP", "HTTP_X_FORWARDED_FOR"};
         // nginx反向代理IP
-        String ip = getRequest().getHeader("X-Real-IP");
-        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
-            ip = getRequest().getHeader("x-forwarded-for");
+        String ip;
+        for (String header : ipHeaders) {
+            ip = getRequest().getHeader(header);
+            if (ip != null && ip.length() != 0 && !unknown.equalsIgnoreCase(ip)) {
+                return ip;
+            }
         }
-        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
-            ip = getRequest().getHeader("Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
-            ip = getRequest().getHeader("WL-Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || unknown.equalsIgnoreCase(ip)) {
-            ip = getRequest().getRemoteAddr();
-        }
-        return ip;
+        return getRequest().getRemoteAddr();
     }
 
     /**
@@ -190,7 +184,7 @@ public class FameUtil {
      * @return 加密的字符串
      */
     public static String getMd5(String str) {
-        String base = str + FameConsts.MD5_SLAT;
+        String base = str + FameConst.MD5_SLAT;
         return DigestUtils.md5DigestAsHex(base.getBytes());
     }
 
@@ -202,10 +196,10 @@ public class FameUtil {
     public static String getSummary(String content, String flag) {
         int index = 0;
         if (!ObjectUtils.isEmpty(flag)) {
-            index = FameUtil.ignoreCaseIndexOf(content, flag);
+            index = FameUtils.ignoreCaseIndexOf(content, flag);
         }
         if (ObjectUtils.isEmpty(flag) || -1 == index) {
-            index = content.length() > FameConsts.MAX_SUMMARY_COUNT ? FameConsts.MAX_SUMMARY_COUNT : content.length();
+            index = content.length() > FameConst.MAX_SUMMARY_COUNT ? FameConst.MAX_SUMMARY_COUNT : content.length();
         }
         return content.substring(0, index);
     }
@@ -237,10 +231,10 @@ public class FameUtil {
     public static String contentTransform(String content, boolean isSummary, boolean isHtml, String summaryFlag) {
         if (isSummary || isHtml) {
             if (isSummary) {
-                content = FameUtil.getSummary(content, summaryFlag);
+                content = FameUtils.getSummary(content, summaryFlag);
             }
             if (isHtml) {
-                content = FameUtil.mdToHtml(content);
+                content = FameUtils.mdToHtml(content);
             }
         }
         return content;
@@ -392,7 +386,7 @@ public class FameUtil {
      * @return 项目目录文件
      */
     public static Path getFameDir() {
-        Path dir = Paths.get(FameConsts.USER_HOME, FameConsts.FAME_HOME);
+        Path dir = Paths.get(FameConst.USER_HOME, FameConst.FAME_HOME);
         if (!Files.exists(dir)) {
             try {
                 Files.createDirectories(dir);

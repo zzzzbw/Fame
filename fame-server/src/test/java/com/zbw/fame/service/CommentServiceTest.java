@@ -64,7 +64,7 @@ public class CommentServiceTest extends BaseTest {
 
     @Test
     public void newComment() throws InterruptedException {
-        commentService.newComment(1);
+        commentService.newComment(new Comment());
         Thread.sleep(2000);
     }
 

@@ -8,7 +8,7 @@ import com.zbw.fame.model.param.ResetPasswordParam;
 import com.zbw.fame.model.param.ResetUserParam;
 import com.zbw.fame.repository.UserRepository;
 import com.zbw.fame.service.UserService;
-import com.zbw.fame.util.FameUtil;
+import com.zbw.fame.util.FameUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
      */
     private User createSessionUser(User user) {
         User sessionUser = new User();
-        FameUtil.copyPropertiesIgnoreNull(user, sessionUser);
+        FameUtils.copyPropertiesIgnoreNull(user, sessionUser);
         // 清空密码
         sessionUser.setPasswordMd5("");
         return sessionUser;
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
         if (null == user) {
             throw new TipException("用户名或者密码错误");
         }
-        String md5 = FameUtil.getMd5(password);
+        String md5 = FameUtils.getMd5(password);
         if (!md5.equals(user.getPasswordMd5())) {
             throw new TipException("用户名或者密码错误");
         }
@@ -67,11 +67,11 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(User.class));
 
-        if (!user.getPasswordMd5().equals(FameUtil.getMd5(param.getOldPassword()))) {
+        if (!user.getPasswordMd5().equals(FameUtils.getMd5(param.getOldPassword()))) {
             throw new TipException("原密码错误");
         }
 
-        user.setPasswordMd5(FameUtil.getMd5(param.getNewPassword()));
+        user.setPasswordMd5(FameUtils.getMd5(param.getNewPassword()));
         userRepository.save(user);
     }
 

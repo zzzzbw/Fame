@@ -3,7 +3,7 @@ package com.zbw.fame.controller.admin;
 import com.zbw.fame.model.domain.Media;
 import com.zbw.fame.model.dto.Pagination;
 import com.zbw.fame.service.MediaService;
-import com.zbw.fame.util.FameConsts;
+import com.zbw.fame.util.FameConst;
 import com.zbw.fame.util.RestResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +35,7 @@ public class MediaController {
      */
     @GetMapping
     public RestResponse<Pagination<Media>> index(@RequestParam(required = false, defaultValue = "0") Integer page,
-                                                 @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
+                                                 @RequestParam(required = false, defaultValue = FameConst.PAGE_SIZE) Integer limit) {
         Page<Media> medias = mediaService.pageAdminMedias(page, limit);
         return RestResponse.ok(Pagination.of(medias));
     }

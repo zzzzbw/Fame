@@ -1,12 +1,11 @@
 package com.zbw.fame.controller.admin;
 
-import com.zbw.fame.exception.NotFoundException;
 import com.zbw.fame.model.domain.Comment;
 import com.zbw.fame.model.dto.CommentDto;
 import com.zbw.fame.model.dto.Pagination;
 import com.zbw.fame.service.CommentService;
-import com.zbw.fame.util.FameConsts;
-import com.zbw.fame.util.FameUtil;
+import com.zbw.fame.util.FameConst;
+import com.zbw.fame.util.FameUtils;
 import com.zbw.fame.util.RestResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +34,7 @@ public class CommentController {
      */
     @GetMapping
     public RestResponse<Pagination<Comment>> index(@RequestParam(required = false, defaultValue = "0") Integer page,
-                                                   @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
+                                                   @RequestParam(required = false, defaultValue = FameConst.PAGE_SIZE) Integer limit) {
         Page<Comment> comments = commentService.pageAdminComments(page, limit);
         return RestResponse.ok(Pagination.of(comments));
     }
@@ -50,9 +49,9 @@ public class CommentController {
     public RestResponse<Comment> detail(@PathVariable Integer id) {
         CommentDto comment = commentService.getCommentDetail(id);
         if (null != comment.getParentComment()) {
-            comment.getParentComment().setContent(FameUtil.mdToHtml(comment.getParentComment().getContent()));
+            comment.getParentComment().setContent(FameUtils.mdToHtml(comment.getParentComment().getContent()));
         }
-        comment.setContent(FameUtil.mdToHtml(comment.getContent()));
+        comment.setContent(FameUtils.mdToHtml(comment.getContent()));
         return RestResponse.ok(comment);
     }
 

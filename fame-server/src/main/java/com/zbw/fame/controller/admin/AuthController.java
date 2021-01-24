@@ -5,7 +5,7 @@ import com.zbw.fame.model.param.LoginParam;
 import com.zbw.fame.model.param.ResetPasswordParam;
 import com.zbw.fame.model.param.ResetUserParam;
 import com.zbw.fame.service.UserService;
-import com.zbw.fame.util.FameUtil;
+import com.zbw.fame.util.FameUtils;
 import com.zbw.fame.util.RestResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class AuthController {
     @PostMapping("login")
     public RestResponse<RestResponse.Empty> login(@RequestBody @Valid LoginParam param) {
         User user = userService.login(param);
-        FameUtil.setLoginUser(user);
+        FameUtils.setLoginUser(user);
         return RestResponse.ok();
     }
 
@@ -45,7 +45,7 @@ public class AuthController {
      */
     @PostMapping("logout")
     public RestResponse<RestResponse.Empty> logout() {
-        FameUtil.clearLoginUser();
+        FameUtils.clearLoginUser();
         return RestResponse.ok();
     }
 
@@ -56,7 +56,7 @@ public class AuthController {
      */
     @PutMapping("reset/password")
     public RestResponse<RestResponse.Empty> resetPassword(@RequestBody @Valid ResetPasswordParam param) {
-        User user = FameUtil.getLoginUser();
+        User user = FameUtils.getLoginUser();
         userService.resetPassword(user.getId(), param);
         this.logout();
         return RestResponse.ok();
@@ -69,7 +69,7 @@ public class AuthController {
      */
     @PutMapping("reset/user")
     public RestResponse<RestResponse.Empty> resetUser(@RequestBody @Valid ResetUserParam param) {
-        User user = FameUtil.getLoginUser();
+        User user = FameUtils.getLoginUser();
         userService.resetUser(user.getId(), param);
         this.logout();
         return RestResponse.ok();
@@ -82,7 +82,7 @@ public class AuthController {
      */
     @GetMapping("user")
     public RestResponse<User> getUser() {
-        User user = FameUtil.getLoginUser();
+        User user = FameUtils.getLoginUser();
         return RestResponse.ok(user);
     }
 

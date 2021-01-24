@@ -3,7 +3,7 @@ package com.zbw.fame.interceptor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zbw.fame.exception.NotLoginException;
 import com.zbw.fame.util.ErrorCode;
-import com.zbw.fame.util.FameUtil;
+import com.zbw.fame.util.FameUtils;
 import com.zbw.fame.util.RestResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -34,7 +34,7 @@ public class AdminInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String url = request.getRequestURI();
-        String ip = FameUtil.getIp();
+        String ip = FameUtils.getIp();
 
         log.info("用户访问地址: {}, Http类型: {}, ip地址: {}", url, request.getMethod(), ip);
 
@@ -42,7 +42,7 @@ public class AdminInterceptor implements HandlerInterceptor {
         if (url.contains(AUTH_URIS) && isAuthUrl(url)) {
             // 调用方法查看是否有登录的用户
             try {
-                FameUtil.getLoginUser();
+                FameUtils.getLoginUser();
             } catch (NotLoginException e) {
                 // 要设置跨域，不然输出信息没有
                 if (request.getHeader(HttpHeaders.ORIGIN) != null) {

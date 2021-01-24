@@ -31,26 +31,37 @@ public enum ErrorCode {
      * 数组越界异常
      */
     INDEX_OUTOF_BOUNDS(1005, "IndexOutOfBoundsException"),
+
+    /**
+     * 参数校验异常
+     */
+    METHOD_ARGUMENT_NOT_VALID(400, "METHOD_ARGUMENT_NOT_VALID"),
+
     /**
      * 400异常
      */
     BAD_REQUEST(400, "Bad Request"),
+
     /**
      * 404异常
      */
     NOT_FOUND(404, "Not Found"),
+
     /**
      * 方法不允许异常
      */
     METHOD_BOT_ALLOWED(405, "Method Not Allowed"),
+
     /**
      * 不可到达异常
      */
     NOT_ACCEPTABLE(406, "Not Acceptable"),
+
     /**
      * 500异常
      */
     INTERNAL_SERVER_ERROR(500, "Internal Server Error"),
+
     /**
      * 用户未登陆
      */

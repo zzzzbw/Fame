@@ -11,8 +11,8 @@ import com.zbw.fame.model.dto.Pagination;
 import com.zbw.fame.model.enums.CommentAssessType;
 import com.zbw.fame.model.param.AddCommentParam;
 import com.zbw.fame.service.*;
-import com.zbw.fame.util.FameConsts;
-import com.zbw.fame.util.FameUtil;
+import com.zbw.fame.util.FameConst;
+import com.zbw.fame.util.FameUtils;
 import com.zbw.fame.util.RestResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +55,7 @@ public class FrontController {
      */
     @GetMapping("post")
     public RestResponse<Pagination<Post>> home(@RequestParam(required = false, defaultValue = "0") Integer page,
-                                               @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit,
+                                               @RequestParam(required = false, defaultValue = FameConst.PAGE_SIZE) Integer limit,
                                                @RequestParam(required = false, defaultValue = "id") List<String> sort) {
         Page<Post> posts = postService.pageFrontArticle(page, limit, sort);
         return RestResponse.ok(Pagination.of(posts));
@@ -141,7 +141,7 @@ public class FrontController {
      */
     @GetMapping("comment")
     public RestResponse<Pagination<Comment>> getArticleComment(@RequestParam Integer articleId, @RequestParam(required = false, defaultValue = "0") Integer page,
-                                                               @RequestParam(required = false, defaultValue = FameConsts.PAGE_SIZE) Integer limit) {
+                                                               @RequestParam(required = false, defaultValue = FameConst.PAGE_SIZE) Integer limit) {
         Page<Comment> comments = commentService.getCommentsByArticleId(page, limit, articleId);
         return RestResponse.ok(Pagination.of(comments));
     }
@@ -154,9 +154,9 @@ public class FrontController {
      */
     @PostMapping("comment")
     public RestResponse<RestResponse.Empty> addComment(@RequestBody @Valid AddCommentParam param) {
-        Comment comment = FameUtil.convertTo(param, Comment.class);
+        Comment comment = FameUtils.convertTo(param, Comment.class);
         commentService.save(comment);
-        commentService.newComment(comment.getId());
+        commentService.newComment(comment);
         return RestResponse.ok();
     }
 

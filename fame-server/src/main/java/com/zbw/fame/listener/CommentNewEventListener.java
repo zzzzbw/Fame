@@ -5,6 +5,7 @@ import com.zbw.fame.model.dto.CommentDto;
 import com.zbw.fame.service.CommentService;
 import com.zbw.fame.service.EmailService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
@@ -15,6 +16,7 @@ import org.springframework.util.StringUtils;
  * @author by zzzzbw
  * @since 2021/01/14 17:19
  */
+@Slf4j
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class CommentNewEventListener {
@@ -25,7 +27,9 @@ public class CommentNewEventListener {
 
     @Async
     @EventListener
-    public void onCommentNewEvent(CommentNewEvent event) throws InterruptedException {
+    public void onCommentNewEvent(CommentNewEvent event) {
+        log.info("onCommentNewEvent event:{}", event);
+
         //发送邮件提醒
         CommentDto commentDetail = commentService.getCommentDetail(event.getCommentId());
         // 发送给管理员

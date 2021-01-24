@@ -1,7 +1,7 @@
 package com.zbw.fame.service;
 
-import com.zbw.fame.util.FameConsts;
-import com.zbw.fame.util.FameUtil;
+import com.zbw.fame.util.FameConst;
+import com.zbw.fame.util.FameUtils;
 import com.zbw.fame.BaseTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -74,7 +74,7 @@ public class MediaServiceTest extends BaseTest {
 
     @Test
     public void test2() {
-        Path dir = Paths.get(FameConsts.USER_HOME, FameConsts.FAME_HOME, "aaaa");
+        Path dir = Paths.get(FameConst.USER_HOME, FameConst.FAME_HOME, "aaaa");
         System.out.println(dir);
         System.out.println(dir.isAbsolute());
     }
@@ -85,7 +85,7 @@ public class MediaServiceTest extends BaseTest {
         Path target = Paths.get("E:\\zbw\\develop\\java\\Fame\\fame-server\\upload\\a\\b\\c", "ccc_s.jpg");
         System.out.println(dir);
         System.out.println(dir.isAbsolute());
-        FameUtil.compressImage(dir.toFile(), target.toFile(), 0.5f);
+        FameUtils.compressImage(dir.toFile(), target.toFile(), 0.5f);
     }
 
     @Test

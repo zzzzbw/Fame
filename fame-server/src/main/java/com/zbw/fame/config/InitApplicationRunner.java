@@ -4,8 +4,8 @@ import com.zbw.fame.model.domain.*;
 import com.zbw.fame.model.enums.ArticleStatus;
 import com.zbw.fame.repository.*;
 import com.zbw.fame.service.OptionService;
-import com.zbw.fame.util.FameConsts;
-import com.zbw.fame.util.FameUtil;
+import com.zbw.fame.util.FameConst;
+import com.zbw.fame.util.FameUtils;
 import com.zbw.fame.util.OptionKeys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,6 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -79,7 +78,7 @@ public class InitApplicationRunner implements ApplicationRunner {
      */
     private void initDispatcherServlet() {
         // 任意访问一个url，使DispatcherServlet和数据库连接初始化
-        String url = "http://" + FameUtil.getHostAddress() + ":" + port + INIT_URL;
+        String url = "http://" + FameUtils.getHostAddress() + ":" + port + INIT_URL;
         log.info("The url for init: {}", url);
 
         try {
@@ -217,10 +216,10 @@ public class InitApplicationRunner implements ApplicationRunner {
     private void createDefaultOptionIfAbsent() {
         log.info("Create default option...");
         if (ObjectUtils.isEmpty(optionService.get(OptionKeys.EMAIL_SUBJECT))) {
-            optionService.save(OptionKeys.EMAIL_SUBJECT, FameConsts.DEFAULT_EMAIL_TEMPLATE_SUBJECT);
+            optionService.save(OptionKeys.EMAIL_SUBJECT, FameConst.DEFAULT_EMAIL_TEMPLATE_SUBJECT);
         }
         if (ObjectUtils.isEmpty(optionService.get(OptionKeys.SUMMARY_FLAG))) {
-            optionService.save(OptionKeys.SUMMARY_FLAG, FameConsts.DEFAULT_SUMMARY_FLAG);
+            optionService.save(OptionKeys.SUMMARY_FLAG, FameConst.DEFAULT_SUMMARY_FLAG);
         }
     }
 }

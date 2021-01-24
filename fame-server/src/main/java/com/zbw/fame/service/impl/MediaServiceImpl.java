@@ -5,8 +5,8 @@ import com.zbw.fame.exception.TipException;
 import com.zbw.fame.model.domain.Media;
 import com.zbw.fame.repository.MediaRepository;
 import com.zbw.fame.service.MediaService;
-import com.zbw.fame.util.FameConsts;
-import com.zbw.fame.util.FameUtil;
+import com.zbw.fame.util.FameConst;
+import com.zbw.fame.util.FameUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -37,7 +36,7 @@ public class MediaServiceImpl implements MediaService {
 
     @Override
     public Page<Media> pageAdminMedias(Integer page, Integer limit) {
-        return mediaRepository.findAll(PageRequest.of(page, limit, FameUtil.sortDescById()));
+        return mediaRepository.findAll(PageRequest.of(page, limit, FameUtils.sortDescById()));
     }
 
     @Override
@@ -62,10 +61,10 @@ public class MediaServiceImpl implements MediaService {
         try {
             Path basePath = Paths.get(path);
 
-            Path fameDir = FameUtil.getFameDir();
-            Path uploadPath = fameDir.resolve(FameConsts.MEDIA_DIR);
+            Path fameDir = FameUtils.getFameDir();
+            Path uploadPath = fameDir.resolve(FameConst.MEDIA_DIR);
 
-            String suffix = FameUtil.getFileSuffix(file.getOriginalFilename());
+            String suffix = FameUtils.getFileSuffix(file.getOriginalFilename());
 
             String mediaName = name.endsWith(suffix) ? name : name + "." + suffix;
             Path mediaUrl = basePath.resolve(mediaName);
@@ -82,14 +81,14 @@ public class MediaServiceImpl implements MediaService {
             // 图片资源压缩图片
             if (Objects.requireNonNull(file.getContentType()).contains("image")) {
                 String thumbnailName = name.endsWith(suffix) ?
-                        FameUtil.getFileBaseName(name) + FameConsts.MEDIA_THUMBNAIL_SUFFIX + "." + suffix
-                        : name + FameConsts.MEDIA_THUMBNAIL_SUFFIX + "." + suffix;
+                        FameUtils.getFileBaseName(name) + FameConst.MEDIA_THUMBNAIL_SUFFIX + "." + suffix
+                        : name + FameConst.MEDIA_THUMBNAIL_SUFFIX + "." + suffix;
 
                 Path thumbnailUrl = basePath.resolve(thumbnailName);
                 Path thumbnailPath = uploadPath.resolve(thumbnailUrl);
                 log.info("Compress media thumbnail: [{}]", thumbnailPath);
 
-                FameUtil.compressImage(mediaPath.toFile(), thumbnailPath.toFile(), 0.5f);
+                FameUtils.compressImage(mediaPath.toFile(), thumbnailPath.toFile(), 0.5f);
                 media.setThumbUrl(thumbnailUrl.toString());
             }
 
@@ -113,8 +112,8 @@ public class MediaServiceImpl implements MediaService {
 
         mediaRepository.delete(media);
 
-        Path fameDir = FameUtil.getFameDir();
-        Path uploadPath = fameDir.resolve(FameConsts.MEDIA_DIR);
+        Path fameDir = FameUtils.getFameDir();
+        Path uploadPath = fameDir.resolve(FameConst.MEDIA_DIR);
 
         Path mediaPath = uploadPath.resolve(media.getUrl());
         if (Files.exists(mediaPath)) {

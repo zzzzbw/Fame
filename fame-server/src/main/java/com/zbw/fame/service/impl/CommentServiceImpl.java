@@ -3,18 +3,19 @@ package com.zbw.fame.service.impl;
 import com.zbw.fame.exception.NotFoundException;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.listener.event.CommentNewEvent;
+import com.zbw.fame.listener.event.LogEvent;
 import com.zbw.fame.model.domain.Article;
 import com.zbw.fame.model.domain.Comment;
 import com.zbw.fame.model.dto.CommentDto;
 import com.zbw.fame.model.enums.CommentAssessType;
 import com.zbw.fame.model.enums.CommentStatus;
+import com.zbw.fame.model.enums.LogAction;
 import com.zbw.fame.model.enums.LogType;
 import com.zbw.fame.repository.ArticleRepository;
 import com.zbw.fame.repository.CommentRepository;
 import com.zbw.fame.service.CommentService;
 import com.zbw.fame.service.LogService;
-import com.zbw.fame.util.FameConsts;
-import com.zbw.fame.util.FameUtil;
+import com.zbw.fame.util.FameUtils;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -77,10 +77,10 @@ public class CommentServiceImpl implements CommentService {
         Comment record = new Comment();
         record.setArticleId(articleId);
         record.setStatus(CommentStatus.NORMAL);
-        Page<Comment> result = commentRepository.findAll(Example.of(record), PageRequest.of(page, limit, FameUtil.sortDescById()));
+        Page<Comment> result = commentRepository.findAll(Example.of(record), PageRequest.of(page, limit, FameUtils.sortDescById()));
 
         result.forEach(comments -> {
-            String content = FameUtil.contentTransform(comments.getContent(), false, true, null);
+            String content = FameUtils.contentTransform(comments.getContent(), false, true, null);
             comments.setContent(content);
         });
 
@@ -91,9 +91,9 @@ public class CommentServiceImpl implements CommentService {
     public Page<Comment> pageAdminComments(Integer page, Integer limit) {
         Comment record = new Comment();
         record.setStatus(CommentStatus.NORMAL);
-        Page<Comment> result = commentRepository.findAll(Example.of(record), PageRequest.of(page, limit, FameUtil.sortDescById()));
+        Page<Comment> result = commentRepository.findAll(Example.of(record), PageRequest.of(page, limit, FameUtils.sortDescById()));
         result.forEach(comments -> {
-            String content = FameUtil.contentTransform(comments.getContent(), false, false, null);
+            String content = FameUtils.contentTransform(comments.getContent(), false, false, null);
             comments.setContent(content);
         });
 
@@ -182,8 +182,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void newComment(Integer commentId) {
-        eventPublisher.publishEvent(new CommentNewEvent(this, commentId));
+    public void newComment(Comment comment) {
+        eventPublisher.publishEvent(new CommentNewEvent(this, comment.getId()));
+
+        LogEvent logEvent = new LogEvent(this, comment, LogAction.ADD, LogType.COMMENT, FameUtils.getIp(), null);
+        eventPublisher.publishEvent(logEvent);
     }
 
 }
