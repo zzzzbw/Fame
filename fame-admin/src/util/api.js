@@ -1,4 +1,4 @@
-import { get, post, del } from '../plugins/http'
+import { get, post, del } from '@/plugins/http'
 
 const auth = {
   login(user) {
