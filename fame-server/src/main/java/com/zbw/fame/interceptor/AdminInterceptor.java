@@ -35,7 +35,7 @@ public class AdminInterceptor implements HandlerInterceptor {
         String url = request.getRequestURI();
         String ip = FameUtils.getIp();
 
-        log.info("用户访问地址: {}, Http类型: {}, ip地址: {}", url, request.getMethod(), ip);
+        log.info("requestUrl: {}, HttpMethod: {}, ip: {}", url, request.getMethod(), ip);
 
         //登录拦截
         if (url.contains(AUTH_URIS) && isAuthUrl(url)) {
@@ -43,14 +43,7 @@ public class AdminInterceptor implements HandlerInterceptor {
             try {
                 FameUtils.getLoginUser();
             } catch (NotLoginException e) {
-                // 要设置跨域，不然输出信息没有
-                if (request.getHeader(HttpHeaders.ORIGIN) != null) {
-                    response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, request.getHeader(HttpHeaders.ORIGIN));
-                    response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
-                    response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, "POST, GET, PUT, DELETE");
-                    response.setHeader(HttpHeaders.ACCESS_CONTROL_MAX_AGE, "3600");
-                    response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "x-requested-with");
-                }
+                log.info("Admin no login! requestUrl: {}, HttpMethod: {}, ip: {}", url, request.getMethod(), ip);
                 PrintWriter out = response.getWriter();
                 RestResponse<RestResponse.Empty> resp = RestResponse.fail(ErrorCode.NOT_LOGIN.getCode(), ErrorCode.NOT_LOGIN.getMsg());
                 String json = FameUtils.objectToJson(resp);

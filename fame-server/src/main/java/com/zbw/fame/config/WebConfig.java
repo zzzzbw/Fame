@@ -4,12 +4,22 @@ import com.zbw.fame.interceptor.AdminInterceptor;
 import com.zbw.fame.util.FameConst;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.core.Ordered;
+import org.springframework.http.HttpHeaders;
+import org.springframework.util.StringUtils;
+import org.springframework.web.cors.CorsUtils;
+import org.springframework.web.filter.GenericFilterBean;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * web 配置
@@ -25,20 +35,12 @@ public class WebConfig {
 
     private static final String MEDIA_PATH_PATTERNS = "/media/**";
 
+
     @Bean
     public WebMvcConfigurer webMvcConfigurer() {
         return new WebMvcConfigurer() {
             @Autowired
             private AdminInterceptor adminInterceptor;
-
-            //跨域请求配置
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/api/**")
-                        .allowCredentials(true)
-                        .allowedOriginPatterns("*")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE");
-            }
 
             //拦截器
             @Override
@@ -56,5 +58,38 @@ public class WebConfig {
                         .addResourceLocations(mediaResource);
             }
         };
+    }
+
+
+    /**
+     * 跨域处理Filter
+     */
+    @Bean
+    public FilterRegistrationBean<Filter> registrationCorsBean() {
+        Filter corsFilter = new GenericFilterBean() {
+            @Override
+            public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+                HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+                HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+
+                // Set customized header
+                String originHeaderValue = httpServletRequest.getHeader(HttpHeaders.ORIGIN);
+                if (StringUtils.hasText(originHeaderValue)) {
+                    httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, originHeaderValue);
+                }
+                httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, HttpHeaders.CONTENT_TYPE);
+                httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, "GET, POST, PUT, DELETE, OPTIONS");
+                httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
+                httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_MAX_AGE, "1800");
+
+                if (!CorsUtils.isPreFlightRequest(httpServletRequest)) {
+                    chain.doFilter(httpServletRequest, httpServletResponse);
+                }
+            }
+        };
+
+        FilterRegistrationBean<Filter> registrationBean = new FilterRegistrationBean<>(corsFilter);
+        registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        return registrationBean;
     }
 }
