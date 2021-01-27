@@ -14,7 +14,6 @@ import com.zbw.fame.model.enums.LogType;
 import com.zbw.fame.repository.ArticleRepository;
 import com.zbw.fame.repository.CommentRepository;
 import com.zbw.fame.service.CommentService;
-import com.zbw.fame.service.LogService;
 import com.zbw.fame.util.FameUtils;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +28,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
@@ -47,14 +45,7 @@ public class CommentServiceImpl implements CommentService {
 
     private final ArticleRepository<Article> articleRepository;
 
-    private final LogService logService;
-
     private final ApplicationEventPublisher eventPublisher;
-
-
-    private static String LOG_MESSAGE_CREATE_COMMENT = "新建评论";
-    private static String LOG_MESSAGE_DELETE_COMMENT = "删除评论";
-    private static String LOG_MESSAGE_BATCH_DELETE_COMMENT = "批量删除评论";
 
 
     @Override
@@ -64,8 +55,6 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new NotFoundException(Article.class));
 
         commentRepository.save(comment);
-        logService.save(comment.toString(), LOG_MESSAGE_CREATE_COMMENT, LogType.COMMENT);
-
 
         // 增加文章的评论数
         article.setCommentCount(article.getCommentCount() + 1);
@@ -142,7 +131,9 @@ public class CommentServiceImpl implements CommentService {
 
         log.info("删除评论: {}", comment);
         commentRepository.save(comment);
-        logService.save(comment.toString(), LOG_MESSAGE_DELETE_COMMENT, LogType.COMMENT);
+
+        LogEvent logEvent = new LogEvent(this, comment, LogAction.DELETE, LogType.COMMENT, FameUtils.getIp(), FameUtils.getLoginUser().getId());
+        eventPublisher.publishEvent(logEvent);
     }
 
     @Override
@@ -153,8 +144,9 @@ public class CommentServiceImpl implements CommentService {
         List<Comment> list = commentRepository.findAll(Example.of(record));
         list.forEach(comment -> comment.setStatus(CommentStatus.DELETE));
 
-        String logData = "ids:" + list.stream().map(Comment::getId).map(String::valueOf).collect(Collectors.joining(","));
-        logService.save(logData, LOG_MESSAGE_BATCH_DELETE_COMMENT, LogType.COMMENT);
+        LogEvent logEvent = new LogEvent(this, list, LogAction.DELETE, LogType.COMMENT, FameUtils.getIp(), FameUtils.getLoginUser().getId());
+        eventPublisher.publishEvent(logEvent);
+
         return commentRepository.saveAll(list).size();
     }
 
@@ -182,7 +174,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void newComment(Comment comment) {
+    public void newCommentEvent(Comment comment) {
         eventPublisher.publishEvent(new CommentNewEvent(this, comment.getId()));
 
         LogEvent logEvent = new LogEvent(this, comment, LogAction.ADD, LogType.COMMENT, FameUtils.getIp(), null);

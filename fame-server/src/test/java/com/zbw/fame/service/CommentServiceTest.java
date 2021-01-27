@@ -1,8 +1,10 @@
 package com.zbw.fame.service;
 
 import com.zbw.fame.model.domain.Comment;
+import com.zbw.fame.model.domain.User;
 import com.zbw.fame.model.dto.Pagination;
 import com.zbw.fame.BaseTest;
+import com.zbw.fame.util.FameUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,11 +66,16 @@ public class CommentServiceTest extends BaseTest {
 
     @Test
     public void newComment() throws InterruptedException {
-        commentService.newComment(new Comment());
+        commentService.newCommentEvent(new Comment());
         Thread.sleep(2000);
     }
 
-    public void addCommentController() {
+    @Test
+    public void deleteComment() {
+        User user = new User();
+        user.setId(1);
+        FameUtils.setLoginUser(user);
 
+        commentService.deleteComment(1);
     }
 }

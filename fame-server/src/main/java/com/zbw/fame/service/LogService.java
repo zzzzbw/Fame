@@ -3,6 +3,7 @@ package com.zbw.fame.service;
 import com.zbw.fame.model.domain.Log;
 import com.zbw.fame.model.enums.LogType;
 import org.springframework.data.domain.Page;
+import org.springframework.lang.NonNull;
 
 /**
  * 日志 Service 接口
@@ -15,21 +16,9 @@ public interface LogService {
     /**
      * 保存操作日志
      *
-     * @param data    日志数据
-     * @param message 日志信息
-     * @param type    日志类型
+     * @param log 日志Entity
      */
-    void save(String data, String message, LogType type);
-
-    /**
-     * 保存操作日志
-     *
-     * @param data    日志数据
-     * @param message 日志信息
-     * @param type    日志类型
-     * @param ip      操作人ip
-     */
-    void save(String data, String message, LogType type, String ip);
+    void save(@NonNull Log log);
 
     /**
      * 保存操作日志

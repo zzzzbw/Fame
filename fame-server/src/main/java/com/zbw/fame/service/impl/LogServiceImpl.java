@@ -4,6 +4,7 @@ import com.zbw.fame.model.domain.Log;
 import com.zbw.fame.model.enums.LogType;
 import com.zbw.fame.repository.LogRepository;
 import com.zbw.fame.service.LogService;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,15 +25,8 @@ public class LogServiceImpl implements LogService {
     private final LogRepository logRepository;
 
     @Override
-    @Transactional(rollbackFor = Throwable.class)
-    public void save(String data, String message, LogType type) {
-        this.save(data, message, type, null, null);
-    }
-
-    @Override
-    @Transactional(rollbackFor = Throwable.class)
-    public void save(String data, String message, LogType type, String ip) {
-        this.save(data, message, type, ip, null);
+    public void save(@NonNull Log log) {
+        logRepository.save(log);
     }
 
     @Override

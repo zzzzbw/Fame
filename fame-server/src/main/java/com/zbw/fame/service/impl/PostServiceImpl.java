@@ -2,11 +2,13 @@ package com.zbw.fame.service.impl;
 
 import com.zbw.fame.exception.NotFoundException;
 import com.zbw.fame.exception.TipException;
+import com.zbw.fame.listener.event.LogEvent;
 import com.zbw.fame.listener.event.PostHitsEvent;
 import com.zbw.fame.model.domain.Post;
 import com.zbw.fame.model.dto.Archive;
 import com.zbw.fame.model.dto.PostInfo;
 import com.zbw.fame.model.enums.ArticleStatus;
+import com.zbw.fame.model.enums.LogAction;
 import com.zbw.fame.model.enums.LogType;
 import com.zbw.fame.repository.ArticleRepository;
 import com.zbw.fame.service.*;
@@ -34,25 +36,18 @@ public class PostServiceImpl extends AbstractArticleServiceImpl<Post> implements
 
     private final CommentService commentService;
 
-    private final LogService logService;
-
     private final ApplicationEventPublisher eventPublisher;
-
-    private static String LOG_MESSAGE_CREATE_POST = "新建文章";
-    private static String LOG_MESSAGE_DELETE_POST = "删除文章";
 
     public PostServiceImpl(ArticleRepository<Post> articleRepository,
                            OptionService optionService,
                            CategoryService categoryService,
                            TagService tagService,
                            CommentService commentService,
-                           LogService logService,
                            ApplicationEventPublisher eventPublisher) {
         super(articleRepository, optionService);
         this.categoryService = categoryService;
         this.tagService = tagService;
         this.commentService = commentService;
-        this.logService = logService;
         this.eventPublisher = eventPublisher;
     }
 
@@ -69,7 +64,9 @@ public class PostServiceImpl extends AbstractArticleServiceImpl<Post> implements
             articleRepository.saveAndFlush(oldPost);
         } else {
             articleRepository.saveAndFlush(post);
-            logService.save(post.toString(), LOG_MESSAGE_CREATE_POST, LogType.POST);
+
+            LogEvent logEvent = new LogEvent(this, post, LogAction.ADD, LogType.POST, FameUtils.getIp(), FameUtils.getLoginUser().getId());
+            eventPublisher.publishEvent(logEvent);
         }
 
         Integer id = post.getId();
@@ -89,8 +86,6 @@ public class PostServiceImpl extends AbstractArticleServiceImpl<Post> implements
 
         log.info("删除文章: {}", post);
         articleRepository.save(post);
-        logService.save(post.toString(), LOG_MESSAGE_DELETE_POST, LogType.POST);
-
 
         int commentsResult = commentService.deleteCommentByArticleId(id);
         log.info("删除对应的评论,数量: {}", commentsResult);
@@ -98,6 +93,9 @@ public class PostServiceImpl extends AbstractArticleServiceImpl<Post> implements
         // 传空的属性，则移除该文章关联的属性
         categoryService.saveOrRemoveMetas("", post.getId());
         tagService.saveOrRemoveMetas("", post.getId());
+
+        LogEvent logEvent = new LogEvent(this, post, LogAction.DELETE, LogType.POST, FameUtils.getIp(), FameUtils.getLoginUser().getId());
+        eventPublisher.publishEvent(logEvent);
 
     }
 

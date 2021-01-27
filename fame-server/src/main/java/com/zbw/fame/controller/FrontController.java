@@ -156,7 +156,7 @@ public class FrontController {
     public RestResponse<RestResponse.Empty> addComment(@RequestBody @Valid AddCommentParam param) {
         Comment comment = FameUtils.convertTo(param, Comment.class);
         commentService.save(comment);
-        commentService.newComment(comment);
+        commentService.newCommentEvent(comment);
         return RestResponse.ok();
     }
 

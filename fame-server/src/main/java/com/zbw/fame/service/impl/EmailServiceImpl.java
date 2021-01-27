@@ -1,15 +1,17 @@
 package com.zbw.fame.service.impl;
 
+import com.zbw.fame.listener.event.LogEvent;
 import com.zbw.fame.model.domain.Comment;
+import com.zbw.fame.model.enums.LogAction;
 import com.zbw.fame.model.enums.LogType;
 import com.zbw.fame.service.EmailService;
-import com.zbw.fame.service.LogService;
 import com.zbw.fame.service.OptionService;
 import com.zbw.fame.util.FameConst;
 import com.zbw.fame.util.OptionKeys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -37,10 +39,7 @@ public class EmailServiceImpl implements EmailService {
 
     private final OptionService optionService;
 
-    private final LogService logService;
-
-    private static String LOG_MESSAGE_SEND_EMAIL_SUCCESS = "发送邮件成功";
-    private static String LOG_MESSAGE_SEND_EMAIL_FAIL = "发送邮件失败";
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     @Async
@@ -57,10 +56,13 @@ public class EmailServiceImpl implements EmailService {
         try {
             String emailUsername = optionService.get(OptionKeys.EMAIL_USERNAME);
             sendEmail(content, emailUsername);
-            logService.save(logData, LOG_MESSAGE_SEND_EMAIL_SUCCESS, LogType.EMAIL);
+
+            LogEvent logEvent = new LogEvent(this, logData, LogAction.SUCCESS, LogType.EMAIL);
+            eventPublisher.publishEvent(logEvent);
         } catch (Exception e) {
-            logService.save(logData, LOG_MESSAGE_SEND_EMAIL_FAIL, LogType.EMAIL);
-            log.error(e.getMessage());
+            LogEvent logEvent = new LogEvent(this, logData, LogAction.FAIL, LogType.EMAIL);
+            eventPublisher.publishEvent(logEvent);
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -78,10 +80,13 @@ public class EmailServiceImpl implements EmailService {
         log.info("sendEmailToUser start: {}", new Date());
         try {
             sendEmail(content, replyEmail);
-            logService.save(logData, LOG_MESSAGE_SEND_EMAIL_SUCCESS, LogType.EMAIL);
+
+            LogEvent logEvent = new LogEvent(this, logData, LogAction.SUCCESS, LogType.EMAIL);
+            eventPublisher.publishEvent(logEvent);
         } catch (Exception e) {
-            logService.save(logData, LOG_MESSAGE_SEND_EMAIL_FAIL, LogType.EMAIL);
-            log.error(e.getMessage());
+            LogEvent logEvent = new LogEvent(this, logData, LogAction.FAIL, LogType.EMAIL);
+            eventPublisher.publishEvent(logEvent);
+            log.error(e.getMessage(), e);
         }
     }
 

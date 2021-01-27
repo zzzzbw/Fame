@@ -1,18 +1,20 @@
 package com.zbw.fame.service.impl;
 
 import com.zbw.fame.exception.NotFoundException;
+import com.zbw.fame.listener.event.LogEvent;
 import com.zbw.fame.model.domain.Note;
 import com.zbw.fame.model.dto.NoteInfo;
 import com.zbw.fame.model.enums.ArticleStatus;
+import com.zbw.fame.model.enums.LogAction;
 import com.zbw.fame.model.enums.LogType;
 import com.zbw.fame.repository.NoteRepository;
 import com.zbw.fame.service.CommentService;
-import com.zbw.fame.service.LogService;
 import com.zbw.fame.service.NoteService;
 import com.zbw.fame.service.OptionService;
 import com.zbw.fame.util.FameUtils;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,18 +32,15 @@ public class NoteServiceImpl extends AbstractArticleServiceImpl<Note> implements
 
     private final CommentService commentService;
 
-    private final LogService logService;
-
-    private static String LOG_MESSAGE_CREATE_NOTE = "新建页面";
-    private static String LOG_MESSAGE_DELETE_NOTE = "删除页面";
+    private final ApplicationEventPublisher eventPublisher;
 
     public NoteServiceImpl(NoteRepository noteRepository,
                            OptionService optionService,
                            CommentService commentService,
-                           LogService logService) {
+                           ApplicationEventPublisher eventPublisher) {
         super(noteRepository, optionService);
         this.commentService = commentService;
-        this.logService = logService;
+        this.eventPublisher = eventPublisher;
     }
 
 
@@ -63,7 +62,9 @@ public class NoteServiceImpl extends AbstractArticleServiceImpl<Note> implements
             articleRepository.saveAndFlush(oldNote);
         } else {
             articleRepository.saveAndFlush(note);
-            logService.save(note.toString(), LOG_MESSAGE_CREATE_NOTE, LogType.NOTE);
+
+            LogEvent logEvent = new LogEvent(this, note, LogAction.ADD, LogType.NOTE, FameUtils.getIp(), FameUtils.getLoginUser().getId());
+            eventPublisher.publishEvent(logEvent);
         }
 
         return note.getId();
@@ -79,9 +80,10 @@ public class NoteServiceImpl extends AbstractArticleServiceImpl<Note> implements
         log.info("删除页面: {}", note);
         articleRepository.save(note);
 
-        logService.save(note.toString(), LOG_MESSAGE_DELETE_NOTE, LogType.NOTE);
-
         int commentsResult = commentService.deleteCommentByArticleId(id);
         log.info("删除对应的评论,数量: {}", commentsResult);
+
+        LogEvent logEvent = new LogEvent(this, note, LogAction.DELETE, LogType.NOTE, FameUtils.getIp(), FameUtils.getLoginUser().getId());
+        eventPublisher.publishEvent(logEvent);
     }
 }

@@ -4,6 +4,7 @@ import com.zbw.fame.model.domain.Comment;
 import com.zbw.fame.model.dto.CommentDto;
 import com.zbw.fame.model.enums.CommentAssessType;
 import org.springframework.data.domain.Page;
+import org.springframework.lang.NonNull;
 
 /**
  * 评论 Service 接口
@@ -17,7 +18,7 @@ public interface CommentService {
      *
      * @param comments 评论entity
      */
-    void save(Comment comments);
+    void save(@NonNull Comment comments);
 
     /**
      * 获取文章下的评论
@@ -81,5 +82,5 @@ public interface CommentService {
      *
      * @param comment 评论id
      */
-    void newComment(Comment comment);
+    void newCommentEvent(Comment comment);
 }

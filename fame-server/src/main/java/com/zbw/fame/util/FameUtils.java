@@ -1,5 +1,6 @@
 package com.zbw.fame.util;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vladsch.flexmark.ast.Node;
 import com.vladsch.flexmark.ext.tables.TablesExtension;
 import com.vladsch.flexmark.html.HtmlRenderer;
@@ -9,13 +10,17 @@ import com.vladsch.flexmark.util.options.MutableDataSet;
 import com.zbw.fame.exception.NotLoginException;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.model.domain.User;
+import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
-import org.springframework.util.*;
+import org.springframework.util.DigestUtils;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -46,6 +51,11 @@ import java.util.*;
  */
 @Slf4j
 public class FameUtils {
+
+    /**
+     * {@code jackson} ObjectMapper
+     */
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     /**
      * markdown 扩展设置
@@ -269,6 +279,32 @@ public class FameUtils {
     public static Sort sortDescById() {
         return sortDescBy("id");
     }
+
+
+    /**
+     * json转换为对象
+     *
+     * @param json json字符串
+     * @param clz  对象Class
+     * @param <T>  对象类型
+     * @return 对象实体
+     */
+    @SneakyThrows
+    public static <T> T jsonToObject(@NonNull String json, @NonNull Class<T> clz) {
+        return OBJECT_MAPPER.readValue(json, clz);
+    }
+
+    /**
+     * 对象转为json
+     *
+     * @param data 目标对象
+     * @return json字符串
+     */
+    @SneakyThrows
+    public static String objectToJson(@NonNull Object data) {
+        return OBJECT_MAPPER.writeValueAsString(data);
+    }
+
 
     /**
      * 忽略大小写的indexOf

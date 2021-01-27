@@ -1,6 +1,7 @@
 package com.zbw.fame;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zbw.fame.util.FameUtils;
+import com.zbw.fame.util.FameUtilsTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
@@ -40,7 +41,7 @@ public abstract class BaseMvcTest extends BaseTest {
                     .accept(MediaType.APPLICATION_JSON);
 
             if (!Objects.isNull(requestBody)) {
-                String content = new ObjectMapper().writeValueAsString(requestBody);
+                String content = FameUtils.objectToJson(requestBody);
                 builder.content(content);
             }
             return mockMvc.perform(builder).andReturn();

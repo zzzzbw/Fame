@@ -1,6 +1,5 @@
 package com.zbw.fame.interceptor;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zbw.fame.exception.NotLoginException;
 import com.zbw.fame.util.ErrorCode;
 import com.zbw.fame.util.FameUtils;
@@ -53,7 +52,8 @@ public class AdminInterceptor implements HandlerInterceptor {
                     response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "x-requested-with");
                 }
                 PrintWriter out = response.getWriter();
-                String json = new ObjectMapper().writeValueAsString(RestResponse.fail(ErrorCode.NOT_LOGIN.getCode(), ErrorCode.NOT_LOGIN.getMsg()));
+                RestResponse<RestResponse.Empty> resp = RestResponse.fail(ErrorCode.NOT_LOGIN.getCode(), ErrorCode.NOT_LOGIN.getMsg());
+                String json = FameUtils.objectToJson(resp);
                 out.print(json);
                 out.flush();
                 return false;

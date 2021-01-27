@@ -1,6 +1,7 @@
 package com.zbw.fame.listener.event;
 
 import lombok.Getter;
+import lombok.ToString;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.lang.NonNull;
 
@@ -8,6 +9,8 @@ import org.springframework.lang.NonNull;
  * @author by zzzzbw
  * @since 2021/01/14 14:49
  */
+
+@ToString
 @Getter
 public class PostHitsEvent extends ApplicationEvent {
 
