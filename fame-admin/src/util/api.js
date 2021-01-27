@@ -45,7 +45,7 @@ const auth = {
     return post('/admin/post', article)
   },
   deletePost(id) {
-    return del('/admin/article/' + id)
+    return del('/admin/post/' + id)
   },
   pageComment(page) {
     const params = {
@@ -69,16 +69,10 @@ const auth = {
     return get('/admin/tag')
   },
   saveCategory(name) {
-    const params = {
-      name: name,
-    }
-    return post('/admin/category', params)
+    return post('/admin/category/' + name)
   },
   saveTag(name) {
-    const params = {
-      name: name,
-    }
-    return post('/admin/tag', params)
+    return post('/admin/tag/' + name)
   },
   updateCategory(id, name) {
     const params = {
@@ -93,16 +87,10 @@ const auth = {
     return post('/admin/tag/' + id, params)
   },
   deleteCategory(name) {
-    const params = {
-      name: name,
-    }
-    return del('/admin/category', params)
+    return del('/admin/category/' + name)
   },
   deleteTag(name) {
-    const params = {
-      name: name,
-    }
-    return del('/admin/tag', params)
+    return del('/admin/tag/' + name)
   },
   pageNote(page) {
     const params = {

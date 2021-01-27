@@ -2,9 +2,10 @@ package com.zbw.fame.model.param;
 
 import com.zbw.fame.model.enums.ArticleStatus;
 import lombok.Data;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 /**
  * @author by zzzzbw
@@ -31,8 +32,10 @@ public class SavePostParam {
 
     private Boolean allowComment = false;
 
-    private Long created = System.currentTimeMillis();
+    @NotNull(message = "创建时间不能为空")
+    private Date created;
 
-    private Long modified = System.currentTimeMillis();
+    @NotNull(message = "更新时间不能为空")
+    private Date modified;
 
 }

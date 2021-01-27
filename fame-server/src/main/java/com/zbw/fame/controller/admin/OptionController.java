@@ -38,7 +38,7 @@ public class OptionController {
      * @return {@link RestResponse#ok()}
      */
     @PostMapping("save")
-    public RestResponse<RestResponse.Empty> saveAllOptions(@RequestParam Map<String, String> options) {
+    public RestResponse<RestResponse.Empty> saveAllOptions(@RequestBody Map<String, String> options) {
         optionService.save(options);
         return RestResponse.ok();
     }

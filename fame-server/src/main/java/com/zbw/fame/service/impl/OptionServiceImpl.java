@@ -52,15 +52,12 @@ public class OptionServiceImpl implements OptionService {
     @Transactional(rollbackFor = Throwable.class)
     public void save(String key, String value) {
         SysOption sysOption = optionRepository.findByOptionKey(key);
-        if (null != sysOption) {
-            sysOption.setOptionValue(value);
-            optionRepository.save(sysOption);
-        } else {
+        if (null == sysOption) {
             sysOption = new SysOption();
             sysOption.setOptionKey(key);
-            sysOption.setOptionValue(value);
-            optionRepository.save(sysOption);
         }
+        sysOption.setOptionValue(value);
+        optionRepository.save(sysOption);
     }
 
     @Override

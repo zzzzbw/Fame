@@ -63,7 +63,7 @@ public class MediaController {
     @PostMapping("upload")
     public RestResponse<Media> upload(@RequestPart("file") MultipartFile file,
                                       @RequestParam String name,
-                                      @RequestParam String path, HttpServletResponse response) {
+                                      @RequestParam String path) {
         log.info("name:{}, path:{}", name, path);
         Media media = mediaService.upload(file, name, path);
         return RestResponse.ok(media);

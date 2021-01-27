@@ -7,8 +7,11 @@ import com.zbw.fame.service.NoteService;
 import com.zbw.fame.util.FameUtils;
 import com.zbw.fame.util.RestResponse;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 /**
  * @author zzzzbw
@@ -31,7 +34,7 @@ public class NoteController extends AbstractArticleController<Note> {
      * @return {@see String}
      */
     @PostMapping
-    public RestResponse<Integer> save(SaveNoteParam param) {
+    public RestResponse<Integer> save(@RequestBody @Valid SaveNoteParam param) {
         Note note = FameUtils.convertTo(param, Note.class);
         User user = FameUtils.getLoginUser();
         note.setAuthorId(user.getId());

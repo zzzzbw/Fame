@@ -8,6 +8,8 @@ import com.zbw.fame.util.FameUtils;
 import com.zbw.fame.util.RestResponse;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 /**
  * @author zzzzbw
  * @since 2019/7/22 17:50
@@ -29,9 +31,8 @@ public class PostController extends AbstractArticleController<Post> {
      * @return {@link RestResponse#ok()}
      */
     @PostMapping
-    public RestResponse<Integer> save(SavePostParam param) {
+    public RestResponse<Integer> save(@RequestBody @Valid SavePostParam param) {
         Post post = FameUtils.convertTo(param, Post.class);
-        // TODO created、modified时间转换
         User user = FameUtils.getLoginUser();
         post.setAuthorId(user.getId());
         Integer postId = postService.save(post);
