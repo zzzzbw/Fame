@@ -70,7 +70,7 @@ public class InitApplicationRunner implements ApplicationRunner {
 
         initDispatcherServlet();
 
-        log.info("Fame initialization in " + (System.currentTimeMillis() - startTime) + " ms");
+        log.info("Fame initialization in {}ms", (System.currentTimeMillis() - startTime));
     }
 
     /**

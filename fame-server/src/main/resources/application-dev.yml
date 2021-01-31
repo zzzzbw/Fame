@@ -6,6 +6,9 @@ spring:
     url: jdbc:h2:file:~/.fame/db/fame
     username: root
     password: root
+    schema: classpath:db/schema/*.sql
+    # 第三方连接池需要设置为 always
+    initialization-mode: always
 
   h2:
     console:
@@ -15,3 +18,5 @@ spring:
       enabled: true
   jpa:
     show-sql: true
+    hibernate:
+      ddl-auto: none
