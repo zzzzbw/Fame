@@ -58,7 +58,7 @@ public class NoteServiceImpl extends AbstractArticleServiceImpl<Note> implements
             Note oldNote = articleRepository.findById(note.getId())
                     .orElseThrow(() -> new NotFoundException(Note.class));
 
-            FameUtils.copyPropertiesIgnoreNull(note, oldNote);
+            FameUtils.copyProperties(note, oldNote, true);
             articleRepository.saveAndFlush(oldNote);
         } else {
             articleRepository.saveAndFlush(note);

@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
      */
     private User createSessionUser(User user) {
         User sessionUser = new User();
-        FameUtils.copyPropertiesIgnoreNull(user, sessionUser);
+        FameUtils.copyProperties(user, sessionUser, true);
         // 清空密码
         sessionUser.setPasswordMd5("");
         return sessionUser;

@@ -60,7 +60,7 @@ public class PostServiceImpl extends AbstractArticleServiceImpl<Post> implements
             Post oldPost = articleRepository.findById(post.getId())
                     .orElseThrow(() -> new NotFoundException(Post.class));
 
-            FameUtils.copyPropertiesIgnoreNull(post, oldPost);
+            FameUtils.copyProperties(post, oldPost, true);
             articleRepository.saveAndFlush(oldPost);
         } else {
             articleRepository.saveAndFlush(post);

@@ -1,5 +1,12 @@
 package com.zbw.fame.util;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import cn.hutool.core.convert.Convert;
+import cn.hutool.core.img.ImgUtil;
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.TypeUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vladsch.flexmark.ast.Node;
 import com.vladsch.flexmark.ext.tables.TablesExtension;
@@ -13,9 +20,6 @@ import com.zbw.fame.model.domain.User;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.DigestUtils;
@@ -24,24 +28,20 @@ import org.springframework.util.ReflectionUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.imageio.IIOImage;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageWriteParam;
-import javax.imageio.ImageWriter;
-import javax.imageio.stream.ImageOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.awt.image.BufferedImage;
-import java.beans.PropertyDescriptor;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.ParameterizedType;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * 公用工具类
@@ -314,9 +314,7 @@ public class FameUtils {
      * @return 所在的位置, 没有匹配返回-1
      */
     public static int ignoreCaseIndexOf(String str, String flag) {
-        str = str.toUpperCase();
-        flag = flag.toUpperCase();
-        return str.indexOf(flag);
+        return StrUtil.indexOfIgnoreCase(str, flag);
     }
 
     /**
@@ -326,8 +324,7 @@ public class FameUtils {
      * @return 泛型类
      */
     public static Class<?> getGenericClass(Class<?> clz) {
-        ParameterizedType parameterizedType = (ParameterizedType) clz.getGenericSuperclass();
-        return (Class<?>) parameterizedType.getActualTypeArguments()[0];
+        return (Class<?>) TypeUtil.getTypeArgument(clz);
     }
 
 
@@ -339,27 +336,8 @@ public class FameUtils {
      * @param <T>   T
      * @return 值
      */
-    @SuppressWarnings("unchecked")
-    public static <T> T convertStringToType(String value, Class<?> type) {
-        if (type.equals(Boolean.class) || type.equals(boolean.class)) {
-            return (T) Boolean.valueOf(value);
-        } else if (type.equals(Integer.class) || type.equals(int.class)) {
-            return (T) Integer.valueOf(value);
-        } else if (type.equals(Byte.class) || type.equals(byte.class)) {
-            return (T) Byte.valueOf(value);
-        } else if (type.equals(Short.class) || type.equals(short.class)) {
-            return (T) Short.valueOf(value);
-        } else if (type.equals(Long.class) || type.equals(long.class)) {
-            return (T) Long.valueOf(value);
-        } else if (type.equals(Float.class) || type.equals(float.class)) {
-            return (T) Float.valueOf(value);
-        } else if (type.equals(Double.class) || type.equals(double.class)) {
-            return (T) Double.valueOf(value);
-        } else if (type.equals(Character.class) || type.equals(char.class)) {
-            return (T) Character.valueOf(value.charAt(0));
-        }
-
-        return (T) value;
+    public static <T> T convertStringToType(String value, Class<T> type) {
+        return Convert.convert(type, value);
     }
 
     /**
@@ -377,7 +355,7 @@ public class FameUtils {
         try {
             Constructor<T> tConstructor = ReflectionUtils.accessibleConstructor(targetClz);
             targetInstance = tConstructor.newInstance();
-            copyPropertiesIgnoreNull(source, targetInstance);
+            copyProperties(source, targetInstance, true);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
             throw new TipException(e);
@@ -388,32 +366,16 @@ public class FameUtils {
     /**
      * 复制非Null的属性
      *
-     * @param source 源对象
-     * @param target 目标对象
+     * @param source     源对象
+     * @param target     目标对象
+     * @param ignoreNull 忽略null值
      */
-    public static void copyPropertiesIgnoreNull(Object source, Object target) {
-        BeanUtils.copyProperties(source, target, getNullPropertyNames(source));
-    }
-
-    /**
-     * 获取Null属性名称
-     *
-     * @param source 对象
-     * @return Null属性名称
-     */
-    public static String[] getNullPropertyNames(Object source) {
-        final BeanWrapper src = new BeanWrapperImpl(source);
-        PropertyDescriptor[] pds = src.getPropertyDescriptors();
-
-        Set<String> emptyNames = new HashSet<>();
-        for (PropertyDescriptor pd : pds) {
-            Object srcValue = src.getPropertyValue(pd.getName());
-            if (srcValue == null) {
-                emptyNames.add(pd.getName());
-            }
+    public static void copyProperties(Object source, Object target, boolean ignoreNull) {
+        CopyOptions copyOptions = CopyOptions.create();
+        if (ignoreNull) {
+            copyOptions.ignoreNullValue();
         }
-        String[] result = new String[emptyNames.size()];
-        return emptyNames.toArray(result);
+        BeanUtil.copyProperties(source, target, copyOptions);
     }
 
     /**
@@ -439,14 +401,7 @@ public class FameUtils {
      * @return 文件名
      */
     public static String getFileBaseName(String fileName) {
-        if (ObjectUtils.isEmpty(fileName)) {
-            return "";
-        }
-        int index = fileName.lastIndexOf(".");
-        if (index == -1) {
-            return fileName;
-        }
-        return fileName.substring(0, index);
+        return FileUtil.getPrefix(fileName);
     }
 
 
@@ -457,14 +412,7 @@ public class FameUtils {
      * @return 文件后缀
      */
     public static String getFileSuffix(String fileName) {
-        if (ObjectUtils.isEmpty(fileName)) {
-            return "";
-        }
-        int index = fileName.lastIndexOf(".");
-        if (index == -1) {
-            return "";
-        }
-        return fileName.substring(index + 1);
+        return FileUtil.getSuffix(fileName);
     }
 
     /**
@@ -475,55 +423,6 @@ public class FameUtils {
      * @param imageQuality 压缩图片质量
      */
     public static void compressImage(File source, File target, float imageQuality) {
-        InputStream inputStream = null;
-        OutputStream outputStream = null;
-        ImageWriter imageWriter = null;
-        ImageOutputStream imageOutputStream = null;
-        try {
-            inputStream = new FileInputStream(source);
-            outputStream = new FileOutputStream(target);
-            // Create the buffered image
-            BufferedImage bufferedImage = ImageIO.read(inputStream);
-
-            // Get image writers
-            Iterator<ImageWriter> imageWriters = ImageIO.getImageWritersByFormatName("jpg");
-
-            if (!imageWriters.hasNext()) {
-                throw new IllegalStateException("Writers Not Found!!");
-            }
-
-            imageWriter = imageWriters.next();
-            imageOutputStream = ImageIO.createImageOutputStream(outputStream);
-            imageWriter.setOutput(imageOutputStream);
-
-            ImageWriteParam imageWriteParam = imageWriter.getDefaultWriteParam();
-
-            // Set the compress quality metrics
-            imageWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-            imageWriteParam.setCompressionQuality(imageQuality);
-
-            // Created image
-            imageWriter.write(null, new IIOImage(bufferedImage, null, null), imageWriteParam);
-        } catch (IOException e) {
-            throw new TipException(e);
-        } finally {
-            // close all streams
-            try {
-                if (inputStream != null) {
-                    inputStream.close();
-                }
-                if (outputStream != null) {
-                    outputStream.close();
-                }
-                if (imageOutputStream != null) {
-                    imageOutputStream.close();
-                }
-                if (imageWriter != null) {
-                    imageWriter.dispose();
-                }
-            } catch (IOException e) {
-                log.error(e.getMessage(), e);
-            }
-        }
+        ImgUtil.scale(source, target, imageQuality);
     }
 }
