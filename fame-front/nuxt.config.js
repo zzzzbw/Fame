@@ -43,9 +43,10 @@ export default {
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       {
-        rel: 'stylesheet',
-        type: 'text/css',
-        href: 'https://fonts.googleapis.com/css?family=Bree+Serif',
+        rel: 'preload',
+        href: 'https://fonts.font.im/css?family=Bree+Serif',
+        as: 'style',
+        onload: 'this.rel="stylesheet"',
       },
     ],
     noscript: [{ innerHTML: 'This website requires JavaScript.' }],
