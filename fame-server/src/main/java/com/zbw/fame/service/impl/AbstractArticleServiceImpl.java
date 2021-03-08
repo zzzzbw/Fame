@@ -6,7 +6,7 @@ import com.zbw.fame.model.enums.ArticleStatus;
 import com.zbw.fame.model.param.ArticleQuery;
 import com.zbw.fame.repository.ArticleRepository;
 import com.zbw.fame.service.ArticleService;
-import com.zbw.fame.service.OptionService;
+import com.zbw.fame.service.SysOptionService;
 import com.zbw.fame.util.FameUtils;
 import com.zbw.fame.util.OptionKeys;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,7 @@ public abstract class AbstractArticleServiceImpl<ARTICLE extends Article> implem
 
     protected final ArticleRepository<ARTICLE> articleRepository;
 
-    protected final OptionService optionService;
+    protected final SysOptionService sysOptionService;
 
 
     @Override
@@ -45,7 +45,7 @@ public abstract class AbstractArticleServiceImpl<ARTICLE extends Article> implem
         Pageable pageable = PageRequest.of(page, limit, FameUtils.sortDescBy(sort));
         Page<ARTICLE> result = articleRepository.findAllByStatus(ArticleStatus.PUBLISH, pageable);
 
-        String summaryFlag = optionService.get(OptionKeys.SUMMARY_FLAG);
+        String summaryFlag = sysOptionService.get(OptionKeys.SUMMARY_FLAG);
         result.forEach(article -> {
             String content = FameUtils.contentTransform(article.getContent(), true, true, summaryFlag);
             article.setContent(content);

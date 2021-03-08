@@ -44,7 +44,7 @@ public class FrontController {
 
     private final CommentService commentService;
 
-    private final OptionService optionService;
+    private final SysOptionService sysOptionService;
 
     /**
      * 文章列表
@@ -180,7 +180,7 @@ public class FrontController {
      */
     @GetMapping("option")
     public RestResponse<Map<String, String>> getOption() {
-        Map<String, String> map = optionService.getFrontOptionMap();
+        Map<String, String> map = sysOptionService.getFrontOptionMap();
         return RestResponse.ok(map);
     }
 }

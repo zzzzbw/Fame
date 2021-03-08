@@ -1,8 +1,11 @@
 package com.zbw.fame.service.impl;
 
-import com.zbw.fame.model.domain.SysOption;
-import com.zbw.fame.repository.OptionRepository;
-import com.zbw.fame.service.OptionService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.zbw.fame.mapper.SysOptionMapper;
+import com.zbw.fame.model.entity.SysOption;
+import com.zbw.fame.service.SysOptionService;
 import com.zbw.fame.util.FameUtils;
 import com.zbw.fame.util.OptionKeys;
 import lombok.RequiredArgsConstructor;
@@ -23,21 +26,23 @@ import java.util.stream.Collectors;
  */
 @Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class OptionServiceImpl implements OptionService {
-
-
-    private final OptionRepository optionRepository;
+public class SysOptionServiceImpl extends ServiceImpl<SysOptionMapper, SysOption> implements SysOptionService {
 
     @Override
     public Map<String, String> getAllOptionMap() {
-        return optionRepository.findAll().stream()
+        return lambdaQuery().list()
+                .stream()
                 .collect(Collectors.toMap(SysOption::getOptionKey, SysOption::getOptionValue));
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public <T> T get(String key, T defaultValue) {
-        SysOption sysOption = optionRepository.findByOptionKey(key);
+        LambdaQueryWrapper<SysOption> wrapper = Wrappers.<SysOption>lambdaQuery()
+                .eq(SysOption::getOptionKey, key);
+
+        SysOption sysOption = getOne(wrapper);
+
         return (T) (sysOption == null || ObjectUtils.isEmpty(sysOption.getOptionValue()) ?
                 defaultValue :
                 FameUtils.convertStringToType(sysOption.getOptionValue(), defaultValue.getClass()));
@@ -51,13 +56,16 @@ public class OptionServiceImpl implements OptionService {
     @Override
     @Transactional(rollbackFor = Throwable.class)
     public void save(String key, String value) {
-        SysOption sysOption = optionRepository.findByOptionKey(key);
+        LambdaQueryWrapper<SysOption> wrapper = Wrappers.<SysOption>lambdaQuery()
+                .eq(SysOption::getOptionKey, key);
+
+        SysOption sysOption = getOne(wrapper);
         if (null == sysOption) {
             sysOption = new SysOption();
             sysOption.setOptionKey(key);
         }
         sysOption.setOptionValue(value);
-        optionRepository.save(sysOption);
+        saveOrUpdate(sysOption);
     }
 
     @Override

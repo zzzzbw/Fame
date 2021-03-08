@@ -6,5 +6,6 @@ create table if not exists SYS_OPTION
         unique,
     OPTION_VALUE VARCHAR(1023)                       not null,
     CREATED      TIMESTAMP default CURRENT_TIMESTAMP not null,
-    MODIFIED     TIMESTAMP default CURRENT_TIMESTAMP not null
+    MODIFIED     TIMESTAMP default CURRENT_TIMESTAMP not null,
+    DELETED      TINYINT default 0 not null
 );

@@ -3,7 +3,7 @@ package com.zbw.fame.config;
 import com.zbw.fame.model.domain.*;
 import com.zbw.fame.model.enums.ArticleStatus;
 import com.zbw.fame.repository.*;
-import com.zbw.fame.service.OptionService;
+import com.zbw.fame.service.SysOptionService;
 import com.zbw.fame.util.FameConst;
 import com.zbw.fame.util.FameUtils;
 import com.zbw.fame.util.OptionKeys;
@@ -43,7 +43,7 @@ public class InitApplicationRunner implements ApplicationRunner {
 
     private final CommentRepository commentRepository;
 
-    private final OptionService optionService;
+    private final SysOptionService sysOptionService;
 
     private static final String DEFAULT_TAG = "First";
 
@@ -63,7 +63,7 @@ public class InitApplicationRunner implements ApplicationRunner {
         log.info("Initializing Fame after springboot loading completed...");
         long startTime = System.currentTimeMillis();
 
-        boolean isInit = optionService.get(OptionKeys.FAME_INIT, Boolean.FALSE);
+        boolean isInit = sysOptionService.get(OptionKeys.FAME_INIT, Boolean.FALSE);
         if (!isInit) {
             createDefaultIfAbsent();
         }
@@ -97,7 +97,7 @@ public class InitApplicationRunner implements ApplicationRunner {
         createDefaultCommentIfAbsent(post);
         createDefaultNoteIfAbsent(user);
         createDefaultOptionIfAbsent();
-        optionService.save(OptionKeys.FAME_INIT, Boolean.TRUE.toString());
+        sysOptionService.save(OptionKeys.FAME_INIT, Boolean.TRUE.toString());
         log.info("Create default data success");
     }
 
@@ -215,11 +215,11 @@ public class InitApplicationRunner implements ApplicationRunner {
 
     private void createDefaultOptionIfAbsent() {
         log.info("Create default option...");
-        if (ObjectUtils.isEmpty(optionService.get(OptionKeys.EMAIL_SUBJECT))) {
-            optionService.save(OptionKeys.EMAIL_SUBJECT, FameConst.DEFAULT_EMAIL_TEMPLATE_SUBJECT);
+        if (ObjectUtils.isEmpty(sysOptionService.get(OptionKeys.EMAIL_SUBJECT))) {
+            sysOptionService.save(OptionKeys.EMAIL_SUBJECT, FameConst.DEFAULT_EMAIL_TEMPLATE_SUBJECT);
         }
-        if (ObjectUtils.isEmpty(optionService.get(OptionKeys.SUMMARY_FLAG))) {
-            optionService.save(OptionKeys.SUMMARY_FLAG, FameConst.DEFAULT_SUMMARY_FLAG);
+        if (ObjectUtils.isEmpty(sysOptionService.get(OptionKeys.SUMMARY_FLAG))) {
+            sysOptionService.save(OptionKeys.SUMMARY_FLAG, FameConst.DEFAULT_SUMMARY_FLAG);
         }
     }
 }

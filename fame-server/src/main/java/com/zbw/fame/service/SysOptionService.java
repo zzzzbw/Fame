@@ -1,5 +1,8 @@
 package com.zbw.fame.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.zbw.fame.model.entity.SysOption;
+
 import java.util.Map;
 
 /**
@@ -8,7 +11,7 @@ import java.util.Map;
  * @author zzzzbw
  * @since 2019-05-20 22:44
  */
-public interface OptionService {
+public interface SysOptionService extends IService<SysOption> {
 
     /**
      * 获取所有设置的key-value

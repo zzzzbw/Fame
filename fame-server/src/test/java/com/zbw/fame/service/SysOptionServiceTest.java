@@ -10,18 +10,18 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @since 2019/6/24 10:44
  */
 @Slf4j
-public class OptionServiceTest extends BaseTest {
+public class SysOptionServiceTest extends BaseTest {
 
     @Autowired
-    private OptionService optionService;
+    private SysOptionService sysOptionService;
 
     @Test
-    public void test1() {
-        log.info("{}", optionService.getAllOptionMap());
+    public void getAllOptionMap() {
+        log.info("{}", sysOptionService.getAllOptionMap());
     }
 
     @Test
-    public void test2() {
-        optionService.save("new_option", "new123");
+    public void save() {
+        sysOptionService.save("new_option", "new123");
     }
 }

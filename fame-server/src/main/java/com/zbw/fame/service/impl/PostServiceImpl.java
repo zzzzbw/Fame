@@ -39,12 +39,12 @@ public class PostServiceImpl extends AbstractArticleServiceImpl<Post> implements
     private final ApplicationEventPublisher eventPublisher;
 
     public PostServiceImpl(ArticleRepository<Post> articleRepository,
-                           OptionService optionService,
+                           SysOptionService sysOptionService,
                            CategoryService categoryService,
                            TagService tagService,
                            CommentService commentService,
                            ApplicationEventPublisher eventPublisher) {
-        super(articleRepository, optionService);
+        super(articleRepository, sysOptionService);
         this.categoryService = categoryService;
         this.tagService = tagService;
         this.commentService = commentService;

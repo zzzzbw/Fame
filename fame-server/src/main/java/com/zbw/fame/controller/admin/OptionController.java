@@ -1,6 +1,6 @@
 package com.zbw.fame.controller.admin;
 
-import com.zbw.fame.service.OptionService;
+import com.zbw.fame.service.SysOptionService;
 import com.zbw.fame.util.RestResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ import java.util.Map;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class OptionController {
 
-    private final OptionService optionService;
+    private final SysOptionService sysOptionService;
 
     /**
      * 获取所有设置
@@ -28,7 +28,7 @@ public class OptionController {
      */
     @GetMapping("all")
     public RestResponse<Map<String, String>> getAllOptions() {
-        return RestResponse.ok(optionService.getAllOptionMap());
+        return RestResponse.ok(sysOptionService.getAllOptionMap());
     }
 
     /**
@@ -39,7 +39,7 @@ public class OptionController {
      */
     @PostMapping("save")
     public RestResponse<RestResponse.Empty> saveAllOptions(@RequestBody Map<String, String> options) {
-        optionService.save(options);
+        sysOptionService.save(options);
         return RestResponse.ok();
     }
 }

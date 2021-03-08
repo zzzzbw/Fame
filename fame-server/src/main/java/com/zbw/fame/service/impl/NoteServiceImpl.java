@@ -10,7 +10,7 @@ import com.zbw.fame.model.enums.LogType;
 import com.zbw.fame.repository.NoteRepository;
 import com.zbw.fame.service.CommentService;
 import com.zbw.fame.service.NoteService;
-import com.zbw.fame.service.OptionService;
+import com.zbw.fame.service.SysOptionService;
 import com.zbw.fame.util.FameUtils;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -35,10 +35,10 @@ public class NoteServiceImpl extends AbstractArticleServiceImpl<Note> implements
     private final ApplicationEventPublisher eventPublisher;
 
     public NoteServiceImpl(NoteRepository noteRepository,
-                           OptionService optionService,
+                           SysOptionService sysOptionService,
                            CommentService commentService,
                            ApplicationEventPublisher eventPublisher) {
-        super(noteRepository, optionService);
+        super(noteRepository, sysOptionService);
         this.commentService = commentService;
         this.eventPublisher = eventPublisher;
     }

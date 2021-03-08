@@ -5,7 +5,7 @@ import com.zbw.fame.model.domain.Comment;
 import com.zbw.fame.model.enums.LogAction;
 import com.zbw.fame.model.enums.LogType;
 import com.zbw.fame.service.EmailService;
-import com.zbw.fame.service.OptionService;
+import com.zbw.fame.service.SysOptionService;
 import com.zbw.fame.util.FameConst;
 import com.zbw.fame.util.OptionKeys;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,7 @@ import java.util.Map;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class EmailServiceImpl implements EmailService {
 
-    private final OptionService optionService;
+    private final SysOptionService sysOptionService;
 
     private final ApplicationEventPublisher eventPublisher;
 
@@ -54,7 +54,7 @@ public class EmailServiceImpl implements EmailService {
         String logData = content + ";  发送给管理员";
         log.info("sendEmailToAdmin start: {}", new Date());
         try {
-            String emailUsername = optionService.get(OptionKeys.EMAIL_USERNAME);
+            String emailUsername = sysOptionService.get(OptionKeys.EMAIL_USERNAME);
             sendEmail(content, emailUsername);
 
             LogEvent logEvent = new LogEvent(this, logData, LogAction.SUCCESS, LogType.EMAIL);
@@ -97,12 +97,12 @@ public class EmailServiceImpl implements EmailService {
      * @return 是否发送邮件
      */
     private boolean isEmail(String email) {
-        boolean isEmail = optionService.get(OptionKeys.IS_EMAIL, Boolean.FALSE);
+        boolean isEmail = sysOptionService.get(OptionKeys.IS_EMAIL, Boolean.FALSE);
         if (!isEmail) {
             return false;
         }
 
-        String adminUserEmail = optionService.get(OptionKeys.EMAIL_USERNAME, "");
+        String adminUserEmail = sysOptionService.get(OptionKeys.EMAIL_USERNAME, "");
         // 如果是管理员的回复则不必通知管理员
         return ObjectUtils.isEmpty(adminUserEmail) || !adminUserEmail.equals(email);
     }
@@ -116,8 +116,8 @@ public class EmailServiceImpl implements EmailService {
     private Map<String, String> getEmailParams(Comment comment) {
         Map<String, String> params = new HashMap<>();
 
-        String websiteName = optionService.get(OptionKeys.BLOG_NAME);
-        String website = optionService.get(OptionKeys.BLOG_WEBSITE);
+        String websiteName = sysOptionService.get(OptionKeys.BLOG_NAME);
+        String website = sysOptionService.get(OptionKeys.BLOG_WEBSITE);
 
         // 如果网址最后没有/,则补上
         if (!ObjectUtils.isEmpty(website)
@@ -141,11 +141,11 @@ public class EmailServiceImpl implements EmailService {
      * @throws MessagingException
      */
     private void sendEmail(String content, String to) throws MessagingException {
-        String subject = optionService.get(OptionKeys.EMAIL_SUBJECT, FameConst.DEFAULT_EMAIL_TEMPLATE_SUBJECT);
-        String host = optionService.get(OptionKeys.EMAIL_HOST);
-        Integer port = optionService.get(OptionKeys.EMAIL_PORT, 25);
-        String username = optionService.get(OptionKeys.EMAIL_USERNAME);
-        String password = optionService.get(OptionKeys.EMAIL_PASSWORD);
+        String subject = sysOptionService.get(OptionKeys.EMAIL_SUBJECT, FameConst.DEFAULT_EMAIL_TEMPLATE_SUBJECT);
+        String host = sysOptionService.get(OptionKeys.EMAIL_HOST);
+        Integer port = sysOptionService.get(OptionKeys.EMAIL_PORT, 25);
+        String username = sysOptionService.get(OptionKeys.EMAIL_USERNAME);
+        String password = sysOptionService.get(OptionKeys.EMAIL_PASSWORD);
 
         JavaMailSender mailSender = (JavaMailSender) mailSender(host, port,
                 username, password);
