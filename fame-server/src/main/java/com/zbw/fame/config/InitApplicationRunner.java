@@ -1,8 +1,11 @@
 package com.zbw.fame.config;
 
 import com.zbw.fame.model.domain.*;
+import com.zbw.fame.model.entity.SysLog;
 import com.zbw.fame.model.enums.ArticleStatus;
+import com.zbw.fame.model.enums.LogType;
 import com.zbw.fame.repository.*;
+import com.zbw.fame.service.SysLogService;
 import com.zbw.fame.service.SysOptionService;
 import com.zbw.fame.util.FameConst;
 import com.zbw.fame.util.FameUtils;
@@ -44,6 +47,8 @@ public class InitApplicationRunner implements ApplicationRunner {
     private final CommentRepository commentRepository;
 
     private final SysOptionService sysOptionService;
+
+    private final SysLogService sysLogService;
 
     private static final String DEFAULT_TAG = "First";
 
@@ -97,6 +102,7 @@ public class InitApplicationRunner implements ApplicationRunner {
         createDefaultCommentIfAbsent(post);
         createDefaultNoteIfAbsent(user);
         createDefaultOptionIfAbsent();
+        createInitLog();
         sysOptionService.save(OptionKeys.FAME_INIT, Boolean.TRUE.toString());
         log.info("Create default data success");
     }
@@ -221,5 +227,13 @@ public class InitApplicationRunner implements ApplicationRunner {
         if (ObjectUtils.isEmpty(sysOptionService.get(OptionKeys.SUMMARY_FLAG))) {
             sysOptionService.save(OptionKeys.SUMMARY_FLAG, FameConst.DEFAULT_SUMMARY_FLAG);
         }
+    }
+
+
+    private void createInitLog() {
+        SysLog sysLog = new SysLog();
+        sysLog.setType(LogType.SYSTEM);
+        sysLog.setMessage("Init System");
+        sysLogService.save(sysLog);
     }
 }

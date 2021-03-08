@@ -3,9 +3,9 @@ package com.zbw.fame.listener;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.listener.event.LogEvent;
 import com.zbw.fame.model.domain.BaseEntity;
-import com.zbw.fame.model.domain.Log;
+import com.zbw.fame.model.entity.SysLog;
 import com.zbw.fame.model.enums.LogAction;
-import com.zbw.fame.service.LogService;
+import com.zbw.fame.service.SysLogService;
 import com.zbw.fame.util.FameUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 public class LogEventListener {
 
 
-    private final LogService logService;
+    private final SysLogService sysLogService;
 
 
     @Async
@@ -37,20 +37,20 @@ public class LogEventListener {
     public void onLogEvent(LogEvent event) {
         log.info("onLogEvent event:{}", event);
 
-        Log systemLog = createLog(event);
-        logService.save(systemLog);
+        SysLog sysLog = createLog(event);
+        sysLogService.save(sysLog);
     }
 
-    private Log createLog(LogEvent event) {
-        Log systemLog = new Log();
+    private SysLog createLog(LogEvent event) {
+        SysLog sysLog = new SysLog();
         LogAction action = event.getAction();
         String logData = createLogData(event.getData());
-        systemLog.setData(logData);
-        systemLog.setMessage(action.getMsg());
-        systemLog.setType(event.getType());
-        systemLog.setIp(event.getIp());
-        systemLog.setUserId(event.getUserId());
-        return systemLog;
+        sysLog.setData(logData);
+        sysLog.setMessage(action.getMsg());
+        sysLog.setType(event.getType());
+        sysLog.setIp(event.getIp());
+        sysLog.setUserId(event.getUserId());
+        return sysLog;
     }
 
     private String createLogData(Object data) {

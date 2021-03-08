@@ -1,4 +1,4 @@
-create table if not exists LOG
+create table if not exists SYS_LOG
 (
     ID       INTEGER auto_increment
         primary key,

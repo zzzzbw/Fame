@@ -1,8 +1,9 @@
 package com.zbw.fame.service;
 
-import com.zbw.fame.model.domain.Log;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.zbw.fame.model.entity.SysLog;
 import com.zbw.fame.model.enums.LogType;
-import org.springframework.data.domain.Page;
 import org.springframework.lang.NonNull;
 
 /**
@@ -11,14 +12,7 @@ import org.springframework.lang.NonNull;
  * @author zzzzbw
  * @since 2017/10/11 10:42
  */
-public interface LogService {
-
-    /**
-     * 保存操作日志
-     *
-     * @param log 日志Entity
-     */
-    void save(@NonNull Log log);
+public interface SysLogService extends IService<SysLog> {
 
     /**
      * 保存操作日志
@@ -34,9 +28,9 @@ public interface LogService {
     /**
      * 获取日志
      *
-     * @param page  当前分页
-     * @param limit 分页大小
+     * @param current  当前分页
+     * @param size 分页大小
      * @return Page<Log>
      */
-    Page<Log> getLogs(Integer page, Integer limit);
+    Page<SysLog> pageSysLog(Integer current, Integer size);
 }

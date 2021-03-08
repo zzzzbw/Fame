@@ -21,7 +21,7 @@ import java.util.Date;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class Log extends BaseEntity {
+public class SysLog extends BaseEntity {
 
     /**
      * 操作数据
