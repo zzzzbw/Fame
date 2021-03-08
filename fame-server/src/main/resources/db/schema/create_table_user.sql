@@ -9,5 +9,6 @@ create table if not exists USER
     SCREEN_NAME  VARCHAR(45),
     CREATED      TIMESTAMP default CURRENT_TIMESTAMP not null,
     LOGGED       TIMESTAMP default CURRENT_TIMESTAMP not null,
-    MODIFIED     TIMESTAMP default CURRENT_TIMESTAMP not null
+    MODIFIED     TIMESTAMP default CURRENT_TIMESTAMP not null,
+    DELETED      TINYINT default 0 not null
 );

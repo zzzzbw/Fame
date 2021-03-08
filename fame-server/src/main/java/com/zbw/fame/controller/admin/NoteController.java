@@ -2,6 +2,7 @@ package com.zbw.fame.controller.admin;
 
 import com.zbw.fame.model.domain.Note;
 import com.zbw.fame.model.domain.User;
+import com.zbw.fame.model.dto.LoginUser;
 import com.zbw.fame.model.param.SaveNoteParam;
 import com.zbw.fame.service.NoteService;
 import com.zbw.fame.util.FameUtils;
@@ -36,7 +37,7 @@ public class NoteController extends AbstractArticleController<Note> {
     @PostMapping
     public RestResponse<Integer> save(@RequestBody @Valid SaveNoteParam param) {
         Note note = FameUtils.convertTo(param, Note.class);
-        User user = FameUtils.getLoginUser();
+        LoginUser user = FameUtils.getLoginUser();
         note.setAuthorId(user.getId());
         Integer noteId = noteService.save(note);
         return RestResponse.ok(noteId);

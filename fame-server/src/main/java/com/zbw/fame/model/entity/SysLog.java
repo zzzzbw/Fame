@@ -9,7 +9,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 
 /**
- * @author by ZHANGBOWEN469
+ * @author by zzzzbw
  * @since 2021/03/08 15:21
  */
 @EqualsAndHashCode(callSuper = true)

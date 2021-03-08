@@ -2,6 +2,7 @@ package com.zbw.fame.service;
 
 import com.zbw.fame.model.domain.Comment;
 import com.zbw.fame.model.domain.User;
+import com.zbw.fame.model.dto.LoginUser;
 import com.zbw.fame.model.dto.Pagination;
 import com.zbw.fame.BaseTest;
 import com.zbw.fame.util.FameUtils;
@@ -72,7 +73,7 @@ public class CommentServiceTest extends BaseTest {
 
     @Test
     public void deleteComment() {
-        User user = new User();
+        LoginUser user = new LoginUser();
         user.setId(1);
         FameUtils.setLoginUser(user);
 

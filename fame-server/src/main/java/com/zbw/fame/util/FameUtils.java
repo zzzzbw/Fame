@@ -16,7 +16,8 @@ import com.vladsch.flexmark.parser.ParserEmulationProfile;
 import com.vladsch.flexmark.util.options.MutableDataSet;
 import com.zbw.fame.exception.NotLoginException;
 import com.zbw.fame.exception.TipException;
-import com.zbw.fame.model.domain.User;
+import com.zbw.fame.model.dto.LoginUser;
+import com.zbw.fame.model.entity.User;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -90,7 +91,7 @@ public class FameUtils {
      *
      * @param user 登录用户
      */
-    public static void setLoginUser(User user) {
+    public static void setLoginUser(LoginUser user) {
         HttpSession session = getSession();
         session.setAttribute(FameConst.USER_SESSION_KEY, user);
     }
@@ -108,9 +109,9 @@ public class FameUtils {
      *
      * @return session中的用户
      */
-    public static User getLoginUser() {
+    public static LoginUser getLoginUser() {
         HttpSession session = getSession();
-        return (User) Optional.ofNullable(session.getAttribute(FameConst.USER_SESSION_KEY))
+        return (LoginUser) Optional.ofNullable(session.getAttribute(FameConst.USER_SESSION_KEY))
                 .orElseThrow(NotLoginException::new);
     }
 

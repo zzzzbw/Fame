@@ -1,12 +1,15 @@
 package com.zbw.fame.controller.admin;
 
 import com.zbw.fame.model.domain.Post;
-import com.zbw.fame.model.domain.User;
+import com.zbw.fame.model.dto.LoginUser;
 import com.zbw.fame.model.param.SavePostParam;
 import com.zbw.fame.service.PostService;
 import com.zbw.fame.util.FameUtils;
 import com.zbw.fame.util.RestResponse;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
@@ -33,7 +36,7 @@ public class PostController extends AbstractArticleController<Post> {
     @PostMapping
     public RestResponse<Integer> save(@RequestBody @Valid SavePostParam param) {
         Post post = FameUtils.convertTo(param, Post.class);
-        User user = FameUtils.getLoginUser();
+        LoginUser user = FameUtils.getLoginUser();
         post.setAuthorId(user.getId());
         Integer postId = postService.save(post);
         return RestResponse.ok(postId);
