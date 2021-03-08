@@ -1,18 +1,21 @@
 package com.zbw.fame.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zbw.fame.exception.NotFoundException;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.listener.event.CommentNewEvent;
 import com.zbw.fame.listener.event.LogEvent;
+import com.zbw.fame.mapper.CommentMapper;
 import com.zbw.fame.model.domain.Article;
-import com.zbw.fame.model.domain.Comment;
 import com.zbw.fame.model.dto.CommentDto;
+import com.zbw.fame.model.entity.BaseEntity;
+import com.zbw.fame.model.entity.Comment;
 import com.zbw.fame.model.enums.CommentAssessType;
-import com.zbw.fame.model.enums.CommentStatus;
 import com.zbw.fame.model.enums.LogAction;
 import com.zbw.fame.model.enums.LogType;
 import com.zbw.fame.repository.ArticleRepository;
-import com.zbw.fame.repository.CommentRepository;
 import com.zbw.fame.service.CommentService;
 import com.zbw.fame.util.FameUtils;
 import lombok.NonNull;
@@ -21,13 +24,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
@@ -39,9 +42,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class CommentServiceImpl implements CommentService {
-
-    private final CommentRepository commentRepository;
+public class CommentServiceImpl extends ServiceImpl<CommentMapper, com.zbw.fame.model.entity.Comment> implements CommentService {
 
     private final ArticleRepository<Article> articleRepository;
 
@@ -50,56 +51,76 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    public void save(@NonNull Comment comment) {
+    public void createComment(@NonNull Comment comment) {
+
+        // TODO ArticleService
         Article article = articleRepository.findById(comment.getArticleId())
                 .orElseThrow(() -> new NotFoundException(Article.class));
 
-        commentRepository.save(comment);
+        save(comment);
 
+        // TODO ArticleService
         // 增加文章的评论数
         article.setCommentCount(article.getCommentCount() + 1);
         articleRepository.save(article);
+
+
+        this.createCommentEvent(comment);
     }
 
     @Override
-    public Page<Comment> getCommentsByArticleId(Integer page, Integer limit, Integer articleId) {
+    public Page<Comment> pageByArticleId(Integer current, Integer size, Integer articleId) {
         Comment record = new Comment();
         record.setArticleId(articleId);
-        record.setStatus(CommentStatus.NORMAL);
-        Page<Comment> result = commentRepository.findAll(Example.of(record), PageRequest.of(page, limit, FameUtils.sortDescById()));
 
-        result.forEach(comments -> {
+        Page<Comment> page = new Page<>(current, size);
+        page.addOrder(OrderItem.desc("id"));
+
+        Page<Comment> commentPage = lambdaQuery()
+                .eq(Comment::getArticleId, articleId)
+                .page(page);
+
+        commentPage.getRecords().forEach(comments -> {
             String content = FameUtils.contentTransform(comments.getContent(), false, true, null);
             comments.setContent(content);
         });
 
-        return result;
+        return commentPage;
     }
 
     @Override
-    public Page<Comment> pageAdminComments(Integer page, Integer limit) {
-        Comment record = new Comment();
-        record.setStatus(CommentStatus.NORMAL);
-        Page<Comment> result = commentRepository.findAll(Example.of(record), PageRequest.of(page, limit, FameUtils.sortDescById()));
-        result.forEach(comments -> {
+    public Page<Comment> pageCommentAdmin(Integer current, Integer size) {
+        Page<Comment> page = new Page<>(current, size);
+        page.addOrder(OrderItem.desc("id"));
+        Page<Comment> commentPage = page(page);
+
+
+        commentPage.getRecords().forEach(comments -> {
             String content = FameUtils.contentTransform(comments.getContent(), false, false, null);
             comments.setContent(content);
         });
 
-        return result;
+        return commentPage;
     }
 
     @Override
-    public CommentDto getCommentDetail(Integer id) {
-        Comment entity = commentRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(Comment.class));
+    public CommentDto getCommentDto(Integer id) {
+
+        Comment entity = getById(id);
+        if (null == entity) {
+            throw new NotFoundException(Comment.class);
+        }
+
         CommentDto comment = new CommentDto();
         BeanUtils.copyProperties(entity, comment);
         if (null != comment.getParentId() && -1 != comment.getParentId()) {
-            Comment parentComment = commentRepository.findById(comment.getParentId()).orElse(null);
+
+            Comment parentComment = getById(comment.getParentId());
             comment.setParentComment(parentComment);
         }
 
+
+        // TODO ArticleService
         Article article = articleRepository.findById(comment.getArticleId())
                 .orElseThrow(() -> new NotFoundException(Article.class));
         comment.setArticle(article);
@@ -110,9 +131,12 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional(rollbackFor = Throwable.class)
     public void deleteComment(Integer id) {
-        Comment comment = commentRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(Comment.class));
+        Comment comment = getById(id);
+        if (null == comment) {
+            throw new NotFoundException(Comment.class);
+        }
 
+        // TODO ArticleService
         // 减去文章中评论数
         Article article = articleRepository.findById(comment.getArticleId())
                 .orElseThrow(() -> new NotFoundException(Article.class));
@@ -120,17 +144,14 @@ public class CommentServiceImpl implements CommentService {
         articleRepository.save(article);
 
         // 去除子评论中关联
-        Comment record = new Comment();
-        record.setParentId(id);
-        commentRepository.findOne(Example.of(record)).ifPresent(childComment -> {
-            childComment.setParentId(null);
-            commentRepository.save(childComment);
-        });
-
-        comment.setStatus(CommentStatus.DELETE);
+        List<Comment> childComments = lambdaQuery()
+                .eq(Comment::getParentId, id)
+                .list();
+        childComments.forEach(child -> child.setParentId(null));
+        updateBatchById(childComments);
 
         log.info("删除评论: {}", comment);
-        commentRepository.save(comment);
+        removeById(id);
 
         LogEvent logEvent = new LogEvent(this, comment, LogAction.DELETE, LogType.COMMENT, FameUtils.getIp(), FameUtils.getLoginUser().getId());
         eventPublisher.publishEvent(logEvent);
@@ -139,22 +160,28 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Transactional(rollbackFor = Throwable.class)
     public int deleteCommentByArticleId(Integer articleId) {
-        Comment record = new Comment();
-        record.setArticleId(articleId);
-        List<Comment> list = commentRepository.findAll(Example.of(record));
-        list.forEach(comment -> comment.setStatus(CommentStatus.DELETE));
+        List<Comment> list = lambdaQuery()
+                .eq(Comment::getArticleId, articleId)
+                .list();
+        Set<Integer> ids = list.stream().map(BaseEntity::getId).collect(Collectors.toSet());
+        if (CollectionUtils.isEmpty(ids)) {
+            return 0;
+        }
+        removeByIds(ids);
 
         LogEvent logEvent = new LogEvent(this, list, LogAction.DELETE, LogType.COMMENT, FameUtils.getIp(), FameUtils.getLoginUser().getId());
         eventPublisher.publishEvent(logEvent);
 
-        return commentRepository.saveAll(list).size();
+        return ids.size();
     }
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
     public void assessComment(Integer commentId, CommentAssessType assess) {
-        Comment comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new NotFoundException(Comment.class));
+        Comment comment = getById(commentId);
+        if (null == comment) {
+            throw new NotFoundException(Comment.class);
+        }
 
         if (CommentAssessType.AGREE.equals(assess)) {
             comment.setAgree(comment.getAgree() + 1);
@@ -163,18 +190,11 @@ public class CommentServiceImpl implements CommentService {
         } else {
             throw new TipException("assess参数错误");
         }
-        commentRepository.save(comment);
+        updateById(comment);
     }
 
     @Override
-    public Long count() {
-        Comment record = new Comment();
-        record.setStatus(CommentStatus.NORMAL);
-        return commentRepository.count(Example.of(record));
-    }
-
-    @Override
-    public void newCommentEvent(Comment comment) {
+    public void createCommentEvent(Comment comment) {
         eventPublisher.publishEvent(new CommentNewEvent(this, comment.getId()));
 
         LogEvent logEvent = new LogEvent(this, comment, LogAction.ADD, LogType.COMMENT, FameUtils.getIp(), null);

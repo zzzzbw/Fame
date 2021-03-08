@@ -1,7 +1,7 @@
 package com.zbw.fame.service.impl;
 
 import com.zbw.fame.listener.event.LogEvent;
-import com.zbw.fame.model.domain.Comment;
+import com.zbw.fame.model.entity.Comment;
 import com.zbw.fame.model.enums.LogAction;
 import com.zbw.fame.model.enums.LogType;
 import com.zbw.fame.service.EmailService;

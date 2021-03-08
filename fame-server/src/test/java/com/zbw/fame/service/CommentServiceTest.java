@@ -1,15 +1,15 @@
 package com.zbw.fame.service;
 
-import com.zbw.fame.model.domain.Comment;
-import com.zbw.fame.model.domain.User;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zbw.fame.model.dto.LoginUser;
 import com.zbw.fame.model.dto.Pagination;
 import com.zbw.fame.BaseTest;
+import com.zbw.fame.model.entity.Comment;
 import com.zbw.fame.util.FameUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+
 
 /**
  * @author zzzzbw
@@ -25,23 +25,23 @@ public class CommentServiceTest extends BaseTest {
     private EmailService emailService;
 
     @Test
-    public void test1() {
+    public void createComment() {
         Comment comment = new Comment();
         comment.setContent("test comment");
         comment.setName("test");
-        comment.setArticleId(1);
-        commentService.save(comment);
+        comment.setArticleId(2);
+        commentService.createComment(comment);
     }
 
     @Test
     public void test2() {
-        Page<Comment> result = commentService.getCommentsByArticleId(1, 10, 1);
+        Page<Comment> result = commentService.pageByArticleId(1, 10, 1);
         log.info("{}", Pagination.of(result));
     }
 
     @Test
     public void test3() {
-        log.info("{}", commentService.getCommentDetail(2));
+        log.info("{}", commentService.getCommentDto(2));
     }
 
     @Test
@@ -67,7 +67,7 @@ public class CommentServiceTest extends BaseTest {
 
     @Test
     public void newComment() throws InterruptedException {
-        commentService.newCommentEvent(new Comment());
+        commentService.createCommentEvent(new Comment());
         Thread.sleep(2000);
     }
 

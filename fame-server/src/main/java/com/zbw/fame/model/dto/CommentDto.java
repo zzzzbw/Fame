@@ -1,7 +1,7 @@
 package com.zbw.fame.model.dto;
 
 import com.zbw.fame.model.domain.Article;
-import com.zbw.fame.model.domain.Comment;
+import com.zbw.fame.model.entity.Comment;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

@@ -1,9 +1,10 @@
 package com.zbw.fame.service;
 
-import com.zbw.fame.model.domain.Comment;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.zbw.fame.model.dto.CommentDto;
+import com.zbw.fame.model.entity.Comment;
 import com.zbw.fame.model.enums.CommentAssessType;
-import org.springframework.data.domain.Page;
 import org.springframework.lang.NonNull;
 
 /**
@@ -12,32 +13,32 @@ import org.springframework.lang.NonNull;
  * @author zzzzbw
  * @since 2018/1/19 16:56
  */
-public interface CommentService {
+public interface CommentService extends IService<com.zbw.fame.model.entity.Comment> {
     /**
      * 保存评论
      *
-     * @param comments 评论entity
+     * @param comment 评论entity
      */
-    void save(@NonNull Comment comments);
+    void createComment(@NonNull Comment comment);
 
     /**
      * 获取文章下的评论
      *
-     * @param page      第几页
-     * @param limit     每页数量
+     * @param current      第几页
+     * @param size     每页数量
      * @param articleId 文章id
      * @return Page<Comment>
      */
-    Page<Comment> getCommentsByArticleId(Integer page, Integer limit, Integer articleId);
+    Page<Comment> pageByArticleId(Integer current, Integer size, Integer articleId);
 
     /**
      * 获取文章下的评论
      *
-     * @param page  第几页
-     * @param limit 每页数量
+     * @param current  第几页
+     * @param size 每页数量
      * @return Page<Comment>
      */
-    Page<Comment> pageAdminComments(Integer page, Integer limit);
+    Page<Comment> pageCommentAdmin(Integer current, Integer size);
 
     /**
      * 获取评论详情
@@ -45,7 +46,7 @@ public interface CommentService {
      * @param id 评论id
      * @return CommentDto
      */
-    CommentDto getCommentDetail(Integer id);
+    CommentDto getCommentDto(Integer id);
 
     /**
      * 删除评论
@@ -71,16 +72,9 @@ public interface CommentService {
     void assessComment(Integer commentId, CommentAssessType assess);
 
     /**
-     * 评论数量
-     *
-     * @return 数量
-     */
-    Long count();
-
-    /**
      * 新增评论
      *
      * @param comment 评论id
      */
-    void newCommentEvent(Comment comment);
+    void createCommentEvent(Comment comment);
 }

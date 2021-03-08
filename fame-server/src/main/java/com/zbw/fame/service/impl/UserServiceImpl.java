@@ -2,6 +2,7 @@ package com.zbw.fame.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zbw.fame.exception.NotFoundException;
 import com.zbw.fame.exception.TipException;
@@ -48,12 +49,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String username = param.getUsername();
         String password = param.getPassword();
 
-        LambdaQueryWrapper<User> wrapper = Wrappers.<User>lambdaQuery()
+        User user =  lambdaQuery()
                 .eq(User::getUsername, username)
                 .or()
-                .eq(User::getEmail, username);
-
-        User user = getOne(wrapper);
+                .eq(User::getEmail, username)
+                .one();
         if (null == user) {
             throw new TipException("用户名或者密码错误");
         }

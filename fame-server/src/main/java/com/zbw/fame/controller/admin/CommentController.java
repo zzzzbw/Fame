@@ -1,15 +1,16 @@
 package com.zbw.fame.controller.admin;
 
-import com.zbw.fame.model.domain.Comment;
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zbw.fame.model.dto.CommentDto;
 import com.zbw.fame.model.dto.Pagination;
+import com.zbw.fame.model.entity.Comment;
 import com.zbw.fame.service.CommentService;
 import com.zbw.fame.util.FameConst;
 import com.zbw.fame.util.FameUtils;
 import com.zbw.fame.util.RestResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -35,7 +36,7 @@ public class CommentController {
     @GetMapping
     public RestResponse<Pagination<Comment>> index(@RequestParam(required = false, defaultValue = "0") Integer page,
                                                    @RequestParam(required = false, defaultValue = FameConst.PAGE_SIZE) Integer limit) {
-        Page<Comment> comments = commentService.pageAdminComments(page, limit);
+        Page<Comment> comments = commentService.pageCommentAdmin(page, limit);
         return RestResponse.ok(Pagination.of(comments));
     }
 
@@ -47,7 +48,7 @@ public class CommentController {
      */
     @GetMapping("{id}")
     public RestResponse<Comment> detail(@PathVariable Integer id) {
-        CommentDto comment = commentService.getCommentDetail(id);
+        CommentDto comment = commentService.getCommentDto(id);
         if (null != comment.getParentComment()) {
             comment.getParentComment().setContent(FameUtils.mdToHtml(comment.getParentComment().getContent()));
         }
@@ -73,7 +74,7 @@ public class CommentController {
      * @return {@see Integer}
      */
     @GetMapping("count")
-    public RestResponse<Long> count() {
+    public RestResponse<Integer> count() {
         return RestResponse.ok(commentService.count());
     }
 

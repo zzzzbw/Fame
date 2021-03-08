@@ -1,5 +1,7 @@
 package com.zbw.fame.config;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.zbw.fame.mapper.CommentMapper;
 import com.zbw.fame.model.domain.*;
 import com.zbw.fame.model.entity.SysLog;
 import com.zbw.fame.model.enums.ArticleStatus;
@@ -44,7 +46,7 @@ public class InitApplicationRunner implements ApplicationRunner {
 
     private final MiddleRepository middleRepository;
 
-    private final CommentRepository commentRepository;
+    private final CommentMapper commentMapper;
 
     private final SysOptionService sysOptionService;
 
@@ -180,11 +182,11 @@ public class InitApplicationRunner implements ApplicationRunner {
 
     private void createDefaultCommentIfAbsent(Post post) {
         log.info("Create default comment...");
-        long count = commentRepository.count();
+        long count = commentMapper.selectCount(Wrappers.emptyWrapper());
         if (null == post || count > 0) {
             return;
         }
-        Comment comment = new Comment();
+        com.zbw.fame.model.entity.Comment comment = new com.zbw.fame.model.entity.Comment();
         comment.setArticleId(post.getId());
         comment.setContent("## 测试评论\n" +
                 "这是我的网址[Fame](http://zzzzbw.cn)");
@@ -192,7 +194,7 @@ public class InitApplicationRunner implements ApplicationRunner {
         comment.setEmail("zzzzbw@gmail.com");
         comment.setWebsite("https://zzzzbw.cn");
         comment.setIp("0.0.0.1");
-        commentRepository.save(comment);
+        commentMapper.insert(comment);
 
         post.setCommentCount(1);
         postRepository.save(post);

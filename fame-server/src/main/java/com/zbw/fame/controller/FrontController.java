@@ -1,13 +1,13 @@
 package com.zbw.fame.controller;
 
 
-import com.zbw.fame.model.domain.Comment;
 import com.zbw.fame.model.domain.Note;
 import com.zbw.fame.model.domain.Post;
 import com.zbw.fame.model.dto.Archive;
 import com.zbw.fame.model.dto.MetaInfo;
 import com.zbw.fame.model.dto.NoteInfo;
 import com.zbw.fame.model.dto.Pagination;
+import com.zbw.fame.model.entity.Comment;
 import com.zbw.fame.model.enums.CommentAssessType;
 import com.zbw.fame.model.param.AddCommentParam;
 import com.zbw.fame.service.*;
@@ -142,7 +142,7 @@ public class FrontController {
     @GetMapping("comment")
     public RestResponse<Pagination<Comment>> getArticleComment(@RequestParam Integer articleId, @RequestParam(required = false, defaultValue = "0") Integer page,
                                                                @RequestParam(required = false, defaultValue = FameConst.PAGE_SIZE) Integer limit) {
-        Page<Comment> comments = commentService.getCommentsByArticleId(page, limit, articleId);
+        com.baomidou.mybatisplus.extension.plugins.pagination.Page<Comment> comments = commentService.pageByArticleId(page, limit, articleId);
         return RestResponse.ok(Pagination.of(comments));
     }
 
@@ -155,8 +155,7 @@ public class FrontController {
     @PostMapping("comment")
     public RestResponse<RestResponse.Empty> addComment(@RequestBody @Valid AddCommentParam param) {
         Comment comment = FameUtils.convertTo(param, Comment.class);
-        commentService.save(comment);
-        commentService.newCommentEvent(comment);
+        commentService.createComment(comment);
         return RestResponse.ok();
     }
 

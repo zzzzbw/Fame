@@ -13,6 +13,6 @@ create table if not exists COMMENT
     IP         VARCHAR(255),
     AGENT      VARCHAR(255),
     CREATED    TIMESTAMP default CURRENT_TIMESTAMP not null,
-    STATUS     VARCHAR(32),
-    MODIFIED   TIMESTAMP default CURRENT_TIMESTAMP not null
+    MODIFIED   TIMESTAMP default CURRENT_TIMESTAMP not null,
+    DELETED      TINYINT default 0 not null
 );

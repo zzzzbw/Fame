@@ -2,6 +2,7 @@ package com.zbw.fame.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zbw.fame.mapper.SysOptionMapper;
 import com.zbw.fame.model.entity.SysOption;
@@ -38,10 +39,9 @@ public class SysOptionServiceImpl extends ServiceImpl<SysOptionMapper, SysOption
     @SuppressWarnings("unchecked")
     @Override
     public <T> T get(String key, T defaultValue) {
-        LambdaQueryWrapper<SysOption> wrapper = Wrappers.<SysOption>lambdaQuery()
-                .eq(SysOption::getOptionKey, key);
-
-        SysOption sysOption = getOne(wrapper);
+        SysOption sysOption = lambdaQuery()
+                .eq(SysOption::getOptionKey, key)
+                .one();
 
         return (T) (sysOption == null || ObjectUtils.isEmpty(sysOption.getOptionValue()) ?
                 defaultValue :
@@ -56,10 +56,9 @@ public class SysOptionServiceImpl extends ServiceImpl<SysOptionMapper, SysOption
     @Override
     @Transactional(rollbackFor = Throwable.class)
     public void save(String key, String value) {
-        LambdaQueryWrapper<SysOption> wrapper = Wrappers.<SysOption>lambdaQuery()
-                .eq(SysOption::getOptionKey, key);
-
-        SysOption sysOption = getOne(wrapper);
+        SysOption sysOption =  lambdaQuery()
+                .eq(SysOption::getOptionKey, key)
+                .one();
         if (null == sysOption) {
             sysOption = new SysOption();
             sysOption.setOptionKey(key);
