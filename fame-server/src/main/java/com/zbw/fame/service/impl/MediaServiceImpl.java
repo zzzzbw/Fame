@@ -1,8 +1,12 @@
 package com.zbw.fame.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zbw.fame.exception.NotFoundException;
 import com.zbw.fame.exception.TipException;
-import com.zbw.fame.model.domain.Media;
+import com.zbw.fame.mapper.MediaMapper;
+import com.zbw.fame.model.entity.Media;
 import com.zbw.fame.repository.MediaRepository;
 import com.zbw.fame.service.MediaService;
 import com.zbw.fame.util.FameConst;
@@ -10,8 +14,6 @@ import com.zbw.fame.util.FameUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -30,18 +32,24 @@ import java.util.Objects;
 @Slf4j
 @Service
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class MediaServiceImpl implements MediaService {
+public class MediaServiceImpl extends ServiceImpl<MediaMapper, Media> implements MediaService {
 
     private final MediaRepository mediaRepository;
 
     @Override
-    public Page<Media> pageAdminMedias(Integer page, Integer limit) {
-        return mediaRepository.findAll(PageRequest.of(page, limit, FameUtils.sortDescById()));
+    public Page<Media> pageAdminMedias(Integer current, Integer size) {
+        Page<Media> page = new Page<>(current, size);
+        page.addOrder(OrderItem.desc("id"));
+        return page(page);
     }
 
     @Override
     public Media getMedia(Integer id) {
-        return mediaRepository.findById(id).orElseThrow(() -> new TipException("媒体不存在"));
+        Media media = getById(id);
+        if (null == media) {
+            throw new NotFoundException(Media.class);
+        }
+        return media;
     }
 
     @Override
@@ -95,7 +103,7 @@ public class MediaServiceImpl implements MediaService {
             media.setName(mediaName);
             media.setUrl(mediaUrl.toString());
             media.setSuffix(suffix);
-            mediaRepository.save(media);
+            save(media);
         } catch (IOException e) {
             log.error(e.getMessage(), e);
             throw new TipException(e);
@@ -107,10 +115,12 @@ public class MediaServiceImpl implements MediaService {
     @Override
     @Transactional(rollbackFor = Throwable.class)
     public void delete(Integer id) {
-        Media media = mediaRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(Media.class));
+        Media media = getById(id);
+        if (null == media) {
+            throw new NotFoundException(Media.class);
+        }
 
-        mediaRepository.delete(media);
+        removeById(id);
 
         Path fameDir = FameUtils.getFameDir();
         Path uploadPath = fameDir.resolve(FameConst.MEDIA_DIR);

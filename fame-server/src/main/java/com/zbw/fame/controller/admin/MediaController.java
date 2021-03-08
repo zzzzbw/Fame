@@ -1,18 +1,17 @@
 package com.zbw.fame.controller.admin;
 
-import com.zbw.fame.model.domain.Media;
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zbw.fame.model.dto.Pagination;
+import com.zbw.fame.model.entity.Media;
 import com.zbw.fame.service.MediaService;
 import com.zbw.fame.util.FameConst;
 import com.zbw.fame.util.RestResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author zzzzbw
