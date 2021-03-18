@@ -18,5 +18,5 @@ public enum ArticleStatus {
     /**
      * 删除
      */
-    DELETE
+    DELETE,
 }

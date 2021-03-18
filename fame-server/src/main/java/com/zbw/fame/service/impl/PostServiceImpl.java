@@ -3,7 +3,7 @@ package com.zbw.fame.service.impl;
 import com.zbw.fame.exception.NotFoundException;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.listener.event.LogEvent;
-import com.zbw.fame.listener.event.PostHitsEvent;
+import com.zbw.fame.listener.event.ArticleHitsEvent;
 import com.zbw.fame.model.domain.Post;
 import com.zbw.fame.model.dto.Archive;
 import com.zbw.fame.model.dto.PostInfo;
@@ -101,7 +101,7 @@ public class PostServiceImpl extends AbstractArticleServiceImpl<Post> implements
 
     @Override
     public void visitPost(Integer postId) {
-        eventPublisher.publishEvent(new PostHitsEvent(this, postId));
+        eventPublisher.publishEvent(new ArticleHitsEvent(this, postId));
     }
 
     @Transactional(rollbackFor = Throwable.class)

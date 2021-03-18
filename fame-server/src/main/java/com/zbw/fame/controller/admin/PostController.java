@@ -2,7 +2,7 @@ package com.zbw.fame.controller.admin;
 
 import com.zbw.fame.model.domain.Post;
 import com.zbw.fame.model.dto.LoginUser;
-import com.zbw.fame.model.param.SavePostParam;
+import com.zbw.fame.model.param.SaveArticleParam;
 import com.zbw.fame.service.PostService;
 import com.zbw.fame.util.FameUtils;
 import com.zbw.fame.util.RestResponse;
@@ -34,7 +34,7 @@ public class PostController extends AbstractArticleController<Post> {
      * @return {@link RestResponse#ok()}
      */
     @PostMapping
-    public RestResponse<Integer> save(@RequestBody @Valid SavePostParam param) {
+    public RestResponse<Integer> save(@RequestBody @Valid SaveArticleParam param) {
         Post post = FameUtils.convertTo(param, Post.class);
         LoginUser user = FameUtils.getLoginUser();
         post.setAuthorId(user.getId());

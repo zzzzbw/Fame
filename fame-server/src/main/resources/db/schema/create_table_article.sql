@@ -15,5 +15,6 @@ create table if not exists  ARTICLE
     TYPE          VARCHAR(45)                         not null,
     ALLOW_COMMENT BOOLEAN   default TRUE              not null,
     COMMENT_COUNT INT       default 0                 not null,
-    PRIORITY      INT       default 0                 not null
+    PRIORITY      INT       default 0                 not null,
+    DELETED      TINYINT default 0 not null
 );

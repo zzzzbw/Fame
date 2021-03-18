@@ -12,7 +12,7 @@ import java.util.Date;
  * @since 2021/01/20 10:57
  */
 @Data
-public class SavePostParam {
+public class SaveArticleParam {
 
     private Integer id;
 

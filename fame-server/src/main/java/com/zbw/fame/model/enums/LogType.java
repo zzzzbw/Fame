@@ -11,6 +11,10 @@ public enum LogType {
     /**
      * 文章
      */
+    ARTICLE,
+    /**
+     * 文章
+     */
     POST,
     /**
      * 自定义页面

@@ -1,12 +1,12 @@
 package com.zbw.fame.controller;
 
 
-import com.zbw.fame.model.domain.Note;
-import com.zbw.fame.model.domain.Post;
-import com.zbw.fame.model.dto.Archive;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.zbw.fame.model.dto.ArchiveDto;
+import com.zbw.fame.model.dto.ArticleInfoDto;
 import com.zbw.fame.model.dto.MetaInfo;
-import com.zbw.fame.model.dto.NoteInfo;
 import com.zbw.fame.model.dto.Pagination;
+import com.zbw.fame.model.entity.Article;
 import com.zbw.fame.model.entity.Comment;
 import com.zbw.fame.model.enums.CommentAssessType;
 import com.zbw.fame.model.param.AddCommentParam;
@@ -16,7 +16,6 @@ import com.zbw.fame.util.FameUtils;
 import com.zbw.fame.util.RestResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -33,10 +32,7 @@ import java.util.Map;
 @RequestMapping("/api")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class FrontController {
-
-    private final PostService postService;
-
-    private final NoteService noteService;
+    private final ArticleServiceNew articleServiceNew;
 
     private final CategoryService categoryService;
 
@@ -54,11 +50,11 @@ public class FrontController {
      * @return {@see Pagination<Post>}
      */
     @GetMapping("post")
-    public RestResponse<Pagination<Post>> home(@RequestParam(required = false, defaultValue = "0") Integer page,
-                                               @RequestParam(required = false, defaultValue = FameConst.PAGE_SIZE) Integer limit,
-                                               @RequestParam(required = false, defaultValue = "id") List<String> sort) {
-        Page<Post> posts = postService.pageFrontArticle(page, limit, sort);
-        return RestResponse.ok(Pagination.of(posts));
+    public RestResponse<Pagination<Article>> home(@RequestParam(required = false, defaultValue = "0") Integer page,
+                                                  @RequestParam(required = false, defaultValue = FameConst.PAGE_SIZE) Integer limit,
+                                                  @RequestParam(required = false, defaultValue = "id") List<String> sort) {
+        Page<Article> articles = articleServiceNew.pageArticleFront(page, limit, sort);
+        return RestResponse.ok(Pagination.of(articles));
     }
 
     /**
@@ -68,10 +64,10 @@ public class FrontController {
      * @return {@see Article}
      */
     @GetMapping("post/{id}")
-    public RestResponse<Post> post(@PathVariable Integer id) {
-        Post post = postService.getFrontArticle(id);
-        postService.visitPost(post.getId());
-        return RestResponse.ok(post);
+    public RestResponse<Article> post(@PathVariable Integer id) {
+        Article article = articleServiceNew.getArticleFront(id);
+        articleServiceNew.visitArticle(article.getId());
+        return RestResponse.ok(article);
     }
 
 
@@ -100,35 +96,23 @@ public class FrontController {
     /**
      * 归档页
      *
-     * @return {@see List<Archive>}
+     * @return {@see List<ArchiveDto>}
      */
     @GetMapping("archive")
-    public RestResponse<List<Archive>> archive() {
-        List<Archive> archives = postService.getArchives();
+    public RestResponse<List<ArchiveDto>> archive() {
+        List<ArchiveDto> archives = articleServiceNew.getArchives();
         return RestResponse.ok(archives);
     }
 
     /**
-     * 获取自定义页面的列表,根据权重排序
+     * 导航栏文章列表
      *
-     * @return {@see List<NoteInfo>}
+     * @return {@see List<ArticleInfoDto>}
      */
-    @GetMapping("note")
-    public RestResponse<List<NoteInfo>> noteList() {
-        List<NoteInfo> notes = noteService.getFrontNoteList();
-        return RestResponse.ok(notes);
-    }
-
-    /**
-     * 自定义页面
-     *
-     * @param id 页面id
-     * @return {@see Article}
-     */
-    @GetMapping("note/{id}")
-    public RestResponse<Note> note(@PathVariable Integer id) {
-        Note note = noteService.getFrontArticle(id);
-        return RestResponse.ok(note);
+    @GetMapping("header")
+    public RestResponse<List<ArticleInfoDto>> headerList() {
+        List<ArticleInfoDto> articleHeader = articleServiceNew.listArticleHeader();
+        return RestResponse.ok(articleHeader);
     }
 
     /**

@@ -12,19 +12,19 @@ import org.springframework.lang.NonNull;
 
 @ToString
 @Getter
-public class PostHitsEvent extends ApplicationEvent {
+public class ArticleHitsEvent extends ApplicationEvent {
 
-    private final Integer postId;
+    private final Integer articleId;
 
     /**
      * Create a new {@code ApplicationEvent}.
      *
      * @param source the object on which the event initially occurred or with
      *               which the event is associated (never {@code null})
-     * @param postId 文章id
+     * @param articleId 文章id
      */
-    public PostHitsEvent(Object source, @NonNull Integer postId) {
+    public ArticleHitsEvent(Object source, @NonNull Integer articleId) {
         super(source);
-        this.postId = postId;
+        this.articleId = articleId;
     }
 }

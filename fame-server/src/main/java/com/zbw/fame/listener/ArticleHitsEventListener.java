@@ -1,6 +1,7 @@
 package com.zbw.fame.listener;
 
-import com.zbw.fame.listener.event.PostHitsEvent;
+import com.zbw.fame.listener.event.ArticleHitsEvent;
+import com.zbw.fame.service.ArticleServiceNew;
 import com.zbw.fame.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,14 +17,14 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class PostHitsEventListener {
+public class ArticleHitsEventListener {
 
-    private final PostService postService;
+    private final ArticleServiceNew articleServiceNew;
 
     @Async
     @EventListener
-    public void onPostHitsEvent(PostHitsEvent event) {
-        log.info("onPostHitsEvent event:{}", event);
-        postService.increaseHits(event.getPostId(), 1);
+    public void onArticleHitsEvent(ArticleHitsEvent event) {
+        log.info("onArticleHitsEvent event:{}", event);
+        articleServiceNew.increaseHits(event.getArticleId(), 1);
     }
 }
