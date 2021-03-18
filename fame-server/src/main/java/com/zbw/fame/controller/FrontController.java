@@ -126,7 +126,7 @@ public class FrontController {
     @GetMapping("comment")
     public RestResponse<Pagination<Comment>> getArticleComment(@RequestParam Integer articleId, @RequestParam(required = false, defaultValue = "0") Integer page,
                                                                @RequestParam(required = false, defaultValue = FameConst.PAGE_SIZE) Integer limit) {
-        com.baomidou.mybatisplus.extension.plugins.pagination.Page<Comment> comments = commentService.pageByArticleId(page, limit, articleId);
+        Page<Comment> comments = commentService.pageByArticleId(page, limit, articleId);
         return RestResponse.ok(Pagination.of(comments));
     }
 

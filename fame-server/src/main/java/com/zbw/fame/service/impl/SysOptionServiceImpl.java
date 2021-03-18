@@ -11,6 +11,7 @@ import com.zbw.fame.util.FameUtils;
 import com.zbw.fame.util.OptionKeys;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -26,7 +27,7 @@ import java.util.stream.Collectors;
  * @since 2019-05-20 22:45
  */
 @Service
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @Lazy})
 public class SysOptionServiceImpl extends ServiceImpl<SysOptionMapper, SysOption> implements SysOptionService {
 
     @Override

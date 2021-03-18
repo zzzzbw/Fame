@@ -8,14 +8,14 @@ import com.zbw.fame.exception.TipException;
 import com.zbw.fame.listener.event.CommentNewEvent;
 import com.zbw.fame.listener.event.LogEvent;
 import com.zbw.fame.mapper.CommentMapper;
-import com.zbw.fame.model.domain.Article;
 import com.zbw.fame.model.dto.CommentDto;
+import com.zbw.fame.model.entity.Article;
 import com.zbw.fame.model.entity.BaseEntity;
 import com.zbw.fame.model.entity.Comment;
 import com.zbw.fame.model.enums.CommentAssessType;
 import com.zbw.fame.model.enums.LogAction;
 import com.zbw.fame.model.enums.LogType;
-import com.zbw.fame.repository.ArticleRepository;
+import com.zbw.fame.service.ArticleServiceNew;
 import com.zbw.fame.service.CommentService;
 import com.zbw.fame.util.FameUtils;
 import lombok.NonNull;
@@ -24,11 +24,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -41,10 +43,10 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class CommentServiceImpl extends ServiceImpl<CommentMapper, com.zbw.fame.model.entity.Comment> implements CommentService {
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @Lazy})
+public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> implements CommentService {
 
-    private final ArticleRepository<Article> articleRepository;
+    private final ArticleServiceNew articleServiceNew;
 
     private final ApplicationEventPublisher eventPublisher;
 
@@ -52,18 +54,14 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, com.zbw.fame.
     @Override
     @Transactional(rollbackFor = Throwable.class)
     public void createComment(@NonNull Comment comment) {
-
-        // TODO ArticleService
-        Article article = articleRepository.findById(comment.getArticleId())
+        Article article = Optional.of(articleServiceNew.getById(comment.getArticleId()))
                 .orElseThrow(() -> new NotFoundException(Article.class));
 
         save(comment);
 
-        // TODO ArticleService
         // 增加文章的评论数
         article.setCommentCount(article.getCommentCount() + 1);
-        articleRepository.save(article);
-
+        articleServiceNew.updateById(article);
 
         this.createCommentEvent(comment);
     }
@@ -111,20 +109,19 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, com.zbw.fame.
             throw new NotFoundException(Comment.class);
         }
 
-        CommentDto comment = new CommentDto();
-        BeanUtils.copyProperties(entity, comment);
-        if (null != comment.getParentId() && -1 != comment.getParentId()) {
+        CommentDto commentDto = new CommentDto();
+        BeanUtils.copyProperties(entity, commentDto);
+        if (null != commentDto.getParentId() && -1 != commentDto.getParentId()) {
 
-            Comment parentComment = getById(comment.getParentId());
-            comment.setParentComment(parentComment);
+            Comment parentComment = getById(commentDto.getParentId());
+            commentDto.setParentComment(parentComment);
         }
 
 
-        // TODO ArticleService
-        Article article = articleRepository.findById(comment.getArticleId())
+        Article article = Optional.ofNullable(articleServiceNew.getById(commentDto.getArticleId()))
                 .orElseThrow(() -> new NotFoundException(Article.class));
-        comment.setArticle(article);
-        return comment;
+        commentDto.setArticle(article);
+        return commentDto;
     }
 
 
@@ -138,10 +135,10 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, com.zbw.fame.
 
         // TODO ArticleService
         // 减去文章中评论数
-        Article article = articleRepository.findById(comment.getArticleId())
+        Article article = Optional.ofNullable(articleServiceNew.getById(comment.getArticleId()))
                 .orElseThrow(() -> new NotFoundException(Article.class));
         article.setCommentCount(article.getCommentCount() - 1);
-        articleRepository.save(article);
+        articleServiceNew.updateById(article);
 
         // 去除子评论中关联
         List<Comment> childComments = lambdaQuery()

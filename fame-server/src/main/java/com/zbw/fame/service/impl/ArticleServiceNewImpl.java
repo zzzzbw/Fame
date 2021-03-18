@@ -27,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -43,8 +44,8 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
-public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements ArticleServiceNew {
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @Lazy})
+public class ArticleServiceNewImpl extends ServiceImpl<ArticleMapper, Article> implements ArticleServiceNew {
 
     private final CommentService commentService;
 
@@ -120,7 +121,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         if (null != article.getId()) {
             Article old = Optional
                     .ofNullable(getById(article.getId()))
-                    .orElseThrow(() -> new NotFoundException(Post.class));
+                    .orElseThrow(() -> new NotFoundException(Article.class));
 
             FameUtils.copyProperties(article, old, true);
             updateById(article);

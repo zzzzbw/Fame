@@ -16,6 +16,7 @@ import com.zbw.fame.service.UserService;
 import com.zbw.fame.util.FameUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,7 +29,7 @@ import java.util.Date;
  * @since 2017/7/12 21:24
  */
 @Service
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
+@RequiredArgsConstructor(onConstructor_ = {@Autowired, @Lazy})
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
     /**
