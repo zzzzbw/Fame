@@ -133,7 +133,6 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             throw new NotFoundException(Comment.class);
         }
 
-        // TODO ArticleService
         // 减去文章中评论数
         Article article = Optional.ofNullable(articleServiceNew.getById(comment.getArticleId()))
                 .orElseThrow(() -> new NotFoundException(Article.class));

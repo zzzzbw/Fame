@@ -32,10 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -208,5 +205,13 @@ public class ArticleServiceNewImpl extends ServiceImpl<ArticleMapper, Article> i
         return list.stream()
                 .map(ArticleInfoDto::new)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Article> listByIds(Collection<Integer> ids, boolean isFront) {
+        return lambdaQuery()
+                .select()
+                .eq(isFront, Article::getStatus, ArticleStatus.PUBLISH)
+                .list();
     }
 }

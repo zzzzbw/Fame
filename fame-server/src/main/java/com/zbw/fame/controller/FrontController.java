@@ -2,10 +2,7 @@ package com.zbw.fame.controller;
 
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.zbw.fame.model.dto.ArchiveDto;
-import com.zbw.fame.model.dto.ArticleInfoDto;
-import com.zbw.fame.model.dto.MetaInfo;
-import com.zbw.fame.model.dto.Pagination;
+import com.zbw.fame.model.dto.*;
 import com.zbw.fame.model.entity.Article;
 import com.zbw.fame.model.entity.Comment;
 import com.zbw.fame.model.enums.CommentAssessType;
@@ -36,7 +33,7 @@ public class FrontController {
 
     private final CategoryService categoryService;
 
-    private final TagService tagService;
+    private final TagServiceNew tagServiceNew;
 
     private final CommentService commentService;
 
@@ -74,12 +71,12 @@ public class FrontController {
     /**
      * 标签页
      *
-     * @return {@see List<MetaInfo>}
+     * @return {@see List<TagInfoDto>}
      */
     @GetMapping("tag")
-    public RestResponse<List<MetaInfo>> tag() {
-        List<MetaInfo> metaInfos = tagService.getFrontMetaInfos();
-        return RestResponse.ok(metaInfos);
+    public RestResponse<List<TagInfoDto>> tag() {
+        List<TagInfoDto> tagInfos = tagServiceNew.listTagInfo(true);
+        return RestResponse.ok(tagInfos);
     }
 
     /**

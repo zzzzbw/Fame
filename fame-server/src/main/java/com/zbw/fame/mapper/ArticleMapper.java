@@ -14,10 +14,10 @@ public interface ArticleMapper extends BaseMapper<Article> {
     /**
      * 增加文章点击数
      *
-     * @param id   文章id
+     * @param id           文章id
      * @param increaseHits 增加的点击数
      * @return
      */
-    @Update("update article set hits = hits + #{increaseHits} where id = #{id}")
+    @Update("update article set hits = hits + #{increaseHits} where id = #{id} and deleted = 0")
     int increaseHits(@Param("id") Integer id, @Param("increaseHits") Integer increaseHits);
 }

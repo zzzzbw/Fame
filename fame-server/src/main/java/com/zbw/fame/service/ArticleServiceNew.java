@@ -7,6 +7,7 @@ import com.zbw.fame.model.dto.ArticleInfoDto;
 import com.zbw.fame.model.entity.Article;
 import com.zbw.fame.model.param.ArticleQuery;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -98,4 +99,13 @@ public interface ArticleServiceNew extends IService<Article> {
      * @return List<ArticleInfoDto>
      */
     List<ArticleInfoDto> listArticleHeader();
+
+    /**
+     * 通过id获取前端文章
+     *
+     * @param ids
+     * @param isFront
+     * @return
+     */
+    List<Article> listByIds(Collection<Integer> ids, boolean isFront);
 }
