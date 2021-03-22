@@ -25,7 +25,7 @@ public class TagController {
     private final TagServiceNew tagServiceNew;
 
     /**
-     * 获取所有属性
+     * 获取所有标签
      *
      * @return {@see List<TagInfoDto>}
      */

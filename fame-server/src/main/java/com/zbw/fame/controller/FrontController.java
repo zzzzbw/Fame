@@ -31,7 +31,7 @@ import java.util.Map;
 public class FrontController {
     private final ArticleServiceNew articleServiceNew;
 
-    private final CategoryService categoryService;
+    private final CategoryServiceNew categoryServiceNew;
 
     private final TagServiceNew tagServiceNew;
 
@@ -82,12 +82,12 @@ public class FrontController {
     /**
      * 分类页
      *
-     * @return {@see List<MetaInfo>}
+     * @return {@see List<CategoryInfoDto>}
      */
     @GetMapping("category")
-    public RestResponse<List<MetaInfo>> category() {
-        List<MetaInfo> metaInfos = categoryService.getFrontMetaInfos();
-        return RestResponse.ok(metaInfos);
+    public RestResponse<List<CategoryInfoDto>> category() {
+        List<CategoryInfoDto> categoryInfos = categoryServiceNew.listCategoryInfo(true);
+        return RestResponse.ok(categoryInfos);
     }
 
     /**

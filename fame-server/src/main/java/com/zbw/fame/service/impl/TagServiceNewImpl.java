@@ -22,7 +22,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -59,36 +59,27 @@ public class TagServiceNewImpl extends ServiceImpl<TagMapper, Tag> implements Ta
     @Override
     public List<TagInfoDto> listTagInfo(boolean isFront) {
         List<Tag> tags = list();
+        if (CollectionUtils.isEmpty(tags)) {
+            return Collections.emptyList();
+        }
         Set<Integer> tagIds = tags
                 .stream()
                 .map(BaseEntity::getId)
                 .collect(Collectors.toSet());
-
-        if (CollectionUtils.isEmpty(tagIds)) {
-            return new ArrayList<>();
-        }
-
-
         Map<Integer, List<Article>> articleMap = articleTagService.listArticleByTagIds(tagIds, isFront);
-        Map<Integer, Tag> tagMap = tags
-                .stream()
-                .collect(Collectors.toMap(BaseEntity::getId, tag -> tag));
 
-        List<TagInfoDto> tagInfos = new ArrayList<>();
-        articleMap.forEach((tagId, articleList) -> {
-            Tag tag = tagMap.get(tagId);
-            TagInfoDto dto = new TagInfoDto();
-            dto.setId(tag.getId());
-            dto.setName(tag.getName());
+        return tags.stream()
+                .map(tag -> {
+                    TagInfoDto dto = new TagInfoDto();
+                    dto.setId(tag.getId());
+                    dto.setName(tag.getName());
 
-            List<ArticleInfoDto> articleInfoDtos = articleList.stream()
-                    .map(ArticleInfoDto::new)
-                    .collect(Collectors.toList());
-            dto.setArticleInfos(articleInfoDtos);
-            tagInfos.add(dto);
-        });
-
-
-        return tagInfos;
+                    List<ArticleInfoDto> articleInfoDtos = articleMap.getOrDefault(tag.getId(), Collections.emptyList())
+                            .stream()
+                            .map(ArticleInfoDto::new)
+                            .collect(Collectors.toList());
+                    dto.setArticleInfos(articleInfoDtos);
+                    return dto;
+                }).collect(Collectors.toList());
     }
 }
