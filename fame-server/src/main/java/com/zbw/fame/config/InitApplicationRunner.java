@@ -1,14 +1,10 @@
 package com.zbw.fame.config;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.zbw.fame.mapper.CommentMapper;
-import com.zbw.fame.model.domain.*;
-import com.zbw.fame.model.entity.SysLog;
+import com.zbw.fame.model.entity.*;
 import com.zbw.fame.model.enums.ArticleStatus;
 import com.zbw.fame.model.enums.LogType;
-import com.zbw.fame.repository.*;
-import com.zbw.fame.service.SysLogService;
-import com.zbw.fame.service.SysOptionService;
+import com.zbw.fame.service.*;
 import com.zbw.fame.util.FameConst;
 import com.zbw.fame.util.FameUtils;
 import com.zbw.fame.util.OptionKeys;
@@ -34,19 +30,19 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class InitApplicationRunner implements ApplicationRunner {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    private final PostRepository postRepository;
+    private final ArticleServiceNew articleServiceNew;
 
-    private final NoteRepository noteRepository;
+    private final CategoryServiceNew categoryServiceNew;
 
-    private final CategoryRepository categoryRepository;
+    private final ArticleCategoryService articleCategoryService;
 
-    private final TagRepository tagRepository;
+    private final TagServiceNew tagServiceNew;
 
-    private final MiddleRepository middleRepository;
+    private final ArticleTagService articleTagService;
 
-    private final CommentMapper commentMapper;
+    private final CommentService commentService;
 
     private final SysOptionService sysOptionService;
 
@@ -98,11 +94,11 @@ public class InitApplicationRunner implements ApplicationRunner {
     private void createDefaultIfAbsent() {
         log.info("Start create default data...");
         User user = createDefaultUserIfAbsent();
-        Post post = createDefaultPostIfAbsent(user);
-        createDefaultCategoryIfAbsent(post);
-        createDefaultTagIfAbsent(post);
-        createDefaultCommentIfAbsent(post);
-        createDefaultNoteIfAbsent(user);
+        Article article = createDefaultArticleIfAbsent(user);
+        createDefaultCategoryIfAbsent(article);
+        createDefaultTagIfAbsent(article);
+        createDefaultCommentIfAbsent(article);
+        createDefaultHeaderArticleIfAbsent(user);
         createDefaultOptionIfAbsent();
         createInitLog();
         sysOptionService.save(OptionKeys.FAME_INIT, Boolean.TRUE.toString());
@@ -112,7 +108,7 @@ public class InitApplicationRunner implements ApplicationRunner {
     private User createDefaultUserIfAbsent() {
         log.info("Create default user...");
 
-        if (userRepository.count() > 0) {
+        if (userService.count() > 0) {
             return null;
         }
         User user = new User();
@@ -120,105 +116,112 @@ public class InitApplicationRunner implements ApplicationRunner {
         user.setPasswordMd5("3e6693e83d186225b85b09e71c974d2d");
         user.setEmail("");
         user.setScreenName("admin");
-        userRepository.save(user);
+        userService.save(user);
         return user;
     }
 
-    private Post createDefaultPostIfAbsent(User user) {
+    private Article createDefaultArticleIfAbsent(User user) {
         log.info("Create default post...");
-        long count = postRepository.count();
+        long count = articleServiceNew.count(Wrappers.<Article>lambdaQuery().eq(Article::isHeaderShow, false));
         if (null == user || count > 0) {
             return null;
         }
-        Post post = new Post();
-        post.setTitle("Hello world");
-        post.setContent("欢迎使用[Fame](https://github.com/zzzzbw/Fame)! 这是你的第一篇博客。快点来写点什么吧\n" +
+        Article article = new Article();
+        article.setTitle("Hello world");
+        article.setContent("欢迎使用[Fame](https://github.com/zzzzbw/Fame)! 这是你的第一篇博客。快点来写点什么吧\n" +
                 "```java\n" +
                 "public static void main(String[] args){\n" +
                 "    System.out.println(\"Hello world\");\n" +
                 "}\n" +
                 "```\n" +
                 "> 想要了解更多详细信息，可以查看[文档](https://github.com/zzzzbw/Fame/blob/master/README.md)。");
-        post.setTags(DEFAULT_TAG);
-        post.setCategory(DEFAULT_CATEGORY);
-        post.setStatus(ArticleStatus.PUBLISH);
-        post.setAuthorId(user.getId());
+        article.setHeaderShow(false);
+        article.setListShow(true);
+        article.setStatus(ArticleStatus.PUBLISH);
+        article.setAuthorId(user.getId());
 
-        postRepository.save(post);
-        return post;
+        articleServiceNew.save(article);
+        return article;
     }
 
-    private void createDefaultCategoryIfAbsent(Post post) {
+    private void createDefaultCategoryIfAbsent(Article article) {
         log.info("Create default category...");
-        long count = categoryRepository.count();
-        if (null == post || count > 0) {
+        long count = categoryServiceNew.count();
+        if (null == article || count > 0) {
             return;
         }
 
         Category category = new Category();
         category.setName(DEFAULT_CATEGORY);
-        category = categoryRepository.save(category);
+        categoryServiceNew.save(category);
 
+        ArticleCategory articleCategory = new ArticleCategory();
+        articleCategory.setArticleId(article.getId());
+        articleCategory.setCategoryId(category.getId());
 
-        Middle middleCategory = new Middle(post.getId(), category.getId());
-        middleRepository.save(middleCategory);
+        articleCategoryService.save(articleCategory);
     }
 
-    private void createDefaultTagIfAbsent(Post post) {
+    private void createDefaultTagIfAbsent(Article article) {
         log.info("Create default tag...");
-        long count = tagRepository.count();
-        if (null == post || count > 0) {
+        long count = tagServiceNew.count();
+        if (null == article || count > 0) {
             return;
         }
 
 
         Tag tag = new Tag();
         tag.setName(DEFAULT_TAG);
-        tag = tagRepository.save(tag);
+        tagServiceNew.save(tag);
 
-        Middle middleTag = new Middle(post.getId(), tag.getId());
-        middleRepository.save(middleTag);
+        ArticleTag articleTag = new ArticleTag();
+        articleTag.setArticleId(article.getId());
+        articleTag.setTagId(tag.getId());
+
+        articleTagService.save(articleTag);
     }
 
-    private void createDefaultCommentIfAbsent(Post post) {
+    private void createDefaultCommentIfAbsent(Article article) {
         log.info("Create default comment...");
-        long count = commentMapper.selectCount(Wrappers.emptyWrapper());
-        if (null == post || count > 0) {
+        long count = commentService.count();
+        if (null == article || count > 0) {
             return;
         }
-        com.zbw.fame.model.entity.Comment comment = new com.zbw.fame.model.entity.Comment();
-        comment.setArticleId(post.getId());
+        Comment comment = new Comment();
+        comment.setArticleId(article.getId());
         comment.setContent("## 测试评论\n" +
                 "这是我的网址[Fame](http://zzzzbw.cn)");
         comment.setName("zzzzbw");
         comment.setEmail("zzzzbw@gmail.com");
         comment.setWebsite("https://zzzzbw.cn");
         comment.setIp("0.0.0.1");
-        commentMapper.insert(comment);
+        commentService.save(comment);
 
-        post.setCommentCount(1);
-        postRepository.save(post);
+        article.setCommentCount(1);
+        articleServiceNew.updateById(article);
     }
 
-    private void createDefaultNoteIfAbsent(User user) {
+    private void createDefaultHeaderArticleIfAbsent(User user) {
         log.info("Create default page...");
-        long count = noteRepository.count();
+        long count = articleServiceNew.count(Wrappers.<Article>lambdaQuery().eq(Article::isHeaderShow, true));
         if (null == user || count > 0) {
             return;
         }
-        Note note = new Note();
-        note.setTitle("About");
-        note.setContent("# About me\n" +
+        Article article = new Article();
+        article.setTitle("About");
+        article.setContent("# About me\n" +
                 "### Hello word\n" +
                 "这是关于我的页面\n" +
                 "* [Github](https://github.com/)\n" +
                 "* [知乎](https://www.zhihu.com/)\n" +
                 "### 也可以设置别的页面\n" +
                 "* 比如友链页面");
-        note.setStatus(ArticleStatus.PUBLISH);
-        note.setAuthorId(user.getId());
+        article.setHeaderShow(true);
+        article.setListShow(false);
+        article.setStatus(ArticleStatus.PUBLISH);
+        article.setAuthorId(user.getId());
 
-        noteRepository.save(note);
+        articleServiceNew.save(article);
     }
 
     private void createDefaultOptionIfAbsent() {
