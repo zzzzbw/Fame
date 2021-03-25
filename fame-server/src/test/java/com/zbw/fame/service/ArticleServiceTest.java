@@ -15,20 +15,18 @@ import java.util.List;
 @Slf4j
 public class ArticleServiceTest extends BaseTest {
 
-    @Autowired
-    private PostService postService;
 
     @Autowired
     private ArticleServiceNew articleServiceNew;
 
     @Test
-    public void getFrontArticle() {
-        postService.getFrontArticle(100);
+    public void getArticleFront() {
+        articleServiceNew.getArticleFront(1);
     }
 
     @Test
     public void visitPost() throws InterruptedException {
-        postService.visitPost(1);
+        articleServiceNew.visitArticle(1);
         Thread.sleep(1000); // 等待异步线程完成
     }
 

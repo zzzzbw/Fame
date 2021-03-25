@@ -17,11 +17,9 @@ import com.vladsch.flexmark.util.options.MutableDataSet;
 import com.zbw.fame.exception.NotLoginException;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.model.dto.LoginUser;
-import com.zbw.fame.model.entity.User;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.ObjectUtils;
@@ -40,7 +38,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -249,36 +246,6 @@ public class FameUtils {
             }
         }
         return content;
-    }
-
-    /**
-     * 根据字段倒叙排序
-     *
-     * @param properties 排序字段列表
-     * @return {@link Sort}
-     */
-    public static Sort sortDescBy(List<String> properties) {
-        return sortDescBy(properties.toArray(new String[0]));
-    }
-
-    /**
-     * 根据字段倒叙排序
-     *
-     * @param properties 字段
-     * @return {@link Sort}
-     */
-    public static Sort sortDescBy(String... properties) {
-        return Sort.by(Sort.Direction.DESC, properties);
-    }
-
-
-    /**
-     * 根据id倒叙排序
-     *
-     * @return {@link Sort}
-     */
-    public static Sort sortDescById() {
-        return sortDescBy("id");
     }
 
 

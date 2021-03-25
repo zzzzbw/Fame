@@ -1,9 +1,8 @@
 package com.zbw.fame.service;
 
+import com.zbw.fame.BaseTest;
 import com.zbw.fame.util.FameConst;
 import com.zbw.fame.util.FameUtils;
-import com.zbw.fame.util.FameUtilsTest;
-import com.zbw.fame.BaseTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -9,7 +9,6 @@ import com.zbw.fame.exception.TipException;
 import com.zbw.fame.listener.event.ArticleHitsEvent;
 import com.zbw.fame.listener.event.LogEvent;
 import com.zbw.fame.mapper.ArticleMapper;
-import com.zbw.fame.model.domain.Post;
 import com.zbw.fame.model.dto.ArchiveDto;
 import com.zbw.fame.model.dto.ArticleInfoDto;
 import com.zbw.fame.model.entity.Article;
@@ -140,7 +139,7 @@ public class ArticleServiceNewImpl extends ServiceImpl<ArticleMapper, Article> i
     public void delete(Integer id) {
         Article article = Optional
                 .ofNullable(getById(id))
-                .orElseThrow(() -> new NotFoundException(Post.class));
+                .orElseThrow(() -> new NotFoundException(Article.class));
 
         log.info("删除文章: {}", article);
         removeById(id);

@@ -2,7 +2,7 @@ package com.zbw.fame.listener;
 
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.listener.event.LogEvent;
-import com.zbw.fame.model.domain.BaseEntity;
+import com.zbw.fame.model.entity.BaseEntity;
 import com.zbw.fame.model.entity.SysLog;
 import com.zbw.fame.model.enums.LogAction;
 import com.zbw.fame.service.SysLogService;

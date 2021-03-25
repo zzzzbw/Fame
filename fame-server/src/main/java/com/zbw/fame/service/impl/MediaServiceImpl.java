@@ -7,7 +7,6 @@ import com.zbw.fame.exception.NotFoundException;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.mapper.MediaMapper;
 import com.zbw.fame.model.entity.Media;
-import com.zbw.fame.repository.MediaRepository;
 import com.zbw.fame.service.MediaService;
 import com.zbw.fame.util.FameConst;
 import com.zbw.fame.util.FameUtils;
@@ -34,8 +33,6 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @Lazy})
 public class MediaServiceImpl extends ServiceImpl<MediaMapper, Media> implements MediaService {
-
-    private final MediaRepository mediaRepository;
 
     @Override
     public Page<Media> pageAdminMedias(Integer current, Integer size) {

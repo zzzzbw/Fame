@@ -3,7 +3,6 @@ package com.zbw.fame.model.dto;
 import com.zbw.fame.util.FameUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -31,18 +30,6 @@ public class Pagination<T> {
                 page.getPages(),
                 FameUtils.objectToJson(page.getOrders().toString()),
                 page.getRecords()
-        );
-    }
-
-
-    public static <S> Pagination<S> of(Page<S> page) {
-        return new Pagination<>(
-                page.getNumber(),
-                page.getSize(),
-                page.getTotalElements(),
-                page.getTotalPages(),
-                page.getSort().toString(),
-                page.getContent()
         );
     }
 }

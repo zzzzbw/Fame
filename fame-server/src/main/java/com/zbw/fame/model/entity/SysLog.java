@@ -4,10 +4,6 @@ import com.zbw.fame.model.enums.LogType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-
 /**
  * @author by zzzzbw
  * @since 2021/03/08 15:21
