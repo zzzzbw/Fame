@@ -1,5 +1,5 @@
 -- auto-generated definition
-create table if not exists  ARTICLE
+create table if not exists ARTICLE
 (
 
     ID            INTEGER primary key auto_increment,
@@ -12,9 +12,10 @@ create table if not exists  ARTICLE
     TAGS          VARCHAR(500),
     CATEGORY      VARCHAR(500),
     STATUS        VARCHAR(32),
-    TYPE          VARCHAR(45)                         not null,
+    LIST_SHOW     BOOLEAN,
+    HEADER_SHOW   BOOLEAN,
     ALLOW_COMMENT BOOLEAN   default TRUE              not null,
     COMMENT_COUNT INT       default 0                 not null,
     PRIORITY      INT       default 0                 not null,
-    DELETED      TINYINT default 0 not null
+    DELETED       TINYINT   default 0                 not null
 );
