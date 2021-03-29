@@ -3,7 +3,7 @@ package com.zbw.fame.controller.admin;
 import com.zbw.fame.model.dto.CategoryInfoDto;
 import com.zbw.fame.model.entity.Category;
 import com.zbw.fame.model.param.SaveCategoryParam;
-import com.zbw.fame.service.CategoryServiceNew;
+import com.zbw.fame.service.CategoryService;
 import com.zbw.fame.util.RestResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class CategoryController {
 
-    private final CategoryServiceNew categoryServiceNew;
+    private final CategoryService categoryService;
 
     /**
      * 获取所有分类
@@ -32,7 +32,7 @@ public class CategoryController {
      */
     @GetMapping
     public RestResponse<List<CategoryInfoDto>> getAll() {
-        List<CategoryInfoDto> categoryInfos = categoryServiceNew.listCategoryInfo(false);
+        List<CategoryInfoDto> categoryInfos = categoryService.listCategoryInfo(false);
         return RestResponse.ok(categoryInfos);
     }
 
@@ -44,7 +44,7 @@ public class CategoryController {
      */
     @DeleteMapping("{id}")
     public RestResponse<RestResponse.Empty> delete(@PathVariable Integer id) {
-        categoryServiceNew.delete(id);
+        categoryService.delete(id);
         return RestResponse.ok();
     }
 
@@ -56,7 +56,7 @@ public class CategoryController {
      */
     @PostMapping
     public RestResponse<Category> save(SaveCategoryParam param) {
-        Category category = categoryServiceNew.createOrUpdate(param);
+        Category category = categoryService.createOrUpdate(param);
         return RestResponse.ok(category);
     }
 

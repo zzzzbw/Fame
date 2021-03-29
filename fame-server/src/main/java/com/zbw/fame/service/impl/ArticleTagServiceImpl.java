@@ -5,7 +5,7 @@ import com.zbw.fame.mapper.ArticleTagMapper;
 import com.zbw.fame.model.entity.Article;
 import com.zbw.fame.model.entity.ArticleTag;
 import com.zbw.fame.model.entity.BaseEntity;
-import com.zbw.fame.service.ArticleServiceNew;
+import com.zbw.fame.service.ArticleService;
 import com.zbw.fame.service.ArticleTagService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @Lazy})
 public class ArticleTagServiceImpl extends ServiceImpl<ArticleTagMapper, ArticleTag> implements ArticleTagService {
 
-    private final ArticleServiceNew articleServiceNew;
+    private final ArticleService articleService;
 
     @Override
     public Map<Integer, List<Article>> listArticleByTagIds(Collection<Integer> tagIds, boolean isFront) {
@@ -39,7 +39,7 @@ public class ArticleTagServiceImpl extends ServiceImpl<ArticleTagMapper, Article
         Set<Integer> articleIds = articleTags.stream()
                 .map(ArticleTag::getArticleId)
                 .collect(Collectors.toSet());
-        Map<Integer, Article> articleMap = articleServiceNew.listByIds(articleIds, isFront)
+        Map<Integer, Article> articleMap = articleService.listByIds(articleIds, isFront)
                 .stream()
                 .collect(Collectors.toMap(BaseEntity::getId, article -> article, (o1, o2) -> o1));
 

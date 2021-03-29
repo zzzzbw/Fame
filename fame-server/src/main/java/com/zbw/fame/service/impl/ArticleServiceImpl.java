@@ -17,7 +17,7 @@ import com.zbw.fame.model.enums.ArticleStatus;
 import com.zbw.fame.model.enums.LogAction;
 import com.zbw.fame.model.enums.LogType;
 import com.zbw.fame.model.param.ArticleQuery;
-import com.zbw.fame.service.ArticleServiceNew;
+import com.zbw.fame.service.ArticleService;
 import com.zbw.fame.service.CommentService;
 import com.zbw.fame.service.SysOptionService;
 import com.zbw.fame.util.FameUtils;
@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @Lazy})
-public class ArticleServiceNewImpl extends ServiceImpl<ArticleMapper, Article> implements ArticleServiceNew {
+public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements ArticleService {
 
     private final CommentService commentService;
 

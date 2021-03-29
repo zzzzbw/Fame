@@ -13,7 +13,7 @@ import com.zbw.fame.model.entity.BaseEntity;
 import com.zbw.fame.model.entity.Tag;
 import com.zbw.fame.model.param.SaveTagParam;
 import com.zbw.fame.service.ArticleTagService;
-import com.zbw.fame.service.TagServiceNew;
+import com.zbw.fame.service.TagService;
 import com.zbw.fame.util.FameUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @Lazy})
-public class TagServiceNewImpl extends ServiceImpl<TagMapper, Tag> implements TagServiceNew {
+public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagService {
 
     private final ArticleTagService articleTagService;
 

@@ -4,10 +4,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zbw.fame.mapper.ArticleCategoryMapper;
 import com.zbw.fame.model.entity.Article;
 import com.zbw.fame.model.entity.ArticleCategory;
-import com.zbw.fame.model.entity.ArticleTag;
 import com.zbw.fame.model.entity.BaseEntity;
 import com.zbw.fame.service.ArticleCategoryService;
-import com.zbw.fame.service.ArticleServiceNew;
+import com.zbw.fame.service.ArticleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @Lazy})
 public class ArticleCategoryServiceImpl extends ServiceImpl<ArticleCategoryMapper, ArticleCategory> implements ArticleCategoryService {
 
-    private final ArticleServiceNew articleServiceNew;
+    private final ArticleService articleService;
 
     @Override
     public void deleteByCategoryId(Integer categoryId) {
@@ -46,7 +45,7 @@ public class ArticleCategoryServiceImpl extends ServiceImpl<ArticleCategoryMappe
         Set<Integer> articleIds = articleCategories.stream()
                 .map(ArticleCategory::getArticleId)
                 .collect(Collectors.toSet());
-        Map<Integer, Article> articleMap = articleServiceNew.listByIds(articleIds, isFront)
+        Map<Integer, Article> articleMap = articleService.listByIds(articleIds, isFront)
                 .stream()
                 .collect(Collectors.toMap(BaseEntity::getId, article -> article, (o1, o2) -> o1));
 

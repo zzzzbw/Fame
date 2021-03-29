@@ -10,7 +10,7 @@ import com.zbw.fame.model.entity.BaseEntity;
 import com.zbw.fame.model.entity.Category;
 import com.zbw.fame.model.param.SaveCategoryParam;
 import com.zbw.fame.service.ArticleCategoryService;
-import com.zbw.fame.service.CategoryServiceNew;
+import com.zbw.fame.service.CategoryService;
 import com.zbw.fame.util.FameUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @Lazy})
-public class CategoryServiceNewImpl extends ServiceImpl<CategoryMapper, Category> implements CategoryServiceNew {
+public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> implements CategoryService {
 
     private final ArticleCategoryService articleCategoryService;
 

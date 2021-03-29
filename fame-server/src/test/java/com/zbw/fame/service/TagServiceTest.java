@@ -16,11 +16,11 @@ import java.util.List;
 public class TagServiceTest extends BaseTest {
 
     @Autowired
-    private TagServiceNew tagServiceNew;
+    private TagService tagService;
 
     @Test
     public void listTagInfo() {
-        List<TagInfoDto> tagInfoDtos = tagServiceNew.listTagInfo(false);
+        List<TagInfoDto> tagInfoDtos = tagService.listTagInfo(false);
         log.info("{}", tagInfoDtos);
     }
 }

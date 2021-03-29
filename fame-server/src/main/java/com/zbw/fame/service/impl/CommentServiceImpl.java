@@ -15,7 +15,7 @@ import com.zbw.fame.model.entity.Comment;
 import com.zbw.fame.model.enums.CommentAssessType;
 import com.zbw.fame.model.enums.LogAction;
 import com.zbw.fame.model.enums.LogType;
-import com.zbw.fame.service.ArticleServiceNew;
+import com.zbw.fame.service.ArticleService;
 import com.zbw.fame.service.CommentService;
 import com.zbw.fame.util.FameUtils;
 import lombok.NonNull;
@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @Lazy})
 public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> implements CommentService {
 
-    private final ArticleServiceNew articleServiceNew;
+    private final ArticleService articleService;
 
     private final ApplicationEventPublisher eventPublisher;
 
@@ -54,14 +54,14 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Override
     @Transactional(rollbackFor = Throwable.class)
     public void createComment(@NonNull Comment comment) {
-        Article article = Optional.of(articleServiceNew.getById(comment.getArticleId()))
+        Article article = Optional.of(articleService.getById(comment.getArticleId()))
                 .orElseThrow(() -> new NotFoundException(Article.class));
 
         save(comment);
 
         // 增加文章的评论数
         article.setCommentCount(article.getCommentCount() + 1);
-        articleServiceNew.updateById(article);
+        articleService.updateById(article);
 
         this.createCommentEvent(comment);
     }
@@ -118,7 +118,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         }
 
 
-        Article article = Optional.ofNullable(articleServiceNew.getById(commentDto.getArticleId()))
+        Article article = Optional.ofNullable(articleService.getById(commentDto.getArticleId()))
                 .orElseThrow(() -> new NotFoundException(Article.class));
         commentDto.setArticle(article);
         return commentDto;
@@ -134,10 +134,10 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         }
 
         // 减去文章中评论数
-        Article article = Optional.ofNullable(articleServiceNew.getById(comment.getArticleId()))
+        Article article = Optional.ofNullable(articleService.getById(comment.getArticleId()))
                 .orElseThrow(() -> new NotFoundException(Article.class));
         article.setCommentCount(article.getCommentCount() - 1);
-        articleServiceNew.updateById(article);
+        articleService.updateById(article);
 
         // 去除子评论中关联
         List<Comment> childComments = lambdaQuery()

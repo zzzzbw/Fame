@@ -29,11 +29,11 @@ import java.util.Map;
 @RequestMapping("/api")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class FrontController {
-    private final ArticleServiceNew articleServiceNew;
+    private final ArticleService articleService;
 
-    private final CategoryServiceNew categoryServiceNew;
+    private final CategoryService categoryService;
 
-    private final TagServiceNew tagServiceNew;
+    private final TagService tagService;
 
     private final CommentService commentService;
 
@@ -50,7 +50,7 @@ public class FrontController {
     public RestResponse<Pagination<Article>> home(@RequestParam(required = false, defaultValue = "0") Integer page,
                                                   @RequestParam(required = false, defaultValue = FameConst.PAGE_SIZE) Integer limit,
                                                   @RequestParam(required = false, defaultValue = "id") List<String> sort) {
-        Page<Article> articles = articleServiceNew.pageArticleFront(page, limit, sort);
+        Page<Article> articles = articleService.pageArticleFront(page, limit, sort);
         return RestResponse.ok(Pagination.of(articles));
     }
 
@@ -62,8 +62,8 @@ public class FrontController {
      */
     @GetMapping("post/{id}")
     public RestResponse<Article> post(@PathVariable Integer id) {
-        Article article = articleServiceNew.getArticleFront(id);
-        articleServiceNew.visitArticle(article.getId());
+        Article article = articleService.getArticleFront(id);
+        articleService.visitArticle(article.getId());
         return RestResponse.ok(article);
     }
 
@@ -75,7 +75,7 @@ public class FrontController {
      */
     @GetMapping("tag")
     public RestResponse<List<TagInfoDto>> tag() {
-        List<TagInfoDto> tagInfos = tagServiceNew.listTagInfo(true);
+        List<TagInfoDto> tagInfos = tagService.listTagInfo(true);
         return RestResponse.ok(tagInfos);
     }
 
@@ -86,7 +86,7 @@ public class FrontController {
      */
     @GetMapping("category")
     public RestResponse<List<CategoryInfoDto>> category() {
-        List<CategoryInfoDto> categoryInfos = categoryServiceNew.listCategoryInfo(true);
+        List<CategoryInfoDto> categoryInfos = categoryService.listCategoryInfo(true);
         return RestResponse.ok(categoryInfos);
     }
 
@@ -97,7 +97,7 @@ public class FrontController {
      */
     @GetMapping("archive")
     public RestResponse<List<ArchiveDto>> archive() {
-        List<ArchiveDto> archives = articleServiceNew.getArchives();
+        List<ArchiveDto> archives = articleService.getArchives();
         return RestResponse.ok(archives);
     }
 
@@ -108,7 +108,7 @@ public class FrontController {
      */
     @GetMapping("header")
     public RestResponse<List<ArticleInfoDto>> headerList() {
-        List<ArticleInfoDto> articleHeader = articleServiceNew.listArticleHeader();
+        List<ArticleInfoDto> articleHeader = articleService.listArticleHeader();
         return RestResponse.ok(articleHeader);
     }
 

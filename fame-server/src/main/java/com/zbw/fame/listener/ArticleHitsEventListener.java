@@ -1,7 +1,7 @@
 package com.zbw.fame.listener;
 
 import com.zbw.fame.listener.event.ArticleHitsEvent;
-import com.zbw.fame.service.ArticleServiceNew;
+import com.zbw.fame.service.ArticleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +18,12 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ArticleHitsEventListener {
 
-    private final ArticleServiceNew articleServiceNew;
+    private final ArticleService articleService;
 
     @Async
     @EventListener
     public void onArticleHitsEvent(ArticleHitsEvent event) {
         log.info("onArticleHitsEvent event:{}", event);
-        articleServiceNew.increaseHits(event.getArticleId(), 1);
+        articleService.increaseHits(event.getArticleId(), 1);
     }
 }

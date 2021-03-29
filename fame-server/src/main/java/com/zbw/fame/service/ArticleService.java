@@ -14,7 +14,7 @@ import java.util.List;
  * @author by zzzzbw
  * @since 2021/03/09 15:49
  */
-public interface ArticleServiceNew extends IService<Article> {
+public interface ArticleService extends IService<Article> {
 
 
     /**

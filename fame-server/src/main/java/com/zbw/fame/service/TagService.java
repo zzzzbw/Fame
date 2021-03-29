@@ -1,18 +1,17 @@
 package com.zbw.fame.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.zbw.fame.model.dto.CategoryInfoDto;
-import com.zbw.fame.model.entity.Category;
-import com.zbw.fame.model.param.SaveCategoryParam;
+import com.zbw.fame.model.dto.TagInfoDto;
+import com.zbw.fame.model.entity.Tag;
+import com.zbw.fame.model.param.SaveTagParam;
 
 import java.util.List;
 
 /**
  * @author by zzzzbw
- * @since 2021/03/19 10:26
+ * @since 2021/03/15 11:30
  */
-public interface CategoryServiceNew extends IService<Category> {
-
+public interface TagService extends IService<Tag> {
     /**
      * 删除标签
      *
@@ -26,15 +25,13 @@ public interface CategoryServiceNew extends IService<Category> {
      * @param param
      * @return
      */
-    Category createOrUpdate(SaveCategoryParam param);
+    Tag createOrUpdate(SaveTagParam param);
 
     /**
      * 获取标签信息
      *
+     * @return List<TagInfoDto>
      * @param isFront 是否为前端标签
-     * @return List<CategoryInfoDto>
      */
-    List<CategoryInfoDto> listCategoryInfo(boolean isFront);
-
-
+    List<TagInfoDto> listTagInfo(boolean isFront);
 }

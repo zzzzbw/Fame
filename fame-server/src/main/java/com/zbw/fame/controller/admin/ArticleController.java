@@ -6,7 +6,7 @@ import com.zbw.fame.model.dto.Pagination;
 import com.zbw.fame.model.entity.Article;
 import com.zbw.fame.model.param.ArticleQuery;
 import com.zbw.fame.model.param.SaveArticleParam;
-import com.zbw.fame.service.ArticleServiceNew;
+import com.zbw.fame.service.ArticleService;
 import com.zbw.fame.util.FameConst;
 import com.zbw.fame.util.FameUtils;
 import com.zbw.fame.util.RestResponse;
@@ -25,7 +25,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ArticleController {
 
-    private final ArticleServiceNew articleServiceNew;
+    private final ArticleService articleService;
 
     /**
      * 文章信息列表
@@ -37,7 +37,7 @@ public class ArticleController {
     @GetMapping
     public RestResponse<Pagination<Article>> page(@RequestParam(required = false, defaultValue = "0") Integer page,
                                                   @RequestParam(required = false, defaultValue = FameConst.PAGE_SIZE) Integer limit, ArticleQuery query) {
-        Page<Article> articles = articleServiceNew.pageArticleAdmin(page, limit, query);
+        Page<Article> articles = articleService.pageArticleAdmin(page, limit, query);
         return RestResponse.ok(Pagination.of(articles));
     }
 
@@ -49,7 +49,7 @@ public class ArticleController {
      */
     @GetMapping("{id}")
     public RestResponse<Article> get(@PathVariable Integer id) {
-        Article article = articleServiceNew.getArticleAdmin(id);
+        Article article = articleService.getArticleAdmin(id);
         return RestResponse.ok(article);
     }
 
@@ -63,7 +63,7 @@ public class ArticleController {
         Article article = FameUtils.convertTo(param, Article.class);
         LoginUser user = FameUtils.getLoginUser();
         article.setAuthorId(user.getId());
-        Integer postId = articleServiceNew.createOrUpdate(article);
+        Integer postId = articleService.createOrUpdate(article);
         return RestResponse.ok(postId);
     }
 
@@ -75,7 +75,7 @@ public class ArticleController {
      */
     @DeleteMapping("{id}")
     public RestResponse<RestResponse.Empty> delete(@PathVariable Integer id) {
-        articleServiceNew.delete(id);
+        articleService.delete(id);
         return RestResponse.ok();
     }
 
@@ -86,6 +86,6 @@ public class ArticleController {
      */
     @GetMapping("count")
     public RestResponse<Integer> count() {
-        return RestResponse.ok(articleServiceNew.count());
+        return RestResponse.ok(articleService.count());
     }
 }

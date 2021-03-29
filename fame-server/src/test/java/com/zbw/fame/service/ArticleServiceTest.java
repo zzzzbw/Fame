@@ -17,27 +17,27 @@ public class ArticleServiceTest extends BaseTest {
 
 
     @Autowired
-    private ArticleServiceNew articleServiceNew;
+    private ArticleService articleService;
 
     @Test
     public void getArticleFront() {
-        articleServiceNew.getArticleFront(1);
+        articleService.getArticleFront(1);
     }
 
     @Test
     public void visitPost() throws InterruptedException {
-        articleServiceNew.visitArticle(1);
+        articleService.visitArticle(1);
         Thread.sleep(1000); // 等待异步线程完成
     }
 
     @Test
     public void increaseHits() {
-        articleServiceNew.increaseHits(1, 10);
+        articleService.increaseHits(1, 10);
     }
 
     @Test
     public void getArchives() {
-        List<ArchiveDto> archives = articleServiceNew.getArchives();
+        List<ArchiveDto> archives = articleService.getArchives();
         log.info("{}", archives);
     }
 }

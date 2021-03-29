@@ -3,7 +3,7 @@ package com.zbw.fame.controller.admin;
 import com.zbw.fame.model.dto.TagInfoDto;
 import com.zbw.fame.model.entity.Tag;
 import com.zbw.fame.model.param.SaveTagParam;
-import com.zbw.fame.service.TagServiceNew;
+import com.zbw.fame.service.TagService;
 import com.zbw.fame.util.RestResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class TagController {
 
-    private final TagServiceNew tagServiceNew;
+    private final TagService tagService;
 
     /**
      * 获取所有标签
@@ -31,7 +31,7 @@ public class TagController {
      */
     @GetMapping
     public RestResponse<List<TagInfoDto>> getAll() {
-        List<TagInfoDto> tagInfos = tagServiceNew.listTagInfo(false);
+        List<TagInfoDto> tagInfos = tagService.listTagInfo(false);
         return RestResponse.ok(tagInfos);
     }
 
@@ -43,7 +43,7 @@ public class TagController {
      */
     @DeleteMapping("{id}")
     public RestResponse<RestResponse.Empty> delete(@PathVariable Integer id) {
-        tagServiceNew.delete(id);
+        tagService.delete(id);
         return RestResponse.ok();
     }
 
@@ -55,7 +55,7 @@ public class TagController {
      */
     @PostMapping
     public RestResponse<Tag> save(SaveTagParam param) {
-        Tag tag = tagServiceNew.createOrUpdate(param);
+        Tag tag = tagService.createOrUpdate(param);
         return RestResponse.ok(tag);
     }
 }

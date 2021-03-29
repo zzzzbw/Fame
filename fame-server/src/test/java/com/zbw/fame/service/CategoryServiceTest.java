@@ -16,11 +16,11 @@ import java.util.List;
 public class CategoryServiceTest extends BaseTest {
 
     @Autowired
-    private CategoryServiceNew categoryServiceNew;
+    private CategoryService categoryService;
 
     @Test
     public void listCategoryInfo() {
-        List<CategoryInfoDto> categoryInfoDtos = categoryServiceNew.listCategoryInfo(false);
+        List<CategoryInfoDto> categoryInfoDtos = categoryService.listCategoryInfo(false);
         log.info("{}", categoryInfoDtos);
     }
 }

@@ -32,13 +32,13 @@ public class InitApplicationRunner implements ApplicationRunner {
 
     private final UserService userService;
 
-    private final ArticleServiceNew articleServiceNew;
+    private final ArticleService articleService;
 
-    private final CategoryServiceNew categoryServiceNew;
+    private final CategoryService categoryService;
 
     private final ArticleCategoryService articleCategoryService;
 
-    private final TagServiceNew tagServiceNew;
+    private final TagService tagService;
 
     private final ArticleTagService articleTagService;
 
@@ -122,7 +122,7 @@ public class InitApplicationRunner implements ApplicationRunner {
 
     private Article createDefaultArticleIfAbsent(User user) {
         log.info("Create default post...");
-        long count = articleServiceNew.count(Wrappers.<Article>lambdaQuery().eq(Article::isHeaderShow, false));
+        long count = articleService.count(Wrappers.<Article>lambdaQuery().eq(Article::isHeaderShow, false));
         if (null == user || count > 0) {
             return null;
         }
@@ -140,20 +140,20 @@ public class InitApplicationRunner implements ApplicationRunner {
         article.setStatus(ArticleStatus.PUBLISH);
         article.setAuthorId(user.getId());
 
-        articleServiceNew.save(article);
+        articleService.save(article);
         return article;
     }
 
     private void createDefaultCategoryIfAbsent(Article article) {
         log.info("Create default category...");
-        long count = categoryServiceNew.count();
+        long count = categoryService.count();
         if (null == article || count > 0) {
             return;
         }
 
         Category category = new Category();
         category.setName(DEFAULT_CATEGORY);
-        categoryServiceNew.save(category);
+        categoryService.save(category);
 
         ArticleCategory articleCategory = new ArticleCategory();
         articleCategory.setArticleId(article.getId());
@@ -164,7 +164,7 @@ public class InitApplicationRunner implements ApplicationRunner {
 
     private void createDefaultTagIfAbsent(Article article) {
         log.info("Create default tag...");
-        long count = tagServiceNew.count();
+        long count = tagService.count();
         if (null == article || count > 0) {
             return;
         }
@@ -172,7 +172,7 @@ public class InitApplicationRunner implements ApplicationRunner {
 
         Tag tag = new Tag();
         tag.setName(DEFAULT_TAG);
-        tagServiceNew.save(tag);
+        tagService.save(tag);
 
         ArticleTag articleTag = new ArticleTag();
         articleTag.setArticleId(article.getId());
@@ -198,12 +198,12 @@ public class InitApplicationRunner implements ApplicationRunner {
         commentService.save(comment);
 
         article.setCommentCount(1);
-        articleServiceNew.updateById(article);
+        articleService.updateById(article);
     }
 
     private void createDefaultHeaderArticleIfAbsent(User user) {
         log.info("Create default page...");
-        long count = articleServiceNew.count(Wrappers.<Article>lambdaQuery().eq(Article::isHeaderShow, true));
+        long count = articleService.count(Wrappers.<Article>lambdaQuery().eq(Article::isHeaderShow, true));
         if (null == user || count > 0) {
             return;
         }
@@ -221,7 +221,7 @@ public class InitApplicationRunner implements ApplicationRunner {
         article.setStatus(ArticleStatus.PUBLISH);
         article.setAuthorId(user.getId());
 
-        articleServiceNew.save(article);
+        articleService.save(article);
     }
 
     private void createDefaultOptionIfAbsent() {
