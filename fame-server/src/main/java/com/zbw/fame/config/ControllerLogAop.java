@@ -77,7 +77,7 @@ public class ControllerLogAop {
 
         if (!shouldNotLog) {
             String requestBody = FameUtils.objectToJson(args);
-            log.info("{}.{} Parameters: [{}]", clazzName, methodName, requestBody);
+            log.debug("{}.{} Parameters: [{}]", clazzName, methodName, requestBody);
         }
     }
 
@@ -97,7 +97,7 @@ public class ControllerLogAop {
             }
 
 
-            log.info("{}.{} Response: [{}]", className, methodName, returnData);
+            log.debug("{}.{} Response: [{}]", className, methodName, returnData);
         }
     }
 

@@ -10,17 +10,12 @@ spring:
     console:
       settings:
         web-allow-others: false
-      path: /h2-console
       enabled: false
-
-  jpa:
-    show-sql: false
 #log
 logging:
   level:
     root: INFO
-    org:
-      springframework:
-        web: INFO
+    com:
+      zbw: INFO
   file:
     name: log/fame.log
