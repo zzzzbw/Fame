@@ -21,15 +21,10 @@ export const actions = {
     }
     commit('post/SET_LIST', list)
   },
-  // 自定义页面目录
-  async getNoteMenu({ commit }) {
-    const { data } = await api.getNoteMenu()
-    commit('note/SET_MENU', data)
-  },
-  // 自定义页面详情
-  async getNote({ commit }, id) {
-    const { data } = await api.getNote(id)
-    commit('note/SET_DETAIL', data)
+  // header文章
+  async getHeader({ commit }) {
+    const { data } = await api.getHeader()
+    commit('article/SET_HEADER', data)
   },
   // 分类列表
   async getCategories({ commit }) {
@@ -90,6 +85,6 @@ export const actions = {
   // 全局服务初始化
   async nuxtServerInit({ dispatch }) {
     await dispatch('getOptions')
-    await dispatch('getNoteMenu')
+    await dispatch('getHeader')
   },
 }

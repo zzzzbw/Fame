@@ -79,8 +79,8 @@ export default {
     options() {
       return this.$store.state.option.data
     },
-    noteMenu() {
-      return this.$store.state.note.menu
+    headerMenu() {
+      return this.$store.state.article.header
     }
   },
   mounted() {
@@ -89,8 +89,8 @@ export default {
   methods: {
     initMenu() {
       const links = staticMenu
-      this.noteMenu.forEach(menu => {
-        links.push({ path: '/note/' + menu.id, name: menu.title })
+      this.headerMenu.forEach(menu => {
+        links.push({ path: '/post/' + menu.id, name: menu.title })
       })
       this.links = links
     },

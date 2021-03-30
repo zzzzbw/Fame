@@ -18,11 +18,8 @@ const api = {
   getTags() {
     return get('/tag')
   },
-  getNoteMenu() {
-    return get('/note')
-  },
-  getNote(id) {
-    return get('/note/' + id)
+  getHeader() {
+    return get('/header')
   },
   getArchives() {
     return get('/archive')
