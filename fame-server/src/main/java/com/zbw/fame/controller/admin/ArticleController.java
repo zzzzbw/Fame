@@ -1,14 +1,14 @@
 package com.zbw.fame.controller.admin;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.zbw.fame.model.dto.LoginUser;
+import com.zbw.fame.model.dto.ArticleDetailDto;
 import com.zbw.fame.model.dto.Pagination;
 import com.zbw.fame.model.entity.Article;
 import com.zbw.fame.model.param.ArticleQuery;
 import com.zbw.fame.model.param.SaveArticleParam;
 import com.zbw.fame.service.ArticleService;
 import com.zbw.fame.util.FameConst;
-import com.zbw.fame.util.FameUtils;
 import com.zbw.fame.util.RestResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,12 +32,12 @@ public class ArticleController {
      *
      * @param page  第几页
      * @param limit 每页数量
-     * @return {@see Pagination<Article>}
+     * @return {@see Pagination<ArticleDetailDto>}
      */
     @GetMapping
-    public RestResponse<Pagination<Article>> page(@RequestParam(required = false, defaultValue = "0") Integer page,
+    public RestResponse<Pagination<ArticleDetailDto>> page(@RequestParam(required = false, defaultValue = "0") Integer page,
                                                   @RequestParam(required = false, defaultValue = FameConst.PAGE_SIZE) Integer limit, ArticleQuery query) {
-        Page<Article> articles = articleService.pageArticleAdmin(page, limit, query);
+        IPage<ArticleDetailDto> articles = articleService.pageArticleAdmin(page, limit, query);
         return RestResponse.ok(Pagination.of(articles));
     }
 
@@ -45,26 +45,23 @@ public class ArticleController {
      * 单个文章信息
      *
      * @param id 文章id
-     * @return {@see Article}
+     * @return {@see ArticleDetailDto}
      */
     @GetMapping("{id}")
-    public RestResponse<Article> get(@PathVariable Integer id) {
-        Article article = articleService.getArticleAdmin(id);
-        return RestResponse.ok(article);
+    public RestResponse<ArticleDetailDto> get(@PathVariable Integer id) {
+        ArticleDetailDto articleDetailDto = articleService.getArticleAdmin(id);
+        return RestResponse.ok(articleDetailDto);
     }
 
     /**
      * 新增或保存文章
      *
-     * @return {@link RestResponse#ok()}
+     * @return {@see ArticleDetailDto}
      */
     @PostMapping
-    public RestResponse<Integer> createOrUpdate(@RequestBody @Valid SaveArticleParam param) {
-        Article article = FameUtils.convertTo(param, Article.class);
-        LoginUser user = FameUtils.getLoginUser();
-        article.setAuthorId(user.getId());
-        Integer postId = articleService.createOrUpdate(article);
-        return RestResponse.ok(postId);
+    public RestResponse<ArticleDetailDto> createOrUpdate(@RequestBody @Valid SaveArticleParam param) {
+        ArticleDetailDto articleDetailDto = articleService.createOrUpdate(param);
+        return RestResponse.ok(articleDetailDto);
     }
 
     /**

@@ -6,6 +6,7 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * @author by zzzzbw
@@ -22,11 +23,15 @@ public class SaveArticleParam {
     @NotBlank(message = "内容不允许为空")
     private String content;
 
-    private String tags;
+    private Set<Integer> tagIds;
 
-    private String category;
+    private Integer categoryId;
 
     private ArticleStatus status = ArticleStatus.DRAFT;
+
+    private Boolean listShow = false;
+
+    private Boolean headerShow = false;
 
     private Integer priority = 0;
 

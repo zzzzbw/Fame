@@ -196,9 +196,6 @@ public class InitApplicationRunner implements ApplicationRunner {
         comment.setWebsite("https://zzzzbw.cn");
         comment.setIp("0.0.0.1");
         commentService.save(comment);
-
-        article.setCommentCount(1);
-        articleService.updateById(article);
     }
 
     private void createDefaultHeaderArticleIfAbsent(User user) {

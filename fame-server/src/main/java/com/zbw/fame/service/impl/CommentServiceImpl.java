@@ -29,9 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -58,10 +56,6 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
                 .orElseThrow(() -> new NotFoundException(Article.class));
 
         save(comment);
-
-        // 增加文章的评论数
-        article.setCommentCount(article.getCommentCount() + 1);
-        articleService.updateById(article);
 
         this.createCommentEvent(comment);
     }
@@ -133,12 +127,6 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             throw new NotFoundException(Comment.class);
         }
 
-        // 减去文章中评论数
-        Article article = Optional.ofNullable(articleService.getById(comment.getArticleId()))
-                .orElseThrow(() -> new NotFoundException(Article.class));
-        article.setCommentCount(article.getCommentCount() - 1);
-        articleService.updateById(article);
-
         // 去除子评论中关联
         List<Comment> childComments = lambdaQuery()
                 .eq(Comment::getParentId, id)
@@ -155,7 +143,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    public int deleteCommentByArticleId(Integer articleId) {
+    public int deleteByArticleId(Integer articleId) {
         List<Comment> list = lambdaQuery()
                 .eq(Comment::getArticleId, articleId)
                 .list();
@@ -195,6 +183,25 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
         LogEvent logEvent = new LogEvent(this, comment, LogAction.ADD, LogType.COMMENT, FameUtils.getIp(), null);
         eventPublisher.publishEvent(logEvent);
+    }
+
+    @Override
+    public int countByArticleId(Integer articleId) {
+        return lambdaQuery()
+                .eq(Comment::getArticleId, articleId)
+                .count();
+    }
+
+    @Override
+    public Map<Integer, Long> countByArticleIds(Collection<Integer> articleIds) {
+        List<Comment> comments = lambdaQuery()
+                .select(BaseEntity::getId)
+                .select(Comment::getArticleId)
+                .in(Comment::getArticleId, articleIds)
+                .list();
+
+        return comments.stream()
+                .collect(Collectors.groupingBy(Comment::getArticleId, Collectors.counting()));
     }
 
 }

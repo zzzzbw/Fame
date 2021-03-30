@@ -44,9 +44,7 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
         if (!removeById(id)) {
             throw new TipException("删除标签失败");
         }
-        LambdaQueryWrapper<ArticleTag> wrapper = Wrappers.<ArticleTag>lambdaQuery()
-                .eq(ArticleTag::getTagId, id);
-        articleTagService.remove(wrapper);
+        articleTagService.deleteByTagId(id);
     }
 
     @Override

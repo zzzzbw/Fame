@@ -1,6 +1,7 @@
 package com.zbw.fame.controller;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zbw.fame.model.dto.*;
 import com.zbw.fame.model.entity.Article;
@@ -44,13 +45,13 @@ public class FrontController {
      *
      * @param page  第几页
      * @param limit 每页数量
-     * @return {@see Pagination<Post>}
+     * @return {@see Pagination<ArticleDetailDto>}
      */
     @GetMapping("post")
-    public RestResponse<Pagination<Article>> home(@RequestParam(required = false, defaultValue = "0") Integer page,
+    public RestResponse<Pagination<ArticleDetailDto>> home(@RequestParam(required = false, defaultValue = "0") Integer page,
                                                   @RequestParam(required = false, defaultValue = FameConst.PAGE_SIZE) Integer limit,
                                                   @RequestParam(required = false, defaultValue = "id") List<String> sort) {
-        Page<Article> articles = articleService.pageArticleFront(page, limit, sort);
+        IPage<ArticleDetailDto> articles = articleService.pageArticleFront(page, limit, sort);
         return RestResponse.ok(Pagination.of(articles));
     }
 
@@ -58,13 +59,13 @@ public class FrontController {
      * 文章内容页
      *
      * @param id 文章id
-     * @return {@see Article}
+     * @return {@see ArticleDetailDto}
      */
     @GetMapping("post/{id}")
-    public RestResponse<Article> post(@PathVariable Integer id) {
-        Article article = articleService.getArticleFront(id);
-        articleService.visitArticle(article.getId());
-        return RestResponse.ok(article);
+    public RestResponse<ArticleDetailDto> post(@PathVariable Integer id) {
+        ArticleDetailDto articleDetailDto = articleService.getArticleFront(id);
+        articleService.visitArticle(articleDetailDto.getId());
+        return RestResponse.ok(articleDetailDto);
     }
 
 

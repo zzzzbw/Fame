@@ -1,5 +1,6 @@
 package com.zbw.fame.model.dto;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.zbw.fame.util.FameUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,13 +23,13 @@ public class Pagination<T> {
     private String orderBy;
     private List<T> list;
 
-    public static <S> Pagination<S> of(com.baomidou.mybatisplus.extension.plugins.pagination.Page<S> page) {
+    public static <S> Pagination<S> of(IPage<S> page) {
         return new Pagination<>(
                 page.getCurrent(),
                 page.getSize(),
                 page.getTotal(),
                 page.getPages(),
-                FameUtils.objectToJson(page.getOrders().toString()),
+                FameUtils.objectToJson(page.orders()),
                 page.getRecords()
         );
     }

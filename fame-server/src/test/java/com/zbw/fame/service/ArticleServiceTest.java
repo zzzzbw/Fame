@@ -1,7 +1,11 @@
 package com.zbw.fame.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.zbw.fame.BaseTest;
 import com.zbw.fame.model.dto.ArchiveDto;
+import com.zbw.fame.model.dto.ArticleDetailDto;
+import com.zbw.fame.model.param.ArticleQuery;
+import com.zbw.fame.util.FameUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,5 +43,11 @@ public class ArticleServiceTest extends BaseTest {
     public void getArchives() {
         List<ArchiveDto> archives = articleService.getArchives();
         log.info("{}", archives);
+    }
+
+    @Test
+    public void pageArticleAdmin() {
+        IPage<ArticleDetailDto> articleDetailDtoIPage = articleService.pageArticleAdmin(1, 10, new ArticleQuery());
+        log.info("{}", FameUtils.objectToJson(articleDetailDtoIPage));
     }
 }

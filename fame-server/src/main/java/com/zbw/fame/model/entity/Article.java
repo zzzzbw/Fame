@@ -56,9 +56,4 @@ public class Article extends BaseEntity {
      * 是否允许评论
      */
     private Boolean allowComment;
-
-    /**
-     * 评论数量
-     */
-    private Integer commentCount;
 }

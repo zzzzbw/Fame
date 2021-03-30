@@ -5,8 +5,10 @@ import com.zbw.fame.mapper.ArticleTagMapper;
 import com.zbw.fame.model.entity.Article;
 import com.zbw.fame.model.entity.ArticleTag;
 import com.zbw.fame.model.entity.BaseEntity;
+import com.zbw.fame.model.entity.Tag;
 import com.zbw.fame.service.ArticleService;
 import com.zbw.fame.service.ArticleTagService;
+import com.zbw.fame.service.TagService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +30,34 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @Lazy})
 public class ArticleTagServiceImpl extends ServiceImpl<ArticleTagMapper, ArticleTag> implements ArticleTagService {
 
+    private final TagService tagService;
+
     private final ArticleService articleService;
+
+    @Override
+    public List<Tag> listTagByArticleId(Integer articleId) {
+        Set<Integer> tagIds = lambdaQuery()
+                .eq(ArticleTag::getArticleId, articleId)
+                .list()
+                .stream()
+                .map(ArticleTag::getTagId)
+                .collect(Collectors.toSet());
+        return tagService.listByIds(tagIds);
+    }
+
+    @Override
+    public void deleteByTagId(Integer tagId) {
+        lambdaUpdate()
+                .eq(ArticleTag::getTagId, tagId)
+                .remove();
+    }
+
+    @Override
+    public void deleteByArticleId(Integer articleId) {
+        lambdaUpdate()
+                .eq(ArticleTag::getArticleId, articleId)
+                .remove();
+    }
 
     @Override
     public Map<Integer, List<Article>> listArticleByTagIds(Collection<Integer> tagIds, boolean isFront) {
@@ -50,5 +79,46 @@ public class ArticleTagServiceImpl extends ServiceImpl<ArticleTagMapper, Article
                             Integer articleId = articleTag.getArticleId();
                             return articleMap.get(articleId);
                         }, Collectors.toList())));
+    }
+
+    @Override
+    public Map<Integer, List<Tag>> listTagByArticleIds(Collection<Integer> articleIds) {
+        List<ArticleTag> articleTags = lambdaQuery()
+                .in(ArticleTag::getArticleId, articleIds)
+                .list();
+
+        Set<Integer> tagIds = articleTags
+                .stream()
+                .map(ArticleTag::getTagId)
+                .collect(Collectors.toSet());
+
+        Map<Integer, Tag> tagMap = tagService.listByIds(tagIds)
+                .stream()
+                .collect(Collectors.toMap(BaseEntity::getId, o -> o));
+
+        return articleTags
+                .stream()
+                .collect(Collectors.groupingBy(ArticleTag::getArticleId,
+                        Collectors.mapping(articleTag -> tagMap.get(articleTag.getTagId()),
+                                Collectors.toList())));
+    }
+
+    @Override
+    public void createOrUpdate(Integer articleId, Set<Integer> tagIds) {
+        // 删除原有关联
+        lambdaUpdate()
+                .eq(ArticleTag::getArticleId, articleId)
+                .in(ArticleTag::getTagId, tagIds)
+                .remove();
+
+        // 插入新关联
+        Set<ArticleTag> articleTags = tagIds.stream()
+                .map(tagId -> {
+                    ArticleTag articleTag = new ArticleTag();
+                    articleTag.setArticleId(articleId);
+                    articleTag.setTagId(tagId);
+                    return articleTag;
+                }).collect(Collectors.toSet());
+        saveBatch(articleTags);
     }
 }

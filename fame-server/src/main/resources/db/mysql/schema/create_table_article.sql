@@ -10,7 +10,6 @@ create table if not exists ARTICLE
     LIST_SHOW     TINYINT(1) default 1                 not null comment '是否在列表显示',
     HEADER_SHOW   TINYINT(1) default 0                 not null comment '是否在顶部显示',
     ALLOW_COMMENT TINYINT(1) default 1                 not null comment '是否允许评论',
-    COMMENT_COUNT INT        default 0                 not null comment '评论数量',
     PRIORITY      INT        default 0                 not null comment '优先级, 倒序',
 
     DELETED       TINYINT(1) default 0                 not null comment '逻辑删除 0:未删除 1:已删除',

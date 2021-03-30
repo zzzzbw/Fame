@@ -7,6 +7,9 @@ import com.zbw.fame.model.entity.Comment;
 import com.zbw.fame.model.enums.CommentAssessType;
 import org.springframework.lang.NonNull;
 
+import java.util.Collection;
+import java.util.Map;
+
 /**
  * 评论 Service 接口
  *
@@ -24,8 +27,8 @@ public interface CommentService extends IService<com.zbw.fame.model.entity.Comme
     /**
      * 获取文章下的评论
      *
-     * @param current      第几页
-     * @param size     每页数量
+     * @param current   第几页
+     * @param size      每页数量
      * @param articleId 文章id
      * @return Page<Comment>
      */
@@ -34,8 +37,8 @@ public interface CommentService extends IService<com.zbw.fame.model.entity.Comme
     /**
      * 获取文章下的评论
      *
-     * @param current  第几页
-     * @param size 每页数量
+     * @param current 第几页
+     * @param size    每页数量
      * @return Page<Comment>
      */
     Page<Comment> pageCommentAdmin(Integer current, Integer size);
@@ -61,7 +64,7 @@ public interface CommentService extends IService<com.zbw.fame.model.entity.Comme
      * @param articleId 文章id
      * @return 删除评论数量
      */
-    int deleteCommentByArticleId(Integer articleId);
+    int deleteByArticleId(Integer articleId);
 
     /**
      * 顶或踩评论
@@ -77,4 +80,20 @@ public interface CommentService extends IService<com.zbw.fame.model.entity.Comme
      * @param comment 评论id
      */
     void createCommentEvent(Comment comment);
+
+    /**
+     * 文章评论数量
+     *
+     * @param articleId
+     * @return
+     */
+    int countByArticleId(Integer articleId);
+
+    /**
+     * 查询文章下的评论数量
+     *
+     * @param articleIds
+     * @return
+     */
+    Map<Integer, Long> countByArticleIds(Collection<Integer> articleIds);
 }

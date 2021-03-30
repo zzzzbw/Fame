@@ -14,9 +14,5 @@ public enum ArticleStatus {
     /**
      * 草稿
      */
-    DRAFT,
-    /**
-     * 删除
-     */
-    DELETE,
+    DRAFT
 }
