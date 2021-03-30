@@ -20,9 +20,15 @@
         <div class="divider"></div>
         <div class="tag-title">{{ tagTitle }}</div>
         <ul class="tag-ul">
-          <li v-for="post in postInfos" :key="post.id" class="article-title">
-            <nuxt-link :to="{ path: '/post/' + post.id }" class="text-primary"
-              >{{ post.title }}
+          <li
+            v-for="article in articleInfos"
+            :key="article.id"
+            class="article-title"
+          >
+            <nuxt-link
+              :to="{ path: '/post/' + article.id }"
+              class="text-primary"
+              >{{ article.title }}
             </nuxt-link>
           </li>
         </ul>
@@ -35,7 +41,7 @@
 export default {
   data() {
     return {
-      postInfos: [],
+      articleInfos: [],
       tagTitle: '',
       activeTag: '',
       show: false
@@ -76,7 +82,7 @@ export default {
         this.activeTag = name
         this.show = false
         this.tagTitle = tag.name
-        this.postInfos = tag.postInfos
+        this.articleInfos = tag.articleInfos
         this.show = true
       }
     }

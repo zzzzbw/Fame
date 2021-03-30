@@ -11,15 +11,15 @@
           <div class="tile-content">
             <p class="tile-subtitle">{{ archive.year }}</p>
             <p
-              v-for="post in archive.postInfos"
-              :key="post.id"
+              v-for="article in archive.articleInfos"
+              :key="article.id"
               class="tile-title"
             >
               <label class="text-italic">{{
-                post.created | time('MM-dd')
+                article.created | time('MM-dd')
               }}</label>
-              <nuxt-link :to="{ path: '/post/' + post.id }"
-                >{{ post.title }}
+              <nuxt-link :to="{ path: '/post/' + article.id }"
+                >{{ article.title }}
               </nuxt-link>
             </p>
           </div>
