@@ -5,6 +5,7 @@ import com.zbw.fame.model.entity.Tag;
 import com.zbw.fame.model.enums.ArticleStatus;
 import lombok.Data;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,4 +42,8 @@ public class ArticleDetailDto {
     private Category category;
 
     private List<Tag> tags;
+
+    private Date created;
+
+    private Date modified;
 }

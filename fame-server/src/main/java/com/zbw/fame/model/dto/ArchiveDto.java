@@ -14,7 +14,5 @@ public class ArchiveDto {
 
     private String year;
 
-    private Date test = new Date();
-
     private List<ArticleInfoDto> articleInfos;
 }

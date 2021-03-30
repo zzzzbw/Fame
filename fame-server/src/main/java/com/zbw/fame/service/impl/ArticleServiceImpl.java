@@ -75,6 +75,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public ArticleDetailDto getArticleFront(Integer id) {
         Article article = lambdaQuery()
+                .eq(BaseEntity::getId, id)
                 .eq(Article::getStatus, ArticleStatus.PUBLISH)
                 .one();
 
