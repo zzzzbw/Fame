@@ -1,14 +1,7 @@
-import FameUtil from './tools'
-
 // 时间格式化
 export function time(time, format) {
   const date = new Date(time)
   return formatDate(date, format || 'yyyy-mm-dd HH:ss')
-}
-
-// 分类格式化
-export function formatCategory(category) {
-  return category || FameUtil.STATIC.DEFAULT_CATEGORY
 }
 
 function formatDate(date, fmt) {

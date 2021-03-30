@@ -7,19 +7,23 @@ export const actions = {
     commit('option/SET_DATA', data)
   },
   // 文章详情
-  async getPost({ commit }, id) {
-    const { data } = await api.getPost(id)
-    commit('post/SET_DETAIL', data)
+  async getArticle({ commit }, id) {
+    const { data } = await api.getArticle(id)
+    commit('article/SET_DETAIL', data)
   },
   // 文章列表
-  async getPosts({ commit }, params) {
-    const { data } = await api.getPosts(params.page, params.limit, params.sort)
+  async getArticles({ commit }, params) {
+    const { data } = await api.getArticles(
+      params.page,
+      params.limit,
+      params.sort
+    )
     const list = {
       data: data.list,
       totalPage: data.pages,
       currentPage: data.pageNum || 0,
     }
-    commit('post/SET_LIST', list)
+    commit('article/SET_LIST', list)
   },
   // header文章
   async getHeader({ commit }) {

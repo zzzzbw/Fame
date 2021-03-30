@@ -1,40 +1,40 @@
 <template>
   <div>
-    <div v-for="post in posts" :key="post.id" class="article-item">
+    <div v-for="article in articles" :key="article.id" class="article-item">
       <h2 class="article-head text-bold">
-        <nuxt-link :to="{ path: '/post/' + post.id }"
-          >{{ post.title }}
+        <nuxt-link :to="{ path: '/post/' + article.id }"
+          >{{ article.title }}
         </nuxt-link>
       </h2>
-      <p v-if="post.category" class="article-date">
+      <p v-if="article.category" class="article-date">
         <span class="icon-folder"></span>
-        {{ post.category | formatCategory }}
+        {{ article.category.name }}
       </p>
       <p class="article-date text-italic">
         <span class="icon-calendar"></span>
-        {{ post.created | time('yyyy-MM-dd') }}
+        {{ article.created | time('yyyy-MM-dd') }}
       </p>
-      <p class="article-date"><span class="icon-eye"></span> {{ post.hits }}</p>
       <p class="article-date">
-        <span class="icon-bubble2"> {{ post.commentCount }} </span>
+        <span class="icon-eye"></span> {{ article.hits }}
+      </p>
+      <p class="article-date">
+        <span class="icon-bubble2"> {{ article.commentCount }} </span>
       </p>
       <div class="article-tags">
-        <label
-          v-for="tag in $util.stringToTags(post.tags)"
-          :key="tag"
-          class="article-tag"
-        >
-          <nuxt-link :to="{ path: '/tag/' + tag }">#{{ tag }}</nuxt-link>
+        <label v-for="tag in article.tags" :key="tag" class="article-tag">
+          <nuxt-link :to="{ path: '/tag/' + tag.name }"
+            >#{{ tag.name }}</nuxt-link
+          >
         </label>
       </div>
       <div
         v-highlight
         class="article-summary markdown-body"
-        v-html="post.content"
+        v-html="article.contentHtml"
       ></div>
       <nuxt-link
         class="article-more text-primary"
-        :to="{ path: '/post/' + post.id }"
+        :to="{ path: '/post/' + article.id }"
         >Read more
       </nuxt-link>
     </div>
@@ -65,20 +65,20 @@ export default {
       limit: 5,
       sort: ['priority','id']
     }
-    return store.dispatch('getPosts', params)
+    return store.dispatch('getArticles', params)
   },
   head() {
     return { title: `Blog` }
   },
   computed: {
-    posts() {
-      return this.$store.state.post.list.data
+    articles() {
+      return this.$store.state.article.list.data
     },
     totalPage() {
-      return this.$store.state.post.list.totalPage
+      return this.$store.state.article.list.totalPage
     },
     currentPage() {
-      return this.$store.state.post.list.currentPage
+      return this.$store.state.article.list.currentPage
     }
   },
   watchQuery: ['page']

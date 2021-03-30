@@ -5,34 +5,6 @@
  */
 
 /**
- * 标签转字符串
- * @param tags
- * @returns {string}
- */
-function tagsToString(tags) {
-  if (tags.length === 0) {
-    return ''
-  }
-  let str = ''
-  for (let i = 0; i < tags.length; i++) {
-    str += tags[i] + ','
-  }
-  return str.substr(0, str.length - 1)
-}
-
-/**
- * 字符串转标签
- * @param str
- * @returns {Array}
- */
-function stringToTags(str) {
-  if (!str) {
-    return []
-  }
-  return str.toString().split(',')
-}
-
-/**
  * 跳转到指定id元素处
  * @param id 元素id
  * @param offset 偏移量
@@ -104,8 +76,6 @@ function formatWebsite(url) {
 }
 
 export default {
-  tagsToString,
-  stringToTags,
   goAnchor,
   jump,
   formatWebsite,

@@ -1,33 +1,33 @@
 <template>
   <div id="article">
-    <h2 class="article-title text-bold">{{ post.title }}</h2>
+    <h2 class="article-title text-bold">{{ article.title }}</h2>
     <div class="article-info">
-      <p v-if="post.category" class="article-category">
+      <p v-if="article.category" class="article-category">
         <span class="icon-folder"></span>
-        {{ post.category | formatCategory }}
+        {{ article.category.name }}
       </p>
       <p class="article-date">
         <span class="icon-calendar"></span>
-        {{ post.created | time('yyyy-MM-dd') }}
+        {{ article.created | time('yyyy-MM-dd') }}
       </p>
-      <p class="article-date"><span class="icon-eye"></span> {{ post.hits }}</p>
       <p class="article-date">
-        <span class="icon-bubble2"> {{ post.commentCount }} </span>
+        <span class="icon-eye"></span> {{ article.hits }}
+      </p>
+      <p class="article-date">
+        <span class="icon-bubble2"> {{ article.commentCount }} </span>
       </p>
     </div>
-    <div v-highlight class="markdown-body" v-html="post.content"></div>
-    <div v-if="post.tags" class="article-tags">
+    <div v-highlight class="markdown-body" v-html="article.contentHtml"></div>
+    <div v-if="article.tags" class="article-tags">
       <label class="label-tags">Tags:</label>
-      <span
-        v-for="tag in $util.stringToTags(post.tags)"
-        :key="tag"
-        class="article-tag"
-      >
-        <nuxt-link :to="{ path: '/tag/' + tag }">#{{ tag }}</nuxt-link>
+      <span v-for="tag in article.tags" :key="tag" class="article-tag">
+        <nuxt-link :to="{ path: '/tag/' + tag.name }"
+          >#{{ tag.name }}</nuxt-link
+        >
       </span>
     </div>
     <nav class="markdown-toc toc"></nav>
-    <comment v-if="post.allowComment" :article-id="post.id"></comment>
+    <comment v-if="article.allowComment" :article-id="article.id"></comment>
     <big-img :visible.sync="isBigImg" :img="img"></big-img>
   </div>
 </template>
@@ -49,14 +49,14 @@ export default {
     }
   },
   fetch ({ store, params }) {
-    return store.dispatch('getPost', params.id)
+    return store.dispatch('getArticle', params.id)
   },
   head () {
-    return { title: `${this.post.title}` }
+    return { title: `${this.article.title}` }
   },
   computed: {
-    post () {
-      return this.$store.state.post.detail
+    article () {
+      return this.$store.state.article.detail
     }
   },
   mounted () {
