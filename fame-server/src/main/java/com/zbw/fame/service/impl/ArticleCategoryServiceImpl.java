@@ -14,8 +14,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -99,16 +103,21 @@ public class ArticleCategoryServiceImpl extends ServiceImpl<ArticleCategoryMappe
 
     @Override
     public void createOrUpdate(Integer articleId, Integer categoryId) {
+        Assert.notNull(articleId, "articleId can not be null!");
+
         // 删除原有关联
         lambdaUpdate()
                 .eq(ArticleCategory::getArticleId, articleId)
-                .eq(ArticleCategory::getCategoryId, categoryId)
                 .remove();
 
+        if (categoryId == null) {
+            return;
+        }
         // 重新关联
         ArticleCategory articleCategory = new ArticleCategory();
         articleCategory.setArticleId(articleId);
         articleCategory.setCategoryId(categoryId);
         save(articleCategory);
+
     }
 }

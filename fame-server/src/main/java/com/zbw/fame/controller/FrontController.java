@@ -12,7 +12,9 @@ import com.zbw.fame.util.FameConst;
 import com.zbw.fame.util.FameUtils;
 import com.zbw.fame.util.RestResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -158,7 +160,7 @@ public class FrontController {
      * @param commentId 评论id
      * @return {@link RestResponse#ok()}
      */
-    @PostMapping("comment/agree/{commentId}")
+    @PostMapping("comment/disagree/{commentId}")
     public RestResponse<RestResponse.Empty> disagreeComment(@PathVariable Integer commentId) {
         commentService.assessComment(commentId, CommentAssessType.DISAGREE);
         return RestResponse.ok();

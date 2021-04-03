@@ -7,6 +7,7 @@ import com.zbw.fame.service.CategoryService;
 import com.zbw.fame.util.RestResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +20,6 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/admin/category")
-
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class CategoryController {
 

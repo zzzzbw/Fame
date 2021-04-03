@@ -12,6 +12,7 @@ import com.zbw.fame.util.FameConst;
 import com.zbw.fame.util.RestResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -36,7 +37,7 @@ public class ArticleController {
      */
     @GetMapping
     public RestResponse<Pagination<ArticleDetailDto>> page(@RequestParam(required = false, defaultValue = "0") Integer page,
-                                                  @RequestParam(required = false, defaultValue = FameConst.PAGE_SIZE) Integer limit, ArticleQuery query) {
+                                                           @RequestParam(required = false, defaultValue = FameConst.PAGE_SIZE) Integer limit, ArticleQuery query) {
         IPage<ArticleDetailDto> articles = articleService.pageArticleAdmin(page, limit, query);
         return RestResponse.ok(Pagination.of(articles));
     }

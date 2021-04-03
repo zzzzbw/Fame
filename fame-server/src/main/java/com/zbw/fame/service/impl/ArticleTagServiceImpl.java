@@ -14,11 +14,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -105,12 +104,16 @@ public class ArticleTagServiceImpl extends ServiceImpl<ArticleTagMapper, Article
 
     @Override
     public void createOrUpdate(Integer articleId, Set<Integer> tagIds) {
+        Assert.notNull(articleId, "articleId can not be null!");
+
         // 删除原有关联
         lambdaUpdate()
                 .eq(ArticleTag::getArticleId, articleId)
-                .in(ArticleTag::getTagId, tagIds)
                 .remove();
 
+        if (CollectionUtils.isEmpty(tagIds)) {
+            return;
+        }
         // 插入新关联
         Set<ArticleTag> articleTags = tagIds.stream()
                 .map(tagId -> {

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -54,7 +55,7 @@ public class TagController {
      * @return {@link Tag}
      */
     @PostMapping
-    public RestResponse<Tag> save(SaveTagParam param) {
+    public RestResponse<Tag> save(@RequestBody @Valid SaveTagParam param) {
         Tag tag = tagService.createOrUpdate(param);
         return RestResponse.ok(tag);
     }
