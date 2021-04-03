@@ -231,7 +231,7 @@ export default {
       const id = this.$route.params.id
       // 如果有id则表示编辑文章,获取文章信息
       if (id) {
-        this.$api.auth.getPost(id).then((data) => {
+        this.$api.auth.getArticle(id).then((data) => {
           this.initPost(data.data)
         })
       } else {
@@ -343,7 +343,7 @@ export default {
           this.submitting = true
           let params = this.post
           params.tags = this.$util.tagsToString(this.selectTags)
-          this.$api.auth.savePost(params).then((data) => {
+          this.$api.auth.saveArticle(params).then((data) => {
             if (data.success) {
               success(data.data)
             } else {

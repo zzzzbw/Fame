@@ -74,7 +74,7 @@
       </el-row>
     </div>
 
-    <el-table :data="postDatas" border stripe style="width: 100%">
+    <el-table :data="articleData" border stripe style="width: 100%">
       <el-table-column prop="id" label="id" width="60"></el-table-column>
       <el-table-column prop="title" label="标题" show-overflow-tooltip>
         <template slot-scope="scope">
@@ -168,7 +168,7 @@ export default {
                 title: '',
                 priority: ''
             },
-            postDatas: [],
+            articleData: [],
             total: 0,
             pageSize: 10,
             currentPage: 1
@@ -180,10 +180,10 @@ export default {
             this.init();
         },
         handleNew() {
-            this.$router.push('/post/publish')
+            this.$router.push('/article/publish')
         },
         handleEdit(id) {
-            this.$router.push('/post/publish/' + id)
+            this.$router.push('/article/publish/' + id)
         },
         handleDelete(id) {
             this.$confirm('此操作将永久删除该文章, 是否继续?', '提示', {
@@ -191,36 +191,36 @@ export default {
                 cancelButtonText: '取消',
                 type: 'danger'
             }).then(() => {
-                this.deletePost(id)
+                this.deleteArticle(id)
             }).catch(() => {
             })
         },
-        initPostDatas(articles) {
-            this.postDatas = []
+        initArticleData(articles) {
+            this.articleData = []
             for (let key in articles) {
                 let data = articles[key]
-                let post = {
+                let article = {
                     id: data.id,
                     title: data.title,
                     frontUrl: this.$util.getServerFrontPostUrl(data.id),
                     publish: this.$dayjs(data.created).format('YYYY-MM-DD HH:mm'),
                     modified: this.$dayjs(data.modified).format('YYYY-MM-DD HH:mm'),
-                    category: data.category,
+                    category: data.category ? data.category.name : '',
                     status: this.$static.ArticleStatus.getValue(data.status),
                     priority: this.$static.PostPriority.getValue(data.priority)
                 }
-                this.postDatas.push(post)
+                this.articleData.push(article)
             }
         },
-        deletePost(id) {
-            this.$api.auth.deletePost(id).then(() => {
+        deleteArticle(id) {
+            this.$api.auth.deleteArticle(id).then(() => {
                 this.$util.message.success('删除成功!')
                 this.init()
             })
         },
         init() {
-            this.$api.auth.pagePost(this.currentPage, this.tool).then(data => {
-                this.initPostDatas(data.data.list)
+            this.$api.auth.pageArticle(this.currentPage, this.tool).then(data => {
+                this.initArticleData(data.data.list)
                 this.total = data.data.total
                 this.pageSize = data.data.pageSize
             })

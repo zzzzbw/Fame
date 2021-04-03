@@ -30,22 +30,22 @@ const auth = {
   saveOptions(options) {
     return post('/admin/option/save', options)
   },
-  countPost() {
-    return get('/admin/post/count')
+  countArticle() {
+    return get('/admin/article/count')
   },
-  pagePost(page, query) {
+  pageArticle(page, query) {
     const params = query || {}
     params.page = page - 1
-    return get('/admin/post', params)
+    return get('/admin/article', params)
   },
-  getPost(id) {
-    return get('/admin/post/' + id)
+  getArticle(id) {
+    return get('/admin/article/' + id)
   },
-  savePost(article) {
-    return post('/admin/post', article)
+  saveArticle(article) {
+    return post('/admin/article', article)
   },
-  deletePost(id) {
-    return del('/admin/post/' + id)
+  deleteArticle(id) {
+    return del('/admin/article/' + id)
   },
   pageComment(page) {
     const params = {

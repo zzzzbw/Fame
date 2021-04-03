@@ -109,9 +109,9 @@ export default {
     init() {
       this.$axios
         .all([
-          this.$api.auth.pagePost(1),
+          this.$api.auth.pageArticle(1),
           this.$api.auth.pageComment(1),
-          this.$api.auth.countPost(),
+          this.$api.auth.countArticle(),
           this.$api.auth.countComment(),
         ])
         .then(this.$axios.spread(this.initData))
