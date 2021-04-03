@@ -7,7 +7,7 @@
         class="category text-bold"
         @click="goAnchor('category-' + category.name)"
       >
-        {{ category.name }}({{ category.postInfos.length }})
+        {{ category.name }}({{ category.articleInfos.length }})
       </a>
     </div>
     <div class="category-content">
@@ -22,12 +22,14 @@
         </div>
         <ul class="category-ul">
           <li
-            v-for="post in category.postInfos"
-            :key="post.id"
+            v-for="article in category.articleInfos"
+            :key="article.id"
             class="article-title"
           >
-            <nuxt-link :to="{ path: '/post/' + post.id }" class="text-primary"
-              >{{ post.title }}
+            <nuxt-link
+              :to="{ path: '/post/' + article.id }"
+              class="text-primary"
+              >{{ article.title }}
             </nuxt-link>
           </li>
         </ul>

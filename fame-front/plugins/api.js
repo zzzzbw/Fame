@@ -49,6 +49,12 @@ const api = {
     }
     return post('/comment/' + commentId + '/assess', params)
   },
+  agreeComment(commentId) {
+    return post('/comment/agree/' + commentId)
+  },
+  disagreeComment(commentId) {
+    return post('/comment/disagree/' + commentId)
+  },
   getOptions() {
     return get('/option')
   },

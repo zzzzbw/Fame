@@ -111,14 +111,14 @@
               <div class="comment-item-footer">
                 <a
                   class="comment-item-agree"
-                  :class="{ active: isAgree(comment.id) }"
-                  @click="assessComment(comment.id, 'agree')"
+                  :class="{ active: alreadyAgree(comment.id) }"
+                  @click="assessComment(comment.id, COMMENT_AGREE)"
                   ><span class="icon-thumbs-o-up"></span
                   ><span>顶({{ comment.agree }})</span></a
                 >
                 <a
                   class="comment-item-disagree"
-                  :class="{ active: isDisagree(comment.id) }"
+                  :class="{ active: alreadyDisagree(comment.id) }"
                   @click="assessComment(comment.id, 'disagree')"
                   ><span class="icon-thumbs-o-down"></span
                   ><span>踩({{ comment.disagree }})</span></a
@@ -137,6 +137,7 @@
   </div>
 </template>
 <script type="text/ecmascript-6">
+const COMMENT_AGREE = 'COMMENT_AGREE'
 const defaultPlaceholder = '写下你的评论,支持markdown语法哟...'
 // 设置999不分页
 const defaultLimit = 999
@@ -247,18 +248,18 @@ export default {
       this.$refs.content.innerHTML = ''
       this.placeHolder = defaultPlaceholder
     },
-    isAgree (commentId) {
+    alreadyAgree (commentId) {
       return this.commentAgrees.includes(commentId)
     },
-    isDisagree (commentId) {
+    alreadyDisagree (commentId) {
       return this.commentDisagrees.includes(commentId)
     },
     async assessComment (commentId, assess) {
-      if (assess === 'agree') {
-        if (this.isAgree(commentId)) return
+      if (assess === COMMENT_AGREE) {
+        if (this.alreadyAgree(commentId)) return
       }
       if (assess === 'disagree') {
-        if (this.isDisagree(commentId)) return
+        if (this.alreadyDisagree(commentId)) return
       }
       let res = null
       if (assess === 'agree') {
