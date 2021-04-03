@@ -31,10 +31,6 @@
         <i class="el-icon-copy-document"></i>
         <span slot="title">媒体库</span>
       </el-menu-item>
-      <el-menu-item index="/note">
-        <i class="el-icon-document"></i>
-        <span slot="title">页面列表</span>
-      </el-menu-item>
       <el-menu-item index="/setting">
         <i class="el-icon-setting"></i>
         <span slot="title">网站设置</span>

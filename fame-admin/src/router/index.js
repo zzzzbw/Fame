@@ -7,11 +7,9 @@ import Login from '../components/Login'
 import Dashboard from '../components/page/Dashboard'
 import ArticleEdit from '../components/page/Article'
 import ArticleList from '../components/page/ArticleList'
-import CommentList from '../components/page/Comments'
-import MetaList from '../components/page/Metas'
-import MediaList from '../components/page/Medias'
-import NoteList from '../components/page/Notes'
-import NoteEdit from '../components/page/Note'
+import CommentList from '../components/page/CommentList'
+import MetaList from '../components/page/MetaList'
+import MediaList from '../components/page/MediaList'
 import Setting from '../components/page/Setting'
 
 Vue.use(Router)
@@ -66,21 +64,6 @@ const router = new Router({
           path: 'media',
           name: 'MediaList',
           component: MediaList,
-        },
-        {
-          path: 'note',
-          name: 'NoteList',
-          component: NoteList,
-        },
-        {
-          path: 'note/publish/:id',
-          name: 'NoteEdit',
-          component: NoteEdit,
-        },
-        {
-          path: 'note/publish',
-          name: 'NoteNew',
-          component: NoteEdit,
         },
         {
           path: 'setting',
