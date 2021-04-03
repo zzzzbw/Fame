@@ -23,7 +23,7 @@ const STATIC = {
       }
     },
   },
-  PostPriority: {
+  ArticlePriority: {
     NORMAL: {
       key: 0,
       value: '普通',
@@ -34,10 +34,10 @@ const STATIC = {
     },
     getValue: (key) => {
       switch (key) {
-        case STATIC.PostPriority.NORMAL.key:
-          return STATIC.PostPriority.NORMAL.value
-        case STATIC.PostPriority.TOP.key:
-          return STATIC.PostPriority.TOP.value
+        case STATIC.ArticlePriority.NORMAL.key:
+          return STATIC.ArticlePriority.NORMAL.value
+        case STATIC.ArticlePriority.TOP.key:
+          return STATIC.ArticlePriority.TOP.value
       }
     },
   },

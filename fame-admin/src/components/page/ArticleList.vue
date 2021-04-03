@@ -32,11 +32,11 @@
                   @change="init"
                 >
                   <el-radio-button label="">全部</el-radio-button>
-                  <el-radio-button :label="this.$static.PostPriority.NORMAL.key"
-                    >{{ this.$static.PostPriority.NORMAL.value }}
+                  <el-radio-button :label="this.$static.ArticlePriority.NORMAL.key"
+                    >{{ this.$static.ArticlePriority.NORMAL.value }}
                   </el-radio-button>
-                  <el-radio-button :label="this.$static.PostPriority.TOP.key"
-                    >{{ this.$static.PostPriority.TOP.value }}
+                  <el-radio-button :label="this.$static.ArticlePriority.TOP.key"
+                    >{{ this.$static.ArticlePriority.TOP.value }}
                   </el-radio-button>
                 </el-radio-group>
               </div>
@@ -207,7 +207,7 @@ export default {
                     modified: this.$dayjs(data.modified).format('YYYY-MM-DD HH:mm'),
                     category: data.category ? data.category.name : '',
                     status: this.$static.ArticleStatus.getValue(data.status),
-                    priority: this.$static.PostPriority.getValue(data.priority)
+                    priority: this.$static.ArticlePriority.getValue(data.priority)
                 }
                 this.articleData.push(article)
             }
