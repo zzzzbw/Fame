@@ -19,8 +19,6 @@ public class CategoryInfoDto {
     
     private List<CategoryInfoDto> childCategories;
 
-    private CategoryInfoDto parentCategory;
-
     @JsonInclude
     private List<ArticleInfoDto> articleInfos;
 

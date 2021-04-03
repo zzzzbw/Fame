@@ -81,7 +81,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
 
         return categories.stream()
                 .filter(category -> category.getParentId() == null)
-                .map(category -> categoryToCategoryInfoDto(category, null, childCategoryMap, articleMap))
+                .map(category -> categoryToCategoryInfoDto(category, childCategoryMap, articleMap))
                 .collect(Collectors.toList());
     }
 
@@ -89,19 +89,16 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
      * Category转CategoryInfoDto
      *
      * @param category
-     * @param parentDto
      * @param childCategoryMap
      * @param articleMap
      * @return
      */
     private CategoryInfoDto categoryToCategoryInfoDto(Category category,
-                                                      CategoryInfoDto parentDto,
                                                       Map<Integer, List<Category>> childCategoryMap,
                                                       Map<Integer, List<Article>> articleMap) {
         CategoryInfoDto dto = new CategoryInfoDto();
         dto.setId(category.getId());
         dto.setName(category.getName());
-        dto.setParentCategory(parentDto);
 
         // 填入分类下的文章信息
         List<ArticleInfoDto> articleInfos = articleMap.getOrDefault(category.getId(), Collections.emptyList())
@@ -113,7 +110,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         // 递归填入分类的子分类列表
         List<Category> childCategory = childCategoryMap.getOrDefault(category.getId(), Collections.emptyList());
         List<CategoryInfoDto> childCategories = childCategory.stream()
-                .map(child -> categoryToCategoryInfoDto(child, dto, childCategoryMap, articleMap))
+                .map(child -> categoryToCategoryInfoDto(child, childCategoryMap, articleMap))
                 .collect(Collectors.toList());
         dto.setChildCategories(childCategories);
         return dto;

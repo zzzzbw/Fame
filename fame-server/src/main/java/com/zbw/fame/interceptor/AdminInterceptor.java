@@ -25,9 +25,9 @@ import java.util.stream.Stream;
 @Component
 public class AdminInterceptor implements HandlerInterceptor {
 
-    private static final String AUTH_URIS = "/admin/**";
+    private static final String AUTH_URIS = "/**/admin/**";
 
-    private static final String[] IGNORE_URIS = {"/admin/login", "/admin/logout"};
+    private static final String[] IGNORE_URIS = {"/api/admin/login", "/api/admin/logout"};
 
     private static final PathMatcher PATH_MATCHER = new AntPathMatcher();
 
