@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -55,7 +56,7 @@ public class CategoryController {
      * @return {@link Category}
      */
     @PostMapping
-    public RestResponse<Category> save(SaveCategoryParam param) {
+    public RestResponse<Category> save(@RequestBody @Valid SaveCategoryParam param) {
         Category category = categoryService.createOrUpdate(param);
         return RestResponse.ok(category);
     }

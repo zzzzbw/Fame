@@ -54,8 +54,10 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
     @Override
     public Category createOrUpdate(SaveCategoryParam param) {
         Integer parentId = param.getParentId();
-        Optional.ofNullable(getById(parentId))
-                .orElseThrow(() -> new NotFoundException(Category.class));
+        if (null != parentId) {
+            Optional.ofNullable(getById(parentId))
+                    .orElseThrow(() -> new NotFoundException(Category.class));
+        }
 
         Category category = FameUtils.convertTo(param, Category.class);
         saveOrUpdate(category);

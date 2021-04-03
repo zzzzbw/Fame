@@ -376,7 +376,7 @@ export default {
       const _this = this
       this.submitArticle('postForm', function (data) {
         _this.$util.message.success('保存文章成功!')
-        _this.$route.params.id = data
+        _this.$route.params.id = data.id
         _this.getArticle()
       })
     },

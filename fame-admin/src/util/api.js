@@ -68,14 +68,13 @@ const auth = {
   getAllTags() {
     return get('/admin/tag')
   },
-  saveCategory(name) {
-    return post('/admin/category/' + name)
-  },
-  updateCategory(id, name) {
+  saveOrUpdateCategory(id, parentId, name) {
     const params = {
+      id: id,
+      parentId: parentId,
       name: name,
     }
-    return post('/admin/category/' + id, params)
+    return post('/admin/category', params)
   },
   saveOrUpdateTag(id, name) {
     const params = {
