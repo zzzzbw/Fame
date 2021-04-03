@@ -24,7 +24,7 @@
             <div class="panel-content">
               <el-form-item label="标签">
                 <el-select
-                  v-model="article.tags"
+                  v-model="article.tagIds"
                   multiple
                   filterable
                   placeholder="请选择文章标签"
@@ -40,7 +40,7 @@
               </el-form-item>
               <el-form-item label="分类">
                 <el-select
-                  v-model="article.category"
+                  v-model="article.categoryId"
                   filterable
                   placeholder="请选择文章分类"
                 >
@@ -208,8 +208,8 @@ export default {
       article: {
         id: '',
         title: '',
-        tags: [],
-        category: null,
+        tagIds: [],
+        categoryId: null,
         content: '',
         status: '',
         listShow: true,
@@ -268,8 +268,8 @@ export default {
     initArticle(data) {
       this.article.id = data.id
       this.article.title = data.title
-      this.article.tags = data.tags.map((item) => item.id)
-      this.article.category = data.category ? data.category.id : null
+      this.article.tagIds = data.tags.map((item) => item.id)
+      this.article.categoryId = data.category ? data.category.id : null
       this.article.content = data.content
       this.article.status = data.status
       this.article.listShow = data.listShow
@@ -369,7 +369,7 @@ export default {
       const _this = this
       this.submitArticle('postForm', function () {
         _this.$util.message.success('发布文章成功!')
-        _this.$router.push('/post')
+        _this.$router.push('/article')
       })
     },
     onSave() {

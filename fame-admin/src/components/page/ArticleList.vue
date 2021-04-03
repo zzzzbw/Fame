@@ -32,7 +32,8 @@
                   @change="init"
                 >
                   <el-radio-button label="">全部</el-radio-button>
-                  <el-radio-button :label="this.$static.ArticlePriority.NORMAL.key"
+                  <el-radio-button
+                    :label="this.$static.ArticlePriority.NORMAL.key"
                     >{{ this.$static.ArticlePriority.NORMAL.value }}
                   </el-radio-button>
                   <el-radio-button :label="this.$static.ArticlePriority.TOP.key"

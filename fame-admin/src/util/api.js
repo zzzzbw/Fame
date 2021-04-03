@@ -71,41 +71,30 @@ const auth = {
   saveCategory(name) {
     return post('/admin/category/' + name)
   },
-  saveTag(name) {
-    return post('/admin/tag/' + name)
-  },
   updateCategory(id, name) {
     const params = {
       name: name,
     }
     return post('/admin/category/' + id, params)
   },
-  updateTag(id, name) {
+  saveOrUpdateTag(id, name) {
     const params = {
+      id: id,
       name: name,
     }
-    return post('/admin/tag/' + id, params)
+    return post('/admin/tag', params)
   },
-  deleteCategory(name) {
-    return del('/admin/category/' + name)
+  deleteCategory(id) {
+    return del('/admin/category/' + id)
   },
-  deleteTag(name) {
-    return del('/admin/tag/' + name)
+  deleteTag(id) {
+    return del('/admin/tag/' + id)
   },
   pageNote(page) {
     const params = {
       page: page - 1,
     }
     return get('/admin/note', params)
-  },
-  getNote(id) {
-    return get('/admin/note/' + id)
-  },
-  saveNote(note) {
-    return post('/admin/note', note)
-  },
-  deleteNote(id) {
-    return del('/admin/note/' + id)
   },
   pageMedia(limit, page) {
     const params = {

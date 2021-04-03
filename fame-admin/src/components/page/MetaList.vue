@@ -12,11 +12,11 @@
                 {{ tag.name }}
               </span>
               <span style="float: right; clear: both">
-                <span class="meta-count">{{ tag.postInfos.length }}</span>
+                <span class="meta-count">{{ tag.articleInfos.length }}</span>
                 <el-button
                   type="danger"
                   size="small"
-                  @click="deleteTagHandle(tag.name)"
+                  @click="deleteTagHandle(tag.id)"
                   >删除</el-button
                 >
               </span>
@@ -50,11 +50,13 @@
                 {{ category.name }}
               </span>
               <span style="float: right; clear: both">
-                <span class="meta-count">{{ category.postInfos.length }}</span>
+                <span class="meta-count">{{
+                  category.articleInfos.length
+                }}</span>
                 <el-button
                   type="danger"
                   size="small"
-                  @click="deleteCategoryHandle(category.name)"
+                  @click="deleteCategoryHandle(category.id)"
                   >删除</el-button
                 >
               </span>
@@ -84,25 +86,21 @@ export default {
         return {
             tags: [],
             categories: [],
-            tagId: '',
+            tagId: null,
             tagName: '',
-            categoryId: '',
+            categoryId: null,
             categoryName: ''
         }
     },
     methods: {
         getTags() {
             this.$api.auth.getAllTags().then(data => {
-                for (let key in data.data) {
-                    this.tags.push(data.data[key])
-                }
+              this.tags = data.data
             })
         },
         getCategories() {
             this.$api.auth.getAllCategories().then(data => {
-                for (let key in data.data) {
-                    this.categories.push(data.data[key])
-                }
+              this.categories = data.data
             })
         },
         clickTag(tagId, tagName) {
@@ -113,13 +111,13 @@ export default {
             this.categoryId = categoryId
             this.categoryName = categoryName
         },
-        deleteTagHandle(tagName) {
+        deleteTagHandle(tagId) {
             this.$confirm('确定删除该标签?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'error'
             }).then(() => {
-                this.$api.auth.deleteTag(tagName).then(() => {
+                this.$api.auth.deleteTag(tagId).then(() => {
                     this.refreshTags()
                     this.$message({
                         type: 'success',
@@ -129,13 +127,13 @@ export default {
             }).catch(() => {
             })
         },
-        deleteCategoryHandle(categoryName) {
+        deleteCategoryHandle(categoryId) {
             this.$confirm('确定删除该分类?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'error'
             }).then(() => {
-                this.$api.auth.deleteCategory(categoryName).then(() => {
+                this.$api.auth.deleteCategory(categoryId).then(() => {
                     this.refreshCategories()
                     this.$message({
                         type: 'success',
@@ -153,23 +151,13 @@ export default {
                 })
                 return
             }
-            if (this.tagId !== null && this.tagId !== '') {
-                this.$api.auth.updateTag(this.tagId, this.tagName).then(() => {
-                    this.refreshTags()
-                    this.$message({
-                        message: '更新tag成功!',
-                        type: 'success'
-                    })
-                })
-            } else {
-                this.$api.auth.saveTag(this.tagName).then(() => {
-                    this.refreshTags()
-                    this.$message({
-                        message: '新建tag成功!',
-                        type: 'success'
-                    })
-                })
-            }
+          this.$api.auth.saveOrUpdateTag(this.tagId, this.tagName).then(() => {
+            this.refreshTags()
+            this.$message({
+              message: '编辑tag成功!',
+              type: 'success'
+            })
+          })
         },
         saveOrUpdateCategory() {
             if (this.categoryName === null || this.categoryName === '') {
@@ -198,11 +186,9 @@ export default {
             }
         },
         refreshTags() {
-            this.tags = []
             this.getTags()
         },
         refreshCategories() {
-            this.categories = []
             this.getCategories()
         }
     },
