@@ -76,6 +76,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
 
         Map<Integer, List<Article>> articleMap = articleCategoryService.listArticleByCategoryIds(categoryIds, isFront);
         Map<Integer, List<Category>> childCategoryMap = categories.stream()
+                .filter(category -> null != category.getParentId())
                 .collect(Collectors.groupingBy(Category::getParentId));
 
         return categories.stream()

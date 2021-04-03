@@ -4,7 +4,6 @@ package com.zbw.fame.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.zbw.fame.model.dto.*;
-import com.zbw.fame.model.entity.Article;
 import com.zbw.fame.model.entity.Comment;
 import com.zbw.fame.model.enums.CommentAssessType;
 import com.zbw.fame.model.param.AddCommentParam;
@@ -49,8 +48,8 @@ public class FrontController {
      */
     @GetMapping("post")
     public RestResponse<Pagination<ArticleDetailDto>> home(@RequestParam(required = false, defaultValue = "0") Integer page,
-                                                  @RequestParam(required = false, defaultValue = FameConst.PAGE_SIZE) Integer limit,
-                                                  @RequestParam(required = false, defaultValue = "id") List<String> sort) {
+                                                           @RequestParam(required = false, defaultValue = FameConst.PAGE_SIZE) Integer limit,
+                                                           @RequestParam(required = false, defaultValue = "id") List<String> sort) {
         IPage<ArticleDetailDto> articles = articleService.pageArticleFront(page, limit, sort);
         return RestResponse.ok(Pagination.of(articles));
     }
@@ -140,17 +139,28 @@ public class FrontController {
         commentService.createComment(comment);
         return RestResponse.ok();
     }
-
+    
     /**
-     * 顶或踩评论
+     * 顶评论
      *
      * @param commentId 评论id
-     * @param assess    点评类型 {@link CommentAssessType}
      * @return {@link RestResponse#ok()}
      */
-    @PostMapping("comment/{commentId}/assess")
-    public RestResponse<RestResponse.Empty> assessComment(@PathVariable Integer commentId, @RequestParam CommentAssessType assess) {
-        commentService.assessComment(commentId, assess);
+    @PostMapping("comment/agree/{commentId}")
+    public RestResponse<RestResponse.Empty> agreeComment(@PathVariable Integer commentId) {
+        commentService.assessComment(commentId, CommentAssessType.AGREE);
+        return RestResponse.ok();
+    }
+
+    /**
+     * 踩评论
+     *
+     * @param commentId 评论id
+     * @return {@link RestResponse#ok()}
+     */
+    @PostMapping("comment/agree/{commentId}")
+    public RestResponse<RestResponse.Empty> disagreeComment(@PathVariable Integer commentId) {
+        commentService.assessComment(commentId, CommentAssessType.DISAGREE);
         return RestResponse.ok();
     }
 
