@@ -25,7 +25,7 @@ public class SysLog extends BaseEntity {
     /**
      * 操作类型
      */
-    private LogType type;
+    private LogType logType;
 
     /**
      * ip地址

@@ -234,7 +234,7 @@ public class InitApplicationRunner implements ApplicationRunner {
 
     private void createInitLog() {
         SysLog sysLog = new SysLog();
-        sysLog.setType(LogType.SYSTEM);
+        sysLog.setLogType(LogType.SYSTEM);
         sysLog.setMessage("Init System");
         sysLogService.save(sysLog);
     }

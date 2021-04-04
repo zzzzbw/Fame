@@ -47,7 +47,7 @@ public class LogEventListener {
         String logData = createLogData(event.getData());
         sysLog.setData(logData);
         sysLog.setMessage(action.getMsg());
-        sysLog.setType(event.getType());
+        sysLog.setLogType(event.getType());
         sysLog.setIp(event.getIp());
         sysLog.setUserId(event.getUserId());
         return sysLog;

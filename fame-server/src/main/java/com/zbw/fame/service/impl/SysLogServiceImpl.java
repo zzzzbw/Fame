@@ -29,7 +29,7 @@ public class SysLogServiceImpl extends ServiceImpl<SysLogMapper, SysLog> impleme
         SysLog sysLog = new SysLog();
         sysLog.setData(data);
         sysLog.setMessage(message);
-        sysLog.setType(type);
+        sysLog.setLogType(type);
         sysLog.setIp(ip);
         sysLog.setUserId(userId);
         this.save(sysLog);
