@@ -194,6 +194,10 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
     @Override
     public Map<Integer, Long> countByArticleIds(Collection<Integer> articleIds) {
+        if (CollectionUtils.isEmpty(articleIds)) {
+            return Collections.emptyMap();
+        }
+
         List<Comment> comments = lambdaQuery()
                 .select(BaseEntity::getId)
                 .select(Comment::getArticleId)

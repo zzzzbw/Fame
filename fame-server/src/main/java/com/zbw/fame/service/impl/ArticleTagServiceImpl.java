@@ -82,6 +82,10 @@ public class ArticleTagServiceImpl extends ServiceImpl<ArticleTagMapper, Article
 
     @Override
     public Map<Integer, List<Tag>> listTagByArticleIds(Collection<Integer> articleIds) {
+        if (CollectionUtils.isEmpty(articleIds)) {
+            return Collections.emptyMap();
+        }
+
         List<ArticleTag> articleTags = lambdaQuery()
                 .in(ArticleTag::getArticleId, articleIds)
                 .list();

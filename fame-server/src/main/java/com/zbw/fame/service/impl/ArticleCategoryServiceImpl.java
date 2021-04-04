@@ -15,11 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -84,6 +82,9 @@ public class ArticleCategoryServiceImpl extends ServiceImpl<ArticleCategoryMappe
 
     @Override
     public Map<Integer, Category> listCategoryByArticleIds(Collection<Integer> articleIds) {
+        if (CollectionUtils.isEmpty(articleIds)) {
+            return Collections.emptyMap();
+        }
         List<ArticleCategory> articleCategories = lambdaQuery()
                 .in(ArticleCategory::getArticleId, articleIds)
                 .list();
