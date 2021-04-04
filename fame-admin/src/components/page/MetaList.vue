@@ -154,7 +154,7 @@ export default {
           this.$api.auth.saveOrUpdateTag(this.tagId, this.tagName).then(() => {
             this.refreshTags()
             this.$message({
-              message: '编辑tag成功!',
+              message: '编辑标签成功!',
               type: 'success'
             })
           })
@@ -167,23 +167,13 @@ export default {
                 })
                 return
             }
-            if (this.categoryId !== null && this.categoryId !== '') {
-                this.$api.auth.updateCategory(this.categoryId, this.categoryName).then(() => {
-                    this.refreshCategories()
-                    this.$message({
-                        message: '更新category成功!',
-                        type: 'success'
-                    })
-                })
-            } else {
-                this.$api.auth.saveCategory(this.categoryName).then(() => {
-                    this.refreshCategories()
-                    this.$message({
-                        message: '新建category成功!',
-                        type: 'success'
-                    })
-                })
-            }
+          this.$api.auth.saveOrUpdateCategory(this.categoryId, null, this.categoryName).then(() => {
+            this.refreshCategories()
+            this.$message({
+              message: '编辑分类成功!',
+              type: 'success'
+            })
+          })
         },
         refreshTags() {
             this.getTags()
