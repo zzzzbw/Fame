@@ -42,6 +42,7 @@
                 <el-select
                   v-model="article.categoryId"
                   filterable
+                  clearable
                   placeholder="请选择文章分类"
                 >
                   <el-option

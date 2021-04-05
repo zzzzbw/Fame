@@ -41,6 +41,9 @@ public class ArticleTagServiceImpl extends ServiceImpl<ArticleTagMapper, Article
                 .stream()
                 .map(ArticleTag::getTagId)
                 .collect(Collectors.toSet());
+        if (CollectionUtils.isEmpty(tagIds)) {
+            return Collections.emptyList();
+        }
         return tagService.listByIds(tagIds);
     }
 

@@ -112,7 +112,7 @@
                 <a
                   class="comment-item-agree"
                   :class="{ active: alreadyAgree(comment.id) }"
-                  @click="assessComment(comment.id, COMMENT_AGREE)"
+                  @click="assessComment(comment.id, 'agree')"
                   ><span class="icon-thumbs-o-up"></span
                   ><span>顶({{ comment.agree }})</span></a
                 >
