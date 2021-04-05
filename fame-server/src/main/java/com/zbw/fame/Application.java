@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @EnableAsync
 @EnableTransactionManagement
-@MapperScan("com.zbw.fame.mapper")
 public class Application {
 
     public static void main(String[] args) {
