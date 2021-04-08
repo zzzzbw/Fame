@@ -15,12 +15,14 @@ services:
     - fame-server
     - fame-admin
     - fame-front
+    restart: always
 
   fame-mysql:
     container_name: fame-mysql
     build:
       context: ./
-      dockerfile: ./fame-docker/fame-mysql/fame-mysql-Dockerfile
+      dockerfile: ./fame-docker/fame-mysql-Dockerfile
+    command: --lower-case-table-names=1
     environment:
       MYSQL_DATABASE: fame
       MYSQL_ROOT_PASSWORD: root
@@ -61,6 +63,7 @@ services:
       TZ: Asia/Shanghai
     expose:
     - "3001"
+    restart: always
 
   fame-front:
     container_name: fame-front
@@ -71,3 +74,4 @@ services:
       TZ: Asia/Shanghai
     expose:
     - "3000"
+    restart: always
