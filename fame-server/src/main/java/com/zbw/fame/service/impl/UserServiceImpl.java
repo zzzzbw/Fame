@@ -1,8 +1,5 @@
 package com.zbw.fame.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
-import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zbw.fame.exception.NotFoundException;
 import com.zbw.fame.exception.TipException;
@@ -40,7 +37,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     private LoginUser createSessionUser(User user) {
         LoginUser sessionUser = new LoginUser();
-        FameUtils.copyProperties(user, sessionUser, true);
+        FameUtils.copyPropertiesIgnoreNull(user, sessionUser);
         return sessionUser;
     }
 

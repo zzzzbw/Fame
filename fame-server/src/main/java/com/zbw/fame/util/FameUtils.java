@@ -6,7 +6,6 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.core.img.ImgUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.core.util.TypeUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vladsch.flexmark.ast.Node;
 import com.vladsch.flexmark.ext.tables.TablesExtension;
@@ -23,7 +22,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.ReflectionUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -31,7 +29,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
@@ -285,16 +282,6 @@ public class FameUtils {
         return StrUtil.indexOfIgnoreCase(str, flag);
     }
 
-    /**
-     * 获取泛型类
-     *
-     * @param clz 类
-     * @return 泛型类
-     */
-    public static Class<?> getGenericClass(Class<?> clz) {
-        return (Class<?>) TypeUtil.getTypeArgument(clz);
-    }
-
 
     /**
      * 转换String到对应数据类型
@@ -304,7 +291,7 @@ public class FameUtils {
      * @param <T>   T
      * @return 值
      */
-    public static <T> T convertStringToType(String value, Class<T> type) {
+    public static <T> T convertStrTo(String value, Class<T> type) {
         return Convert.convert(type, value);
     }
 
@@ -316,34 +303,17 @@ public class FameUtils {
      * @return 转换后对象
      */
     public static <T> T convertTo(Object source, Class<T> targetClz) {
-        if (null == source) {
-            return null;
-        }
-        T targetInstance;
-        try {
-            Constructor<T> tConstructor = ReflectionUtils.accessibleConstructor(targetClz);
-            targetInstance = tConstructor.newInstance();
-            copyProperties(source, targetInstance, true);
-        } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            throw new TipException(e);
-        }
-        return targetInstance;
+        return BeanUtil.toBean(source, targetClz);
     }
 
     /**
      * 复制非Null的属性
      *
-     * @param source     源对象
-     * @param target     目标对象
-     * @param ignoreNull 忽略null值
+     * @param source 源对象
+     * @param target 目标对象
      */
-    public static void copyProperties(Object source, Object target, boolean ignoreNull) {
-        CopyOptions copyOptions = CopyOptions.create();
-        if (ignoreNull) {
-            copyOptions.ignoreNullValue();
-        }
-        BeanUtil.copyProperties(source, target, copyOptions);
+    public static void copyPropertiesIgnoreNull(Object source, Object target) {
+        BeanUtil.copyProperties(source, target, CopyOptions.create().ignoreNullValue());
     }
 
     /**

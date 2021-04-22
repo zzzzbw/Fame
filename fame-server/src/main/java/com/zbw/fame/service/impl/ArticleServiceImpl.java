@@ -119,7 +119,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                     .ofNullable(getById(param.getId()))
                     .orElseThrow(() -> new NotFoundException(Article.class));
 
-            FameUtils.copyProperties(param, article, true);
+            FameUtils.copyPropertiesIgnoreNull(param, article);
             updateById(article);
         } else {
             article = FameUtils.convertTo(param, Article.class);
