@@ -20,6 +20,8 @@ const STATIC = {
           return STATIC.ArticleStatus.PUBLISH.value
         case STATIC.ArticleStatus.DRAFT.key:
           return STATIC.ArticleStatus.DRAFT.value
+        default:
+          return null
       }
     },
   },
@@ -38,6 +40,8 @@ const STATIC = {
           return STATIC.ArticlePriority.NORMAL.value
         case STATIC.ArticlePriority.TOP.key:
           return STATIC.ArticlePriority.TOP.value
+        default:
+          return null
       }
     },
   },
@@ -66,7 +70,7 @@ const FUNCTIONS = {
    * 获取前端文章Url
    */
   getServerFrontPostUrl: (id) => {
-    return FUNCTIONS.getServerFrontUrl() + 'post/' + id
+    return FUNCTIONS.getServerFrontUrl() + 'article/' + id
   },
   /**
    * 获取服务器媒体链接

@@ -90,7 +90,7 @@ export default {
     initMenu() {
       const links = staticMenu
       this.headerMenu.forEach(menu => {
-        links.push({ path: '/post/' + menu.id, name: menu.title })
+        links.push({ path: '/article/' + menu.id, name: menu.title })
       })
       this.links = links
     },

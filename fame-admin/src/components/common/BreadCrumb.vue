@@ -14,23 +14,20 @@
 
 <script>
 const config = [
-  { name: 'PostList', title: '文章列表', link: '/post' },
+  { name: 'ArticleList', title: '文章列表', link: '/article' },
   {
-    name: 'PostNew',
+    name: 'ArticleNew',
     title: '新建文章',
-    parent: 'PostList',
+    parent: 'ArticleList',
   },
   {
-    name: 'PostEdit',
+    name: 'ArticleEdit',
     title: '编辑文章',
-    parent: 'PostList',
+    parent: 'ArticleList',
   },
   { name: 'CommentList', title: '评论列表' },
   { name: 'MetaList', title: '标签/分类' },
   { name: 'MediaList', title: '媒体库' },
-  { name: 'NoteList', title: '页面列表', link: '/note' },
-  { name: 'NoteNew', title: '新建页面', parent: 'NoteList' },
-  { name: 'NoteEdit', title: '编辑页面', parent: 'NoteList' },
   { name: 'Setting', title: '网站设置' },
 ]
 

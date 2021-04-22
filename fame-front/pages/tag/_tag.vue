@@ -26,7 +26,7 @@
             class="article-title"
           >
             <nuxt-link
-              :to="{ path: '/post/' + article.id }"
+              :to="{ path: '/article/' + article.id }"
               class="text-primary"
               >{{ article.title }}
             </nuxt-link>

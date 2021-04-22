@@ -131,9 +131,7 @@
                     >
                       <a
                         :href="
-                          this.$serverConfig.frontUrl +
-                          'post/' +
-                          this.article.id
+                          this.$util.getServerFrontPostUrl(this.article.id)
                         "
                         target="_blank"
                         style="color: #ffffff"

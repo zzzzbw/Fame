@@ -7,10 +7,10 @@ const api = {
       limit: limit || 5,
       sort,
     }
-    return get('/post', params)
+    return get('/article', params)
   },
   getArticle(id) {
-    return get('/post/' + id)
+    return get('/article/' + id)
   },
   getCategories() {
     return get('/category')

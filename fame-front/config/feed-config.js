@@ -22,7 +22,7 @@ const config = [
           title: article.title,
           id: article.id,
           link:
-            tools.formatWebsite(options.blog_website) + '/post/' + article.id,
+            tools.formatWebsite(options.blog_website) + '/article/' + article.id,
           description: article.content,
           content: article.content,
         })

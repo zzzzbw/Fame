@@ -48,7 +48,7 @@ public class FrontController {
      * @param limit 每页数量
      * @return {@see Pagination<ArticleDetailDto>}
      */
-    @GetMapping("post")
+    @GetMapping("article")
     public RestResponse<Pagination<ArticleDetailDto>> home(@RequestParam(required = false, defaultValue = "0") Integer page,
                                                            @RequestParam(required = false, defaultValue = FameConst.PAGE_SIZE) Integer limit,
                                                            @RequestParam(required = false, defaultValue = "id") List<String> sort) {
@@ -62,7 +62,7 @@ public class FrontController {
      * @param id 文章id
      * @return {@see ArticleDetailDto}
      */
-    @GetMapping("post/{id}")
+    @GetMapping("article/{id}")
     public RestResponse<ArticleDetailDto> post(@PathVariable Integer id) {
         ArticleDetailDto articleDetailDto = articleService.getArticleFront(id);
         articleService.visitArticle(articleDetailDto.getId());

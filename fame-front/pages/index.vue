@@ -2,7 +2,7 @@
   <div>
     <div v-for="article in articles" :key="article.id" class="article-item">
       <h2 class="article-head text-bold">
-        <nuxt-link :to="{ path: '/post/' + article.id }"
+        <nuxt-link :to="{ path: '/article/' + article.id }"
           >{{ article.title }}
         </nuxt-link>
       </h2>
@@ -34,7 +34,7 @@
       ></div>
       <nuxt-link
         class="article-more text-primary"
-        :to="{ path: '/post/' + article.id }"
+        :to="{ path: '/article/' + article.id }"
         >Read more
       </nuxt-link>
     </div>

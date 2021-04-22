@@ -17,7 +17,7 @@ const config = {
       }
       return api.getPosts(0, 999).then((articleRes) => {
         const routes = articleRes.data.list.map(
-          (article) => url + '/post/' + article.id
+          (article) => url + '/article/' + article.id
         )
         STATIC_ROUTE.forEach((route) => {
           routes.push(url + route)
