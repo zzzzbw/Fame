@@ -67,9 +67,14 @@ public class ArticleTagServiceImpl extends ServiceImpl<ArticleTagMapper, Article
                 .in(ArticleTag::getTagId, tagIds)
                 .list();
 
+        if (CollectionUtils.isEmpty(articleTags)) {
+            return Collections.emptyMap();
+        }
+
         Set<Integer> articleIds = articleTags.stream()
                 .map(ArticleTag::getArticleId)
                 .collect(Collectors.toSet());
+
         Map<Integer, Article> articleMap = articleService.listByIds(articleIds, isFront)
                 .stream()
                 .collect(Collectors.toMap(BaseEntity::getId, article -> article, (o1, o2) -> o1));
@@ -92,6 +97,10 @@ public class ArticleTagServiceImpl extends ServiceImpl<ArticleTagMapper, Article
         List<ArticleTag> articleTags = lambdaQuery()
                 .in(ArticleTag::getArticleId, articleIds)
                 .list();
+
+        if (CollectionUtils.isEmpty(articleTags)) {
+            return Collections.emptyMap();
+        }
 
         Set<Integer> tagIds = articleTags
                 .stream()

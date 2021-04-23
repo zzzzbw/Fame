@@ -33,6 +33,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 import java.util.*;
@@ -207,9 +208,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Override
     public List<Article> listByIds(Collection<Integer> ids, boolean isFront) {
+        if (CollectionUtils.isEmpty(ids)) {
+            return Collections.emptyList();
+        }
+
         return lambdaQuery()
                 .select()
                 .eq(isFront, Article::getStatus, ArticleStatus.PUBLISH)
+                .in(BaseEntity::getId, ids)
                 .list();
     }
 

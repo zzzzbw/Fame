@@ -55,7 +55,7 @@ public class InitApplicationRunner implements ApplicationRunner {
     /**
      * 用于初始化访问的链接
      */
-    private static final String INIT_URL = "/api/post";
+    private static final String INIT_URL = "/api/article";
 
     @Value("${server.port}")
     private String port;

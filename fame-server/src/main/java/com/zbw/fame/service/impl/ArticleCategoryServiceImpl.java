@@ -64,9 +64,14 @@ public class ArticleCategoryServiceImpl extends ServiceImpl<ArticleCategoryMappe
                 .in(ArticleCategory::getCategoryId, categoryIds)
                 .list();
 
+        if (CollectionUtils.isEmpty(articleCategories)) {
+            return Collections.emptyMap();
+        }
+
         Set<Integer> articleIds = articleCategories.stream()
                 .map(ArticleCategory::getArticleId)
                 .collect(Collectors.toSet());
+
         Map<Integer, Article> articleMap = articleService.listByIds(articleIds, isFront)
                 .stream()
                 .collect(Collectors.toMap(BaseEntity::getId, article -> article, (o1, o2) -> o1));
@@ -88,6 +93,10 @@ public class ArticleCategoryServiceImpl extends ServiceImpl<ArticleCategoryMappe
         List<ArticleCategory> articleCategories = lambdaQuery()
                 .in(ArticleCategory::getArticleId, articleIds)
                 .list();
+
+        if (CollectionUtils.isEmpty(articleCategories)) {
+            return Collections.emptyMap();
+        }
 
         Set<Integer> categoryIds = articleCategories
                 .stream()
