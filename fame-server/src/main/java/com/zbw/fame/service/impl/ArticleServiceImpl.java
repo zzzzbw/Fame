@@ -89,7 +89,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Override
     public IPage<ArticleDetailDto> pageArticleAdmin(Integer current, Integer size, ArticleQuery query) {
-        Page<Article> page = new Page<>();
+        Page<Article> page = new Page<>(current, size);
         page.addOrder(OrderItem.desc("id"));
 
         Page<Article> articlePage = lambdaQuery()
