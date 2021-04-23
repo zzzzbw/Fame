@@ -21,7 +21,7 @@
         <span class="icon-bubble2"> {{ article.commentCount }} </span>
       </p>
       <div class="article-tags">
-        <label v-for="tag in article.tags" :key="tag" class="article-tag">
+        <label v-for="tag in article.tags" :key="tag.id" class="article-tag">
           <nuxt-link :to="{ path: '/tag/' + tag.name }"
             >#{{ tag.name }}</nuxt-link
           >
@@ -39,12 +39,12 @@
       </nuxt-link>
     </div>
     <div class="front-page">
-      <div v-if="currentPage > 0" class="pre text-primary">
+      <div v-if="currentPage > 1" class="pre text-primary">
         <nuxt-link :to="{ path: '', query: { page: currentPage - 1 } }"
           >← Pre
         </nuxt-link>
       </div>
-      <div v-if="currentPage + 1 < totalPage" class="next text-primary">
+      <div v-if="currentPage + 1 <= totalPage" class="next text-primary">
         <nuxt-link :to="{ path: '', query: { page: currentPage + 1 } }"
           >Next →
         </nuxt-link>
@@ -61,7 +61,7 @@ export default {
   },
   fetch({ store, query }) {
     const params = {
-      page: query.page || 0,
+      page: query.page || 1,
       limit: 5,
       sort: ['priority','id']
     }
