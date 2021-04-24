@@ -34,7 +34,7 @@ public class MediaController {
      * @return {@see Page<Media>}
      */
     @GetMapping
-    public RestResponse<Pagination<Media>> index(@RequestParam(required = false, defaultValue = "0") Integer page,
+    public RestResponse<Pagination<Media>> index(@RequestParam(required = false, defaultValue = FameConst.DEFAULT_PAGE) Integer page,
                                                  @RequestParam(required = false, defaultValue = FameConst.PAGE_SIZE) Integer limit) {
         Page<Media> medias = mediaService.pageAdminMedias(page, limit);
         return RestResponse.ok(Pagination.of(medias));

@@ -49,7 +49,7 @@ public class FrontController {
      * @return {@see Pagination<ArticleDetailDto>}
      */
     @GetMapping("article")
-    public RestResponse<Pagination<ArticleDetailDto>> home(@RequestParam(required = false, defaultValue = "0") Integer page,
+    public RestResponse<Pagination<ArticleDetailDto>> home(@RequestParam(required = false, defaultValue = FameConst.DEFAULT_PAGE) Integer page,
                                                            @RequestParam(required = false, defaultValue = FameConst.PAGE_SIZE) Integer limit,
                                                            @RequestParam(required = false, defaultValue = "id") List<String> sort) {
         IPage<ArticleDetailDto> articles = articleService.pageArticleFront(page, limit, sort);

@@ -35,7 +35,7 @@ public class CommentController {
      * @return {@see Pagination<Comment>}
      */
     @GetMapping
-    public RestResponse<Pagination<Comment>> index(@RequestParam(required = false, defaultValue = "0") Integer page,
+    public RestResponse<Pagination<Comment>> index(@RequestParam(required = false, defaultValue = FameConst.DEFAULT_PAGE) Integer page,
                                                    @RequestParam(required = false, defaultValue = FameConst.PAGE_SIZE) Integer limit) {
         Page<Comment> comments = commentService.pageCommentAdmin(page, limit);
         return RestResponse.ok(Pagination.of(comments));

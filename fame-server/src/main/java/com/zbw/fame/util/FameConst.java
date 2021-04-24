@@ -22,6 +22,11 @@ public interface FameConst {
     String MD5_SLAT = "riopwhjrv123bnopiw234q2ec";
 
     /**
+     * 默认分页当前页
+     */
+    String DEFAULT_PAGE = "1";
+
+    /**
      * 默认分页大小
      */
     String PAGE_SIZE = "10";
