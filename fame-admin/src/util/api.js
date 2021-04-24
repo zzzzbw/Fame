@@ -35,7 +35,7 @@ const auth = {
   },
   pageArticle(page, query) {
     const params = query || {}
-    params.page = page - 1
+    params.page = page
     return get('/admin/article', params)
   },
   getArticle(id) {
@@ -49,7 +49,7 @@ const auth = {
   },
   pageComment(page) {
     const params = {
-      page: page - 1,
+      page: page,
     }
     return get('/admin/comment', params)
   },
@@ -91,7 +91,7 @@ const auth = {
   },
   pageNote(page) {
     const params = {
-      page: page - 1,
+      page: page,
     }
     return get('/admin/note', params)
   },
