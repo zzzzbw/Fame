@@ -96,6 +96,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
                 .eq(!ObjectUtils.isEmpty(query.getStatus()), Article::getStatus, query.getStatus())
                 .eq(!ObjectUtils.isEmpty(query.getPriority()), Article::getPriority, query.getPriority())
                 .like(!ObjectUtils.isEmpty(query.getTitle()), Article::getTitle, query.getTitle())
+                .eq(!ObjectUtils.isEmpty(query.getListShow()), Article::isListShow, query.getListShow())
+                .eq(!ObjectUtils.isEmpty(query.getHeaderShow()), Article::isHeaderShow, query.getHeaderShow())
                 .page(page);
 
         return batchConvertToDetailDto(articlePage);

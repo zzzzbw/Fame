@@ -6,7 +6,7 @@
           <el-row>
             <el-col :xs="24" :sm="24" :md="12" :lg="5">
               <div class="tool-container-item">
-                <span> 状态： </span>
+                <span>状态：</span>
                 <el-radio-group
                   size="mini"
                   v-model="tool.status"
@@ -25,7 +25,7 @@
             </el-col>
             <el-col :xs="24" :sm="24" :md="12" :lg="5">
               <div class="tool-container-item">
-                <span> 类型： </span>
+                <span>类型：</span>
                 <el-radio-group
                   size="mini"
                   v-model="tool.priority"
@@ -39,6 +39,34 @@
                   <el-radio-button :label="this.$static.ArticlePriority.TOP.key"
                     >{{ this.$static.ArticlePriority.TOP.value }}
                   </el-radio-button>
+                </el-radio-group>
+              </div>
+            </el-col>
+            <el-col :xs="24" :sm="24" :md="12" :lg="5">
+              <div class="tool-container-item">
+                <span>列表显示：</span>
+                <el-radio-group
+                  size="mini"
+                  v-model="tool.listShow"
+                  @change="init"
+                >
+                  <el-radio-button :label="null">全部</el-radio-button>
+                  <el-radio-button :label="true">是</el-radio-button>
+                  <el-radio-button :label="false">否</el-radio-button>
+                </el-radio-group>
+              </div>
+            </el-col>
+            <el-col :xs="24" :sm="24" :md="12" :lg="5">
+              <div class="tool-container-item">
+                <span>顶部显示：</span>
+                <el-radio-group
+                  size="mini"
+                  v-model="tool.headerShow"
+                  @change="init"
+                >
+                  <el-radio-button :label="null">全部</el-radio-button>
+                  <el-radio-button :label="true">是</el-radio-button>
+                  <el-radio-button :label="false">否</el-radio-button>
                 </el-radio-group>
               </div>
             </el-col>
@@ -92,10 +120,43 @@
         </template>
       </el-table-column>
       <el-table-column
+        prop="listShow"
+        label="列表显示"
+        width="80"
+        show-overflow-tooltip
+        align="center"
+      >
+        <template slot-scope="scope">
+          <i
+            v-if="scope.row.listShow"
+            class="el-icon-check"
+            style="font-size: 24px; color: #409eff"
+          ></i>
+          <i v-else class="el-icon-minus" style="font-size: 24px"></i>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="headerShow"
+        label="顶部显示"
+        width="80"
+        show-overflow-tooltip
+        align="center"
+      >
+        <template slot-scope="scope">
+          <i
+            v-if="scope.row.headerShow"
+            class="el-icon-check"
+            style="font-size: 24px; color: #409eff"
+          ></i>
+          <i v-else class="el-icon-minus" style="font-size: 24px"></i>
+        </template>
+      </el-table-column>
+      <el-table-column
         prop="status"
         label="状态"
         width="100"
         show-overflow-tooltip
+        align="center"
       >
         <template slot-scope="scope">
           <el-tag
@@ -111,6 +172,7 @@
         label="类型"
         width="100"
         show-overflow-tooltip
+        align="center"
       >
         <template slot-scope="scope">
           <el-tag
@@ -167,7 +229,9 @@ export default {
             tool: {
                 status: '',
                 title: '',
-                priority: ''
+                priority: '',
+                listShow: null,
+                headerShow: null,
             },
             articleData: [],
             total: 0,
@@ -199,6 +263,9 @@ export default {
         initArticleData(articles) {
             this.articleData = []
             for (let key in articles) {
+                if(!articles.hasOwnProperty(key)){
+                    continue
+                }
                 let data = articles[key]
                 let article = {
                     id: data.id,
@@ -207,6 +274,8 @@ export default {
                     publish: this.$dayjs(data.created).format('YYYY-MM-DD HH:mm'),
                     modified: this.$dayjs(data.modified).format('YYYY-MM-DD HH:mm'),
                     category: data.category ? data.category.name : '',
+                    listShow: data.listShow,
+                    headerShow: data.headerShow,
                     status: this.$static.ArticleStatus.getValue(data.status),
                     priority: this.$static.ArticlePriority.getValue(data.priority)
                 }
@@ -235,6 +304,18 @@ export default {
 </script>
 
 <style>
+.el-checkbox__input.is-disabled.is-checked .el-checkbox__inner {
+  color: #ffffff !important;
+  background-color: #1890ff !important;
+  border-color: #1890ff !important;
+  -webkit-box-shadow: -1px 0 0 0 #74bcff !important;
+  box-shadow: -1px 0 0 0 #74bcff !important;
+}
+
+.el-checkbox__input.is-disabled.is-checked .el-checkbox__inner::after {
+  border-color: #ffffff !important;
+}
+
 .el-table ::-webkit-scrollbar {
   display: block;
   height: 10px;

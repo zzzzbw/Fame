@@ -18,4 +18,7 @@ public class ArticleQuery {
 
     private Integer priority;
 
+    private Boolean listShow;
+
+    private Boolean headerShow;
 }
