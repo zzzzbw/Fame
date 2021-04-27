@@ -20,7 +20,7 @@
     <div v-highlight class="markdown-body" v-html="article.contentHtml"></div>
     <div v-if="article.tags" class="article-tags">
       <label class="label-tags">Tags:</label>
-      <span v-for="tag in article.tags" :key="tag" class="article-tag">
+      <span v-for="tag in article.tags" :key="tag.id" class="article-tag">
         <nuxt-link :to="{ path: '/tag/' + tag.name }"
           >#{{ tag.name }}</nuxt-link
         >
@@ -33,83 +33,81 @@
 </template>
 
 <script type="text/ecmascript-6">
-import tocbot from 'tocbot'
-import Comment from '~/components/Comment.vue'
-import BigImg from '~/components/BigImg.vue'
+import tocbot from "tocbot";
+import Comment from "~/components/Comment.vue";
+import BigImg from "~/components/BigImg.vue";
 
 export default {
   components: {
     Comment,
     BigImg
   },
-  data () {
+  data() {
     return {
       isBigImg: false,
-      img: ''
-    }
+      img: ""
+    };
   },
-  fetch ({ store, params }) {
-    return store.dispatch('getArticle', params.id)
+  fetch({ store, params }) {
+    return store.dispatch("getArticle", params.id);
   },
-  head () {
-    return { title: `${this.article.title}` }
+  head() {
+    return { title: `${this.article.title}` };
   },
   computed: {
-    article () {
-      return this.$store.state.article.detail
+    article() {
+      return this.$store.state.article.detail;
     }
   },
-  mounted () {
-    this.tocInit()
-    this.initEvent()
+  mounted() {
+    this.tocInit();
+    this.initEvent();
   },
   methods: {
-    initEvent () {
-      const markdown = document.getElementsByClassName('markdown-body')[0]
-      const imgs = markdown.getElementsByTagName('img')
-      const _this = this
+    initEvent() {
+      const markdown = document.getElementsByClassName("markdown-body")[0];
+      const imgs = markdown.getElementsByTagName("img");
+      const _this = this;
       for (let i = 0; i < imgs.length; i++) {
-        imgs[i].addEventListener('click', (e) => {
-          e.stopPropagation()
-          _this.isBigImg = true
-          _this.img = imgs[i].getAttribute('src')
-        })
+        imgs[i].addEventListener("click", (e) => {
+          e.stopPropagation();
+          _this.isBigImg = true;
+          _this.img = imgs[i].getAttribute("src");
+        });
       }
     },
-    tocInit () {
-      const headingSelector = 'h1, h2, h3, h4'
-      const body = document.getElementsByClassName('markdown-body')
+    tocInit() {
+      const headingSelector = "h1, h2, h3, h4";
+      const body = document.getElementsByClassName("markdown-body");
       if (body) {
-        const tag = body[0].querySelectorAll(headingSelector)
+        const tag = body[0].querySelectorAll(headingSelector);
         tag.forEach(function(el) {
-          el.setAttribute('id', el.innerHTML)
-        })
+          el.setAttribute("id", el.innerHTML);
+        });
       }
       tocbot.init({
-        tocSelector: '.markdown-toc',
-        contentSelector: '.markdown-body',
+        tocSelector: ".markdown-toc",
+        contentSelector: ".markdown-body",
         headingSelector
-      })
+      });
       // 延时显示，防止闪烁
       setTimeout(function() {
-        document.getElementsByClassName('markdown-toc')[0].style.opacity = 1
-      }, 500)
+        document.getElementsByClassName("markdown-toc")[0].style.opacity = 1;
+      }, 500);
     }
   }
-}
+};
 </script>
 
 <style>
 @import '~/assets/css/markdown-toc.css';
 
 #article .markdown-body img {
-  max-width: 100%;
+  max-width: 100% !important;
   margin: 0.5rem auto;
-  display: block;
   text-align: center;
   border-radius: 4px;
   transition: all 0.25s;
-  opacity: 0.9;
   cursor: zoom-in;
 }
 </style>
@@ -120,7 +118,7 @@ export default {
   min-width: calc((100% - 1200px) / 2);
   max-width: calc((100% - 1000px) / 2);
   max-height: calc(100% - 120px);
-  right: 0px;
+  right: 0;
   top: 100px;
   opacity: 0;
   transition: all 0.3s;
