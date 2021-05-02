@@ -15,7 +15,11 @@
             ></el-input>
           </el-form-item>
           <el-form-item prop="content">
-            <markdown-editor v-model="article.content" :onSave="onSave" />
+            <markdown-editor
+              v-model="article.content"
+              :height="editorHeight"
+              mode="markdown"
+            />
             <!-- 键修饰符，键别名 -->
           </el-form-item>
         </el-col>
@@ -201,6 +205,7 @@ export default {
   },
   data: function () {
     return {
+      editorHeight: document.documentElement.clientHeight - 250 + 'px',
       mediaDialog: false,
       isMobile: false,
       submitting: false,

@@ -1,95 +1,152 @@
 <template>
-  <mavon-editor
-    v-model="content"
-    :toolbars="markdownOption.toolbars"
-    :codeStyle="markdownOption.codeStyle"
-    @save="onSave"
-    @fullScreen="markdownOption.fullScreen"
-  >
-  </mavon-editor>
+  <div :id="id" />
 </template>
 
 <script>
-import { mavonEditor } from 'mavon-editor'
-import 'mavon-editor/dist/css/index.css'
+import 'highlight.js/styles/github.css'
+import 'codemirror/lib/codemirror.css'
+import '@toast-ui/editor/dist/toastui-editor.css'
+import Editor from '@toast-ui/editor'
+import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight'
+import hljs from 'highlight.js'
 
+const defaultOptions = {
+  minHeight: '300px',
+  previewStyle: 'vertical',
+  useCommandShortcut: true,
+  useDefaultHTMLSanitizer: true,
+  usageStatistics: false,
+  hideModeSwitch: true,
+  toolbarItems: [
+    'heading',
+    'bold',
+    'italic',
+    'strike',
+    'divider',
+    'hr',
+    'quote',
+    'divider',
+    'ul',
+    'ol',
+    'task',
+    'indent',
+    'outdent',
+    'divider',
+    'table',
+    'image',
+    'link',
+    'divider',
+    'code',
+    'codeblock',
+  ],
+}
 export default {
   name: 'MarkdownEditor',
-  components: {
-    mavonEditor,
-  },
-  model: {
-    prop: 'value',
-    event: 'change',
-  },
   props: {
     value: {
       type: String,
       default: '',
     },
-    onSave: {
-      type: Function,
-      default: function () {},
+    id: {
+      type: String,
+      required: false,
+      default() {
+        return (
+          'markdown-editor-' +
+          +new Date() +
+          ((Math.random() * 1000).toFixed(0) + '')
+        )
+      },
+    },
+    options: {
+      type: Object,
+      default() {
+        return defaultOptions
+      },
+    },
+    mode: {
+      type: String,
+      default: 'markdown',
+    },
+    height: {
+      type: String,
+      required: false,
+      default: '300px',
+    },
+    language: {
+      type: String,
+      required: false,
+      default: 'en_US', // https://github.com/nhnent/tui.editor/tree/master/src/js/langs
     },
   },
-  data: function () {
+  data() {
     return {
-      content: '',
-      markdownOption: {
-        codeStyle: 'tomorrow',
-        toolbars: {
-          bold: true, // 粗体
-          italic: true, // 斜体
-          header: true, // 标题
-          underline: true, // 下划线
-          strikethrough: true, // 中划线
-          mark: true, // 标记
-          superscript: true, // 上角标
-          subscript: true, // 下角标
-          quote: true, // 引用
-          ol: true, // 有序列表
-          ul: true, // 无序列表
-          link: true, // 链接
-          code: true, // code
-          table: true, // 表格
-          fullscreen: true, // 全屏编辑
-          readmodel: true, // 沉浸式阅读
-          htmlcode: true, // 展示html源码
-          help: true, // 帮助
-          /* 1.3.5 */
-          undo: true, // 上一步
-          redo: true, // 下一步
-          trash: true, // 清空
-          /* 2.2.1 */
-          subfield: true, // 单双栏模式
-          preview: true, // 预览
-        },
-        fullScreen: this.markdownFullScreen,
-      },
+      editor: null,
     }
   },
-  methods: {
-    markdownFullScreen(status) {
-      if (status) {
-        this.$root.$emit('index-up')
-      } else {
-        this.$root.$emit('index-down')
-      }
+  computed: {
+    editorOptions() {
+      const options = Object.assign({}, defaultOptions, this.options)
+      options.initialEditType = this.mode
+      options.height = this.height
+      options.language = this.language
+      options.plugins = [[codeSyntaxHighlight, { hljs }]]
+      return options
     },
   },
   watch: {
-    value(val) {
-      this.content = val
+    value(newValue, preValue) {
+      if (newValue !== preValue && newValue !== this.editor.getMarkdown()) {
+        this.editor.setMarkdown(newValue)
+      }
     },
-    content() {
-      this.$emit('change', this.content)
+    language(val) {
+      this.destroyEditor()
+      this.initEditor()
+    },
+    height(newValue) {
+      this.editor.height(newValue)
+    },
+    mode(newValue) {
+      this.editor.changeMode(newValue)
+    },
+  },
+  mounted() {
+    this.initEditor()
+  },
+  destroyed() {
+    this.destroyEditor()
+  },
+  methods: {
+    initEditor() {
+      this.editor = new Editor({
+        el: document.getElementById(this.id),
+        ...this.editorOptions,
+      })
+      if (this.value) {
+        this.editor.setMarkdown(this.value)
+      }
+      this.editor.on('change', () => {
+        this.$emit('input', this.editor.getMarkdown())
+      })
+    },
+    destroyEditor() {
+      if (!this.editor) return
+      this.editor.off('change')
+      this.editor.remove()
+    },
+    setValue(value) {
+      this.editor.setMarkdown(value)
+    },
+    getValue() {
+      return this.editor.getMarkdown()
+    },
+    setHtml(value) {
+      this.editor.setHtml(value)
+    },
+    getHtml() {
+      return this.editor.getHtml()
     },
   },
 }
 </script>
-
-<style scoped>
-.markdown-body {
-  height: calc(90vh - 120px);
-}
-</style>
