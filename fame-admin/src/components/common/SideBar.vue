@@ -1,15 +1,11 @@
 <template>
-  <div
-    :class="[showLeftMenu ? 'left-menu-show' : 'left-menu-hide']"
-    class="left-menu"
-  >
+  <div class="side-bar">
     <el-menu
       :default-active="activeMenu"
       background-color="#324157"
       text-color="#fff"
       active-text-color="#ffd04b"
       :router="true"
-      @select="mobileToggle"
     >
       <el-menu-item index="/dashboard">
         <i class="el-icon-monitor"></i>
@@ -41,68 +37,32 @@
 
 <script type="text/ecmascript-6">
 export default {
-    data() {
-        return {
-            showLeftMenu: false
-        }
-    },
-    computed: {
-        activeMenu() {
-            const route = this.$route
-            const {path} = route
-            return path
-        }
-    },
-    methods: {
-
-        toggleLeftMenu() {
-            this.showLeftMenu = !this.showLeftMenu
-        },
-        mobileToggle() {
-            if (document.body.clientWidth < 600) {
-                this.showLeftMenu = false
-            }
-        }
-    },
-    created() {
-        this.$root.$on('collapse', this.toggleLeftMenu)
+  computed: {
+    activeMenu() {
+      const route = this.$route
+      const {path} = route
+      return path
     }
+  }
 }
 </script>
 
 <style>
 .el-submenu .el-menu-item {
-  min-width: 0px;
+  min-width: 0;
 }
 </style>
 
 <style scoped>
-.left-menu {
-  position: fixed;
-  top: 60px;
-  bottom: 0;
-  left: 0;
-  width: 150px;
+.side-bar {
+  width: 100%;
+  height: 100%;
   background-color: #324157;
   box-shadow: 0 2px 3px hsla(0, 0%, 7%, 0.1), 0 0 0 1px hsla(0, 0%, 7%, 0.1);
   transition: 0.3s left;
 }
 
-.left-menu .el-menu {
+.side-bar .el-menu {
   border-right: none;
-}
-
-.left-menu-show {
-  left: 0;
-}
-
-.left-menu-hide {
-  left: -151px;
-}
-
-@media screen and (min-width: 600px) {
-  .left-menu {
-    left: 0;
-  }
 }
 </style>

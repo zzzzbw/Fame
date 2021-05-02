@@ -1,10 +1,10 @@
 <template>
-  <div class="header">
+  <div class="nav-bar">
     <div class="collapse">
       <a @click="collapse"><span class="icon-th-list"></span></a>
     </div>
     <h3 class="title">Fame Dashboard</h3>
-    <ul class="header-right">
+    <ul class="nav-bar-right">
       <li>
         <a @click="logout">
           <span class="icon-sign-in"></span>&nbsp;
@@ -19,9 +19,9 @@
 export default {
   methods: {
     collapse: function () {
-      this.$root.$emit('collapse')
+      this.$root.$emit('side-bar-collapse')
     },
-    logout () {
+    logout() {
       this.$api.auth.logout().then(data => {
         if (data.success) {
           this.$message({
@@ -43,9 +43,9 @@ export default {
 </script>
 
 <style scoped>
-.header {
+.nav-bar {
   width: 100%;
-  height: 60px;
+  height: 100%;
   display: inline-block;
   background-color: #fff;
   line-height: 60px;
@@ -64,14 +64,14 @@ export default {
   display: inline-block;
 }
 
-.header-right {
+.nav-bar-right {
   list-style: none;
   float: right;
   margin: 0 15px 0 0;
   color: #7f8c8d;
 }
 
-.header-right a {
+.nav-bar-right a {
   color: #7f8c8d;
   cursor: pointer;
   text-decoration: none;
