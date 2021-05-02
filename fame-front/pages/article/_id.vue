@@ -1,6 +1,6 @@
 <template>
   <div id="article">
-    <h2 class="article-title text-bold">{{ article.title }}</h2>
+    <h1 class="article-title text-bold">{{ article.title }}</h1>
     <div class="article-info">
       <p v-if="article.category" class="article-category">
         <span class="icon-folder"></span>
@@ -133,7 +133,7 @@ export default {
 .article-title {
   color: #34495e;
   margin: 1.2em 0 0;
-  font-size: 2em;
+  font-size: 2.2em;
 }
 
 .article-date {
