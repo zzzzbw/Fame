@@ -46,17 +46,3 @@
 ![](https://raw.githubusercontent.com/zzzzbw/blog_source/master/images/FameDocker/Snipaste_2019-08-15_22-23-19.png)
 
 ![](https://raw.githubusercontent.com/zzzzbw/blog_source/master/images/FameDocker/Snipaste_2019-08-15_22-23-44.png)
-
-------
-
-
-
-### v2.0.0
-
-- [ ] mysql改h2
-- [ ] 去除无用cache
-- [ ] server升级依赖(swagger-starter,springboot)
-- [ ] jpa改mybaitsPlus
-- [ ] markdown解析改前端
-- [ ] tag-article关系优化
-- [ ] 前端优化(vue3?)
