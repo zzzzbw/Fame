@@ -1,6 +1,7 @@
 package com.zbw.fame.service.impl;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -260,6 +261,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             ArticleDetailDto articleDetailDto = FameUtils.convertTo(article, ArticleDetailDto.class);
             String contentHtml = FameUtils.contentTransform(articleDetailDto.getContent(), true, true, summaryFlag);
             articleDetailDto.setContentHtml(contentHtml);
+            articleDetailDto.setContent(StrUtil.EMPTY);
 
             Category category = categoryMap.get(articleDetailDto.getId());
             articleDetailDto.setCategory(category);
