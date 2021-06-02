@@ -52,8 +52,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Override
     @Transactional(rollbackFor = Throwable.class)
     public void createComment(@NonNull Comment comment) {
-        Article article = Optional.of(articleService.getById(comment.getArticleId()))
-                .orElseThrow(() -> new NotFoundException(Article.class));
+        if (null == articleService.getById(comment.getArticleId())) {
+            throw new NotFoundException(Article.class);
+        }
 
         save(comment);
 
@@ -179,7 +180,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
     @Override
     public void createCommentEvent(Comment comment) {
-        eventPublisher.publishEvent(new CommentNewEvent(this, comment.getId()));
+        CommentDto commentDto = getCommentDto(comment.getId());
+        eventPublisher.publishEvent(new CommentNewEvent(this, commentDto));
 
         LogEvent logEvent = new LogEvent(this, comment, LogAction.ADD, LogType.COMMENT, FameUtils.getIp(), null);
         eventPublisher.publishEvent(logEvent);
