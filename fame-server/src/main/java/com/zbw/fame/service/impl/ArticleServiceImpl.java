@@ -69,6 +69,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         Page<Article> articlePage = lambdaQuery()
                 .eq(Article::getStatus, ArticleStatus.PUBLISH)
                 .eq(Article::isListShow, true)
+                .le(Article::getPublishTime, DateUtil.date())
                 .page(page);
 
         return batchConvertToDetailDto(articlePage);
@@ -79,6 +80,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         Article article = lambdaQuery()
                 .eq(BaseEntity::getId, id)
                 .eq(Article::getStatus, ArticleStatus.PUBLISH)
+                .le(Article::getPublishTime, DateUtil.date())
                 .one();
 
         if (null == article) {
@@ -184,7 +186,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         Map<Integer, List<ArticleInfoDto>> groupByYear = articles.stream()
                 .map(ArticleInfoDto::new)
-                .collect(Collectors.groupingBy(articleInfo -> DateUtil.year(articleInfo.getCreated())));
+                .collect(Collectors.groupingBy(articleInfo -> DateUtil.year(articleInfo.getPublishTime())));
 
         List<ArchiveDto> archives = new ArrayList<>();
         groupByYear.forEach((year, articleInfos) -> {
@@ -193,7 +195,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             archive.setArticleInfos(articleInfos);
             archives.add(archive);
         });
-
+        archives.sort(Comparator.comparing(ArchiveDto::getYear).reversed());
         return archives;
     }
 
@@ -202,6 +204,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         return lambdaQuery()
                 .eq(Article::getStatus, ArticleStatus.PUBLISH)
                 .eq(Article::isHeaderShow, true)
+                .le(Article::getPublishTime, DateUtil.date())
                 .orderByDesc(Article::getPriority)
                 .list()
                 .stream()
@@ -218,6 +221,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         return lambdaQuery()
                 .select()
                 .eq(isFront, Article::getStatus, ArticleStatus.PUBLISH)
+                .le(Article::getPublishTime, DateUtil.date())
                 .in(BaseEntity::getId, ids)
                 .list();
     }

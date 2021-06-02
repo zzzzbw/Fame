@@ -22,10 +22,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -75,6 +72,7 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
                     List<ArticleInfoDto> articleInfoDtos = articleMap.getOrDefault(tag.getId(), Collections.emptyList())
                             .stream()
                             .map(ArticleInfoDto::new)
+                            .sorted((Comparator.comparing(ArticleInfoDto::getPublishTime).reversed()))
                             .collect(Collectors.toList());
                     dto.setArticleInfos(articleInfoDtos);
                     return dto;

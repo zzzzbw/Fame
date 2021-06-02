@@ -92,22 +92,11 @@
                 >
                 </el-switch>
               </el-form-item>
-              <el-form-item label="创建日期">
+              <el-form-item label="发布日期">
                 <el-date-picker
-                  v-model="article.created"
+                  v-model="article.publishTime"
                   type="datetime"
-                  placeholder="创建日期"
-                  size="small"
-                  :editable="flagFalse"
-                  value-format="timestamp"
-                >
-                </el-date-picker>
-              </el-form-item>
-              <el-form-item label="修改日期">
-                <el-date-picker
-                  v-model="article.modified"
-                  type="datetime"
-                  placeholder="修改日期"
+                  placeholder="发布日期"
                   size="small"
                   :editable="flagFalse"
                   value-format="timestamp"
@@ -220,8 +209,7 @@ export default {
         headerShow: false,
         priority: 0,
         allowComment: true,
-        created: null,
-        modified: null,
+        publishTime: null,
       },
       rules: {
         title: [
@@ -263,8 +251,7 @@ export default {
           headerShow: false,
           priority: this.$static.ArticlePriority.NORMAL.key,
           allowComment: true,
-          created: Date.now(),
-          modified: Date.now(),
+          publishTime: Date.now(),
         }
         this.initArticle(data)
       }
@@ -280,8 +267,7 @@ export default {
       this.article.headerShow = data.headerShow
       this.article.priority = data.priority
       this.article.allowComment = data.allowComment
-      this.article.created = new Date(data.created).getTime()
-      this.article.modified = new Date(data.modified).getTime()
+      this.article.publishTime = new Date(data.publishTime).getTime()
     },
     getTags() {
       this.$api.auth.getAllTags().then((data) => {

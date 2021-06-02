@@ -186,13 +186,7 @@
       <el-table-column label="发布日期" width="160" show-overflow-tooltip>
         <template slot-scope="scope">
           <i class="el-icon-time"></i>
-          <span style="margin-left: 10px">{{ scope.row.publish }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="修改日期" width="160" show-overflow-tooltip>
-        <template slot-scope="scope">
-          <i class="el-icon-time"></i>
-          <span style="margin-left: 10px">{{ scope.row.modified }}</span>
+          <span style="margin-left: 10px">{{ scope.row.publishTime }}</span>
         </template>
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="150">
@@ -271,8 +265,7 @@ export default {
                     id: data.id,
                     title: data.title,
                     frontUrl: this.$util.getServerFrontPostUrl(data.id),
-                    publish: this.$dayjs(data.created).format('YYYY-MM-DD HH:mm'),
-                    modified: this.$dayjs(data.modified).format('YYYY-MM-DD HH:mm'),
+                    publishTime: this.$dayjs(data.publishTime).format('YYYY-MM-DD HH:mm'),
                     category: data.category ? data.category.name : '',
                     listShow: data.listShow,
                     headerShow: data.headerShow,

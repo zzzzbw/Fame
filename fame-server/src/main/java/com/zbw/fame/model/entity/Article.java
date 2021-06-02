@@ -4,6 +4,8 @@ import com.zbw.fame.model.enums.ArticleStatus;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.Date;
+
 /**
  * @author by zzzzbw
  * @since 2021/03/09 15:05
@@ -56,4 +58,9 @@ public class Article extends BaseEntity {
      * 是否允许评论
      */
     private Boolean allowComment;
+
+    /**
+     * 发布时间
+     */
+    protected Date publishTime;
 }
