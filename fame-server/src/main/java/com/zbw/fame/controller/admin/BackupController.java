@@ -5,8 +5,14 @@ import com.zbw.fame.util.RestResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 /**
  * 备份 Controller
@@ -26,5 +32,14 @@ public class BackupController {
                                                           @RequestParam Integer articleId) {
         backupService.importArticle(file, articleId);
         return RestResponse.ok();
+    }
+
+    @PostMapping("export")
+    public ResponseEntity<Resource> exportArticle(@RequestParam Integer articleId) throws UnsupportedEncodingException {
+        Resource file = backupService.exportArticle(articleId);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + URLEncoder.encode(file.getFilename(), "UTF-8") + "\"")
+                .body(file);
     }
 }

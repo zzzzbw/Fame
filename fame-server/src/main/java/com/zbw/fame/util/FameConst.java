@@ -145,14 +145,25 @@ public interface FameConst {
      */
     String UPLOAD_DIR = "upload" + File.separator;
 
+
     /**
      * 媒体文件夹路径
      */
     String MEDIA_DIR = UPLOAD_DIR + "media" + File.separator;
 
     /**
+     * 备份文件夹路径
+     */
+    String BACKUP_DIR = UPLOAD_DIR + "backup" + File.separator;
+
+    /**
      * 媒体缩略图后缀
      */
     String MEDIA_THUMBNAIL_SUFFIX = "_thumbnail";
+
+    /**
+     * markdown 文件后缀
+     */
+    String MARKDOWN_SUFFIX = ".md";
 
 }
