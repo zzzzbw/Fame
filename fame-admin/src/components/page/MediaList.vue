@@ -43,7 +43,6 @@ export default {
       total: 0,
       pageSize: 10,
       currentPage: 1,
-      uploadDialog: false,
     }
   },
   methods: {
@@ -64,9 +63,6 @@ export default {
           }
         }
       })
-    },
-    showUploadDialog() {
-      this.uploadDialog = true
     },
     afterUpload(response) {
       if (response.success) {
