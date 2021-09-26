@@ -354,6 +354,22 @@ public class FameUtils {
     }
 
     /**
+     * 是否为图片格式文件后缀
+     *
+     * @param suffix
+     * @return
+     */
+    public static boolean isImgFile(String suffix) {
+        return StrUtil.equalsAnyIgnoreCase(suffix,
+                ImgUtil.IMAGE_TYPE_GIF,
+                ImgUtil.IMAGE_TYPE_JPG,
+                ImgUtil.IMAGE_TYPE_JPEG,
+                ImgUtil.IMAGE_TYPE_BMP,
+                ImgUtil.IMAGE_TYPE_PNG,
+                ImgUtil.IMAGE_TYPE_PSD);
+    }
+
+    /**
      * 压缩图片
      *
      * @param source       源文件
@@ -363,4 +379,5 @@ public class FameUtils {
     public static void compressImage(File source, File target, float imageQuality) {
         ImgUtil.scale(source, target, imageQuality);
     }
+
 }

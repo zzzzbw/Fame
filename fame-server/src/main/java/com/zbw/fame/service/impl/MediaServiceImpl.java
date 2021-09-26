@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -52,15 +53,17 @@ public class MediaServiceImpl extends ServiceImpl<MediaMapper, Media> implements
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    public Media upload(MultipartFile file, String name, String path) {
+    public Media upload(MultipartFile file, String path) {
         if (null == file || file.isEmpty()) {
             throw new TipException("上传文件不能为空");
         }
-        if (ObjectUtils.isEmpty(name)) {
-            throw new TipException("文件名不能为空");
+        String fileName = file.getOriginalFilename();
+        if (!StringUtils.hasText(fileName)) {
+            throw new TipException("上传文件名不能为空");
         }
-        if (name.length() > 255) {
-            throw new TipException("文件名过长");
+        String suffix = FameUtils.getFileSuffix(file.getOriginalFilename());
+        if (!FameUtils.isImgFile(suffix)) {
+            throw new TipException("媒体文件格式错误");
         }
 
         Media media = new Media();
@@ -70,9 +73,7 @@ public class MediaServiceImpl extends ServiceImpl<MediaMapper, Media> implements
             Path fameDir = FameUtils.getFameDir();
             Path uploadPath = fameDir.resolve(FameConst.MEDIA_DIR);
 
-            String suffix = FameUtils.getFileSuffix(file.getOriginalFilename());
-
-            String mediaName = name.endsWith(suffix) ? name : name + "." + suffix;
+            String mediaName = fileName.endsWith(suffix) ? fileName : fileName + "." + suffix;
             Path mediaUrl = basePath.resolve(mediaName);
             Path mediaPath = uploadPath.resolve(mediaUrl);
             log.info("Uploading media: [{}]", mediaPath);
@@ -81,27 +82,29 @@ public class MediaServiceImpl extends ServiceImpl<MediaMapper, Media> implements
                 throw new TipException("同名文件已经存在!");
             }
 
+            String thumbnailName = fileName.endsWith(suffix) ?
+                    FameUtils.getFileBaseName(fileName) + FameConst.MEDIA_THUMBNAIL_SUFFIX + "." + suffix
+                    : fileName + FameConst.MEDIA_THUMBNAIL_SUFFIX + "." + suffix;
+            Path thumbnailUrl = basePath.resolve(thumbnailName);
+
+            // 先插入数据库，再上传文件，保证事务一致
+            media.setName(mediaName);
+            media.setUrl(mediaUrl.toString());
+            media.setSuffix(suffix);
+            media.setThumbUrl(thumbnailUrl.toString());
+            save(media);
+
             Files.createDirectories(mediaPath.getParent());
             file.transferTo(mediaPath.toFile());
 
             // 图片资源压缩图片
             if (Objects.requireNonNull(file.getContentType()).contains("image")) {
-                String thumbnailName = name.endsWith(suffix) ?
-                        FameUtils.getFileBaseName(name) + FameConst.MEDIA_THUMBNAIL_SUFFIX + "." + suffix
-                        : name + FameConst.MEDIA_THUMBNAIL_SUFFIX + "." + suffix;
-
-                Path thumbnailUrl = basePath.resolve(thumbnailName);
                 Path thumbnailPath = uploadPath.resolve(thumbnailUrl);
                 log.info("Compress media thumbnail: [{}]", thumbnailPath);
 
                 FameUtils.compressImage(mediaPath.toFile(), thumbnailPath.toFile(), 0.5f);
-                media.setThumbUrl(thumbnailUrl.toString());
             }
 
-            media.setName(mediaName);
-            media.setUrl(mediaUrl.toString());
-            media.setSuffix(suffix);
-            save(media);
         } catch (IOException e) {
             log.error(e.getMessage(), e);
             throw new TipException(e);

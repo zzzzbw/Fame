@@ -169,7 +169,7 @@
       center
       width="80%"
     >
-      <upload :afterUpload="afterUpload"></upload>
+      <media-upload :afterUpload="afterUpload"></media-upload>
       <div class="media-list">
         <el-row>
           <el-col
@@ -207,13 +207,13 @@
 import serverConfig from '../../../server-config'
 import MarkdownEditor from '../common/MarkdownEditor'
 import MediaItem from '../common/MediaItem'
-import Upload from '../common/Upload'
+import MediaUpload from '../common/MediaUpload'
 
 export default {
   components: {
     MarkdownEditor,
     MediaItem,
-    Upload,
+    MediaUpload,
   },
   data: function () {
     return {

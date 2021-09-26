@@ -10,7 +10,6 @@ import com.zbw.fame.util.RestResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -56,16 +55,13 @@ public class MediaController {
      * 上传媒体文件
      *
      * @param file 文件
-     * @param name 文件名
      * @param path 文件路径
      * @return {@see Media}
      */
     @PostMapping("upload")
     public RestResponse<Media> upload(@RequestPart("file") MultipartFile file,
-                                      @RequestParam String name,
                                       @RequestParam String path) {
-        log.info("name:{}, path:{}", name, path);
-        Media media = mediaService.upload(file, name, path);
+        Media media = mediaService.upload(file, path);
         return RestResponse.ok(media);
     }
 

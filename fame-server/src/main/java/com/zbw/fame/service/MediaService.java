@@ -32,11 +32,10 @@ public interface MediaService extends IService<Media> {
      * 上传媒体文件
      *
      * @param file 媒体文件
-     * @param name 文件名
      * @param path 文件路径
      * @return
      */
-    Media upload(MultipartFile file, String name, String path);
+    Media upload(MultipartFile file, String path);
 
     /**
      * 删除媒体
