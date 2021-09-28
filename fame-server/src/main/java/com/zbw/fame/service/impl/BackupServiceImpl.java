@@ -3,6 +3,7 @@ package com.zbw.fame.service.impl;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.CharsetUtil;
+import cn.hutool.core.util.StrUtil;
 import com.zbw.fame.exception.NotFoundException;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.model.entity.Article;
@@ -28,10 +29,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.StringJoiner;
+import java.util.*;
 
 /**
  * @author by zzzzbw
@@ -65,15 +63,12 @@ public class BackupServiceImpl implements BackupService {
         List<String> lines = new ArrayList<>();
         try (InputStream inputStream = file.getInputStream()) {
             IoUtil.readUtf8Lines(inputStream, lines);
-
-            if (!CollectionUtils.isEmpty(lines) && isTitleLine(fileBaseName, lines.get(0))) {
-                // 判定第一行是否为标题，是的话去除
-                lines.remove(0);
-            }
         } catch (IOException e) {
             log.error(e.getMessage(), e);
             throw new TipException(e);
         }
+
+        handleArticleContentLines(fileBaseName, lines);
 
         StringJoiner content = new StringJoiner("\n");
         lines.forEach(content::add);
@@ -85,6 +80,33 @@ public class BackupServiceImpl implements BackupService {
         article.setContent(content.toString());
 
         articleService.updateById(article);
+    }
+
+    /**
+     * 处理文章内容
+     *
+     * @param filename
+     * @param lines
+     */
+    private void handleArticleContentLines(String filename, List<String> lines) {
+        if (CollectionUtils.isEmpty(lines)) {
+            return;
+        }
+
+        if (isTitleLine(filename, lines.get(0))) {
+            // 判定第一行是否为标题，是的话去除
+            lines.remove(0);
+            // 移除标题后空行
+            Iterator<String> it = lines.iterator();
+            while (it.hasNext()) {
+                String next = it.next();
+                if (!StrUtil.isEmpty(next)) {
+                    break;
+
+                }
+                it.remove();
+            }
+        }
     }
 
     @Override
@@ -119,7 +141,8 @@ public class BackupServiceImpl implements BackupService {
     }
 
     private boolean isTitleLine(String title, String line) {
-        String condition = "# " + title;
-        return Objects.equals(condition, line);
+        String condition1 = "# " + title;
+        String condition2 = "#  " + title;
+        return StrUtil.equalsAny(line, condition1, condition2);
     }
 }
