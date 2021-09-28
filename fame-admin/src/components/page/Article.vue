@@ -139,6 +139,7 @@
                   <el-row>
                     <article-upload
                       :article-id="article.id"
+                      :article-title="article.title"
                       :after-import="getArticle"
                     ></article-upload>
                   </el-row>
@@ -192,7 +193,6 @@
 </template>
 
 <script>
-import serverConfig from '../../../server-config'
 import MarkdownEditor from '@/components/common/MarkdownEditor'
 import MediaItem from '@/components/common/MediaItem'
 import MediaUpload from '@/components/common/MediaUpload'
@@ -235,12 +235,6 @@ export default {
       tags: [],
       categories: [],
       flagFalse: false,
-      backup: {
-        importAction: serverConfig.api + 'api/admin/backup/import',
-        importData: {
-          articleId: null,
-        },
-      },
       mediaDialogData: {
         mediaData: [],
         total: 0,

@@ -47,6 +47,12 @@ const auth = {
   deleteArticle(id) {
     return del('/admin/article/' + id)
   },
+  importArticle(file, articleId) {
+    let formData = new FormData()
+    formData.append('file', file)
+    formData.append('articleId', articleId)
+    return post('/admin/backup/import', formData)
+  },
   pageComment(page) {
     const params = {
       page: page,

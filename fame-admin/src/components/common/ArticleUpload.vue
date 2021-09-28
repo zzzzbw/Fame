@@ -4,22 +4,17 @@
       ref="importUpload"
       class="inline-upload"
       accept="md"
+      action="#"
       :show-file-list="false"
-      :action="importAction"
-      :data="importData"
-      :with-credentials="true"
-      :before-upload="beforeImport"
-      :on-success="successImport"
-      :on-error="errorImport"
+      :auto-upload="false"
+      :on-change="onFileChange"
     >
+      <el-button size="small">导入</el-button>
     </el-upload>
-    <el-button size="small" @click="handleImport">导入</el-button>
   </div>
 </template>
 
 <script>
-import serverConfig from '../../../server-config'
-
 export default {
   name: 'ArticleUpload',
   props: {
@@ -27,29 +22,49 @@ export default {
       type: Number,
       default: null,
     },
+    articleTitle: {
+      type: String,
+      default: '',
+    },
     afterImport: {
       type: Function,
       default: function () {},
     },
   },
   data: function () {
-    return {
-      importAction: serverConfig.api + 'api/admin/backup/import',
-      importData: {
-        articleId: null,
-      },
-    }
+    return {}
   },
   methods: {
-    handleImport() {
-      let self = this
-      this.$confirm('原有文章内容将被替换, 是否继续?', '提示', {
+    onFileChange(file) {
+      let _this = this
+      // 提示框内容
+      const msgData = []
+      const h = this.$createElement
+      msgData.push(h('p', null, '文件[' + file.name + ']'))
+      msgData.push(h('p', null, '将覆盖'))
+      msgData.push(h('p', null, '文章[' + this.articleTitle + ']'))
+      msgData.push(h('p', null, '是否继续?'))
+
+      this.$confirm('提示', {
+        message: h('div', null, msgData),
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'danger',
+        type: 'warning',
       })
         .then(() => {
-          self.$refs['importUpload'].$refs['upload-inner'].handleClick()
+          if (!_this.beforeImport(file)) {
+            return
+          }
+
+          const articleId = _this.articleId
+          _this.$api.auth
+            .importArticle(file.raw, articleId)
+            .then((data) => {
+              _this.successImport(data, file)
+            })
+            .catch((err) => {
+              _this.errorImport(err, file)
+            })
         })
         .catch(() => {})
     },
@@ -61,19 +76,18 @@ export default {
         this.$util.message.error(fileName + '大于10m')
         return false
       }
-
-      this.importData.articleId = this.articleId
+      return true
     },
     successImport(response, file) {
       if (response.success) {
-        this.$util.message.success('上传' + file.name + '成功!')
+        this.$util.message.success('导入' + file.name + '成功!')
       } else {
-        this.$util.message.error('上传' + file.name + '失败!' + response.msg)
+        this.$util.message.error('导入' + file.name + '失败!' + response.msg)
       }
       this.afterImport()
     },
     errorImport(err, file) {
-      this.$util.message.error('上传' + file.name + '失败!')
+      this.$util.message.error('导入' + file.name + '失败!')
       console.log(err)
     },
   },
