@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.activation.MimetypesFileTypeMap;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
@@ -27,19 +28,24 @@ import java.net.URLEncoder;
 public class BackupController {
     private final BackupService backupService;
 
-    @PostMapping("import")
-    public RestResponse<RestResponse.Empty> importArticle(@RequestPart("file") MultipartFile file,
-                                                          @RequestParam Integer articleId) {
+    @PostMapping("import/{articleId}")
+    public RestResponse<RestResponse.Empty> importArticle(@PathVariable Integer articleId,
+                                                          @RequestPart("file") MultipartFile file) {
         backupService.importArticle(file, articleId);
         return RestResponse.ok();
     }
 
-    @PostMapping("export")
-    public ResponseEntity<Resource> exportArticle(@RequestParam Integer articleId) throws UnsupportedEncodingException {
+    @PostMapping("export/{articleId}")
+    public ResponseEntity<Resource> exportArticle(@PathVariable Integer articleId) throws UnsupportedEncodingException {
         Resource file = backupService.exportArticle(articleId);
+        String fileName = URLEncoder.encode(file.getFilename(), "UTF-8");
+        String type = new MimetypesFileTypeMap().getContentType(fileName);
+
         return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_TYPE, type)
                 .header(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=\"" + URLEncoder.encode(file.getFilename(), "UTF-8") + "\"")
+                        "attachment; filename=\"" + fileName + "\"")
+                .header(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.CONTENT_DISPOSITION)
                 .body(file);
     }
 }

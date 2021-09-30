@@ -142,6 +142,11 @@
                       :article-title="article.title"
                       :after-import="getArticle"
                     ></article-upload>
+                    <el-button
+                      size="small"
+                      @click="exportArticle"
+                      >导出
+                    </el-button>
                   </el-row>
                 </el-button-group>
               </el-form-item>
@@ -367,6 +372,17 @@ export default {
           })
         }
       })
+    },
+    exportArticle() {
+      const _this = this
+      this.$api.auth
+        .exportArticle(this.article.id)
+        .then((res) => {
+          _this.$util.downloadFile(res)
+        })
+        .catch((err) => {
+          console.error(err)
+        })
     },
     onPublish() {
       const _this = this

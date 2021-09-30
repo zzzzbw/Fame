@@ -46,6 +46,14 @@ const responseInterceptor = {
       loadingInstance = null
     }
 
+    if (
+      response.headers['content-type'] &&
+      response.headers['content-type'].indexOf('json') === -1
+    ) {
+      // 不是json格式直接返回数据
+      return response
+    }
+
     if (response.data && !response.data.success) {
       let msg = null
       switch (response.data.code) {
@@ -197,5 +205,18 @@ export function del(url, params = {}) {
       .catch((err) => {
         reject(err)
       })
+  })
+}
+
+export function download(url, params = {}) {
+  return new Promise((resolve, reject) => {
+    axiosJson.post(url, params, { responseType: 'blob' }).then(
+      (response) => {
+        resolve(response)
+      },
+      (err) => {
+        reject(err)
+      }
+    )
   })
 }

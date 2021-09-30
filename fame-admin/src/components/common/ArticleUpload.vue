@@ -1,17 +1,15 @@
 <template>
-  <div>
-    <el-upload
-      ref="importUpload"
-      class="inline-upload"
-      accept="md"
-      action="#"
-      :show-file-list="false"
-      :auto-upload="false"
-      :on-change="onFileChange"
-    >
-      <el-button size="small">导入</el-button>
-    </el-upload>
-  </div>
+  <el-upload
+    ref="importUpload"
+    class="inline-upload"
+    accept="md"
+    action="#"
+    :show-file-list="false"
+    :auto-upload="false"
+    :on-change="onFileChange"
+  >
+    <el-button size="small" type="danger">导入</el-button>
+  </el-upload>
 </template>
 
 <script>
@@ -97,5 +95,6 @@ export default {
 <style scoped>
 .inline-upload {
   display: inline;
+  margin-right: 10px;
 }
 </style>
