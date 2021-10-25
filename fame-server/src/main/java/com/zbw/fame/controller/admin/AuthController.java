@@ -35,7 +35,6 @@ public class AuthController {
     @PostMapping("login")
     public RestResponse<LoginUser> login(@RequestBody @Valid LoginParam param) {
         LoginUser user = userService.login(param);
-        // FameUtils.setLoginUser(user);
         return RestResponse.ok(user);
     }
 

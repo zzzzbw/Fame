@@ -34,7 +34,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
-    private static final String[] EXCLUDE_URL = new String[]{"/"};
+    /**
+     * security的鉴权排除的url列表
+     */
+    private static final String[] EXCLUDED_AUTH_PAGES = {
+            "/css/**", "/js/**", "/images/**", "/webjars/**", "/**/favicon*",
+            "/*.html", "/**/*.html", "/**/*.css", "/**/*.js"
+    };
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -68,9 +74,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers().frameOptions().disable()
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, EXCLUDE_URL)
+                .antMatchers(HttpMethod.GET, EXCLUDED_AUTH_PAGES)
                 .permitAll()
-                .antMatchers("/api/admin/login") // 登陆相关url放行
+                .antMatchers(apiUrl("*")) // 前台接口
+                .permitAll()
+                .antMatchers(apiUrl("/admin/")) // 后台接口
+                .authenticated()
+                .antMatchers(apiUrl("/admin/login")) // 后台登陆相关url放行
                 .anonymous()
                 .anyRequest()
                 .authenticated();
@@ -84,6 +94,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling()
                 .authenticationEntryPoint(authenticationEntryPoint())
                 .accessDeniedHandler(accessDeniedHandler());
+    }
+
+    private String apiUrl(String url) {
+        return "/api/" + url;
     }
 
     /**
