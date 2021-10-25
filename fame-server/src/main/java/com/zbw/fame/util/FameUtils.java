@@ -26,9 +26,11 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
@@ -180,6 +182,25 @@ public class FameUtils {
      */
     public static String getAgent() {
         return getRequest().getHeader(HttpHeaders.USER_AGENT);
+    }
+
+    /**
+     * 输出JSON信息到Response
+     *
+     * @param resp
+     * @param response
+     * @throws IOException
+     */
+    public static void writeJsonResponse(RestResponse<?> resp, HttpServletResponse response) {
+        response.setStatus(200);
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json; charset=utf-8");
+        try (PrintWriter printWriter = response.getWriter()) {
+            printWriter.write(objectToJson(resp));
+            printWriter.flush();
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        }
     }
 
     /**

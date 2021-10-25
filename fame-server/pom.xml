@@ -20,6 +20,7 @@
         <flexmark.version>0.34.58</flexmark.version>
         <mybatis-plus.version>3.4.2</mybatis-plus.version>
         <hutool.version>5.5.7</hutool.version>
+        <jjwt.version>0.9.1</jjwt.version>
         <springfox-swagger2.version>3.0.0</springfox-swagger2.version>
     </properties>
 
@@ -39,6 +40,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
+        <!-- security -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
         <!-- mysql连接 -->
@@ -64,6 +71,13 @@
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-core</artifactId>
             <version>${hutool.version}</version>
+        </dependency>
+
+        <!-- jwt工具包 -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${jjwt.version}</version>
         </dependency>
 
 
