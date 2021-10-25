@@ -1,21 +1,26 @@
 package com.zbw.fame.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.zbw.fame.exception.NotFoundException;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.mapper.UserMapper;
 import com.zbw.fame.model.dto.LoginUser;
+import com.zbw.fame.model.dto.UserDetailsDto;
 import com.zbw.fame.model.entity.User;
 import com.zbw.fame.model.param.LoginParam;
 import com.zbw.fame.model.param.ResetPasswordParam;
 import com.zbw.fame.model.param.ResetUserParam;
 import com.zbw.fame.service.UserService;
 import com.zbw.fame.util.FameUtils;
+import com.zbw.fame.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -36,16 +41,27 @@ import java.util.List;
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @Lazy})
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService, UserDetailsService {
 
+    private static final String ADMIN_ROLE = "ADMIN";
+
     /**
-     * 创建保存到Session的User
+     * 创建保存到登录的User
      *
-     * @param user 数据库User
+     * @param userDetailsDto 登录的 UserDetailsDto
      * @return User
      */
-    private LoginUser createSessionUser(User user) {
-        LoginUser sessionUser = new LoginUser();
-        FameUtils.copyPropertiesIgnoreNull(user, sessionUser);
-        return sessionUser;
+    private LoginUser createTokenUser(UserDetailsDto userDetailsDto) {
+        LoginUser loginUser = new LoginUser();
+        final User user = userDetailsDto.getUser();
+        FameUtils.copyPropertiesIgnoreNull(user, loginUser);
+
+        // 生成token
+        final String username = userDetailsDto.getUsername();
+        final Collection<? extends GrantedAuthority> authorityList = userDetailsDto.getAuthorityList();
+        String roles = CollUtil.join(AuthorityUtils.authorityListToSet(authorityList), ",");
+        String token = JwtUtil.generateToken(username, roles, null);
+        loginUser.setToken(token);
+
+        return loginUser;
     }
 
     @Override
@@ -68,7 +84,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         user.setLogged(new Date());
         updateById(user);
-        return createSessionUser(user);
+
+        List<GrantedAuthority> authorityList = AuthorityUtils.createAuthorityList(ADMIN_ROLE);
+        UserDetailsDto userDetailsDto = createUserDetails(user, authorityList);
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetailsDto, null, userDetailsDto.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        return createTokenUser(userDetailsDto);
     }
 
     @Override
@@ -111,46 +132,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         // 模拟构造包含用户角色列表的`List<GrantedAuthority>`对象
         // 预留 RABC 功能，现全部赋予管理员权限
-        List<GrantedAuthority> authorityList = AuthorityUtils.createAuthorityList("ADMIN");
+        List<GrantedAuthority> authorityList = AuthorityUtils.createAuthorityList(ADMIN_ROLE);
         return createUserDetails(user, authorityList);
     }
 
-    private UserDetails createUserDetails(User user, Collection<? extends GrantedAuthority> authorityList) {
-        return new UserDetails() {
-            @Override
-            public Collection<? extends GrantedAuthority> getAuthorities() {
-                return authorityList;
-            }
-
-            @Override
-            public String getPassword() {
-                return user.getPasswordMd5();
-            }
-
-            @Override
-            public String getUsername() {
-                return user.getUsername();
-            }
-
-            @Override
-            public boolean isAccountNonExpired() {
-                return true;
-            }
-
-            @Override
-            public boolean isAccountNonLocked() {
-                return true;
-            }
-
-            @Override
-            public boolean isCredentialsNonExpired() {
-                return true;
-            }
-
-            @Override
-            public boolean isEnabled() {
-                return true;
-            }
-        };
+    private UserDetailsDto createUserDetails(User user, Collection<? extends GrantedAuthority> authorityList) {
+        return new UserDetailsDto(user, authorityList);
     }
 }

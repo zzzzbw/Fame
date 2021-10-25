@@ -292,6 +292,11 @@ public class FameUtils {
     }
 
 
+    public static ObjectMapper getObjectMapper() {
+        return OBJECT_MAPPER;
+    }
+
+
     /**
      * 忽略大小写的indexOf
      *

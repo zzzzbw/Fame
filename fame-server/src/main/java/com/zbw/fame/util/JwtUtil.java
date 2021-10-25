@@ -4,9 +4,13 @@ import cn.hutool.core.map.MapUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.jackson.io.JacksonDeserializer;
+import io.jsonwebtoken.jackson.io.JacksonSerializer;
+import io.jsonwebtoken.security.Keys;
 import lombok.experimental.UtilityClass;
 import org.springframework.http.HttpHeaders;
 
+import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +23,8 @@ import java.util.Map;
  */
 @UtilityClass
 public class JwtUtil {
+
+
     public final String JWT_HEADER_KEY = HttpHeaders.AUTHORIZATION;
 
 
@@ -32,10 +38,12 @@ public class JwtUtil {
      * 权限列表
      */
     private final String AUTHORITIES = "authorities";
+
     /**
      * 密钥
      */
-    private final String SECRET = "HQFutryh";
+    private final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+
     /**
      * 有效期12小时
      */
@@ -58,9 +66,10 @@ public class JwtUtil {
 
         Date expirationDate = new Date(System.currentTimeMillis() + EXPIRE_TIME);
         return Jwts.builder()
+                .serializeToJsonWith(new JacksonSerializer<>(FameUtils.getObjectMapper()))
                 .setClaims(claims)
                 .setExpiration(expirationDate)
-                .signWith(SignatureAlgorithm.HS512, SECRET)
+                .signWith(SECRET_KEY, SignatureAlgorithm.HS512)
                 .compact();
     }
 
@@ -71,10 +80,13 @@ public class JwtUtil {
      * @return
      */
     public Claims getClaims(String jwtToken) {
-        return Jwts.parser()
-                .setSigningKey(SECRET)
+        return Jwts.parserBuilder()
+                .deserializeJsonWith(new JacksonDeserializer<>(FameUtils.getObjectMapper()))
+                .setSigningKey(SECRET_KEY)
+                .build()
                 .parseClaimsJws(jwtToken)
                 .getBody();
+
     }
 
     /**

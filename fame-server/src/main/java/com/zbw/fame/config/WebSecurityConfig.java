@@ -58,22 +58,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf() // JWT不需要csrf
-                .disable()
-                .sessionManagement() // token不需要session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        http
+                // 开启跨域
+                .cors().and()
+                // CSRF 禁用，因为不使用 Session
+                .csrf().disable()
+                // 基于 token 机制，所以不需要 Session
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .headers().frameOptions().disable()
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, EXCLUDE_URL)
                 .permitAll()
                 .antMatchers("/api/admin/login") // 登陆相关url放行
                 .anonymous()
-                .antMatchers(HttpMethod.OPTIONS) // 跨域options请求放行
-                .permitAll()
                 .anyRequest()
                 .authenticated();
-
-        http.headers().cacheControl(); // 禁用缓存
 
         // 增加过滤器
         http
@@ -89,7 +89,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * AccessDeniedException 策略
      *
-     * @return
+     * @return accessDeniedHandler
      */
     public AccessDeniedHandler accessDeniedHandler() {
         return (request, response, accessDeniedException) ->
@@ -99,7 +99,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     /**
      * AuthenticationException 策略
      *
-     * @return
+     * @return authenticationEntryPoint
      */
     public AuthenticationEntryPoint authenticationEntryPoint() {
         return (request, response, authenticationException) ->

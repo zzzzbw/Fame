@@ -10,7 +10,6 @@ import com.zbw.fame.util.FameUtils;
 import com.zbw.fame.util.RestResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -34,10 +33,10 @@ public class AuthController {
      * @return {@link RestResponse#ok()}
      */
     @PostMapping("login")
-    public RestResponse<RestResponse.Empty> login(@RequestBody @Valid LoginParam param) {
+    public RestResponse<LoginUser> login(@RequestBody @Valid LoginParam param) {
         LoginUser user = userService.login(param);
-        FameUtils.setLoginUser(user);
-        return RestResponse.ok();
+        // FameUtils.setLoginUser(user);
+        return RestResponse.ok(user);
     }
 
     /**

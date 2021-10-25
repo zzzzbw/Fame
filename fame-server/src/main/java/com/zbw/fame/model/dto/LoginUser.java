@@ -35,4 +35,9 @@ public class LoginUser {
      * 最后登陆时间
      */
     private Date logged;
+
+    /**
+     * 生成的JWT的token
+     */
+    private String token;
 }

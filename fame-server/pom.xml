@@ -20,7 +20,7 @@
         <flexmark.version>0.34.58</flexmark.version>
         <mybatis-plus.version>3.4.2</mybatis-plus.version>
         <hutool.version>5.5.7</hutool.version>
-        <jjwt.version>0.9.1</jjwt.version>
+        <jjwt.version>0.11.2</jjwt.version>
         <springfox-swagger2.version>3.0.0</springfox-swagger2.version>
     </properties>
 
@@ -66,6 +66,7 @@
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>${mybatis-plus.version}</version>
         </dependency>
+
         <!-- hutool工具包 -->
         <dependency>
             <groupId>cn.hutool</groupId>
@@ -76,7 +77,12 @@
         <!-- jwt工具包 -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>${jjwt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
             <version>${jjwt.version}</version>
         </dependency>
 
