@@ -14,7 +14,6 @@ import com.zbw.fame.mapper.ArticleMapper;
 import com.zbw.fame.model.dto.ArchiveDto;
 import com.zbw.fame.model.dto.ArticleDetailDto;
 import com.zbw.fame.model.dto.ArticleInfoDto;
-import com.zbw.fame.model.dto.LoginUser;
 import com.zbw.fame.model.entity.Article;
 import com.zbw.fame.model.entity.BaseEntity;
 import com.zbw.fame.model.entity.Category;
@@ -129,8 +128,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             updateById(article);
         } else {
             article = FameUtils.convertTo(param, Article.class);
-            LoginUser user = FameUtils.getLoginUser();
-            article.setAuthorId(user.getId());
+            article.setAuthorId(FameUtils.getLoginUserId());
             save(article);
 
             LogEvent logEvent = new LogEvent(this, param, LogAction.ADD, LogType.ARTICLE, FameUtils.getIp(), FameUtils.getLoginUser().getId());

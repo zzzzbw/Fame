@@ -1,8 +1,7 @@
 package com.zbw.fame.service;
 
 import com.zbw.fame.BaseTest;
-import com.zbw.fame.model.dto.LoginUser;
-import com.zbw.fame.model.entity.User;
+import com.zbw.fame.model.dto.TokenDto;
 import com.zbw.fame.model.param.LoginParam;
 import com.zbw.fame.model.param.ResetUserParam;
 import com.zbw.fame.util.JwtUtil;
@@ -26,8 +25,8 @@ public class UserServiceTest extends BaseTest {
         LoginParam loginParam = new LoginParam();
         loginParam.setUsername("fame");
         loginParam.setPassword("123456");
-        LoginUser login = userService.login(loginParam);
-        log.info("{}", login);
+        TokenDto tokenDto = userService.login(loginParam);
+        log.info("{}", tokenDto);
     }
 
     @Test
@@ -41,6 +40,8 @@ public class UserServiceTest extends BaseTest {
         log.info("{}", token);
         final Claims claims = JwtUtil.getClaims(token);
         log.info("{}", claims);
+
+
     }
 
 }

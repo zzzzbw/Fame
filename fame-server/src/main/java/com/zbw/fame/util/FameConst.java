@@ -12,11 +12,6 @@ import java.util.Map;
 public interface FameConst {
 
     /**
-     * 登陆用户session key
-     */
-    String USER_SESSION_KEY = "login_user";
-
-    /**
      * md5加密盐值
      */
     String MD5_SLAT = "riopwhjrv123bnopiw234q2ec";

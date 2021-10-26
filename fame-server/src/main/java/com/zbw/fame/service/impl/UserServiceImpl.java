@@ -1,14 +1,17 @@
 package com.zbw.fame.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.zbw.fame.exception.LoginExpireException;
 import com.zbw.fame.exception.NotFoundException;
 import com.zbw.fame.exception.TipException;
 import com.zbw.fame.mapper.UserMapper;
-import com.zbw.fame.model.dto.LoginUser;
+import com.zbw.fame.model.dto.TokenDto;
 import com.zbw.fame.model.dto.UserDetailsDto;
 import com.zbw.fame.model.entity.User;
 import com.zbw.fame.model.param.LoginParam;
+import com.zbw.fame.model.param.RefreshTokenParam;
 import com.zbw.fame.model.param.ResetPasswordParam;
 import com.zbw.fame.model.param.ResetUserParam;
 import com.zbw.fame.service.UserService;
@@ -41,32 +44,37 @@ import java.util.List;
 @RequiredArgsConstructor(onConstructor_ = {@Autowired, @Lazy})
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService, UserDetailsService {
 
+    /**
+     * 用户角色, 目前全部赋予ADMIN
+     */
     private static final String ADMIN_ROLE = "ADMIN";
+    /**
+     * token刷新允许时间: 10分钟
+     */
+    private static final int TOKEN_REFRESH_SECOND = 60 * 10;
 
     /**
      * 创建保存到登录的User
      *
-     * @param userDetailsDto 登录的 UserDetailsDto
+     * @param userDetails 登录的 userDetails
      * @return User
      */
-    private LoginUser createTokenUser(UserDetailsDto userDetailsDto) {
-        LoginUser loginUser = new LoginUser();
-        final User user = userDetailsDto.getUser();
-        FameUtils.copyPropertiesIgnoreNull(user, loginUser);
-
-        // 生成token
-        final String username = userDetailsDto.getUsername();
-        final Collection<? extends GrantedAuthority> authorityList = userDetailsDto.getAuthorityList();
+    private TokenDto createTokenDto(UserDetails userDetails) {
+        TokenDto tokenDto = new TokenDto();
+        final String username = userDetails.getUsername();
+        final Collection<? extends GrantedAuthority> authorityList = userDetails.getAuthorities();
         String roles = CollUtil.join(AuthorityUtils.authorityListToSet(authorityList), ",");
         String token = JwtUtil.generateToken(username, roles, null);
-        loginUser.setToken(token);
+        tokenDto.setToken(token);
+        String refreshToken = JwtUtil.generateRefreshToken(username, roles, null);
+        tokenDto.setRefreshToken(refreshToken);
 
-        return loginUser;
+        return tokenDto;
     }
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    public LoginUser login(LoginParam param) {
+    public TokenDto login(LoginParam param) {
         String username = param.getUsername();
         String password = param.getPassword();
 
@@ -87,9 +95,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
         List<GrantedAuthority> authorityList = AuthorityUtils.createAuthorityList(ADMIN_ROLE);
         UserDetailsDto userDetailsDto = createUserDetails(user, authorityList);
+
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetailsDto, null, userDetailsDto.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return createTokenUser(userDetailsDto);
+
+
+        return createTokenDto(userDetailsDto);
     }
 
     @Override
@@ -119,6 +130,35 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setUsername(param.getUsername());
         user.setEmail(param.getEmail());
         updateById(user);
+    }
+
+    @Override
+    public TokenDto refreshToken(RefreshTokenParam param) {
+        String refreshToken = param.getRefreshToken();
+
+        if (JwtUtil.isTokenExpired(refreshToken)) {
+            throw new LoginExpireException();
+        }
+
+        // 避免频繁刷新token, 校验token最近刷新
+        Date created = JwtUtil.getCreated(refreshToken);
+        Date refreshDate = new Date();
+        if (refreshDate.after(created) && refreshDate.before(DateUtil.offsetSecond(created, TOKEN_REFRESH_SECOND))) {
+            // 直接返回当前token
+            String jwtToken = FameUtils.getJwtHeaderToken();
+            TokenDto tokenDto = new TokenDto();
+            tokenDto.setToken(jwtToken);
+            tokenDto.setRefreshToken(refreshToken);
+            return tokenDto;
+        }
+
+        String username = JwtUtil.getSubject(refreshToken);
+        UserDetails userDetails = loadUserByUsername(username);
+        if (null == userDetails) {
+            throw new TipException("用户不存在");
+        }
+
+        return createTokenDto(userDetails);
     }
 
     @Override

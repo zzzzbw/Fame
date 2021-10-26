@@ -4,6 +4,7 @@ import com.zbw.fame.interceptor.JwtAuthenticationFilter;
 import com.zbw.fame.util.ErrorCode;
 import com.zbw.fame.util.FameUtils;
 import com.zbw.fame.util.RestResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 
 /**
  * web security 配置
@@ -29,10 +31,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  */
 @EnableWebSecurity
 @Configuration
+@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     /**
      * security的鉴权排除的url列表
@@ -41,6 +43,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/css/**", "/js/**", "/images/**", "/webjars/**", "/**/favicon*",
             "/*.html", "/**/*.html", "/**/*.css", "/**/*.js"
     };
+
+    private static final String LOGIN_IRL = "admin/login";
+
+    private static final String LOGOUT_URL = "admin/logout";
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -73,14 +79,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .headers().frameOptions().disable()
                 .and()
+                .logout() // 配置登出接口
+                .logoutUrl(apiUrl(LOGOUT_URL))
+                .logoutSuccessHandler(logoutSuccessHandler())
+                .permitAll()
+                .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, EXCLUDED_AUTH_PAGES)
                 .permitAll()
                 .antMatchers(apiUrl("*")) // 前台接口
                 .permitAll()
-                .antMatchers(apiUrl("/admin/")) // 后台接口
+                .antMatchers(apiUrl("admin/")) // 后台接口
                 .authenticated()
-                .antMatchers(apiUrl("/admin/login")) // 后台登陆相关url放行
+                .antMatchers(apiUrl(LOGIN_IRL)) // 后台登陆相关url放行
                 .anonymous()
                 .anyRequest()
                 .authenticated();
@@ -98,6 +109,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private String apiUrl(String url) {
         return "/api/" + url;
+    }
+
+    /**
+     * 登出成功
+     *
+     * @return logoutSuccessHandler
+     */
+    public LogoutSuccessHandler logoutSuccessHandler() {
+        return (request, response, authentication) -> FameUtils.writeJsonResponse(RestResponse.ok(), response);
     }
 
     /**
