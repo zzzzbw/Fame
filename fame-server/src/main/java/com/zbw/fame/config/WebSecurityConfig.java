@@ -46,6 +46,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String LOGIN_IRL = "admin/login";
 
+    private static final String REFRESH_TOKEN = "admin/refresh";
+
     private static final String LOGOUT_URL = "admin/logout";
 
     @Bean
@@ -85,14 +87,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS) // Options请求允许
+                .permitAll()
                 .antMatchers(HttpMethod.GET, EXCLUDED_AUTH_PAGES)
                 .permitAll()
                 .antMatchers(apiUrl("*")) // 前台接口
                 .permitAll()
                 .antMatchers(apiUrl("admin/")) // 后台接口
                 .authenticated()
-                .antMatchers(apiUrl(LOGIN_IRL)) // 后台登陆相关url放行
-                .anonymous()
+                .antMatchers(apiUrl(LOGIN_IRL), apiUrl(REFRESH_TOKEN)) // 后台登陆刷新接口
+                .permitAll()
                 .anyRequest()
                 .authenticated();
 

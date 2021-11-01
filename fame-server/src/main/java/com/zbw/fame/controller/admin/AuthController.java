@@ -75,6 +75,16 @@ public class AuthController {
     }
 
     /**
+     * 登出
+     *
+     * @return
+     */
+    @PostMapping("logout")
+    public RestResponse<RestResponse.Empty> logout() {
+        return RestResponse.ok();
+    }
+
+    /**
      * 刷新登陆
      *
      * @param param

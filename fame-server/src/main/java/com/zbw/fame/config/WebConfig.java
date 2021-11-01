@@ -17,6 +17,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.StringJoiner;
 
 /**
  * web 配置
@@ -65,9 +66,14 @@ public class WebConfig {
                 if (StringUtils.hasText(originHeaderValue)) {
                     httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, originHeaderValue);
                 }
-                httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, HttpHeaders.CONTENT_TYPE);
+
+                String allowHeaders = new StringJoiner(",")
+                        .add(HttpHeaders.CONTENT_TYPE)
+                        .add(HttpHeaders.AUTHORIZATION)
+                        .toString();
+                httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, allowHeaders);
                 httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, "GET, POST, PUT, DELETE, OPTIONS");
-                httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
+                // httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
                 httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_MAX_AGE, "1800");
 
                 if (!CorsUtils.isPreFlightRequest(httpServletRequest)) {
