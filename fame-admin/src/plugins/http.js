@@ -7,7 +7,6 @@ import serverConfig from '../../server-config'
 const axiosJson = axios.create({
   baseURL: serverConfig.api + 'api/', // 本地做反向代理
   timeout: 5000,
-  withCredentials: true, // 是否允许带cookie这些
   // 序列化params参数
   paramsSerializer: (params) => {
     // 序列化参数数组时不设置索引，否则tomcat8.5以上无法接收特殊字符
@@ -23,6 +22,11 @@ const requestInterceptor = {
   before: (config) => {
     if (loadingInstance === null) {
       loadingInstance = Loading.service({ target: '#main', fullscreen: false })
+    }
+
+    // 验证头
+    if (localStorage.token) {
+      config.headers.Authorization = 'Bearer ' + localStorage.token
     }
 
     return config

@@ -53,6 +53,22 @@ const STATIC = {
  */
 const FUNCTIONS = {
   /**
+   * 移除 token
+   */
+  removeToken: () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('refreshToken')
+  },
+  /**
+   * 设置 token
+   * @param {string} token
+   * @param {string} refreshToken
+   */
+  setToken: (token, refreshToken) => {
+    localStorage.setItem('token', token)
+    localStorage.setItem('refreshToken', refreshToken)
+  },
+  /**
    * 获取服务器链接
    * @returns {string}
    */
@@ -86,14 +102,12 @@ const FUNCTIONS = {
    */
   downloadFile: (response) => {
     const { data, headers } = response
-    console.log(response)
     let fileName = '下载文件'
-    
-    let disposition = headers["content-disposition"]
-    let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-    let matches = filenameRegex.exec(disposition);
-    if (matches != null && matches[1]) { 
-      fileName = matches[1].replace(/['"]/g, '');
+    let disposition = headers['content-disposition']
+    let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/
+    let matches = filenameRegex.exec(disposition)
+    if (matches != null && matches[1]) {
+      fileName = matches[1].replace(/['"]/g, '')
     }
     const blob = new Blob([data], { type: headers['content-type'] })
     let dom = document.createElement('a')

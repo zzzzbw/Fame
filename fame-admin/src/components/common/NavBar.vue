@@ -22,8 +22,9 @@ export default {
       this.$root.$emit('side-bar-collapse')
     },
     logout() {
-      this.$api.auth.logout().then(data => {
-        if (data.success) {
+      this.$api.auth.logout().then(resp => {
+        if (resp.success) {
+          this.$util.removeToken()
           this.$message({
             type: 'success',
             message: '登出成功!'
@@ -32,7 +33,7 @@ export default {
         } else {
           this.$message({
             type: 'error',
-            message: data.msg || '登出失败!'
+            message: resp.msg || '登出失败!'
           })
           this.$router.push('/login')
         }
