@@ -142,9 +142,7 @@
                       :article-title="article.title"
                       :after-import="getArticle"
                     ></article-upload>
-                    <el-button
-                      size="small"
-                      @click="exportArticle"
+                    <el-button size="small" @click="exportArticle"
                       >导出
                     </el-button>
                   </el-row>

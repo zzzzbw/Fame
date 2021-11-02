@@ -1,8 +1,8 @@
 package com.zbw.fame.controller.admin;
 
 
-import com.zbw.fame.model.dto.LoginUser;
 import com.zbw.fame.model.dto.TokenDto;
+import com.zbw.fame.model.entity.User;
 import com.zbw.fame.model.param.LoginParam;
 import com.zbw.fame.model.param.RefreshTokenParam;
 import com.zbw.fame.model.param.ResetPasswordParam;
@@ -68,10 +68,9 @@ public class AuthController {
      * @return {@link RestResponse#ok()}
      */
     @GetMapping("user")
-    public RestResponse<LoginUser> getUser() {
-        // TODO
-        // LoginUser user = FameUtils.getLoginUser();
-        return RestResponse.ok();
+    public RestResponse<User> getUser() {
+        User user = userService.getCurrentUser();
+        return RestResponse.ok(user);
     }
 
     /**

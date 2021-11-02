@@ -16,12 +16,14 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
  * web security 配置
@@ -34,7 +36,7 @@ import org.springframework.security.web.authentication.logout.LogoutSuccessHandl
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final UserDetailsService userDetailsService;
 
     /**
      * security的鉴权排除的url列表
@@ -67,8 +69,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        super.configure(web);
+        // 不走Spring Security匹配
+        web.ignoring()
+                .antMatchers(HttpMethod.OPTIONS) // options请求
+                .antMatchers(HttpMethod.GET, EXCLUDED_AUTH_PAGES) // 静态页面
+                .antMatchers(apiUrl(LOGIN_IRL), apiUrl(REFRESH_TOKEN)) // 后台登陆刷新
+                .requestMatchers(request -> !new AntPathRequestMatcher(apiUrl("admin/**")).matches(request)); // 非后台接口
     }
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -87,22 +95,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS) // Options请求允许
-                .permitAll()
-                .antMatchers(HttpMethod.GET, EXCLUDED_AUTH_PAGES)
-                .permitAll()
-                .antMatchers(apiUrl("*")) // 前台接口
-                .permitAll()
-                .antMatchers(apiUrl("admin/")) // 后台接口
-                .authenticated()
-                .antMatchers(apiUrl(LOGIN_IRL), apiUrl(REFRESH_TOKEN)) // 后台登陆刷新接口
-                .permitAll()
-                .anyRequest()
+                .antMatchers(apiUrl("admin/**")) // 后台接口验证
                 .authenticated();
 
         // 增加过滤器
         http
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         // 添加自定义异常入口
         http
@@ -113,6 +111,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private String apiUrl(String url) {
         return "/api/" + url;
+    }
+
+    /**
+     * JWT 过滤器。
+     * <p>
+     * 这里必须通过new而不是Spring注入，否则Spring会把这个Filter注入到全局中，而不受Spring Security控制
+     *
+     * @return jwtAuthenticationFilter
+     */
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter(userDetailsService);
     }
 
     /**

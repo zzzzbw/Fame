@@ -45,7 +45,6 @@ public class JwtUtil {
      * 密钥
      */
     private final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS512);
-
     /**
      * token 有效期： 1小时
      */

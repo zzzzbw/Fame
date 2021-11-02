@@ -73,7 +73,7 @@ public class WebConfig {
                         .toString();
                 httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, allowHeaders);
                 httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, "GET, POST, PUT, DELETE, OPTIONS");
-                // httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
+                httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
                 httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_MAX_AGE, "1800");
 
                 if (!CorsUtils.isPreFlightRequest(httpServletRequest)) {

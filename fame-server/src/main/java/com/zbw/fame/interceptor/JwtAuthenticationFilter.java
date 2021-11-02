@@ -1,18 +1,19 @@
 package com.zbw.fame.interceptor;
 
-import com.zbw.fame.exception.LoginExpireException;
 import com.zbw.fame.exception.TipException;
+import com.zbw.fame.util.ErrorCode;
 import com.zbw.fame.util.FameUtils;
 import com.zbw.fame.util.JwtUtil;
+import com.zbw.fame.util.RestResponse;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -29,8 +30,8 @@ import java.util.List;
  * @author zzzzbw
  * @since 2021/10/25 14:22
  */
-@Component
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
+@Slf4j
+@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 
@@ -41,11 +42,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse resp, FilterChain filterChain) throws ServletException, IOException {
         String jwtToken = FameUtils.getJwtHeaderToken();
         if (StringUtils.hasText(jwtToken)) {
-            if (JwtUtil.isTokenExpired(jwtToken)) {
-                throw new LoginExpireException();
-            }
+            String username;
+            try {
+                if (JwtUtil.isTokenExpired(jwtToken)) {
+                    FameUtils.writeJsonResponse(RestResponse.fail(ErrorCode.LOGIN_EXPIRE.getCode(), ErrorCode.LOGIN_EXPIRE.getMsg()), resp);
+                    return;
+                }
 
-            String username = JwtUtil.getSubject(jwtToken);
+                username = JwtUtil.getSubject(jwtToken);
+            } catch (JwtException e) {
+                log.error(e.getMessage(), e);
+                FameUtils.writeJsonResponse(RestResponse.fail(ErrorCode.NOT_LOGIN.getCode(), ErrorCode.NOT_LOGIN.getMsg()), resp);
+                return;
+            }
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             if (null == userDetails) {
                 throw new TipException("用户不存在");

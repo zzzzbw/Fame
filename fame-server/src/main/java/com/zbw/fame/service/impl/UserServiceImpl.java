@@ -104,6 +104,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
+    public User getCurrentUser() {
+        final User user = FameUtils.getLoginUser();
+        User currentUser = new User();
+        // 拷贝数据并清除密码
+        FameUtils.copyPropertiesIgnoreNull(user, currentUser);
+        currentUser.setPasswordMd5(null);
+        return currentUser;
+    }
+
+    @Override
     @Transactional(rollbackFor = Throwable.class)
     public void resetPassword(Integer id, ResetPasswordParam param) {
         User user = getById(id);
@@ -165,6 +175,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = lambdaQuery()
                 .eq(User::getUsername, username)
+                .or()
+                .eq(User::getEmail, username)
                 .one();
         if (null == user) {
             throw new TipException("用户不存在");

@@ -25,6 +25,13 @@ public interface UserService extends IService<User> {
     TokenDto login(LoginParam param);
 
     /**
+     * 获取当前用户
+     *
+     * @return
+     */
+    User getCurrentUser();
+
+    /**
      * 修改用户密码
      *
      * @param id
@@ -40,6 +47,11 @@ public interface UserService extends IService<User> {
      */
     void resetUser(Integer id, ResetUserParam param);
 
+    /**
+     * 刷新 token
+     *
+     * @param param
+     * @return
+     */
     TokenDto refreshToken(RefreshTokenParam param);
-
 }

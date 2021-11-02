@@ -43,7 +43,7 @@ const requestInterceptor = {
 
 // 响应拦截（配置请求回来的信息）
 const responseInterceptor = {
-  after: (response) => {
+  after: async (response) => {
     // 处理响应数据
     if (loadingInstance !== null) {
       loadingInstance.close()
@@ -59,43 +59,7 @@ const responseInterceptor = {
     }
 
     if (response.data && !response.data.success) {
-      let msg = null
-      switch (response.data.code) {
-        case 999:
-          router.push(
-            '/login',
-            () => {},
-            () => {}
-          )
-          msg = '未登录,请先登录'
-          if (!loginError) {
-            loginError = true
-            Message({
-              showClose: true,
-              message: msg,
-              type: 'error',
-              onClose: function () {
-                loginError = false
-              },
-            })
-          }
-          break
-        default:
-          msg = response.data.msg || '系统错误'
-          console.error(
-            'Axios response error.Url: ' +
-              response.request.responseURL +
-              ', code: ' +
-              response.data.code +
-              ', msg: ' +
-              response.data.msg
-          )
-          Message({
-            showClose: true,
-            message: msg,
-            type: 'error',
-          })
-      }
+      return await handleServiceError(response)
     }
     return response
   },
@@ -131,6 +95,125 @@ axiosJson.interceptors.response.use(
   responseInterceptor.after,
   responseInterceptor.error
 )
+
+/**
+ * 处理业务异常
+ * @param {Object} response
+ * @returns response
+ */
+async function handleServiceError(response) {
+  switch (response.data.code) {
+    case 999:
+      return handleNotLogin(response)
+    case 998:
+      return handleLoginExpire(response)
+    default:
+      return handleDefatutError(response)
+  }
+  return response
+}
+
+/**
+ * 用户未登陆
+ * @param {Object} response
+ * @returns response
+ */
+function handleNotLogin(response) {
+  router.push(
+    '/login',
+    () => {},
+    () => {}
+  )
+  if (!loginError) {
+    loginError = true
+    Message({
+      showClose: true,
+      message: '未登录,请先登录',
+      type: 'error',
+      onClose: function () {
+        loginError = false
+      },
+    })
+  }
+  return response
+}
+
+/**
+ * 登陆超时
+ * @param {Object} response
+ * @returns response
+ */
+async function handleLoginExpire(response) {
+  const token = localStorage.getItem('token')
+  const refreshToken = localStorage.getItem('refreshToken')
+  console.log('refreshToken: ' + refreshToken)
+  if (refreshToken) {
+    // 如果有refresh_token，则请求获取新的 token
+    try {
+      const res = await axios({
+        method: 'POST',
+        url: serverConfig.api + 'api/admin/refresh',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        data: {
+          refreshToken,
+        },
+      })
+      // 如果获取成功，则把新的 token 更新到容器中
+      console.log('刷新 token  成功', res)
+      if (res.data && res.data.success) {
+        localStorage.setItem('token', res.data.data.token)
+        localStorage.setItem('refreshToken', res.data.data.refreshToken)
+        // 把之前失败的用户请求继续发出去
+        return axiosJson(response.config)
+      } else {
+        router.push(
+          '/login',
+          () => {},
+          () => {}
+        )
+        if (!loginError) {
+          loginError = true
+          Message({
+            showClose: true,
+            message: '登陆超时,请重新登陆',
+            type: 'error',
+            onClose: function () {
+              loginError = false
+            },
+          })
+        }
+      }
+    } catch (err) {
+      console.log('请求刷新 token 失败', err)
+    }
+  }
+  return response
+}
+
+/**
+ * 默认处理
+ * @param {Object} response
+ * @returns response
+ */
+function handleDefatutError(response) {
+  let msg = response.data.msg || '系统错误'
+  console.error(
+    'Axios response error.Url: ' +
+      response.request.responseURL +
+      ', code: ' +
+      response.data.code +
+      ', msg: ' +
+      response.data.msg
+  )
+  Message({
+    showClose: true,
+    message: msg,
+    type: 'error',
+  })
+  return response
+}
 
 /**
  * get 请求方法
