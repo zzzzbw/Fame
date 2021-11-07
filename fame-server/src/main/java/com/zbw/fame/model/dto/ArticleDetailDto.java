@@ -43,7 +43,5 @@ public class ArticleDetailDto {
 
     private List<Tag> tags;
 
-    private Date created;
-
-    private Date modified;
+    protected Date publishTime;
 }

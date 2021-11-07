@@ -73,10 +73,6 @@ public class CommentServiceTest extends BaseTest {
 
     @Test
     public void deleteComment() {
-        LoginUser user = new LoginUser();
-        user.setId(1);
-        FameUtils.setLoginUser(user);
-
         commentService.deleteComment(1);
     }
 }

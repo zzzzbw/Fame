@@ -12,11 +12,6 @@ import java.util.Map;
 public interface FameConst {
 
     /**
-     * 登陆用户session key
-     */
-    String USER_SESSION_KEY = "login_user";
-
-    /**
      * md5加密盐值
      */
     String MD5_SLAT = "riopwhjrv123bnopiw234q2ec";
@@ -145,14 +140,25 @@ public interface FameConst {
      */
     String UPLOAD_DIR = "upload" + File.separator;
 
+
     /**
      * 媒体文件夹路径
      */
     String MEDIA_DIR = UPLOAD_DIR + "media" + File.separator;
 
     /**
+     * 备份文件夹路径
+     */
+    String BACKUP_DIR = UPLOAD_DIR + "backup" + File.separator;
+
+    /**
      * 媒体缩略图后缀
      */
     String MEDIA_THUMBNAIL_SUFFIX = "_thumbnail";
+
+    /**
+     * markdown 文件后缀
+     */
+    String MARKDOWN_SUFFIX = ".md";
 
 }

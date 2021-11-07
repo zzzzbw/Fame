@@ -1,8 +1,10 @@
 package com.zbw.fame.controller.admin;
 
 
-import com.zbw.fame.model.dto.LoginUser;
+import com.zbw.fame.model.dto.TokenDto;
+import com.zbw.fame.model.entity.User;
 import com.zbw.fame.model.param.LoginParam;
+import com.zbw.fame.model.param.RefreshTokenParam;
 import com.zbw.fame.model.param.ResetPasswordParam;
 import com.zbw.fame.model.param.ResetUserParam;
 import com.zbw.fame.service.UserService;
@@ -10,7 +12,6 @@ import com.zbw.fame.util.FameUtils;
 import com.zbw.fame.util.RestResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -34,21 +35,9 @@ public class AuthController {
      * @return {@link RestResponse#ok()}
      */
     @PostMapping("login")
-    public RestResponse<RestResponse.Empty> login(@RequestBody @Valid LoginParam param) {
-        LoginUser user = userService.login(param);
-        FameUtils.setLoginUser(user);
-        return RestResponse.ok();
-    }
-
-    /**
-     * 登出
-     *
-     * @return {@link RestResponse#ok()}
-     */
-    @PostMapping("logout")
-    public RestResponse<RestResponse.Empty> logout() {
-        FameUtils.clearLoginUser();
-        return RestResponse.ok();
+    public RestResponse<TokenDto> login(@RequestBody @Valid LoginParam param) {
+        TokenDto tokenDto = userService.login(param);
+        return RestResponse.ok(tokenDto);
     }
 
     /**
@@ -58,9 +47,7 @@ public class AuthController {
      */
     @PutMapping("reset/password")
     public RestResponse<RestResponse.Empty> resetPassword(@RequestBody @Valid ResetPasswordParam param) {
-        LoginUser user = FameUtils.getLoginUser();
-        userService.resetPassword(user.getId(), param);
-        this.logout();
+        userService.resetPassword(FameUtils.getLoginUserId(), param);
         return RestResponse.ok();
     }
 
@@ -71,9 +58,7 @@ public class AuthController {
      */
     @PutMapping("reset/user")
     public RestResponse<RestResponse.Empty> resetUser(@RequestBody @Valid ResetUserParam param) {
-        LoginUser user = FameUtils.getLoginUser();
-        userService.resetUser(user.getId(), param);
-        this.logout();
+        userService.resetUser(FameUtils.getLoginUserId(), param);
         return RestResponse.ok();
     }
 
@@ -83,9 +68,30 @@ public class AuthController {
      * @return {@link RestResponse#ok()}
      */
     @GetMapping("user")
-    public RestResponse<LoginUser> getUser() {
-        LoginUser user = FameUtils.getLoginUser();
+    public RestResponse<User> getUser() {
+        User user = userService.getCurrentUser();
         return RestResponse.ok(user);
     }
 
+    /**
+     * 登出
+     *
+     * @return
+     */
+    @PostMapping("logout")
+    public RestResponse<RestResponse.Empty> logout() {
+        return RestResponse.ok();
+    }
+
+    /**
+     * 刷新登陆
+     *
+     * @param param
+     * @return
+     */
+    @PostMapping("refresh")
+    public RestResponse<TokenDto> refresh(@RequestBody @Valid RefreshTokenParam param) {
+        TokenDto tokenDto = userService.refreshToken(param);
+        return RestResponse.ok(tokenDto);
+    }
 }

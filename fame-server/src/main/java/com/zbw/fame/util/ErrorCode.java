@@ -65,7 +65,13 @@ public enum ErrorCode {
     /**
      * 用户未登陆
      */
-    NOT_LOGIN(999, "Not Login");
+    NOT_LOGIN(999, "Not Login"),
+
+    /**
+     * 登陆过期
+     */
+    LOGIN_EXPIRE(998, "Login Expire"),
+    ;
 
     private final int code;
     private final String msg;

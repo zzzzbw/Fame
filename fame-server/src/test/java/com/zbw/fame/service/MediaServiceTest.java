@@ -69,7 +69,7 @@ public class MediaServiceTest extends BaseTest {
 
             }
         };
-        mediaService.upload(file, "ttt.txt", "a/b/c");
+        mediaService.upload(file, "a/b/c");
     }
 
     @Test

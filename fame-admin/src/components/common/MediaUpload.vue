@@ -13,6 +13,7 @@
     </el-button>
     <transition name="flow">
       <el-upload
+        accept="image/*"
         v-show="uploadVisible"
         class="upload-container"
         ref="upload"
@@ -46,7 +47,7 @@
 import serverConfig from '../../../server-config'
 
 export default {
-  name: 'Upload',
+  name: 'MediaUpload',
   props: {
     afterUpload: {
       type: Function,
@@ -58,7 +59,6 @@ export default {
       uploadVisible: false,
       uploadAction: serverConfig.api + 'api/admin/media/upload',
       uploadData: {
-        name: '',
         path: '',
       },
     }
@@ -69,11 +69,6 @@ export default {
     },
     beforeUpload(file) {
       let fileName = file.name
-      let extension = fileName.substring(file.name.lastIndexOf('.') + 1)
-      if (extension === '') {
-        this.$util.message.error(fileName + '文件格式不正确')
-        return false
-      }
 
       const size = file.size / (1024 * 1024)
       if (size > 10) {
@@ -81,17 +76,6 @@ export default {
         return false
       }
 
-      if (
-        extension.toLowerCase() !== 'jpg' &&
-        extension.toLowerCase() !== 'png' &&
-        extension.toLowerCase() !== 'gif' &&
-        extension.toLowerCase() !== 'jpeg' &&
-        extension.toLowerCase() !== 'svg'
-      ) {
-        this.$util.message.error(fileName + '不为图片格式')
-        return false
-      }
-      this.uploadData.name = file.name
       this.uploadData.path = this.$dayjs(new Date()).format('YYYY/MM')
     },
     successUpload(response, file) {

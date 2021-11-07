@@ -1,5 +1,6 @@
 package com.zbw.fame.config;
 
+import com.zbw.fame.exception.LoginExpireException;
 import com.zbw.fame.exception.NotFoundException;
 import com.zbw.fame.exception.NotLoginException;
 import com.zbw.fame.exception.TipException;
@@ -98,6 +99,19 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = NotLoginException.class)
     public RestResponse<RestResponse.Empty> NotLoginErrorHandler(HttpServletRequest req, HttpServletResponse rep, NotLoginException e) {
         return RestResponse.fail(ErrorCode.NOT_LOGIN.getCode(), ErrorCode.NOT_LOGIN.getMsg());
+    }
+
+    /**
+     * LoginExpire异常处理
+     *
+     * @param req
+     * @param rep
+     * @param e
+     * @return
+     */
+    @ExceptionHandler(value = LoginExpireException.class)
+    public RestResponse<RestResponse.Empty> LoginExpireErrorHandler(HttpServletRequest req, HttpServletResponse rep, LoginExpireException e) {
+        return RestResponse.fail(ErrorCode.LOGIN_EXPIRE.getCode(), ErrorCode.LOGIN_EXPIRE.getMsg());
     }
 
     /**

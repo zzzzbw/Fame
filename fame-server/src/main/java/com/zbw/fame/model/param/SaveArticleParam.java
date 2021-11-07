@@ -37,10 +37,7 @@ public class SaveArticleParam {
 
     private Boolean allowComment = false;
 
-    @NotNull(message = "创建时间不能为空")
-    private Date created;
-
-    @NotNull(message = "更新时间不能为空")
-    private Date modified;
+    @NotNull(message = "发布时间不能为空")
+    private Date publishTime;
 
 }

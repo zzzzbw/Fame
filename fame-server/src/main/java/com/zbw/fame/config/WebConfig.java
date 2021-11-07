@@ -1,9 +1,7 @@
 package com.zbw.fame.config;
 
-import com.zbw.fame.interceptor.AdminInterceptor;
 import com.zbw.fame.util.FameConst;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +10,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.util.StringUtils;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.filter.GenericFilterBean;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -20,6 +17,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.StringJoiner;
 
 /**
  * web 配置
@@ -39,15 +37,6 @@ public class WebConfig {
     @Bean
     public WebMvcConfigurer webMvcConfigurer() {
         return new WebMvcConfigurer() {
-            @Autowired
-            private AdminInterceptor adminInterceptor;
-
-            //拦截器
-            @Override
-            public void addInterceptors(InterceptorRegistry registry) {
-                registry.addInterceptor(adminInterceptor).addPathPatterns("/api/**");
-            }
-
             // 资源
             @Override
             public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -77,7 +66,12 @@ public class WebConfig {
                 if (StringUtils.hasText(originHeaderValue)) {
                     httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, originHeaderValue);
                 }
-                httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, HttpHeaders.CONTENT_TYPE);
+
+                String allowHeaders = new StringJoiner(",")
+                        .add(HttpHeaders.CONTENT_TYPE)
+                        .add(HttpHeaders.AUTHORIZATION)
+                        .toString();
+                httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, allowHeaders);
                 httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, "GET, POST, PUT, DELETE, OPTIONS");
                 httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
                 httpServletResponse.setHeader(HttpHeaders.ACCESS_CONTROL_MAX_AGE, "1800");

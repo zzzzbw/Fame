@@ -53,6 +53,22 @@ const STATIC = {
  */
 const FUNCTIONS = {
   /**
+   * 移除 token
+   */
+  removeToken: () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('refreshToken')
+  },
+  /**
+   * 设置 token
+   * @param {string} token
+   * @param {string} refreshToken
+   */
+  setToken: (token, refreshToken) => {
+    localStorage.setItem('token', token)
+    localStorage.setItem('refreshToken', refreshToken)
+  },
+  /**
    * 获取服务器链接
    * @returns {string}
    */
@@ -79,6 +95,30 @@ const FUNCTIONS = {
    */
   getServerMediaUrl: (url) => {
     return FUNCTIONS.getServerUrl() + 'media/' + url
+  },
+  /**
+   * 下载文件
+   * @param {*} response
+   */
+  downloadFile: (response) => {
+    const { data, headers } = response
+    let fileName = '下载文件'
+    let disposition = headers['content-disposition']
+    let filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/
+    let matches = filenameRegex.exec(disposition)
+    if (matches != null && matches[1]) {
+      fileName = matches[1].replace(/['"]/g, '')
+    }
+    const blob = new Blob([data], { type: headers['content-type'] })
+    let dom = document.createElement('a')
+    let url = window.URL.createObjectURL(blob)
+    dom.href = url
+    dom.download = decodeURI(fileName)
+    dom.style.display = 'none'
+    document.body.appendChild(dom)
+    dom.click()
+    dom.parentNode.removeChild(dom)
+    window.URL.revokeObjectURL(url)
   },
   /**
    * 标签转字符串

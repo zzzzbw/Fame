@@ -31,7 +31,7 @@ public class CommentNewEventListener {
         log.info("onCommentNewEvent event:{}", event);
 
         //发送邮件提醒
-        CommentDto commentDetail = commentService.getCommentDto(event.getCommentId());
+        CommentDto commentDetail = event.getCommentDto();
         // 发送给管理员
         emailService.sendEmailToAdmin(commentDetail);
         if (null != commentDetail.getParentComment() && !StringUtils.hasText(commentDetail.getParentComment().getEmail())) {

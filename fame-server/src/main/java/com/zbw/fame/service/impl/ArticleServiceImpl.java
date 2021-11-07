@@ -1,6 +1,7 @@
 package com.zbw.fame.service.impl;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -13,7 +14,6 @@ import com.zbw.fame.mapper.ArticleMapper;
 import com.zbw.fame.model.dto.ArchiveDto;
 import com.zbw.fame.model.dto.ArticleDetailDto;
 import com.zbw.fame.model.dto.ArticleInfoDto;
-import com.zbw.fame.model.dto.LoginUser;
 import com.zbw.fame.model.entity.Article;
 import com.zbw.fame.model.entity.BaseEntity;
 import com.zbw.fame.model.entity.Category;
@@ -68,6 +68,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         Page<Article> articlePage = lambdaQuery()
                 .eq(Article::getStatus, ArticleStatus.PUBLISH)
                 .eq(Article::isListShow, true)
+                .le(Article::getPublishTime, DateUtil.date())
                 .page(page);
 
         return batchConvertToDetailDto(articlePage);
@@ -78,6 +79,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         Article article = lambdaQuery()
                 .eq(BaseEntity::getId, id)
                 .eq(Article::getStatus, ArticleStatus.PUBLISH)
+                .le(Article::getPublishTime, DateUtil.date())
                 .one();
 
         if (null == article) {
@@ -126,8 +128,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             updateById(article);
         } else {
             article = FameUtils.convertTo(param, Article.class);
-            LoginUser user = FameUtils.getLoginUser();
-            article.setAuthorId(user.getId());
+            article.setAuthorId(FameUtils.getLoginUserId());
             save(article);
 
             LogEvent logEvent = new LogEvent(this, param, LogAction.ADD, LogType.ARTICLE, FameUtils.getIp(), FameUtils.getLoginUser().getId());
@@ -183,7 +184,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
         Map<Integer, List<ArticleInfoDto>> groupByYear = articles.stream()
                 .map(ArticleInfoDto::new)
-                .collect(Collectors.groupingBy(articleInfo -> DateUtil.year(articleInfo.getCreated())));
+                .collect(Collectors.groupingBy(articleInfo -> DateUtil.year(articleInfo.getPublishTime())));
 
         List<ArchiveDto> archives = new ArrayList<>();
         groupByYear.forEach((year, articleInfos) -> {
@@ -192,7 +193,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             archive.setArticleInfos(articleInfos);
             archives.add(archive);
         });
-
+        archives.sort(Comparator.comparing(ArchiveDto::getYear).reversed());
         return archives;
     }
 
@@ -201,6 +202,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         return lambdaQuery()
                 .eq(Article::getStatus, ArticleStatus.PUBLISH)
                 .eq(Article::isHeaderShow, true)
+                .le(Article::getPublishTime, DateUtil.date())
                 .orderByDesc(Article::getPriority)
                 .list()
                 .stream()
@@ -217,6 +219,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         return lambdaQuery()
                 .select()
                 .eq(isFront, Article::getStatus, ArticleStatus.PUBLISH)
+                .le(Article::getPublishTime, DateUtil.date())
                 .in(BaseEntity::getId, ids)
                 .list();
     }
@@ -260,6 +263,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             ArticleDetailDto articleDetailDto = FameUtils.convertTo(article, ArticleDetailDto.class);
             String contentHtml = FameUtils.contentTransform(articleDetailDto.getContent(), true, true, summaryFlag);
             articleDetailDto.setContentHtml(contentHtml);
+            articleDetailDto.setContent(StrUtil.EMPTY);
 
             Category category = categoryMap.get(articleDetailDto.getId());
             articleDetailDto.setCategory(category);

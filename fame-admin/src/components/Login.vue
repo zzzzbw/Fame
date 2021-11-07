@@ -54,12 +54,17 @@ export default {
         submitForm(formName) {
             this.$refs[formName].validate((valid) => {
                 if (valid) {
-                    this.$api.auth.login(this.userForm).then(data => {
-                        if (data.success) {
+                    // 先清除之前的token
+                    this.$util.removeToken()
+                    this.$api.auth.login(this.userForm).then(resp => {
+                        if (resp.success) {
+                            // 存储token
+                            const data = resp.data
+                            this.$util.setToken(data.token, data.refreshToken)
                             this.$router.push('/')
                             this.$util.message.success('登录成功!')
                         } else {
-                            this.$util.message.error('登录失败,' + data.msg)
+                            this.$util.message.error('登录失败,' + resp.msg)
                         }
                     })
                 } else {

@@ -15,20 +15,25 @@ import com.vladsch.flexmark.parser.ParserEmulationProfile;
 import com.vladsch.flexmark.util.options.MutableDataSet;
 import com.zbw.fame.exception.NotLoginException;
 import com.zbw.fame.exception.TipException;
-import com.zbw.fame.model.dto.LoginUser;
+import com.zbw.fame.model.dto.UserDetailsDto;
+import com.zbw.fame.model.entity.User;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.file.Files;
@@ -36,7 +41,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.Objects;
-import java.util.Optional;
 
 /**
  * 公用工具类
@@ -81,41 +85,43 @@ public class FameUtils {
 
 
     /**
-     * 设置User对象到登录缓存中
+     * 获取登陆的User对象
      *
-     * @param user 登录用户
+     * @return User
      */
-    public static void setLoginUser(LoginUser user) {
-        HttpSession session = getSession();
-        session.setAttribute(FameConst.USER_SESSION_KEY, user);
+    public static User getLoginUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (null == authentication) {
+            throw new NotLoginException();
+        }
+        Object principal = authentication.getPrincipal();
+        if (null == principal) {
+            throw new NotLoginException();
+        }
+        return ((UserDetailsDto) principal).getUser();
     }
 
     /**
-     * 清除登录中的用户
+     * 获取登陆用户的id
+     *
+     * @return UserId
      */
-    public static void clearLoginUser() {
-        HttpSession session = getSession();
-        session.removeAttribute(FameConst.USER_SESSION_KEY);
+    public static Integer getLoginUserId() {
+        return getLoginUser().getId();
     }
 
     /**
-     * 获取session中的User对象
+     * 获取header 中的 jwt
      *
-     * @return session中的用户
+     * @return token
      */
-    public static LoginUser getLoginUser() {
-        HttpSession session = getSession();
-        return (LoginUser) Optional.ofNullable(session.getAttribute(FameConst.USER_SESSION_KEY))
-                .orElseThrow(NotLoginException::new);
-    }
+    public static String getJwtHeaderToken() {
+        String header = getRequest().getHeader(JwtUtil.JWT_HEADER_KEY);
+        if (!StringUtils.hasText(header)) {
+            return null;
+        }
 
-    /**
-     * 获取session
-     *
-     * @return {@link HttpSession}
-     */
-    public static HttpSession getSession() {
-        return getRequest().getSession();
+        return header.replace(JwtUtil.JWT_HEADER_TOKEN_HEAD_KEY, "").trim();
     }
 
     /**
@@ -180,6 +186,25 @@ public class FameUtils {
      */
     public static String getAgent() {
         return getRequest().getHeader(HttpHeaders.USER_AGENT);
+    }
+
+    /**
+     * 输出JSON信息到Response
+     *
+     * @param resp
+     * @param response
+     * @throws IOException
+     */
+    public static void writeJsonResponse(RestResponse<?> resp, HttpServletResponse response) {
+        response.setStatus(200);
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json; charset=utf-8");
+        try (PrintWriter printWriter = response.getWriter()) {
+            printWriter.write(objectToJson(resp));
+            printWriter.flush();
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        }
     }
 
     /**
@@ -271,6 +296,11 @@ public class FameUtils {
     }
 
 
+    public static ObjectMapper getObjectMapper() {
+        return OBJECT_MAPPER;
+    }
+
+
     /**
      * 忽略大小写的indexOf
      *
@@ -354,6 +384,22 @@ public class FameUtils {
     }
 
     /**
+     * 是否为图片格式文件后缀
+     *
+     * @param suffix
+     * @return
+     */
+    public static boolean isImgFile(String suffix) {
+        return StrUtil.equalsAnyIgnoreCase(suffix,
+                ImgUtil.IMAGE_TYPE_GIF,
+                ImgUtil.IMAGE_TYPE_JPG,
+                ImgUtil.IMAGE_TYPE_JPEG,
+                ImgUtil.IMAGE_TYPE_BMP,
+                ImgUtil.IMAGE_TYPE_PNG,
+                ImgUtil.IMAGE_TYPE_PSD);
+    }
+
+    /**
      * 压缩图片
      *
      * @param source       源文件
@@ -363,4 +409,5 @@ public class FameUtils {
     public static void compressImage(File source, File target, float imageQuality) {
         ImgUtil.scale(source, target, imageQuality);
     }
+
 }

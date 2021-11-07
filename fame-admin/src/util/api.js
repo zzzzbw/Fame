@@ -1,4 +1,4 @@
-import { get, post, del } from '@/plugins/http'
+import { get, post, del, download } from '@/plugins/http'
 
 const auth = {
   login(user) {
@@ -46,6 +46,14 @@ const auth = {
   },
   deleteArticle(id) {
     return del('/admin/article/' + id)
+  },
+  importArticle(file, articleId) {
+    let formData = new FormData()
+    formData.append('file', file)
+    return post('/admin/backup/import/' + articleId, formData)
+  },
+  exportArticle(articleId) {
+    return download('/admin/backup/export/' + articleId)
   },
   pageComment(page) {
     const params = {

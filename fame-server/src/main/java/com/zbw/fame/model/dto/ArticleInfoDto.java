@@ -19,7 +19,7 @@ public class ArticleInfoDto {
         super();
         this.id = article.getId();
         this.title = article.getTitle();
-        this.created = article.getCreated();
+        this.publishTime = article.getPublishTime();
     }
 
 
@@ -34,7 +34,7 @@ public class ArticleInfoDto {
     private String title;
 
     /**
-     * 创建时间
+     * 发布时间
      */
-    private Date created;
+    private Date publishTime;
 }

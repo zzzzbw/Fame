@@ -1,6 +1,6 @@
 <template>
   <div>
-    <upload :afterUpload="afterUpload"></upload>
+    <media-upload :afterUpload="afterUpload"></media-upload>
     <el-divider></el-divider>
     <div class="media-list">
       <el-row>
@@ -27,14 +27,14 @@
 </template>
 
 <script>
-import Upload from '../common/Upload'
+import MediaUpload from '../common/MediaUpload'
 import MediaItem from '../common/MediaItem'
 import Pagination from '../common/Pagination'
 
 export default {
   components: {
     MediaItem,
-    Upload,
+    MediaUpload,
     Pagination,
   },
   data: function () {
@@ -43,7 +43,6 @@ export default {
       total: 0,
       pageSize: 10,
       currentPage: 1,
-      uploadDialog: false,
     }
   },
   methods: {
@@ -64,9 +63,6 @@ export default {
           }
         }
       })
-    },
-    showUploadDialog() {
-      this.uploadDialog = true
     },
     afterUpload(response) {
       if (response.success) {
