@@ -58,7 +58,7 @@ export default {
     { src: '~assets/css/main.css' },
     { src: '~assets/css/normalize.css' },
     { src: '~assets/css/style.css' },
-    'highlight.js/styles/tomorrow.css',
+    'highlight.js/styles/base16/tomorrow.css',
     { src: '~assets/css/icon.css' },
   ],
   modules: ['@nuxtjs/sitemap', '@nuxtjs/feed'],
