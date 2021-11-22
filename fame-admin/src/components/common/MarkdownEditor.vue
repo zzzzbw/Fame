@@ -3,12 +3,9 @@
 </template>
 
 <script>
-import 'highlight.js/styles/github.css'
-import 'codemirror/lib/codemirror.css'
-import '@toast-ui/editor/dist/toastui-editor.css'
 import Editor from '@toast-ui/editor'
-import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight'
-import hljs from 'highlight.js'
+import '@toast-ui/editor/dist/toastui-editor.css'
+import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight-all.js'
 
 const defaultOptions = {
   minHeight: '300px',
@@ -17,28 +14,6 @@ const defaultOptions = {
   useDefaultHTMLSanitizer: true,
   usageStatistics: false,
   hideModeSwitch: true,
-  toolbarItems: [
-    'heading',
-    'bold',
-    'italic',
-    'strike',
-    'divider',
-    'hr',
-    'quote',
-    'divider',
-    'ul',
-    'ol',
-    'task',
-    'indent',
-    'outdent',
-    'divider',
-    'table',
-    'image',
-    'link',
-    'divider',
-    'code',
-    'codeblock',
-  ],
 }
 export default {
   name: 'MarkdownEditor',
@@ -90,7 +65,7 @@ export default {
       options.initialEditType = this.mode
       options.height = this.height
       options.language = this.language
-      options.plugins = [[codeSyntaxHighlight, { hljs }]]
+      options.plugins = [[codeSyntaxHighlight, { highlighter: Prism }]]
       return options
     },
   },
@@ -119,16 +94,19 @@ export default {
   },
   methods: {
     initEditor() {
+      console.log(this.editorOptions)
       this.editor = new Editor({
         el: document.getElementById(this.id),
         ...this.editorOptions,
       })
+      console.log('initEditor2')
       if (this.value) {
         this.editor.setMarkdown(this.value)
       }
       this.editor.on('change', () => {
         this.$emit('input', this.editor.getMarkdown())
       })
+      console.log(this.editor)
     },
     destroyEditor() {
       if (!this.editor) return

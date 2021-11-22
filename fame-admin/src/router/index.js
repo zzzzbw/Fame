@@ -10,7 +10,7 @@ import ArticleList from '../components/page/ArticleList'
 import CommentList from '../components/page/CommentList'
 import MetaList from '../components/page/MetaList'
 import MediaList from '../components/page/MediaList'
-import Setting from '../components/page/Setting'
+import SettingList from '../components/page/SettingList'
 
 Vue.use(Router)
 
@@ -67,8 +67,8 @@ const router = new Router({
         },
         {
           path: 'setting',
-          name: 'Setting',
-          component: Setting,
+          name: 'SettingList',
+          component: SettingList,
         },
       ],
     },
