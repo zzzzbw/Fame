@@ -5,6 +5,7 @@
 <script>
 import Editor from '@toast-ui/editor'
 import '@toast-ui/editor/dist/toastui-editor.css'
+import '@toast-ui/editor/dist/i18n/zh-cn'
 import codeSyntaxHighlight from '@toast-ui/editor-plugin-code-syntax-highlight/dist/toastui-editor-plugin-code-syntax-highlight-all.js'
 
 const defaultOptions = {
@@ -51,7 +52,7 @@ export default {
     language: {
       type: String,
       required: false,
-      default: 'en_US', // https://github.com/nhnent/tui.editor/tree/master/src/js/langs
+      default: 'zh-CN',
     },
   },
   data() {
@@ -89,24 +90,18 @@ export default {
   mounted() {
     this.initEditor()
   },
-  destroyed() {
-    this.destroyEditor()
-  },
   methods: {
     initEditor() {
-      console.log(this.editorOptions)
       this.editor = new Editor({
         el: document.getElementById(this.id),
         ...this.editorOptions,
       })
-      console.log('initEditor2')
       if (this.value) {
         this.editor.setMarkdown(this.value)
       }
       this.editor.on('change', () => {
         this.$emit('input', this.editor.getMarkdown())
       })
-      console.log(this.editor)
     },
     destroyEditor() {
       if (!this.editor) return
