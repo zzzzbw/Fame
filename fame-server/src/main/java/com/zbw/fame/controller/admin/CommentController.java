@@ -75,7 +75,7 @@ public class CommentController {
      * @return {@see Integer}
      */
     @GetMapping("count")
-    public RestResponse<Integer> count() {
+    public RestResponse<Long> count() {
         return RestResponse.ok(commentService.count());
     }
 

@@ -87,7 +87,7 @@ public interface CommentService extends IService<com.zbw.fame.model.entity.Comme
      * @param articleId
      * @return
      */
-    int countByArticleId(Integer articleId);
+    Long countByArticleId(Integer articleId);
 
     /**
      * 查询文章下的评论数量

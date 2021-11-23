@@ -239,7 +239,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         articleDetailDto.setCategory(category);
         List<Tag> tags = articleTagService.listTagByArticleId(articleDetailDto.getId());
         articleDetailDto.setTags(tags);
-        int commentCount = commentService.countByArticleId(articleDetailDto.getId());
+        Long commentCount = commentService.countByArticleId(articleDetailDto.getId());
         articleDetailDto.setCommentCount(commentCount);
 
         return articleDetailDto;
@@ -269,7 +269,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             articleDetailDto.setCategory(category);
             List<Tag> tags = tagMap.getOrDefault(articleDetailDto.getId(), Collections.emptyList());
             articleDetailDto.setTags(tags);
-            int commentCount = Math.toIntExact(countMap.getOrDefault(articleDetailDto.getId(), 0L));
+            Long commentCount = countMap.getOrDefault(articleDetailDto.getId(), 0L);
             articleDetailDto.setCommentCount(commentCount);
             return articleDetailDto;
         });

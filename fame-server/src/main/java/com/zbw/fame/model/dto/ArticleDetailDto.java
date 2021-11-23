@@ -37,7 +37,7 @@ public class ArticleDetailDto {
 
     private Boolean allowComment;
 
-    private Integer commentCount;
+    private Long commentCount;
 
     private Category category;
 

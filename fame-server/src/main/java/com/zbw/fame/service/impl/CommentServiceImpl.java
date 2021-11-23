@@ -188,7 +188,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     }
 
     @Override
-    public int countByArticleId(Integer articleId) {
+    public Long countByArticleId(Integer articleId) {
         return lambdaQuery()
                 .eq(Comment::getArticleId, articleId)
                 .count();

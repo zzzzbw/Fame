@@ -84,7 +84,7 @@ public class ArticleController {
      * @return {@see Integer}
      */
     @GetMapping("count")
-    public RestResponse<Integer> count() {
+    public RestResponse<Long> count() {
         return RestResponse.ok(articleService.count());
     }
 }
