@@ -4,7 +4,7 @@
       © 2017 | Proudly powered by
       <a href="https://github.com/zzzzbw/Fame" target="_blank">Fame</a>
     </p>
-    <div v-highlight class="markdown-body" v-html="options.blog_footer"></div>
+    <div v-prism class="markdown-body" v-html="options.blog_footer"></div>
   </div>
 </template>
 

@@ -28,7 +28,7 @@
         </label>
       </div>
       <div
-        v-highlight
+        v-prism
         class="article-summary markdown-body"
         v-html="article.contentHtml"
       ></div>
