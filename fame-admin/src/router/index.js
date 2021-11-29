@@ -1,16 +1,16 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-import Error from '../components/Error'
-import Admin from '../components/Admin'
-import Login from '../components/Login'
-import Dashboard from '../components/page/Dashboard'
-import ArticleEdit from '../components/page/Article'
-import ArticleList from '../components/page/ArticleList'
-import CommentList from '../components/page/CommentList'
-import MetaList from '../components/page/MetaList'
-import MediaList from '../components/page/MediaList'
-import SettingList from '../components/page/SettingList'
+import Error from '@/components/Error'
+import Admin from '@/components/Admin'
+import Login from '@/components/Login'
+import Dashboard from '@/components/page/Dashboard'
+import ArticleEdit from '@/components/page/Article'
+import ArticleList from '@/components/page/ArticleList'
+import CommentList from '@/components/page/CommentList'
+import MetaList from '@/components/page/MetaList'
+import MediaList from '@/components/page/MediaList'
+import SettingList from '@/components/page/SettingList'
 
 Vue.use(Router)
 

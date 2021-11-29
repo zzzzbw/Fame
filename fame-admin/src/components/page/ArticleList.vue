@@ -212,7 +212,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-import Pagination from '../common/Pagination'
+import Pagination from '@/components/common/Pagination'
 
 export default {
     components: {

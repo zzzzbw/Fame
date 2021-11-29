@@ -1,8 +1,8 @@
 import axios from 'axios'
 import qs from 'qs'
 import { Message, Loading } from 'element-ui'
-import router from '../router/index'
-import serverConfig from '../../server-config'
+import router from '@/router/index'
+import serverConfig from '@/config/server-config'
 
 const axiosJson = axios.create({
   baseURL: serverConfig.api + 'api/', // 本地做反向代理

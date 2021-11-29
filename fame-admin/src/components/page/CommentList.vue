@@ -98,7 +98,7 @@
 </template>
 
 <script>
-import Pagination from '../common/Pagination'
+import Pagination from '@/components/common/Pagination'
 
 export default {
   components: {

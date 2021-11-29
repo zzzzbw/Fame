@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import serverConfig from '../../../server-config'
+import serverConfig from '../../config/server-config'
 
 export default {
   name: 'MediaUpload',

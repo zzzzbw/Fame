@@ -28,9 +28,9 @@
 </template>
 
 <script type="text/ecmascript-6">
-import NavBar from './common/NavBar'
-import SideBar from './common/SideBar'
-import BreadCrumb from './common/BreadCrumb'
+import NavBar from '@/components/common/NavBar'
+import SideBar from '@/components/common/SideBar'
+import BreadCrumb from '@/components/common/BreadCrumb'
 
 export default {
   components: {

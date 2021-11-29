@@ -1,12 +1,12 @@
 import Vue from 'vue'
-import App from './App'
-import router from './router'
-import Api from './util/api'
-import FameUtil from './util/fame'
+import App from '@/App'
+import router from '@/router'
+import Api from '@/util/api'
+import FameUtil from '@/util/fame'
 import dayjs from 'dayjs'
 import axios from 'axios'
-import serverConfig from '../server-config'
-import './plugins/element.js'
+import serverConfig from '@/config/server-config'
+import '@/plugins/element.js'
 
 // 时间过滤器
 Vue.filter('time', function (data, fmt) {

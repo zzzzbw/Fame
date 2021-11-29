@@ -1,5 +1,5 @@
 import { Message } from 'element-ui'
-import serverConfig from '../../server-config'
+import serverConfig from '@/config/server-config'
 /************************************************************/
 /**
  *  全局常量
