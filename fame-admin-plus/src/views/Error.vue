@@ -12,8 +12,8 @@
   export default defineComponent({
     setup() {
       const route = useRoute()
-      const state = ref(404)
-      const message = ref('Page Not found')
+      const state = ref()
+      const message = ref()
 
       state.value = route.params.state || 404
       message.value = route.params.message || 'Page Not found'

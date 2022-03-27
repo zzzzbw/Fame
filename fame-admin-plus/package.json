@@ -8,12 +8,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "axios": "^0.26.1",
     "element-plus": "^2.0.2",
+    "qs": "^6.10.3",
     "vue": "^3.2.31",
     "vue-router": "^4.0.14"
   },
   "devDependencies": {
     "@types/node": "*",
+    "@types/qs": "^6.9.7",
     "@typescript-eslint/eslint-plugin": "^5.16.0",
     "@typescript-eslint/parser": "^5.16.0",
     "@vitejs/plugin-vue": "^2.2.2",

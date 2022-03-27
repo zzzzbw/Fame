@@ -24,7 +24,10 @@
 
 <script lang="ts">
   import { defineComponent, reactive, ref } from 'vue'
-  import type { ElForm } from 'element-plus'
+  import router from '~/router'
+  import { ElForm, ElMessage } from 'element-plus'
+  import { RestResponse } from '~/types'
+  import { Api } from '~/api'
 
   export default defineComponent({
     setup() {
@@ -42,12 +45,26 @@
 
       const submitForm = async (userFormRef: InstanceType<typeof ElForm>) => {
         if (!userFormRef) return
-        await userFormRef.validate((valid) => {
+        await userFormRef.validate(async (valid) => {
           if (!valid) {
             return
           }
 
           console.log('success')
+          try {
+            const resp = (await Api.login(userForm)) as RestResponse
+            if (resp.success) {
+              // 存储token
+              // const data = resp.data
+              // this.$util.setToken(data.token, data.refreshToken)
+              router.push('/')
+              ElMessage.success('登录成功!')
+            } else {
+              ElMessage.error('登录失败,' + resp.msg)
+            }
+          } catch (error) {
+            console.error(error)
+          }
         })
       }
 
