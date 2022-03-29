@@ -1,10 +1,10 @@
 <template>
   <div>
-    <el-container class="container">
+    <el-container class="container full_screen">
       <el-header height="60px">
         <NavBar />
       </el-header>
-      <el-container>
+      <el-container class="container">
         <el-aside :class="[elAsideShow ? 'el-aside-show' : 'el-aside-hide']">
           <SideBar />
         </el-aside>
@@ -78,6 +78,10 @@
   }
 
   .container {
+    display: flex;
+  }
+
+  .full_screen {
     min-height: calc(100vh);
   }
 
