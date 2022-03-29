@@ -29,8 +29,13 @@ const requestInterceptor = {
 
     // 验证头
     if (localStorage.token) {
-      // @ts-ignore
-      config.headers.Authorization = 'Bearer ' + localStorage.token
+      if (config.headers) {
+        config.headers.Authorization = 'Bearer ' + localStorage.token
+      } else {
+        config.headers = {
+          Authorization: 'Bearer ' + localStorage.token
+        }
+      }
     }
 
     return config

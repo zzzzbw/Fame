@@ -28,6 +28,12 @@
   import { ElForm, ElMessage } from 'element-plus'
   import { RestResponse } from '~/types'
   import { Api } from '~/api'
+  import { removeToken, setToken } from '~/utils'
+
+  interface LoginResult {
+    token: string
+    refreshToken: string
+  }
 
   export default defineComponent({
     setup() {
@@ -50,14 +56,14 @@
             return
           }
 
-          console.log('success')
           try {
-            const resp = (await Api.login(userForm)) as RestResponse
+            // 先清除之前的token
+            removeToken()
+            const resp = (await Api.login(userForm)) as RestResponse<LoginResult>
             if (resp.success) {
               // 存储token
-              // const data = resp.data
-              // this.$util.setToken(data.token, data.refreshToken)
-              router.push('/')
+              setToken(resp.data.token, resp.data.refreshToken)
+              await router.push('/')
               ElMessage.success('登录成功!')
             } else {
               ElMessage.error('登录失败,' + resp.msg)

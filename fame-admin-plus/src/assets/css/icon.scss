@@ -1,0 +1,120 @@
+@font-face {
+  font-family: "fame-icon";
+  src: url("../fonts/fame-icon.eot?ic8skt");
+  src: url("../fonts/fame-icon.eot?ic8skt#iefix") format("embedded-opentype"),
+    url("../fonts/fame-icon.ttf?ic8skt") format("truetype"),
+    url("../fonts/fame-icon.woff?ic8skt") format("woff"),
+    url("../fonts/fame-icon.svg?ic8skt#fame-icon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"],
+[class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: "fame-icon" !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-sign-in:before {
+  content: "\e900";
+}
+.icon-arrows-alt:before {
+  content: "\e901";
+}
+.icon-columns:before {
+  content: "\e902";
+}
+.icon-eye:before {
+  content: "\e903";
+}
+.icon-minus:before {
+  content: "\e904";
+}
+.icon-table:before {
+  content: "\e905";
+}
+.icon-image:before {
+  content: "\e906";
+}
+.icon-chain:before {
+  content: "\e907";
+}
+.icon-eraser:before {
+  content: "\e908";
+}
+.icon-list-ol:before {
+  content: "\e909";
+}
+.icon-list-ul:before {
+  content: "\e90a";
+}
+.icon-quote-left:before {
+  content: "\e90b";
+}
+.icon-code:before {
+  content: "\e90c";
+}
+.icon-header:before {
+  content: "\e90d";
+}
+.icon-strikethrough:before {
+  content: "\e90e";
+}
+.icon-italic:before {
+  content: "\e90f";
+}
+.icon-bold:before {
+  content: "\e910";
+}
+.icon-cog:before {
+  content: "\e911";
+}
+.icon-hashtag:before {
+  content: "\e912";
+}
+.icon-edit:before {
+  content: "\e913";
+}
+.icon-dashboard:before {
+  content: "\e914";
+}
+.icon-th-list:before {
+  content: "\e915";
+}
+.icon-list:before {
+  content: "\e916";
+}
+.icon-calendar:before {
+  content: "\e917";
+}
+.icon-folder:before {
+  content: "\e918";
+}
+.icon-tags:before {
+  content: "\e919";
+}
+.icon-tag:before {
+  content: "\e91a";
+}
+.icon-book:before {
+  content: "\e91b";
+}
+.icon-arrow-up:before {
+  content: "\e91c";
+}
+.icon-comment-o:before {
+  content: "\f0e5";
+}
+.icon-comments-o:before {
+  content: "\f0e6";
+}
