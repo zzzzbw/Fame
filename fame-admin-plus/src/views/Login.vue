@@ -60,14 +60,14 @@
             // 先清除之前的token
             removeToken()
             const resp = (await Api.login(userForm)) as RestResponse<LoginResult>
-            if (resp.success) {
-              // 存储token
-              setToken(resp.data.token, resp.data.refreshToken)
-              await router.push('/')
-              ElMessage.success('登录成功!')
-            } else {
-              ElMessage.error('登录失败,' + resp.msg)
+            if (!resp.success) {
+              console.log(resp)
+              return
             }
+            // 存储token
+            setToken(resp.data.token, resp.data.refreshToken)
+            await router.push('/')
+            ElMessage.success('登录成功!')
           } catch (error) {
             console.error(error)
           }

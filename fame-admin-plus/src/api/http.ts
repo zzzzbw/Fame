@@ -20,12 +20,14 @@ let loginError = false
 // 请求拦截（配置请求信息）
 const requestInterceptor = {
   before: (config: AxiosRequestConfig) => {
-    loadingInstance = ElLoading.service({
-      target: '#main',
-      lock: true,
-      text: 'Loading',
-      background: 'rgba(0, 0, 0, 0.7)'
-    })
+    if (!loadingInstance) {
+      loadingInstance = ElLoading.service({
+        target: '#main',
+        lock: true,
+        text: 'Loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
+    }
 
     // 验证头
     if (localStorage.token) {

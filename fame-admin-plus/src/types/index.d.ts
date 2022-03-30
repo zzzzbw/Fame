@@ -4,3 +4,12 @@ export interface RestResponse<T> {
   msg?: string
   data: T
 }
+
+export interface Pagination<T> {
+  pageNum: number
+  pageSize: number
+  total: number
+  pages: number
+  orderBy: number
+  list: Array[T]
+}
