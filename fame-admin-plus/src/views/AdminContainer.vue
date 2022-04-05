@@ -43,7 +43,7 @@
   })
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   @import '~/assets/css/main.scss';
   @import '~/assets/css/admin.scss';
   @import '~/assets/css/icon.scss';

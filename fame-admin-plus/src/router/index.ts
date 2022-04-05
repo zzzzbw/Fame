@@ -22,6 +22,16 @@ const routes: Array<RouteRecordRaw> = [
         path: '/dashboard',
         name: 'Dashboard',
         component: () => import('~/views/Dashboard.vue')
+      },
+      {
+        path: '/comment',
+        name: 'Comment',
+        component: () => import('~/views/CommentList.vue')
+      },
+      {
+        path: 'setting',
+        name: 'SettingList',
+        component: () => import('~/views/Setting.vue')
       }
     ]
   }

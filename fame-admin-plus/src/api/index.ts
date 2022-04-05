@@ -1,4 +1,4 @@
-import { get, post, del, download } from './http'
+import { get, post, put, del, download } from './http'
 
 const Api = {
   login(user: any) {
@@ -15,14 +15,14 @@ const Api = {
       username: username,
       email: email
     }
-    return post('/admin/reset/user', params)
+    return put('/admin/reset/user', params)
   },
   resetPassword(oldPassword: string, newPassword: string) {
     const params = {
       oldPassword: oldPassword,
       newPassword: newPassword
     }
-    return post('/admin/reset/password', params)
+    return put('/admin/reset/password', params)
   },
   getOptions() {
     return get('/admin/option/all')

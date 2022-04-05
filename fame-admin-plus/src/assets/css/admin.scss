@@ -15,3 +15,17 @@
   background: #fabe28 !important;
 }
 /* color end */
+
+// 上下左右居中
+@mixin layout(
+  $justify-content: flex-start,
+  $align-items: stretch,
+  $flex-direction: row,
+  $flex-wrap: nowrap
+) {
+  display: flex;
+  justify-content: $justify-content;
+  align-items: $align-items;
+  flex-direction: $flex-direction;
+  flex-wrap: $flex-wrap;
+}
