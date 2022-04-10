@@ -29,6 +29,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('~/views/CommentList.vue')
       },
       {
+        path: '/meta',
+        name: 'Meta',
+        component: () => import('~/views/Meta.vue')
+      },
+      {
         path: 'setting',
         name: 'SettingList',
         component: () => import('~/views/Setting.vue')

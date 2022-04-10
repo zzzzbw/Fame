@@ -78,7 +78,7 @@ const Api = {
   getAllTags() {
     return get('/admin/tag')
   },
-  saveOrUpdateCategory(id: number, parentId: number, name: string) {
+  saveOrUpdateCategory(id: number | null, parentId: number | null, name: string) {
     const params = {
       id: id,
       parentId: parentId,
@@ -86,7 +86,7 @@ const Api = {
     }
     return post('/admin/category', params)
   },
-  saveOrUpdateTag(id: number, name: string) {
+  saveOrUpdateTag(id: number | null, name: string) {
     const params = {
       id: id,
       name: name

@@ -120,7 +120,7 @@
 
       onMounted(() => {
         axios
-          .all([Api.pageArticle(1), Api.pageComment(1), Api.countArticle(), Api.countComment()])
+          .all([Api.pageArticle(1), Api.pageComment(1, 10), Api.countArticle(), Api.countComment()])
           .then(
             axios.spread((articleData, commentData, articleCount, commentCount) => {
               initArticleData(articleData as RestResponse<Pagination<Article>>)
@@ -141,15 +141,14 @@
   })
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  @import '~/assets/css/admin.scss';
   .el-card {
     margin-bottom: 30px;
   }
 
   .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    @include layout(space-between, center);
   }
 
   .message {
