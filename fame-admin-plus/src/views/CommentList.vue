@@ -68,12 +68,12 @@
       </el-row>
     </el-dialog>
 
-    <pagination :total="total" :page-size="pageSize" @handle-current-change="changePage" />
+    <pagination v-model:currentPage="currentPage" v-model:page-size="pageSize" :total="total" />
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, reactive, onMounted } from 'vue'
+  import { defineComponent, ref, reactive, onMounted, watch } from 'vue'
   import { RestResponse, Pagination } from '~/types'
   import { handleRestResponse } from '~/utils'
   import { Api } from '~/api'
@@ -95,7 +95,7 @@
       const pageSize = ref(10)
 
       async function getCommentData() {
-        const resp = (await Api.pageComment(currentPage.value)) as RestResponse<
+        const resp = (await Api.pageComment(currentPage.value, pageSize.value)) as RestResponse<
           Pagination<CommentListItem>
         >
         handleRestResponse(resp, (page) => {
@@ -113,6 +113,16 @@
         currentPage.value = newPage
         getCommentData()
       }
+
+      watch(
+        () => currentPage.value,
+        () => getCommentData()
+      )
+
+      watch(
+        () => pageSize.value,
+        () => getCommentData()
+      )
 
       onMounted(() => {
         getCommentData()

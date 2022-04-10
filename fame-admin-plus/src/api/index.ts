@@ -56,9 +56,10 @@ const Api = {
   exportArticle(articleId: number) {
     return download('/admin/backup/export/' + articleId)
   },
-  pageComment(page: number) {
+  pageComment(page: number, limit: number) {
     const params = {
-      page: page
+      page: page,
+      limit: limit
     }
     return get('/admin/comment', params)
   },
