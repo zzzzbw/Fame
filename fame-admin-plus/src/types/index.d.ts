@@ -13,3 +13,12 @@ export interface Pagination<T> {
   orderBy: number
   list: Array[T]
 }
+
+export class MediaItem {
+  id: number
+  name: string
+  url: string
+  thumbUrl: string
+  suffix: string
+  showUrl: string
+}

@@ -32,7 +32,7 @@
       </el-menu-item>
     </el-menu>
   </div>
-</template>
+</template>1
 
 <script lang="ts"></script>
 

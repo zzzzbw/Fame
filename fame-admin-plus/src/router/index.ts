@@ -37,6 +37,11 @@ const routes: Array<RouteRecordRaw> = [
         path: 'setting',
         name: 'SettingList',
         component: () => import('~/views/Setting.vue')
+      },
+      {
+        path: 'media',
+        name: 'Media',
+        component: () => import('~/views/Media.vue')
       }
     ]
   }
