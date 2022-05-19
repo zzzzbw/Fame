@@ -43,6 +43,31 @@
   import { ElMessage } from 'element-plus'
   import { Api } from '~/api'
 
+  class MediaItemImpl implements MediaItem {
+    constructor(
+      id: number,
+      name: string,
+      showUrl: string,
+      suffix: string,
+      thumbUrl: string,
+      url: string
+    ) {
+      this.id = id
+      this.name = name
+      this.showUrl = showUrl
+      this.suffix = suffix
+      this.thumbUrl = thumbUrl
+      this.url = url
+    }
+
+    id: number
+    name: string
+    showUrl: string
+    suffix: string
+    thumbUrl: string
+    url: string
+  }
+
   export default defineComponent({
     props: {
       afterDelete: {
@@ -50,8 +75,8 @@
         default: null
       },
       mediaVal: {
-        type: MediaItem,
-        default: new MediaItem()
+        type: MediaItemImpl,
+        default: null
       }
     },
     setup(props) {

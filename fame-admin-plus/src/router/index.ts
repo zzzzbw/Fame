@@ -41,7 +41,7 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: 'media',
         name: 'Media',
-        component: () => import('~/views/Media.vue')
+        component: () => import('~/views/MediaList.vue')
       }
     ]
   }

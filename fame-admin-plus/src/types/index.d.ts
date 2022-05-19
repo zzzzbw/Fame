@@ -14,7 +14,7 @@ export interface Pagination<T> {
   list: Array[T]
 }
 
-export class MediaItem {
+export interface MediaItem {
   id: number
   name: string
   url: string

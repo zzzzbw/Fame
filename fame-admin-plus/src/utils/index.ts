@@ -1,5 +1,5 @@
 import { RestResponse } from '~/types'
-import { FRONT_URL } from '~/config'
+import { FRONT_URL, SERVER_URL } from '~/config'
 
 export function handleRestResponse<T>(resp: RestResponse<T>, handle: (data: T) => void): void {
   if (!resp.success) {
@@ -24,7 +24,11 @@ export function getFrontArticleUrl(id: number): string {
 }
 
 export function getServerMediaUrl(url: string): string {
-  return FRONT_URL + 'media/' + url
+  return SERVER_URL + 'media/' + url
+}
+
+export function getServerUploadMediaUrl(): string {
+  return SERVER_URL + 'api/admin/media/upload'
 }
 
 export function copyText(text: string): void {
