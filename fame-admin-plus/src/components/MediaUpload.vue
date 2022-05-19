@@ -23,15 +23,11 @@
         :on-success="successUpload"
         :on-error="errorUpload"
       >
-        <i class="el-icon-upload"></i>
-        <div class="el-upload__text">
-          将文件拖到此处
-          <br />
-          或
-          <br />
-          <em>点击上传</em>
-          <div slot="tip" class="el-upload__tip"> 只能上传图片文件，且不超过10m </div>
-        </div>
+        <el-icon class="el-icon--upload"><UploadFilled /></el-icon>
+        <div class="el-upload__text"> 将文件拖到此处或<em>点击上传</em> </div>
+        <template #tip>
+          <div class="el-upload__tip"> 只能上传图片文件，且不超过10m </div>
+        </template>
       </el-upload>
     </transition>
   </div>
@@ -40,13 +36,15 @@
 <script lang="ts">
   import { defineComponent, ref, reactive } from 'vue'
   import { RestResponse } from '~/types'
-  import { ElForm, ElMessage, ElUpload } from 'element-plus'
+  import { ElMessage, ElUpload } from 'element-plus'
   import { getServerUploadMediaUrl } from '~/utils'
+  import { UploadFilled } from '@element-plus/icons-vue'
   import dayjs from 'dayjs'
 
   type ElUploadInstance = InstanceType<typeof ElUpload>
 
   export default defineComponent({
+    components: { UploadFilled },
     props: {
       afterUpload: {
         type: Function,
@@ -129,6 +127,9 @@
     margin-top: 20px;
   }
 
+  .el-upload__tip {
+    text-align: left;
+  }
   /* flow */
   .flow-enter-active,
   .flow-leave-active {
