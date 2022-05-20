@@ -1,13 +1,18 @@
 <template>
   <div class="upload-component">
-    <el-button type="primary" icon="el-icon-upload" @click="uploadVisible = !uploadVisible">
+    <el-button
+      type="primary"
+      size="large"
+      :icon="UploadFilled"
+      @click="uploadVisible = !uploadVisible"
+    >
       <span v-if="uploadVisible">隐藏</span>
       <span v-else>上传</span>
     </el-button>
-    <el-button v-show="uploadVisible" type="info" @click="clearUploadFile(uploadRef)">
+    <el-button v-show="uploadVisible" type="info" size="large" @click="clearUploadFile(uploadRef)">
       清空上传列表
     </el-button>
-    <transition name="flow">
+    <el-collapse-transition>
       <el-upload
         v-show="uploadVisible"
         ref="uploadRef"
@@ -17,6 +22,7 @@
         :multiple="true"
         list-type="picture"
         :action="uploadUrl"
+        :headers="uploadHeaders"
         :with-credentials="true"
         :data="uploadData"
         :before-upload="beforeUpload"
@@ -29,7 +35,7 @@
           <div class="el-upload__tip"> 只能上传图片文件，且不超过10m </div>
         </template>
       </el-upload>
-    </transition>
+    </el-collapse-transition>
   </div>
 </template>
 
@@ -56,6 +62,7 @@
 
       const uploadVisible = ref(false)
       const uploadUrl = ref(getServerUploadMediaUrl())
+      const uploadHeaders = reactive({ Authorization: 'Bearer ' + localStorage.token })
       const uploadData = reactive({ path: '' })
 
       function clearUploadFile(uploadRef: InstanceType<typeof ElUpload>) {
@@ -90,9 +97,11 @@
       }
 
       return {
+        UploadFilled,
         uploadRef,
         uploadVisible,
         uploadUrl,
+        uploadHeaders,
         uploadData,
         clearUploadFile,
         beforeUpload,

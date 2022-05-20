@@ -6,20 +6,16 @@
     </div>
     <div style="margin-bottom: 14px">
       <el-button-group>
-        <el-button
-          size="mini"
-          icon="el-icon-copy-document"
-          @click="copyUrl(mediaVal.url)"
-        ></el-button>
+        <el-button size="small" :icon="DocumentCopy" @click="copyUrl(mediaVal.url)"></el-button>
         <el-button
           type="primary"
-          size="mini"
-          icon="el-icon-document-copy"
+          size="small"
+          :icon="Document"
           @click="copyMarkdownUrl(mediaVal.name, mediaVal.url)"
         >
         </el-button>
         <el-popconfirm
-          title="此操作将永久删除该评论,是否继续?"
+          title="此操作将永久删除该媒体,是否继续?"
           confirm-button-text="确定"
           cancel-button-text="取消"
           :icon="InfoFilled"
@@ -27,7 +23,7 @@
           @confirm="deleteMedia(mediaVal.id)"
         >
           <template #reference>
-            <el-button size="small" type="danger">删除</el-button>
+            <el-button size="small" type="danger" :icon="Delete"></el-button>
           </template>
         </el-popconfirm>
       </el-button-group>
@@ -37,36 +33,11 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
-  import { InfoFilled } from '@element-plus/icons-vue'
+  import { InfoFilled, DocumentCopy, Document, Delete } from '@element-plus/icons-vue'
   import { copyText, getServerMediaUrl, handleRestResponse } from '~/utils'
-  import { MediaItem, RestResponse } from '~/types'
+  import { RestResponse } from '~/types'
   import { ElMessage } from 'element-plus'
   import { Api } from '~/api'
-
-  class MediaItemImpl implements MediaItem {
-    constructor(
-      id: number,
-      name: string,
-      showUrl: string,
-      suffix: string,
-      thumbUrl: string,
-      url: string
-    ) {
-      this.id = id
-      this.name = name
-      this.showUrl = showUrl
-      this.suffix = suffix
-      this.thumbUrl = thumbUrl
-      this.url = url
-    }
-
-    id: number
-    name: string
-    showUrl: string
-    suffix: string
-    thumbUrl: string
-    url: string
-  }
 
   export default defineComponent({
     props: {
@@ -75,7 +46,7 @@
         default: null
       },
       mediaVal: {
-        type: MediaItemImpl,
+        type: Object,
         default: null
       }
     },
@@ -112,7 +83,10 @@
         copyMarkdownUrl,
         deleteMedia,
         showDetailDialog,
-        InfoFilled
+        InfoFilled,
+        DocumentCopy,
+        Document,
+        Delete
       }
     }
   })

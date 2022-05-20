@@ -15,7 +15,7 @@
                 <BreadCrumb />
               </div>
               <div class="content">
-                <transition name="fade" mode="out-in">
+                <transition name="el-fade-in">
                   <router-view></router-view>
                 </transition>
               </div>

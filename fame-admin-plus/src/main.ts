@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+import { ElCollapseTransition } from 'element-plus'
 import App from './App.vue'
 import router from './router'
 
@@ -17,4 +18,5 @@ import 'element-plus/theme-chalk/src/loading.scss'
 
 const app = createApp(App)
 // app.use(ElementPlus);
+app.component(ElCollapseTransition.name, ElCollapseTransition)
 app.use(router).mount('#app')

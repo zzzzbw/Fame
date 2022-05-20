@@ -14,7 +14,7 @@
           :lg="6"
           :xl="4"
         >
-          <MediaItem :media="media" :after-delete="initMediaData"></MediaItem>
+          <MediaItem :media-val="media" :after-delete="initMediaData"></MediaItem>
         </el-col>
       </el-row>
     </div>
@@ -39,10 +39,11 @@
       const mediaList = reactive<Array<MediaItem>>([])
 
       async function initMediaData() {
-        const resp = (await Api.pageMedia(currentPage.value, pageSize.value)) as RestResponse<
+        const resp = (await Api.pageMedia(pageSize.value, currentPage.value)) as RestResponse<
           Pagination<MediaItem>
         >
         handleRestResponse(resp, (page) => {
+          mediaList.splice(0)
           total.value = page.total
           pageSize.value = page.pageSize
           for (let key in page.list) {
