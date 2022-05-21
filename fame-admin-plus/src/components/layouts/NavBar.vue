@@ -6,10 +6,9 @@
     <h3 class="title">Fame Dashboard</h3>
     <ul class="nav-bar-right">
       <li>
-        <a @click="logout">
-          <span class="icon-sign-in"></span>&nbsp;
-          <span>退出</span>
-        </a>
+        <el-link @click="logout">
+          <el-icon class="el-icon--left"><icon-back /></el-icon>退出
+        </el-link>
       </li>
     </ul>
   </div>
@@ -17,6 +16,7 @@
 
 <script lang="ts">
   import { defineComponent } from 'vue'
+  import { Back as IconBack } from '@element-plus/icons-vue'
   import router from '~/router'
   import { ElMessage } from 'element-plus'
   import { RestResponse } from '~/types'
@@ -24,6 +24,7 @@
   import { removeToken } from '~/utils'
 
   export default defineComponent({
+    components: { IconBack },
     setup() {
       const logout = async () => {
         const resp = (await Api.logout()) as RestResponse<void>

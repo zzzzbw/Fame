@@ -7,9 +7,9 @@
             <h3>{{ articleCount }}</h3>
             <p>发布文章数</p>
           </div>
-          <div class="icon">
-            <i class="el-icon-tickets"></i>
-          </div>
+          <el-icon size="18" color="#ffffff" class="icon-message blue">
+            <Postcard />
+          </el-icon>
           <div style="clear: both"></div>
         </el-card>
       </el-col>
@@ -19,9 +19,9 @@
             <h3>{{ commentCount }}</h3>
             <p>评论数</p>
           </div>
-          <div class="icon red">
-            <i class="el-icon-chat-line-round"></i>
-          </div>
+          <el-icon size="18" color="#ffffff" class="icon-message red">
+            <ChatLineSquare />
+          </el-icon>
           <div style="clear: both"></div>
         </el-card>
       </el-col>
@@ -61,6 +61,7 @@
 
 <script lang="ts">
   import { defineComponent, ref, reactive, onMounted } from 'vue'
+  import { Postcard, ChatLineSquare } from '@element-plus/icons-vue'
   import { RestResponse, Pagination } from '~/types'
   import { handleRestResponse } from '~/utils'
   import { Api } from '~/api'
@@ -78,6 +79,7 @@
   }
 
   export default defineComponent({
+    components: { Postcard, ChatLineSquare },
     setup() {
       const articleCount = ref(0)
       const commentCount = ref(0)
@@ -157,6 +159,7 @@
 
   .message h3 {
     font-size: 32px;
+    text-align: left;
     color: #676767;
     margin: 0;
   }
@@ -170,10 +173,9 @@
     display: inline-block;
   }
 
-  .icon {
+  .icon-message {
     font-size: 30px;
     color: #ffffff;
-    background: #30a5ff;
     padding: 19px;
     float: right;
     border-radius: 6px;

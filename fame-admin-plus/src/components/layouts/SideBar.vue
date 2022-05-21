@@ -7,34 +7,48 @@
       :router="true"
     >
       <el-menu-item index="/dashboard">
-        <i class="el-icon-monitor"></i>
+        <el-icon><DataAnalysis /></el-icon>
         <span>仪表盘</span>
       </el-menu-item>
       <el-menu-item index="/article">
-        <i class="el-icon-document-copy"></i>
+        <el-icon><Tickets /></el-icon>
         <span>文章列表</span>
       </el-menu-item>
       <el-menu-item index="/comment">
-        <i class="el-icon-chat-dot-round"></i>
+        <el-icon><ChatSquare /></el-icon>
         <span>评论列表</span>
       </el-menu-item>
       <el-menu-item index="/meta">
-        <i class="el-icon-copy-document"></i>
+        <el-icon><PriceTag /></el-icon>
         <span>标签/分类</span>
       </el-menu-item>
       <el-menu-item index="/media">
-        <i class="el-icon-copy-document"></i>
+        <el-icon><Picture /></el-icon>
         <span>媒体库</span>
       </el-menu-item>
       <el-menu-item index="/setting">
-        <i class="el-icon-setting"></i>
+        <el-icon><Setting /></el-icon>
         <span>网站设置</span>
       </el-menu-item>
     </el-menu>
   </div>
-</template>1
+</template>
 
-<script lang="ts"></script>
+<script lang="ts">
+  import {
+    DataAnalysis,
+    Tickets,
+    ChatSquare,
+    PriceTag,
+    Picture,
+    Setting
+  } from '@element-plus/icons-vue'
+  import { defineComponent } from 'vue'
+
+  export default defineComponent({
+    components: { DataAnalysis, Tickets, ChatSquare, PriceTag, Picture, Setting }
+  })
+</script>
 
 <style>
   .el-submenu .el-menu-item {
