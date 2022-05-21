@@ -33,10 +33,10 @@ const Api = {
   countArticle() {
     return get('/admin/article/count')
   },
-  pageArticle(page: number, query: object = {}) {
+  pageArticle(page: number, limit: number, query: { page?: number; limit?: number } = {}) {
     const params = query || {}
-    // TODO
-    // params.pagea = page
+    params.page = page
+    params.limit = limit
     return get('/admin/article', params)
   },
   getArticle(id: number) {
@@ -105,7 +105,7 @@ const Api = {
     }
     return get('/admin/note', params)
   },
-  pageMedia(limit: number, page: number) {
+  pageMedia(page: number, limit: number) {
     const params = {
       limit: limit,
       page: page - 1

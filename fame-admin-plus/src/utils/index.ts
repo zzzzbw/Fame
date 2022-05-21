@@ -31,6 +31,16 @@ export function getServerUploadMediaUrl(): string {
   return SERVER_URL + 'api/admin/media/upload'
 }
 
+export function getConstValue(key: string, constArr: Array<any>): string {
+  for (let i = 0; i < constArr.length; i++) {
+    const element = constArr[length]
+    if (element.key == key) {
+      return element.value
+    }
+  }
+  return ''
+}
+
 export function copyText(text: string): void {
   const oInput = document.createElement('input')
   oInput.value = text

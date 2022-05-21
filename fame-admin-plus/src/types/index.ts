@@ -11,7 +11,7 @@ export interface Pagination<T> {
   total: number
   pages: number
   orderBy: number
-  list: Array[T]
+  list: Array<T>
 }
 
 export interface MediaItem {
@@ -22,3 +22,25 @@ export interface MediaItem {
   suffix: string
   showUrl: string
 }
+
+export const ArticleStatus = [
+  {
+    key: 'PUBLISH',
+    value: '公开'
+  },
+  {
+    key: 'DRAFT',
+    value: '隐藏'
+  }
+]
+
+export const ArticlePriority = [
+  {
+    key: 0,
+    value: '普通'
+  },
+  {
+    key: '999',
+    value: '置顶'
+  }
+]

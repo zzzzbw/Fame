@@ -24,6 +24,11 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('~/views/Dashboard.vue')
       },
       {
+        path: '/article',
+        name: 'ArticleList',
+        component: () => import('~/views/ArticleList.vue')
+      },
+      {
         path: '/comment',
         name: 'Comment',
         component: () => import('~/views/CommentList.vue')
@@ -40,7 +45,7 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: 'media',
-        name: 'Media',
+        name: 'MediaList',
         component: () => import('~/views/MediaList.vue')
       }
     ]

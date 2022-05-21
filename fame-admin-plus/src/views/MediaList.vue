@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, reactive, onMounted } from 'vue'
+  import { defineComponent, ref, reactive, onMounted, watch } from 'vue'
   import { RestResponse, Pagination, MediaItem } from '~/types'
   import { getServerMediaUrl, handleRestResponse } from '~/utils'
   import { Api } from '~/api'
@@ -39,7 +39,7 @@
       const mediaList = reactive<Array<MediaItem>>([])
 
       async function initMediaData() {
-        const resp = (await Api.pageMedia(pageSize.value, currentPage.value)) as RestResponse<
+        const resp = (await Api.pageMedia(currentPage.value, pageSize.value)) as RestResponse<
           Pagination<MediaItem>
         >
         handleRestResponse(resp, (page) => {
@@ -57,6 +57,16 @@
           }
         })
       }
+
+      watch(
+        () => currentPage.value,
+        () => initMediaData()
+      )
+
+      watch(
+        () => pageSize.value,
+        () => initMediaData()
+      )
 
       onMounted(() => {
         initMediaData()

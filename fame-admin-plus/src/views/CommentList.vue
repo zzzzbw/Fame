@@ -119,6 +119,10 @@
 
   export default defineComponent({
     setup() {
+      const currentPage = ref(1)
+      const total = ref(0)
+      const pageSize = ref(10)
+
       const commentList = reactive<Array<CommentListItem>>([])
       const comment = reactive<CommentDetail>({
         agent: '',
@@ -133,9 +137,6 @@
         website: '',
         hasReplay: false
       })
-      const currentPage = ref(1)
-      const total = ref(0)
-      const pageSize = ref(10)
 
       const detailVisible = ref(false)
 
