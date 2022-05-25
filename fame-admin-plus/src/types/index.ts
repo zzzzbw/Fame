@@ -23,6 +23,17 @@ export interface MediaItem {
   showUrl: string
 }
 
+export interface EditMeta {
+  id: number | null
+  name: string
+}
+
+export interface Meta {
+  id: number
+  name: string
+  articleInfos: []
+}
+
 export const ArticleStatus = [
   {
     key: 'PUBLISH',

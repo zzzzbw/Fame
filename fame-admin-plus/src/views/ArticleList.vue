@@ -219,11 +219,11 @@
       const articleList = reactive<Array<ArticleListItem>>([])
 
       function handleNew() {
-        router.push('/article/publish')
+        router.push('/article/edit')
       }
 
       function handleEdit(id: number) {
-        router.push('/article/publish/' + id)
+        router.push('/article/edit/' + id)
       }
 
       async function deleteArticle(id: number) {

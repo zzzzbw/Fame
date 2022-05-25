@@ -88,21 +88,10 @@
 <script lang="ts">
   import { defineComponent, reactive, onMounted } from 'vue'
   import { Api } from '~/api'
-  import { RestResponse } from '~/types'
+  import { EditMeta, Meta, RestResponse } from '~/types'
   import { handleRestResponse } from '~/utils'
   import { InfoFilled } from '@element-plus/icons-vue'
   import { ElMessage } from 'element-plus'
-
-  interface EditMeta {
-    id: number | null
-    name: string
-  }
-
-  interface Meta {
-    id: number
-    name: string
-    articleInfos: []
-  }
 
   export default defineComponent({
     setup() {
