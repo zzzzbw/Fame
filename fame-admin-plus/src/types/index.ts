@@ -34,24 +34,34 @@ export interface Meta {
   articleInfos: []
 }
 
+export enum ArticleStatusEnum {
+  PUBLISH = 'PUBLISH',
+  DRAFT = 'DRAFT'
+}
+
 export const ArticleStatus = [
   {
-    key: 'PUBLISH',
+    key: ArticleStatusEnum.PUBLISH,
     value: '公开'
   },
   {
-    key: 'DRAFT',
+    key: ArticleStatusEnum.DRAFT,
     value: '隐藏'
   }
 ]
 
+export enum ArticlePriorityEnum {
+  NORMAL = '0',
+  TOP = '999'
+}
+
 export const ArticlePriority = [
   {
-    key: 0,
+    key: ArticlePriorityEnum.NORMAL,
     value: '普通'
   },
   {
-    key: '999',
+    key: ArticlePriorityEnum.TOP,
     value: '置顶'
   }
 ]

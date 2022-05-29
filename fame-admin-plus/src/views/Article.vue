@@ -7,8 +7,7 @@
             <el-input v-model="article.title" placeholder="请输入文章标题"></el-input>
           </el-form-item>
           <el-form-item prop="content">
-            <markdown-editor v-model="article.content" :height="editorHeight" mode="markdown" />
-            <!-- 键修饰符，键别名 -->
+            <BytemdEditor :content-val="article.content" class="md-editor" />
           </el-form-item>
         </el-col>
         <el-col :xs="24" :sm="8" :md="5" :lg="5">
@@ -41,31 +40,31 @@
                   </el-option>
                 </el-select>
               </el-form-item>
-              <!--              <el-form-item>
-                <el-switch
-                  v-model="article.status"
-                  :active-value="$static.ArticleStatus.PUBLISH.key"
-                  :inactive-value="$static.ArticleStatus.DRAFT.key"
-                  :active-text="$static.ArticleStatus.PUBLISH.value"
-                  :inactive-text="$static.ArticleStatus.DRAFT.value"
-                >
-                </el-switch>
-              </el-form-item>
               <el-form-item>
                 <el-checkbox v-model="article.listShow">列表显示</el-checkbox>
                 <el-checkbox v-model="article.headerShow">顶栏显示</el-checkbox>
               </el-form-item>
               <el-form-item>
                 <el-switch
-                  v-model="article.priority"
-                  :active-value="$static.ArticlePriority.TOP.key"
-                  :inactive-value="$static.ArticlePriority.NORMAL.key"
-                  active-color="#ffd740"
-                  :active-text="$static.ArticlePriority.TOP.value"
-                  :inactive-text="$static.ArticlePriority.NORMAL.value"
+                  v-model="article.status"
+                  :active-value="ArticleStatusEnum.PUBLISH"
+                  :inactive-value="ArticleStatusEnum.DRAFT"
+                  :active-text="getConstValue(ArticleStatusEnum.PUBLISH, ArticleStatus)"
+                  :inactive-text="getConstValue(ArticleStatusEnum.DRAFT, ArticleStatus)"
                 >
                 </el-switch>
-              </el-form-item>-->
+              </el-form-item>
+              <el-form-item>
+                <el-switch
+                  v-model="article.priority"
+                  :active-value="ArticlePriorityEnum.TOP"
+                  :inactive-value="ArticlePriorityEnum.NORMAL"
+                  active-color="#ffd740"
+                  :active-text="getConstValue(ArticlePriorityEnum.TOP, ArticlePriority)"
+                  :inactive-text="getConstValue(ArticlePriorityEnum.NORMAL, ArticlePriority)"
+                >
+                </el-switch>
+              </el-form-item>
               <el-form-item>
                 <el-switch
                   v-model="article.allowComment"
@@ -159,13 +158,20 @@
 
 <script lang="ts">
   import { defineComponent, ref, reactive, onMounted, watch } from 'vue'
-  import { Edit, InfoFilled, Check, Minus } from '@element-plus/icons-vue'
   import { Api } from '~/api'
-  import { MediaItem, Meta, Pagination, RestResponse } from '~/types'
-  import { getConstValue, getFrontArticleUrl, getServerMediaUrl, handleRestResponse } from '~/utils'
-  import { ArticleStatus, ArticlePriority } from '~/types'
+  import {
+    MediaItem,
+    Meta,
+    Pagination,
+    RestResponse,
+    ArticleStatusEnum,
+    ArticleStatus,
+    ArticlePriorityEnum,
+    ArticlePriority
+  } from '~/types'
+  import { getFrontArticleUrl, getServerMediaUrl, handleRestResponse, getConstValue } from '~/utils'
   import router from '~/router'
-  import { ElMessage } from 'element-plus'
+  import BytemdEditor from '~/components/BytemdEditor.vue'
 
   interface Article {
     id: number | undefined
@@ -203,6 +209,7 @@
   }
 
   export default defineComponent({
+    components: { BytemdEditor },
     setup() {
       const mediaDialog = ref(false)
       const isMobile = ref(false)
@@ -233,7 +240,6 @@
           const resp = (await Api.getArticle(Number(id))) as RestResponse<ArticleResp>
           handleRestResponse(resp, (data) => {
             Object.assign(article, data)
-            console.log(data)
             article.categoryId = data.category?.id
             article.tagIds = data.tags?.map((tag) => {
               return tag.id
@@ -309,6 +315,10 @@
       )
 
       return {
+        ArticleStatusEnum,
+        ArticleStatus,
+        ArticlePriorityEnum,
+        ArticlePriority,
         mediaDialog,
         isMobile,
         submitting,
@@ -320,6 +330,7 @@
         mediaData,
         initArticle,
         getFrontArticleUrl,
+        getConstValue,
         exportArticle,
         initMedia,
         showMediaDialog
@@ -329,17 +340,15 @@
 </script>
 
 <style scoped>
-  .el-select {
-    width: 100%;
-  }
-
-  .el-date-editor {
-    width: 100%;
-  }
-
   .admin-page {
     margin-top: 30px;
     text-align: center;
+  }
+
+  .md-editor {
+    width: 100%;
+    line-height: normal;
+    text-align: left;
   }
 
   a {

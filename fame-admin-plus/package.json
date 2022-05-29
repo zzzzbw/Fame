@@ -8,9 +8,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@bytemd/plugin-gfm": "^1.15.0",
+    "@bytemd/plugin-highlight": "^1.15.0",
+    "@bytemd/vue-next": "^1.15.0",
     "axios": "^0.26.1",
+    "bytemd": "^1.15.0",
     "dayjs": "^1.11.2",
     "element-plus": "^2.0.2",
+    "github-markdown-css": "^5.1.0",
+    "highlight.js": "^11.5.1",
     "qs": "^6.10.3",
     "vue": "^3.2.31",
     "vue-router": "^4.0.14"

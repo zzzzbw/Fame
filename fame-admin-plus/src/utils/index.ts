@@ -31,14 +31,14 @@ export function getServerUploadMediaUrl(): string {
   return SERVER_URL + 'api/admin/media/upload'
 }
 
-export function getConstValue(key: string, constArr: Array<any>): string {
+export function getConstValue(key: string, constArr: Array<any>, defaultVal = ''): string {
   for (let i = 0; i < constArr.length; i++) {
-    const element = constArr[length]
+    const element = constArr[i]
     if (element.key == key) {
       return element.value
     }
   }
-  return ''
+  return defaultVal
 }
 
 export function copyText(text: string): void {
