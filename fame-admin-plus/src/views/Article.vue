@@ -7,7 +7,7 @@
             <el-input v-model="article.title" placeholder="请输入文章标题"></el-input>
           </el-form-item>
           <el-form-item prop="content">
-            <BytemdEditor :content-val="article.content" class="md-editor" />
+            <BytemdEditor v-model:contentVal="article.content" class="md-editor" />
           </el-form-item>
         </el-col>
         <el-col :xs="24" :sm="8" :md="5" :lg="5">
