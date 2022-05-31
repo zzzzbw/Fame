@@ -1,12 +1,18 @@
 import { RestResponse } from '~/types'
 import { FRONT_URL, SERVER_URL } from '~/config'
 
-export function handleRestResponse<T>(resp: RestResponse<T>, handle: (data: T) => void): void {
-  if (!resp.success) {
+export function handleRestResponse<T>(
+  resp: RestResponse<T>,
+  successHandle: (data: T) => void,
+  errorHandle: Function = (resp: RestResponse<T>) => {
     console.log(resp)
+  }
+): void {
+  if (!resp.success) {
+    errorHandle(resp)
     return
   }
-  handle(resp.data)
+  successHandle(resp.data)
 }
 
 export function setToken(token: string, refreshToken: string): void {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form ref="postForm" label-position="top" :rules="rules" :model="article">
+    <el-form ref="articleFormRef" label-position="top" :rules="rules" :model="article">
       <el-row :gutter="30">
         <el-col :xs="24" :sm="16" :md="19" :lg="19">
           <el-form-item prop="title">
@@ -90,8 +90,12 @@
               <el-form-item>
                 <el-button-group>
                   <el-row>
-                    <el-button type="success" size="small" @click="onSave">保存</el-button>
-                    <el-button type="primary" size="small" @click="onPublish">发布</el-button>
+                    <el-button type="success" size="small" @click="onSave(articleFormRef)"
+                      >保存</el-button
+                    >
+                    <el-button type="primary" size="small" @click="onPublish(articleFormRef)"
+                      >发布</el-button
+                    >
                     <el-button v-if="article.id !== ''" type="info" size="small">
                       <a
                         :href="getFrontArticleUrl(article.id)"
@@ -172,6 +176,7 @@
   import { getFrontArticleUrl, getServerMediaUrl, handleRestResponse, getConstValue } from '~/utils'
   import router from '~/router'
   import BytemdEditor from '~/components/BytemdEditor.vue'
+  import { ElForm, ElMessage } from 'element-plus'
 
   interface Article {
     id: number | undefined
@@ -208,9 +213,13 @@
     data: Array<MediaItem>
   }
 
+  type ElFormInstance = InstanceType<typeof ElForm>
+
   export default defineComponent({
     components: { BytemdEditor },
     setup() {
+      const articleFormRef = ref<ElFormInstance>()
+
       const mediaDialog = ref(false)
       const isMobile = ref(false)
       const submitting = ref(false)
@@ -228,7 +237,11 @@
         allowComment: true,
         publishTime: ''
       })
-      const rules = reactive({})
+      const rules = reactive({
+        title: [{ required: true, message: '文章标题必须输入', trigger: 'blur' }],
+        content: [{ required: true, message: '文章内容不能为空', trigger: 'blur' }]
+      })
+
       const tags = reactive<Array<Meta>>([])
       const categories = reactive<Array<Meta>>([])
       const flagFalse = ref(false)
@@ -291,7 +304,55 @@
         })
       }
 
+      // TODO
       function exportArticle() {}
+
+      function onPublish(formRef: InstanceType<typeof ElForm>) {
+        submitForm(formRef, () => {
+          ElMessage.success('发布文章成功!')
+          router.push('/article')
+        })
+      }
+
+      function onSave(formRef: InstanceType<typeof ElForm>) {
+        submitForm(formRef, (article: ArticleResp) => {
+          ElMessage.success('发布文章成功!')
+          router.currentRoute.value.params.id = String(article.id)
+          initArticle()
+        })
+      }
+
+      const submitForm = async (formRef: InstanceType<typeof ElForm>, callback: Function) => {
+        if (!formRef) {
+          return
+        }
+
+        if (submitting.value) {
+          ElMessage.warning('请不要提交过快!')
+          return
+        }
+
+        await formRef.validate(async (valid) => {
+          if (!valid) {
+            return
+          }
+
+          submitting.value = true
+          console.log(article)
+          const resp = (await Api.saveArticle(article)) as RestResponse<ArticleResp>
+          handleRestResponse(
+            resp,
+            (article) => {
+              submitting.value = false
+              callback(article)
+            },
+            () => {
+              submitting.value = false
+              ElMessage.error('提交文章失败,' + resp.msg)
+            }
+          )
+        })
+      }
 
       async function showMediaDialog() {
         await initMedia()
@@ -315,6 +376,8 @@
       )
 
       return {
+        rules,
+        articleFormRef,
         ArticleStatusEnum,
         ArticleStatus,
         ArticlePriorityEnum,
@@ -323,7 +386,6 @@
         isMobile,
         submitting,
         article,
-        rules,
         tags,
         categories,
         flagFalse,
@@ -332,6 +394,8 @@
         getFrontArticleUrl,
         getConstValue,
         exportArticle,
+        onPublish,
+        onSave,
         initMedia,
         showMediaDialog
       }
