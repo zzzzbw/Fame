@@ -16,17 +16,18 @@
               <el-form-item label="标签">
                 <el-select
                   v-model="article.tagIds"
+                  class="panel-content-item"
                   multiple
                   filterable
                   placeholder="请选择文章标签"
                 >
-                  <el-option v-for="tag in tags" :key="tag.id" :label="tag.name" :value="tag.id">
-                  </el-option>
+                  <el-option v-for="tag in tags" :key="tag.id" :label="tag.name" :value="tag.id" />
                 </el-select>
               </el-form-item>
               <el-form-item label="分类">
                 <el-select
                   v-model="article.categoryId"
+                  class="panel-content-item"
                   filterable
                   clearable
                   placeholder="请选择文章分类"
@@ -77,6 +78,7 @@
               <el-form-item label="发布日期">
                 <el-date-picker
                   v-model="article.publishTime"
+                  class="panel-content-item"
                   type="datetime"
                   placeholder="发布日期"
                   size="small"
@@ -189,7 +191,7 @@
     status: string
     priority: number
     allowComment: boolean
-    publishTime: string
+    publishTime: number
   }
 
   interface ArticleResp {
@@ -203,7 +205,7 @@
     status: string
     priority: number
     allowComment: boolean
-    publishTime: string
+    publishTime: number
   }
 
   interface MediaData {
@@ -235,7 +237,7 @@
         headerShow: false,
         priority: 0,
         allowComment: true,
-        publishTime: ''
+        publishTime: new Date().getTime()
       })
       const rules = reactive({
         title: [{ required: true, message: '文章标题必须输入', trigger: 'blur' }],
@@ -417,5 +419,9 @@
 
   a {
     text-decoration: none;
+  }
+
+  .panel-content-item {
+    width: 100%;
   }
 </style>
