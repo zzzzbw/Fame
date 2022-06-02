@@ -34,7 +34,7 @@
               <div class="tool-container-item">
                 <span>列表显示：</span>
                 <el-radio-group v-model="tool.listShow" size="small" @change="initArticleData">
-                  <el-radio-button :label="null">全部</el-radio-button>
+                  <el-radio-button :label="undefined">全部</el-radio-button>
                   <el-radio-button :label="true">是</el-radio-button>
                   <el-radio-button :label="false">否</el-radio-button>
                 </el-radio-group>
@@ -44,7 +44,7 @@
               <div class="tool-container-item">
                 <span>顶部显示：</span>
                 <el-radio-group v-model="tool.headerShow" size="small" @change="initArticleData">
-                  <el-radio-button :label="null">全部</el-radio-button>
+                  <el-radio-button :label="undefined">全部</el-radio-button>
                   <el-radio-button :label="true">是</el-radio-button>
                   <el-radio-button :label="false">否</el-radio-button>
                 </el-radio-group>
@@ -213,8 +213,8 @@
         status: '',
         title: '',
         priority: '',
-        listShow: null,
-        headerShow: null
+        listShow: undefined,
+        headerShow: undefined
       })
       const articleList = reactive<Array<ArticleListItem>>([])
 
@@ -235,9 +235,11 @@
       }
 
       async function initArticleData() {
-        const resp = (await Api.pageArticle(currentPage.value, pageSize.value)) as RestResponse<
-          Pagination<ArticleListItem>
-        >
+        const resp = (await Api.pageArticle(
+          currentPage.value,
+          pageSize.value,
+          tool
+        )) as RestResponse<Pagination<ArticleListItem>>
 
         handleRestResponse(resp, (page) => {
           total.value = page.total
