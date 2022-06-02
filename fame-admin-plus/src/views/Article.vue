@@ -175,10 +175,17 @@
     ArticlePriorityEnum,
     ArticlePriority
   } from '~/types'
-  import { getFrontArticleUrl, getServerMediaUrl, handleRestResponse, getConstValue } from '~/utils'
+  import {
+    getFrontArticleUrl,
+    getServerMediaUrl,
+    handleRestResponse,
+    getConstValue,
+    downloadFile
+  } from '~/utils'
   import router from '~/router'
   import BytemdEditor from '~/components/BytemdEditor.vue'
   import { ElForm, ElMessage } from 'element-plus'
+  import { AxiosResponse } from 'axios'
 
   interface Article {
     id: number | undefined
@@ -307,7 +314,15 @@
       }
 
       // TODO
-      function exportArticle() {}
+      async function exportArticle() {
+        if (!article.id) {
+          ElMessage.error('该文章还未保存，不能导出')
+          return
+        }
+
+        const res = (await Api.exportArticle(article.id)) as AxiosResponse
+        downloadFile(res)
+      }
 
       function onPublish(formRef: InstanceType<typeof ElForm>) {
         submitForm(formRef, () => {

@@ -1,5 +1,6 @@
 import { RestResponse } from '~/types'
 import { FRONT_URL, SERVER_URL } from '~/config'
+import { AxiosResponse } from 'axios'
 
 export function handleRestResponse<T>(
   resp: RestResponse<T>,
@@ -55,4 +56,25 @@ export function copyText(text: string): void {
   document.execCommand('Copy') // 执行浏览器复制命令
   oInput.className = 'oInput'
   oInput.style.display = 'none'
+}
+
+export function downloadFile(response: AxiosResponse) {
+  const { data, headers } = response
+  let fileName = '下载文件'
+  const disposition = headers['content-disposition']
+  const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/
+  const matches = filenameRegex.exec(disposition)
+  if (matches != null && matches[1]) {
+    fileName = matches[1].replace(/['"]/g, '')
+  }
+  const blob = new Blob([data], { type: headers['content-type'] })
+  const dom = document.createElement('a')
+  const url = window.URL.createObjectURL(blob)
+  dom.href = url
+  dom.download = decodeURI(fileName)
+  dom.style.display = 'none'
+  document.body.appendChild(dom)
+  dom.click()
+  dom.parentNode?.removeChild(dom)
+  window.URL.revokeObjectURL(url)
 }
