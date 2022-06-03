@@ -13,45 +13,38 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref, watch } from 'vue'
+<script setup lang="ts">
+  import { defineEmits, ref, watch } from 'vue'
 
-  export default defineComponent({
-    props: {
-      currentPage: {
-        type: Number,
-        default: 1
-      },
-      pageSize: {
-        type: Number,
-        default: 10
-      },
-      total: {
-        type: Number,
-        default: 1
-      }
+  const props = defineProps({
+    currentPage: {
+      type: Number,
+      default: 1
     },
-    emits: ['update:currentPage', 'update:pageSize'],
-    setup(props, { emit }) {
-      const currentPageVal = ref(props.currentPage)
-      const pageSizeVal = ref(props.pageSize)
-
-      watch(
-        () => currentPageVal.value,
-        (newVal) => emit('update:currentPage', newVal)
-      )
-
-      watch(
-        () => pageSizeVal.value,
-        (newVal) => emit('update:pageSize', newVal)
-      )
-
-      return {
-        currentPageVal,
-        pageSizeVal
-      }
+    pageSize: {
+      type: Number,
+      default: 10
+    },
+    total: {
+      type: Number,
+      default: 1
     }
   })
+
+  const emit = defineEmits(['update:currentPage', 'update:pageSize'])
+
+  const currentPageVal = ref(props.currentPage)
+  const pageSizeVal = ref(props.pageSize)
+
+  watch(
+    () => currentPageVal.value,
+    (newVal) => emit('update:currentPage', newVal)
+  )
+
+  watch(
+    () => pageSizeVal.value,
+    (newVal) => emit('update:pageSize', newVal)
+  )
 </script>
 
 <style lang="scss" scoped>

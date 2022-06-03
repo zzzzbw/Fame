@@ -31,65 +31,50 @@
   </el-card>
 </template>
 
-<script lang="ts">
-  import { defineComponent } from 'vue'
+<script setup lang="ts">
   import { InfoFilled, DocumentCopy, Document, Delete } from '@element-plus/icons-vue'
   import { copyText, getServerMediaUrl, handleRestResponse } from '~/utils'
   import { RestResponse } from '~/types'
   import { ElMessage } from 'element-plus'
   import { Api } from '~/api'
 
-  export default defineComponent({
-    props: {
-      afterDelete: {
-        type: Function,
-        default: null
-      },
-      mediaVal: {
-        type: Object,
-        default: null
-      }
+  const props = defineProps({
+    afterDelete: {
+      type: Function,
+      default: null
     },
-    setup(props) {
-      function copyUrl(url: string) {
-        copyText(getServerMediaUrl(url))
-        ElMessage.success('复制链接到剪切板成功!')
-      }
-
-      function copyMarkdownUrl(name: string, url: string) {
-        const realUrl = getServerMediaUrl(url)
-        let text = '![' + name + '](' + realUrl + ')'
-        copyText(text)
-        ElMessage.success('复制Markdown格式链接到剪切板成功!')
-      }
-
-      async function deleteMedia(id: number) {
-        const resp = (await Api.deleteMedia(id)) as RestResponse<void>
-        handleRestResponse(resp, () => {
-          ElMessage.success('删除成功!')
-          if (props.afterDelete) {
-            props.afterDelete()
-          }
-        })
-      }
-
-      function showDetailDialog() {
-        const url = getServerMediaUrl(props.mediaVal?.url)
-        window.open(url, '_blank')
-      }
-
-      return {
-        copyUrl,
-        copyMarkdownUrl,
-        deleteMedia,
-        showDetailDialog,
-        InfoFilled,
-        DocumentCopy,
-        Document,
-        Delete
-      }
+    mediaVal: {
+      type: Object,
+      default: null
     }
   })
+
+  function copyUrl(url: string) {
+    copyText(getServerMediaUrl(url))
+    ElMessage.success('复制链接到剪切板成功!')
+  }
+
+  function copyMarkdownUrl(name: string, url: string) {
+    const realUrl = getServerMediaUrl(url)
+    let text = '![' + name + '](' + realUrl + ')'
+    copyText(text)
+    ElMessage.success('复制Markdown格式链接到剪切板成功!')
+  }
+
+  async function deleteMedia(id: number) {
+    const resp = (await Api.deleteMedia(id)) as RestResponse<void>
+    handleRestResponse(resp, () => {
+      ElMessage.success('删除成功!')
+      if (props.afterDelete) {
+        props.afterDelete()
+      }
+    })
+  }
+
+  function showDetailDialog() {
+    const url = getServerMediaUrl(props.mediaVal?.url)
+    window.open(url, '_blank')
+  }
 </script>
 
 <style scoped>

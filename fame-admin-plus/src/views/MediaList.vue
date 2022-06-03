@@ -22,65 +22,54 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref, reactive, onMounted, watch } from 'vue'
-  import { RestResponse, Pagination, MediaItem } from '~/types'
+<script setup lang="ts">
+  import { ref, reactive, onMounted, watch } from 'vue'
+  import { RestResponse, Page, MediaInfo } from '~/types'
   import { getServerMediaUrl, handleRestResponse } from '~/utils'
   import { Api } from '~/api'
+  import MediaItem from '~/components/MediaItem.vue'
   import MediaUpload from '~/components/MediaUpload.vue'
+  import Pagination from '~/components/layouts/Pagination.vue'
 
-  export default defineComponent({
-    components: { MediaUpload },
-    setup() {
-      const currentPage = ref(1)
-      const total = ref(0)
-      const pageSize = ref(10)
+  const currentPage = ref(1)
+  const total = ref(0)
+  const pageSize = ref(10)
 
-      const mediaList = reactive<Array<MediaItem>>([])
+  const mediaList = reactive<Array<MediaInfo>>([])
 
-      async function initMediaData() {
-        const resp = (await Api.pageMedia(currentPage.value, pageSize.value)) as RestResponse<
-          Pagination<MediaItem>
-        >
-        handleRestResponse(resp, (page) => {
-          mediaList.splice(0)
-          total.value = page.total
-          pageSize.value = page.pageSize
-          for (let key in page.list) {
-            let mediaItem = page.list[key]
-            if (mediaItem.thumbUrl && mediaItem.thumbUrl !== '') {
-              mediaItem.showUrl = getServerMediaUrl(mediaItem.thumbUrl)
-            } else {
-              mediaItem.showUrl = getServerMediaUrl(mediaItem.url)
-            }
-            mediaList.push(mediaItem)
-          }
-          console.log(mediaList)
-        })
+  async function initMediaData() {
+    const resp = (await Api.pageMedia(currentPage.value, pageSize.value)) as RestResponse<
+      Page<MediaInfo>
+    >
+    handleRestResponse(resp, (page) => {
+      mediaList.splice(0)
+      total.value = page.total
+      pageSize.value = page.pageSize
+      for (let key in page.list) {
+        let mediaItem = page.list[key]
+        if (mediaItem.thumbUrl && mediaItem.thumbUrl !== '') {
+          mediaItem.showUrl = getServerMediaUrl(mediaItem.thumbUrl)
+        } else {
+          mediaItem.showUrl = getServerMediaUrl(mediaItem.url)
+        }
+        mediaList.push(mediaItem)
       }
+      console.log(mediaList)
+    })
+  }
 
-      watch(
-        () => currentPage.value,
-        () => initMediaData()
-      )
+  watch(
+    () => currentPage.value,
+    () => initMediaData()
+  )
 
-      watch(
-        () => pageSize.value,
-        () => initMediaData()
-      )
+  watch(
+    () => pageSize.value,
+    () => initMediaData()
+  )
 
-      onMounted(() => {
-        initMediaData()
-      })
-
-      return {
-        currentPage,
-        total,
-        pageSize,
-        mediaList,
-        initMediaData
-      }
-    }
+  onMounted(() => {
+    initMediaData()
   })
 </script>
 

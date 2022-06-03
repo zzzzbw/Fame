@@ -22,10 +22,10 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent, reactive, ref } from 'vue'
+<script setup lang="ts">
+  import { reactive, ref } from 'vue'
   import router from '~/router'
-  import { ElForm, ElMessage } from 'element-plus'
+  import { ElMessage, FormInstance, FormRules } from 'element-plus'
   import { RestResponse } from '~/types'
   import { Api } from '~/api'
   import { handleRestResponse, removeToken, setToken } from '~/utils'
@@ -35,51 +35,40 @@
     refreshToken: string
   }
 
-  export default defineComponent({
-    setup() {
-      const userFormRef = ref<InstanceType<typeof ElForm>>()
+  const userFormRef = ref<FormInstance>()
 
-      const userForm = reactive({
-        username: '',
-        password: ''
-      })
-
-      const rules = reactive({
-        username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-        password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
-      })
-
-      const submitForm = async (userFormRef: InstanceType<typeof ElForm>) => {
-        if (!userFormRef) return
-        await userFormRef.validate(async (valid) => {
-          if (!valid) {
-            return
-          }
-
-          try {
-            // 先清除之前的token
-            removeToken()
-            const resp = (await Api.login(userForm)) as RestResponse<LoginResult>
-            handleRestResponse(resp, (userForm) => {
-              // 存储token
-              setToken(userForm.token, userForm.refreshToken)
-            })
-            await router.push('/')
-            ElMessage.success('登录成功!')
-          } catch (error) {
-            console.error(error)
-          }
-        })
-      }
-
-      return {
-        userFormRef,
-        rules,
-        userForm,
-        submitForm
-      }
-    }
+  const userForm = reactive({
+    username: '',
+    password: ''
   })
+
+  const rules = reactive<FormRules>({
+    username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+    password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
+  })
+
+  const submitForm = async (formEl: FormInstance | undefined) => {
+    if (!formEl) return
+    await formEl.validate(async (valid) => {
+      if (!valid) {
+        return
+      }
+
+      try {
+        // 先清除之前的token
+        removeToken()
+        const resp = (await Api.login(userForm)) as RestResponse<LoginResult>
+        handleRestResponse(resp, (userForm) => {
+          // 存储token
+          setToken(userForm.token, userForm.refreshToken)
+        })
+        await router.push('/')
+        ElMessage.success('登录成功!')
+      } catch (error) {
+        console.error(error)
+      }
+    })
+  }
 </script>
 
 <style scoped>

@@ -9,70 +9,68 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
+  import { onMounted, reactive, watch } from 'vue'
+  import router from '~/router'
+
+  interface BreadCrumbItem {
+    name: string
+    title: string
+    link: string
+    parent: string
+  }
+
   const config = [
-    { name: 'ArticleList', title: '文章列表', link: '/article' },
+    { name: 'ArticleList', title: '文章列表', link: '/article', parent: '' },
     {
       name: 'ArticleNew',
       title: '新建文章',
+      link: '/article',
       parent: 'ArticleList'
     },
     {
       name: 'ArticleEdit',
       title: '编辑文章',
+      link: '/article',
       parent: 'ArticleList'
     },
-    { name: 'CommentList', title: '评论列表' },
-    { name: 'MetaList', title: '标签/分类' },
-    { name: 'MediaList', title: '媒体库' },
-    { name: 'Setting', title: '网站设置' }
+    { name: 'CommentList', title: '评论列表', link: '', parent: '' },
+    { name: 'MetaList', title: '标签/分类', link: '', parent: '' },
+    { name: 'MediaList', title: '媒体库', link: '', parent: '' },
+    { name: 'Setting', title: '网站设置', link: '', parent: '' }
   ]
 
-  export default {
-    name: 'BreadCrumb',
-    data() {
-      return {
-        levelList: []
-      }
-    },
-    watch: {
-      $route(route) {
-        // if you go to the redirect page, do not update the breadcrumbs
-        if (route.path.startsWith('/redirect/')) {
-          return
-        }
-        this.initLevelList()
-      }
-    },
-    created() {
-      this.initLevelList()
-    },
-    methods: {
-      initLevelList() {
-        this.levelList = []
-        if (!this.$route.name) {
-          return
-        }
-        this.getBreadcrumb(this.$route.name)
-        this.levelList.reverse()
-      },
-      getBreadcrumb(name) {
-        let breadCrumbItem = null
-        config.forEach((c) => {
-          if (c.name === name) {
-            breadCrumbItem = c
-          }
-        })
-        if (null === breadCrumbItem) {
-          return
-        }
-        this.levelList.push(breadCrumbItem)
-        if (breadCrumbItem.parent && breadCrumbItem.parent !== '') {
-          this.getBreadcrumb(breadCrumbItem.parent)
-        }
-      }
+  const levelList = reactive<Array<BreadCrumbItem>>([])
+
+  function initLevelList() {
+    levelList.splice(0)
+    let name = router.currentRoute.value.name
+    if (!name) {
+      return
     }
+    getBreadcrumb(name)
+    levelList.reverse()
   }
+
+  function getBreadcrumb(name: string | symbol) {
+    for (let i = 0; i < config.length; i++) {}
+    config.forEach((c) => {
+      if (c.name === name) {
+        levelList.push(c)
+        if (c.parent && c.parent !== '') {
+          getBreadcrumb(c.parent)
+        }
+        return
+      }
+    })
+  }
+
+  onMounted(() => initLevelList())
+
+  watch(
+    () => router.currentRoute.value.name,
+    () => initLevelList()
+  )
 </script>
 
 <style scoped></style>

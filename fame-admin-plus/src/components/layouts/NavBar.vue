@@ -14,8 +14,7 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent } from 'vue'
+<script setup lang="ts">
   import { Back as IconBack } from '@element-plus/icons-vue'
   import router from '~/router'
   import { ElMessage } from 'element-plus'
@@ -23,24 +22,15 @@
   import { Api } from '~/api'
   import { removeToken } from '~/utils'
 
-  export default defineComponent({
-    components: { IconBack },
-    setup() {
-      const logout = async () => {
-        const resp = (await Api.logout()) as RestResponse<void>
-        if (resp.success) {
-          removeToken()
-        } else {
-          ElMessage.error(resp.msg || '登出失败!')
-        }
-        router.push('/login')
-      }
-
-      return {
-        logout
-      }
+  const logout = async () => {
+    const resp = (await Api.logout()) as RestResponse<void>
+    if (resp.success) {
+      removeToken()
+    } else {
+      ElMessage.error(resp.msg || '登出失败!')
     }
-  })
+    await router.push('/login')
+  }
 </script>
 
 <style scoped>

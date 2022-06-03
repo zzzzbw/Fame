@@ -162,13 +162,13 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref, reactive, onMounted, watch } from 'vue'
+<script setup lang="ts">
+  import { ref, reactive, onMounted, watch } from 'vue'
   import { Api } from '~/api'
   import {
-    MediaItem,
+    MediaInfo,
     Meta,
-    Pagination,
+    Page,
     RestResponse,
     ArticleStatusEnum,
     ArticleStatus,
@@ -184,8 +184,10 @@
   } from '~/utils'
   import router from '~/router'
   import BytemdEditor from '~/components/BytemdEditor.vue'
-  import { ElForm, ElMessage } from 'element-plus'
+  import { FormInstance, FormRules, ElMessage } from 'element-plus'
   import { AxiosResponse } from 'axios'
+  import Pagination from '~/components/layouts/Pagination.vue'
+  import MediaItem from '~/components/MediaItem.vue'
 
   interface Article {
     id: number | undefined
@@ -219,205 +221,170 @@
     currentPage: number
     pageSize: number
     total: number
-    data: Array<MediaItem>
+    data: Array<MediaInfo>
   }
 
-  type ElFormInstance = InstanceType<typeof ElForm>
+  const articleFormRef = ref<FormInstance>()
 
-  export default defineComponent({
-    components: { BytemdEditor },
-    setup() {
-      const articleFormRef = ref<ElFormInstance>()
+  const mediaDialog = ref(false)
+  const submitting = ref(false)
 
-      const mediaDialog = ref(false)
-      const isMobile = ref(false)
-      const submitting = ref(false)
-
-      const article = reactive<Article>({
-        id: undefined,
-        title: '',
-        tagIds: [],
-        categoryId: undefined,
-        content: '',
-        status: 'PUBLISH',
-        listShow: true,
-        headerShow: false,
-        priority: 0,
-        allowComment: true,
-        publishTime: new Date().getTime()
-      })
-      const rules = reactive({
-        title: [{ required: true, message: '文章标题必须输入', trigger: 'blur' }],
-        content: [{ required: true, message: '文章内容不能为空', trigger: 'blur' }]
-      })
-
-      const tags = reactive<Array<Meta>>([])
-      const categories = reactive<Array<Meta>>([])
-      const flagFalse = ref(false)
-      const mediaData = reactive<MediaData>({ currentPage: 0, data: [], pageSize: 10, total: 0 })
-
-      async function initArticle() {
-        const id = router.currentRoute.value.params.id
-        if (id) {
-          const resp = (await Api.getArticle(Number(id))) as RestResponse<ArticleResp>
-          handleRestResponse(resp, (data) => {
-            Object.assign(article, data)
-            article.categoryId = data.category?.id
-            article.tagIds = data.tags?.map((tag) => {
-              return tag.id
-            })
-          })
-        }
-      }
-
-      async function initTags() {
-        const resp = (await Api.getAllTags()) as RestResponse<Array<Meta>>
-        handleRestResponse(resp, (data) => {
-          tags.splice(0)
-          for (let key in data) {
-            let tag = data[key]
-            tags.push(tag)
-          }
-        })
-      }
-
-      async function initCategories() {
-        const resp = (await Api.getAllCategories()) as RestResponse<Array<Meta>>
-        handleRestResponse(resp, (data) => {
-          categories.splice(0)
-          for (let key in data) {
-            let category = data[key]
-            categories.push(category)
-          }
-        })
-      }
-
-      async function initMedia() {
-        const resp = (await Api.pageMedia(
-          mediaData.currentPage,
-          mediaData.pageSize
-        )) as RestResponse<Pagination<MediaItem>>
-        handleRestResponse(resp, (page) => {
-          mediaData.data.splice(0)
-          mediaData.total = page.total
-          mediaData.pageSize = page.pageSize
-          for (let key in page.list) {
-            let mediaItem = page.list[key]
-            if (mediaItem.thumbUrl && mediaItem.thumbUrl !== '') {
-              mediaItem.showUrl = getServerMediaUrl(mediaItem.thumbUrl)
-            } else {
-              mediaItem.showUrl = getServerMediaUrl(mediaItem.url)
-            }
-            mediaData.data.push(mediaItem)
-          }
-        })
-      }
-
-      // TODO
-      async function exportArticle() {
-        if (!article.id) {
-          ElMessage.error('该文章还未保存，不能导出')
-          return
-        }
-
-        const res = (await Api.exportArticle(article.id)) as AxiosResponse
-        downloadFile(res)
-      }
-
-      function onPublish(formRef: InstanceType<typeof ElForm>) {
-        submitForm(formRef, () => {
-          ElMessage.success('发布文章成功!')
-          router.push('/article')
-        })
-      }
-
-      function onSave(formRef: InstanceType<typeof ElForm>) {
-        submitForm(formRef, (article: ArticleResp) => {
-          ElMessage.success('发布文章成功!')
-          router.currentRoute.value.params.id = String(article.id)
-          initArticle()
-        })
-      }
-
-      const submitForm = async (formRef: InstanceType<typeof ElForm>, callback: Function) => {
-        if (!formRef) {
-          return
-        }
-
-        if (submitting.value) {
-          ElMessage.warning('请不要提交过快!')
-          return
-        }
-
-        await formRef.validate(async (valid) => {
-          if (!valid) {
-            return
-          }
-
-          submitting.value = true
-          console.log(article)
-          const resp = (await Api.saveArticle(article)) as RestResponse<ArticleResp>
-          handleRestResponse(
-            resp,
-            (article) => {
-              submitting.value = false
-              callback(article)
-            },
-            () => {
-              submitting.value = false
-              ElMessage.error('提交文章失败,' + resp.msg)
-            }
-          )
-        })
-      }
-
-      async function showMediaDialog() {
-        await initMedia()
-        mediaDialog.value = true
-      }
-
-      onMounted(() => {
-        initTags()
-        initCategories()
-        initArticle()
-      })
-
-      watch(
-        () => router.currentRoute.value,
-        () => initArticle()
-      )
-
-      watch(
-        () => mediaData.currentPage,
-        () => initMedia()
-      )
-
-      return {
-        rules,
-        articleFormRef,
-        ArticleStatusEnum,
-        ArticleStatus,
-        ArticlePriorityEnum,
-        ArticlePriority,
-        mediaDialog,
-        isMobile,
-        submitting,
-        article,
-        tags,
-        categories,
-        flagFalse,
-        mediaData,
-        initArticle,
-        getFrontArticleUrl,
-        getConstValue,
-        exportArticle,
-        onPublish,
-        onSave,
-        initMedia,
-        showMediaDialog
-      }
-    }
+  const article = reactive<Article>({
+    id: undefined,
+    title: '',
+    tagIds: [],
+    categoryId: undefined,
+    content: '',
+    status: 'PUBLISH',
+    listShow: true,
+    headerShow: false,
+    priority: 0,
+    allowComment: true,
+    publishTime: new Date().getTime()
   })
+  const rules = reactive<FormRules>({
+    title: [{ required: true, message: '文章标题必须输入', trigger: 'blur' }],
+    content: [{ required: true, message: '文章内容不能为空', trigger: 'blur' }]
+  })
+
+  const tags = reactive<Array<Meta>>([])
+  const categories = reactive<Array<Meta>>([])
+  const flagFalse = ref(false)
+  const mediaData = reactive<MediaData>({ currentPage: 0, data: [], pageSize: 10, total: 0 })
+
+  async function initArticle() {
+    const id = router.currentRoute.value.params.id
+    if (id) {
+      const resp = (await Api.getArticle(Number(id))) as RestResponse<ArticleResp>
+      handleRestResponse(resp, (data) => {
+        Object.assign(article, data)
+        article.categoryId = data.category?.id
+        article.tagIds = data.tags?.map((tag) => {
+          return tag.id
+        })
+      })
+    }
+  }
+
+  async function initTags() {
+    const resp = (await Api.getAllTags()) as RestResponse<Array<Meta>>
+    handleRestResponse(resp, (data) => {
+      tags.splice(0)
+      for (let key in data) {
+        let tag = data[key]
+        tags.push(tag)
+      }
+    })
+  }
+
+  async function initCategories() {
+    const resp = (await Api.getAllCategories()) as RestResponse<Array<Meta>>
+    handleRestResponse(resp, (data) => {
+      categories.splice(0)
+      for (let key in data) {
+        let category = data[key]
+        categories.push(category)
+      }
+    })
+  }
+
+  async function initMedia() {
+    const resp = (await Api.pageMedia(mediaData.currentPage, mediaData.pageSize)) as RestResponse<
+      Page<MediaInfo>
+    >
+    handleRestResponse(resp, (page) => {
+      mediaData.data.splice(0)
+      mediaData.total = page.total
+      mediaData.pageSize = page.pageSize
+      for (let key in page.list) {
+        let mediaItem = page.list[key]
+        if (mediaItem.thumbUrl && mediaItem.thumbUrl !== '') {
+          mediaItem.showUrl = getServerMediaUrl(mediaItem.thumbUrl)
+        } else {
+          mediaItem.showUrl = getServerMediaUrl(mediaItem.url)
+        }
+        mediaData.data.push(mediaItem)
+      }
+    })
+  }
+
+  async function exportArticle() {
+    if (!article.id) {
+      ElMessage.error('该文章还未保存，不能导出')
+      return
+    }
+
+    const res = (await Api.exportArticle(article.id)) as AxiosResponse
+    downloadFile(res)
+  }
+
+  function onPublish(formRef: FormInstance | undefined) {
+    submitForm(formRef, () => {
+      ElMessage.success('发布文章成功!')
+      router.push('/article')
+    })
+  }
+
+  function onSave(formRef: FormInstance | undefined) {
+    submitForm(formRef, (article: ArticleResp) => {
+      ElMessage.success('发布文章成功!')
+      router.currentRoute.value.params.id = String(article.id)
+      initArticle()
+    })
+  }
+
+  const submitForm = async (formRef: FormInstance | undefined, callback: Function) => {
+    if (!formRef) {
+      return
+    }
+
+    if (submitting.value) {
+      ElMessage.warning('请不要提交过快!')
+      return
+    }
+
+    await formRef.validate(async (valid) => {
+      if (!valid) {
+        return
+      }
+
+      submitting.value = true
+      console.log(article)
+      const resp = (await Api.saveArticle(article)) as RestResponse<ArticleResp>
+      handleRestResponse(
+        resp,
+        (article) => {
+          submitting.value = false
+          callback(article)
+        },
+        () => {
+          submitting.value = false
+          ElMessage.error('提交文章失败,' + resp.msg)
+        }
+      )
+    })
+  }
+
+  async function showMediaDialog() {
+    await initMedia()
+    mediaDialog.value = true
+  }
+
+  onMounted(() => {
+    initTags()
+    initCategories()
+    initArticle()
+  })
+
+  watch(
+    () => router.currentRoute.value,
+    () => initArticle()
+  )
+
+  watch(
+    () => mediaData.currentPage,
+    () => initMedia()
+  )
 </script>
 
 <style scoped>

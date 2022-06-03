@@ -5,24 +5,16 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+  import { ref } from 'vue'
   import { useRoute } from 'vue-router'
 
-  export default defineComponent({
-    setup() {
-      const route = useRoute()
-      const state = ref()
-      const message = ref()
+  const route = useRoute()
+  const state = ref()
+  const message = ref()
 
-      state.value = route.params.state || 404
-      message.value = route.params.message || 'Page Not found'
-      return {
-        state,
-        message
-      }
-    }
-  })
+  state.value = route.params.state || 404
+  message.value = route.params.message || 'Page Not found'
 </script>
 
 <style scoped>

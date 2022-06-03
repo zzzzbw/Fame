@@ -79,13 +79,14 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref, reactive, onMounted, watch } from 'vue'
+<script setup lang="ts">
+  import { ref, reactive, onMounted, watch } from 'vue'
   import { InfoFilled } from '@element-plus/icons-vue'
   import { ElMessage } from 'element-plus'
-  import { RestResponse, Pagination } from '~/types'
+  import { RestResponse, Page } from '~/types'
   import { getFrontArticleUrl, handleRestResponse } from '~/utils'
   import { Api } from '~/api'
+  import Pagination from '~/components/layouts/Pagination.vue'
 
   interface CommentListItem {
     id: number
@@ -117,100 +118,84 @@
     parentComment?: CommentDetail
   }
 
-  export default defineComponent({
-    setup() {
-      const currentPage = ref(1)
-      const total = ref(0)
-      const pageSize = ref(10)
+  const currentPage = ref(1)
+  const total = ref(0)
+  const pageSize = ref(10)
 
-      const commentList = reactive<Array<CommentListItem>>([])
-      const comment = reactive<CommentDetail>({
-        agent: '',
-        agree: 0,
-        content: '',
-        created: '',
-        disagree: 0,
-        email: '',
-        id: 0,
-        ip: '',
-        name: '',
-        website: '',
-        hasReplay: false
-      })
+  const commentList = reactive<Array<CommentListItem>>([])
+  const comment = reactive<CommentDetail>({
+    agent: '',
+    agree: 0,
+    content: '',
+    created: '',
+    disagree: 0,
+    email: '',
+    id: 0,
+    ip: '',
+    name: '',
+    website: '',
+    hasReplay: false
+  })
 
-      const detailVisible = ref(false)
+  const detailVisible = ref(false)
 
-      async function initCommentData() {
-        const resp = (await Api.pageComment(currentPage.value, pageSize.value)) as RestResponse<
-          Pagination<CommentListItem>
-        >
-        handleRestResponse(resp, (page) => {
-          total.value = page.total
-          pageSize.value = page.pageSize
-          commentList.splice(0)
-          for (let key in page.list) {
-            let comment = page.list[key]
-            commentList.push(comment)
-          }
-        })
+  async function initCommentData() {
+    const resp = (await Api.pageComment(currentPage.value, pageSize.value)) as RestResponse<
+      Page<CommentListItem>
+    >
+    handleRestResponse(resp, (page) => {
+      total.value = page.total
+      pageSize.value = page.pageSize
+      commentList.splice(0)
+      for (let key in page.list) {
+        let comment = page.list[key]
+        commentList.push(comment)
       }
+    })
+  }
 
-      async function initCommentDetail(id: number) {
-        const resp = (await Api.getCommentDetail(id)) as RestResponse<CommentDetail>
-        handleRestResponse(resp, (data) => {
-          Object.assign(comment, data)
-          if (data.article) {
-            comment.postUrl = getFrontArticleUrl(data.article.id)
-          }
-          if (data.parentComment) {
-            comment.hasReplay = true
-            comment.replayName = data.parentComment.name
-            comment.replay = data.parentComment.content
-          } else {
-            comment.hasReplay = false
-          }
-        })
+  async function initCommentDetail(id: number) {
+    const resp = (await Api.getCommentDetail(id)) as RestResponse<CommentDetail>
+    handleRestResponse(resp, (data) => {
+      Object.assign(comment, data)
+      if (data.article) {
+        comment.postUrl = getFrontArticleUrl(data.article.id)
       }
-
-      async function handleDetail(id: number) {
-        detailVisible.value = true
-        await initCommentDetail(id)
+      if (data.parentComment) {
+        comment.hasReplay = true
+        comment.replayName = data.parentComment.name
+        comment.replay = data.parentComment.content
+      } else {
+        comment.hasReplay = false
       }
+    })
+  }
 
-      async function deleteComment(id: number) {
-        const resp = (await Api.deleteComment(id)) as RestResponse<void>
-        handleRestResponse(resp, () => {
-          ElMessage.success('删除成功!')
-          initCommentData()
-        })
-      }
+  async function handleDetail(id: number) {
+    detailVisible.value = true
+    await initCommentDetail(id)
+  }
 
-      watch(
-        () => currentPage.value,
-        () => initCommentData()
-      )
+  async function deleteComment(id: number) {
+    const resp = (await Api.deleteComment(id)) as RestResponse<void>
+    handleRestResponse(resp, () => {
+      ElMessage.success('删除成功!')
+      initCommentData()
+    })
+  }
 
-      watch(
-        () => pageSize.value,
-        () => initCommentData()
-      )
+  watch(
+    () => currentPage.value,
+    () => initCommentData()
+  )
 
-      onMounted(() => {
-        initCommentData()
-      })
+  watch(
+    () => pageSize.value,
+    () => initCommentData()
+  )
 
-      return {
-        currentPage,
-        total,
-        pageSize,
-        commentList,
-        comment,
-        detailVisible,
-        InfoFilled,
-        handleDetail,
-        deleteComment
-      }
-    }
+  onMounted(() => {
+    initCommentData()
   })
 </script>
 

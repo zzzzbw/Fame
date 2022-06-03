@@ -34,7 +34,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
   import {
     DataAnalysis,
     Tickets,
@@ -43,11 +43,6 @@
     Picture,
     Setting
   } from '@element-plus/icons-vue'
-  import { defineComponent } from 'vue'
-
-  export default defineComponent({
-    components: { DataAnalysis, Tickets, ChatSquare, PriceTag, Picture, Setting }
-  })
 </script>
 
 <style>

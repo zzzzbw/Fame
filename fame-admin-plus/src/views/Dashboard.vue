@@ -59,10 +59,10 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref, reactive, onMounted } from 'vue'
+<script setup lang="ts">
+  import { ref, reactive, onMounted } from 'vue'
   import { Postcard, ChatLineSquare } from '@element-plus/icons-vue'
-  import { RestResponse, Pagination } from '~/types'
+  import { RestResponse, Page } from '~/types'
   import { handleRestResponse } from '~/utils'
   import { Api } from '~/api'
   import axios from 'axios'
@@ -78,68 +78,56 @@
     content: string
   }
 
-  export default defineComponent({
-    components: { Postcard, ChatLineSquare },
-    setup() {
-      const articleCount = ref(0)
-      const commentCount = ref(0)
+  const articleCount = ref(0)
+  const commentCount = ref(0)
 
-      const articles = reactive<Array<Article>>([])
-      const comments = reactive<Array<Comment>>([])
+  const articles = reactive<Array<Article>>([])
+  const comments = reactive<Array<Comment>>([])
 
-      const initArticleData = (resp: RestResponse<Pagination<Article>>) => {
-        handleRestResponse(resp, (page) => {
-          for (let key in page.list) {
-            let article = page.list[key]
-            articles.push(article)
-          }
+  const initArticleData = (resp: RestResponse<Page<Article>>) => {
+    handleRestResponse(resp, (page) => {
+      for (let key in page.list) {
+        let article = page.list[key]
+        articles.push(article)
+      }
+    })
+  }
+
+  const initCommentData = (resp: RestResponse<Page<Comment>>) => {
+    handleRestResponse(resp, (page) => {
+      for (let key in page.list) {
+        let comment = page.list[key]
+        if (comment.content.length > 200) {
+          comment.content = comment.content.substring(0, 80) + '...'
+        }
+        comments.push(comment)
+      }
+    })
+  }
+
+  const initArticleCount = (resp: RestResponse<number>) => {
+    handleRestResponse(resp, (count) => {
+      articleCount.value = count
+    })
+  }
+
+  const initCommentCount = (resp: RestResponse<number>) => {
+    handleRestResponse(resp, (count) => {
+      commentCount.value = count
+    })
+  }
+
+  onMounted(() => {
+    axios
+      .all([Api.pageArticle(1, 10), Api.pageComment(1, 10), Api.countArticle(), Api.countComment()])
+      .then(
+        axios.spread((articleData, commentData, articleCount, commentCount) => {
+          initArticleData(articleData as RestResponse<Page<Article>>)
+          initCommentData(commentData as RestResponse<Page<Comment>>)
+          initArticleCount(articleCount as RestResponse<number>)
+          initCommentCount(commentCount as RestResponse<number>)
         })
-      }
-
-      const initCommentData = (resp: RestResponse<Pagination<Comment>>) => {
-        handleRestResponse(resp, (page) => {
-          for (let key in page.list) {
-            let comment = page.list[key]
-            if (comment.content.length > 200) {
-              comment.content = comment.content.substring(0, 80) + '...'
-            }
-            comments.push(comment)
-          }
-        })
-      }
-
-      const initArticleCount = (resp: RestResponse<number>) => {
-        handleRestResponse(resp, (count) => {
-          articleCount.value = count
-        })
-      }
-
-      const initCommentCount = (resp: RestResponse<number>) => {
-        handleRestResponse(resp, (count) => {
-          commentCount.value = count
-        })
-      }
-
-      onMounted(() => {
-        axios
-          .all([Api.pageArticle(1), Api.pageComment(1, 10), Api.countArticle(), Api.countComment()])
-          .then(
-            axios.spread((articleData, commentData, articleCount, commentCount) => {
-              initArticleData(articleData as RestResponse<Pagination<Article>>)
-              initCommentData(commentData as RestResponse<Pagination<Comment>>)
-              initArticleCount(articleCount as RestResponse<number>)
-              initCommentCount(commentCount as RestResponse<number>)
-            })
-          )
-      })
-
-      return {
-        articleCount,
-        commentCount,
-        articles,
-        comments
-      }
-    }
+      )
   })
 </script>
 

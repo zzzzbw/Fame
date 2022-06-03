@@ -85,120 +85,102 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent, reactive, onMounted } from 'vue'
+<script setup lang="ts">
+  import { reactive, onMounted } from 'vue'
   import { Api } from '~/api'
   import { EditMeta, Meta, RestResponse } from '~/types'
   import { handleRestResponse } from '~/utils'
   import { InfoFilled } from '@element-plus/icons-vue'
   import { ElMessage } from 'element-plus'
 
-  export default defineComponent({
-    setup() {
-      const tagList = reactive<Array<Meta>>([])
-      const editTag = reactive<EditMeta>({ id: null, name: '' })
-      const categoryList = reactive<Array<Meta>>([])
-      const editCategory = reactive<EditMeta>({ id: null, name: '' })
+  const tagList = reactive<Array<Meta>>([])
+  const editTag = reactive<EditMeta>({ id: null, name: '' })
+  const categoryList = reactive<Array<Meta>>([])
+  const editCategory = reactive<EditMeta>({ id: null, name: '' })
 
-      async function initTagData() {
-        const resp = (await Api.getAllTags()) as RestResponse<Array<Meta>>
-        handleRestResponse(resp, (list) => {
-          tagList.splice(0)
-          for (let key in list) {
-            let tag = list[key]
-            tagList.push(tag)
-          }
-        })
+  async function initTagData() {
+    const resp = (await Api.getAllTags()) as RestResponse<Array<Meta>>
+    handleRestResponse(resp, (list) => {
+      tagList.splice(0)
+      for (let key in list) {
+        let tag = list[key]
+        tagList.push(tag)
       }
+    })
+  }
 
-      async function deleteTag(id: number) {
-        const resp = (await Api.deleteTag(id)) as RestResponse<void>
-        handleRestResponse(resp, () => {
-          ElMessage.success('删除成功!')
-          initTagData()
-        })
-      }
+  async function deleteTag(id: number) {
+    const resp = (await Api.deleteTag(id)) as RestResponse<void>
+    handleRestResponse(resp, () => {
+      ElMessage.success('删除成功!')
+      initTagData()
+    })
+  }
 
-      async function saveOrUpdateTag() {
-        if (editTag.name === '') {
-          ElMessage.error('标签名称不能为空')
-          return
-        }
-        const resp = (await Api.saveOrUpdateTag(editTag.id, editTag.name)) as RestResponse<void>
-        handleRestResponse(resp, () => {
-          ElMessage.success('编辑标签成功!')
-          initTagData()
-          editTag.id = null
-          editTag.name = ''
-        })
-      }
-
-      function clickTag(id: number, name: string) {
-        editTag.id = id
-        editTag.name = name
-      }
-
-      async function initCategoryData() {
-        const resp = (await Api.getAllCategories()) as RestResponse<Array<Meta>>
-        handleRestResponse(resp, (list) => {
-          categoryList.splice(0)
-          for (let key in list) {
-            let category = list[key]
-            categoryList.push(category)
-          }
-        })
-      }
-
-      async function deleteCategory(id: number) {
-        const resp = (await Api.deleteCategory(id)) as RestResponse<void>
-        handleRestResponse(resp, () => {
-          ElMessage.success('删除成功!')
-          initCategoryData()
-        })
-      }
-
-      function clickCategory(id: number, name: string) {
-        editCategory.id = id
-        editCategory.name = name
-      }
-
-      async function saveOrUpdateCategory() {
-        if (editCategory.name === '') {
-          ElMessage.error('分类名称不能为空')
-          return
-        }
-        const resp = (await Api.saveOrUpdateCategory(
-          editCategory.id,
-          null,
-          editCategory.name
-        )) as RestResponse<void>
-        handleRestResponse(resp, () => {
-          ElMessage.success('编辑分类成功!')
-          initCategoryData()
-          editCategory.id = null
-          editCategory.name = ''
-        })
-      }
-
-      onMounted(() => {
-        initTagData()
-        initCategoryData()
-      })
-
-      return {
-        tagList,
-        editTag,
-        categoryList,
-        editCategory,
-        InfoFilled,
-        deleteTag,
-        saveOrUpdateTag,
-        clickTag,
-        deleteCategory,
-        saveOrUpdateCategory,
-        clickCategory
-      }
+  async function saveOrUpdateTag() {
+    if (editTag.name === '') {
+      ElMessage.error('标签名称不能为空')
+      return
     }
+    const resp = (await Api.saveOrUpdateTag(editTag.id, editTag.name)) as RestResponse<void>
+    handleRestResponse(resp, () => {
+      ElMessage.success('编辑标签成功!')
+      initTagData()
+      editTag.id = null
+      editTag.name = ''
+    })
+  }
+
+  function clickTag(id: number, name: string) {
+    editTag.id = id
+    editTag.name = name
+  }
+
+  async function initCategoryData() {
+    const resp = (await Api.getAllCategories()) as RestResponse<Array<Meta>>
+    handleRestResponse(resp, (list) => {
+      categoryList.splice(0)
+      for (let key in list) {
+        let category = list[key]
+        categoryList.push(category)
+      }
+    })
+  }
+
+  async function deleteCategory(id: number) {
+    const resp = (await Api.deleteCategory(id)) as RestResponse<void>
+    handleRestResponse(resp, () => {
+      ElMessage.success('删除成功!')
+      initCategoryData()
+    })
+  }
+
+  function clickCategory(id: number, name: string) {
+    editCategory.id = id
+    editCategory.name = name
+  }
+
+  async function saveOrUpdateCategory() {
+    if (editCategory.name === '') {
+      ElMessage.error('分类名称不能为空')
+      return
+    }
+    const resp = (await Api.saveOrUpdateCategory(
+      editCategory.id,
+      null,
+      editCategory.name
+    )) as RestResponse<void>
+    handleRestResponse(resp, () => {
+      ElMessage.success('编辑分类成功!')
+      initCategoryData()
+      editCategory.id = null
+      editCategory.name = ''
+    })
+  }
+
+  onMounted(() => {
+    initTagData()
+    initCategoryData()
   })
 </script>
 

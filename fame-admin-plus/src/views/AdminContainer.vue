@@ -27,20 +27,11 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref } from 'vue'
+<script setup lang="ts">
+  import { ref } from 'vue'
 
-  export default defineComponent({
-    setup() {
-      const indexShowUp = ref(false)
-      const elAsideShow = ref(true)
-
-      return {
-        indexShowUp,
-        elAsideShow
-      }
-    }
-  })
+  const indexShowUp = ref(false)
+  const elAsideShow = ref(true)
 </script>
 
 <style lang="scss" scoped>

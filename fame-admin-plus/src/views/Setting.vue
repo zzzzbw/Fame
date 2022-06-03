@@ -152,11 +152,10 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref, reactive, onMounted } from 'vue'
+<script setup lang="ts">
+  import { ref, reactive, onMounted } from 'vue'
   import router from '~/router'
-  import type { ElForm } from 'element-plus'
-  import { ElMessage } from 'element-plus'
+  import { ElMessage, FormInstance, FormRules } from 'element-plus'
   import { RestResponse } from '~/types'
   import { handleRestResponse, removeToken } from '~/utils'
   import { Api } from '~/api'
@@ -185,156 +184,135 @@
     email_subject = ''
   }
 
-  type ElFormInstance = InstanceType<typeof ElForm>
+  const websiteFormRef = ref<FormInstance>()
+  const seoFormRef = ref<FormInstance>()
+  const emailFormRef = ref<FormInstance>()
+  const userFormRef = ref<FormInstance>()
+  const passwordFormRef = ref<FormInstance>()
 
-  export default defineComponent({
-    setup() {
-      const websiteFormRef = ref<ElFormInstance>()
-      const seoFormRef = ref<ElFormInstance>()
-      const emailFormRef = ref<ElFormInstance>()
-      const userFormRef = ref<ElFormInstance>()
-      const passwordFormRef = ref<ElFormInstance>()
+  const userForm = reactive(new User())
 
-      const userForm = reactive(new User())
+  const passwordForm = reactive({
+    oldPassword: '',
+    newPassword: '',
+    repeatPassword: ''
+  })
 
-      const passwordForm = reactive({
-        oldPassword: '',
-        newPassword: '',
-        repeatPassword: ''
-      })
+  const optionForm = reactive(new Option())
+  const options = optionForm
 
-      const optionForm = reactive(new Option())
+  const websiteRules = reactive<FormRules>({
+    blog_website: [{ type: 'url', message: '请输入正确格式的网址', trigger: 'blur' }]
+  })
 
-      const websiteRules = reactive({
-        blog_website: [{ type: 'url', message: '请输入正确格式的网址', trigger: 'blur' }]
-      })
-
-      const repeatPasswordValidate = (rule: any, value: any, callback: any) => {
-        if (value === '') {
-          callback(new Error('请再次输入确认密码'))
-        } else if (value !== passwordForm.newPassword) {
-          callback(new Error('两次输入的密码不一样'))
-        } else {
-          callback()
-        }
-      }
-
-      const emailSettingValidate = (rule: any, value: any, callback: any) => {
-        if (!optionForm.is_email) {
-          return callback()
-        }
-        if (value === '') {
-          callback(new Error('请输入对应信息'))
-        }
-      }
-
-      const emailRules = reactive({
-        email_username: [
-          { type: 'email', message: '请输入正确格式的邮箱', trigger: 'blur' },
-          { validator: emailSettingValidate, trigger: 'blur' }
-        ],
-        email_password: [{ validator: emailSettingValidate, trigger: 'blur' }],
-        email_host: [{ validator: emailSettingValidate, trigger: 'blur' }],
-        email_port: [{ validator: emailSettingValidate, trigger: 'blur' }]
-      })
-
-      const userRules = reactive({
-        username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-        email: [
-          { type: 'email', message: '请输入正确格式的邮箱', trigger: 'blur' },
-          { required: true, message: '请输入邮箱', trigger: 'blur' }
-        ]
-      })
-
-      const passwordRules = reactive({
-        oldPassword: [{ required: true, message: '请输入原密码', trigger: 'blur' }],
-        newPassword: [{ required: true, message: '请输入新密码', trigger: 'blur' }],
-        repeatPassword: [{ validator: repeatPasswordValidate, trigger: 'blur' }]
-      })
-
-      async function submitUser() {
-        const resp = (await Api.resetUser(userForm.username, userForm.email)) as RestResponse<void>
-        handleRestResponse(resp, () => {
-          ElMessage.success('更新设置成功，请重新登录!')
-          removeToken()
-          router.push('/login')
-        })
-      }
-
-      async function submitPassword() {
-        const resp = (await Api.resetPassword(
-          passwordForm.oldPassword,
-          passwordForm.newPassword
-        )) as RestResponse<void>
-        handleRestResponse(resp, () => {
-          ElMessage.success('更新设置成功，请重新登录!')
-          removeToken()
-          router.push('/login')
-        })
-      }
-
-      async function submitOption() {
-        const resp = (await Api.saveOptions(optionForm)) as RestResponse<void>
-        handleRestResponse(resp, () => {
-          ElMessage.success('更新设置成功!')
-        })
-      }
-
-      const submitForm = async (formRef: InstanceType<typeof ElForm>) => {
-        if (!formRef) {
-          return
-        }
-
-        await formRef.validate((valid) => {
-          if (!valid) {
-            return
-          }
-          if (formRef === passwordFormRef.value) {
-            submitPassword()
-          } else if (formRef === userFormRef.value) {
-            submitUser()
-          } else {
-            submitOption()
-          }
-        })
-      }
-
-      async function getUserInfo() {
-        const userResp = (await Api.getUser()) as RestResponse<User>
-        handleRestResponse(userResp, (user) => {
-          userForm.username = user.username
-          userForm.email = user.email
-        })
-      }
-
-      async function getOptions() {
-        const optionsResp = (await Api.getOptions()) as RestResponse<Option>
-        handleRestResponse(optionsResp, (option) => {
-          Object.assign(optionForm, option)
-        })
-      }
-
-      onMounted(() => {
-        getUserInfo()
-        getOptions()
-      })
-
-      return {
-        websiteFormRef,
-        seoFormRef,
-        emailFormRef,
-        userFormRef,
-        passwordFormRef,
-        userForm,
-        passwordForm,
-        options: optionForm,
-        websiteRules,
-        emailRules,
-        userRules,
-        passwordRules,
-        submitForm
-      }
+  const repeatPasswordValidate = (rule: any, value: any, callback: any) => {
+    if (value === '') {
+      callback(new Error('请再次输入确认密码'))
+    } else if (value !== passwordForm.newPassword) {
+      callback(new Error('两次输入的密码不一样'))
+    } else {
+      callback()
     }
+  }
+
+  const emailSettingValidate = (rule: any, value: any, callback: any) => {
+    if (!optionForm.is_email) {
+      return callback()
+    }
+    if (value === '') {
+      callback(new Error('请输入对应信息'))
+    }
+  }
+
+  const emailRules = reactive<FormRules>({
+    email_username: [
+      { type: 'email', message: '请输入正确格式的邮箱', trigger: 'blur' },
+      { validator: emailSettingValidate, trigger: 'blur' }
+    ],
+    email_password: [{ validator: emailSettingValidate, trigger: 'blur' }],
+    email_host: [{ validator: emailSettingValidate, trigger: 'blur' }],
+    email_port: [{ validator: emailSettingValidate, trigger: 'blur' }]
+  })
+
+  const userRules = reactive<FormRules>({
+    username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+    email: [
+      { type: 'email', message: '请输入正确格式的邮箱', trigger: 'blur' },
+      { required: true, message: '请输入邮箱', trigger: 'blur' }
+    ]
+  })
+
+  const passwordRules = reactive<FormRules>({
+    oldPassword: [{ required: true, message: '请输入原密码', trigger: 'blur' }],
+    newPassword: [{ required: true, message: '请输入新密码', trigger: 'blur' }],
+    repeatPassword: [{ validator: repeatPasswordValidate, trigger: 'blur' }]
+  })
+
+  async function submitUser() {
+    const resp = (await Api.resetUser(userForm.username, userForm.email)) as RestResponse<void>
+    handleRestResponse(resp, () => {
+      ElMessage.success('更新设置成功，请重新登录!')
+      removeToken()
+      router.push('/login')
+    })
+  }
+
+  async function submitPassword() {
+    const resp = (await Api.resetPassword(
+      passwordForm.oldPassword,
+      passwordForm.newPassword
+    )) as RestResponse<void>
+    handleRestResponse(resp, () => {
+      ElMessage.success('更新设置成功，请重新登录!')
+      removeToken()
+      router.push('/login')
+    })
+  }
+
+  async function submitOption() {
+    const resp = (await Api.saveOptions(optionForm)) as RestResponse<void>
+    handleRestResponse(resp, () => {
+      ElMessage.success('更新设置成功!')
+    })
+  }
+
+  const submitForm = async (formRef: FormInstance | undefined) => {
+    if (!formRef) {
+      return
+    }
+
+    await formRef.validate((valid) => {
+      if (!valid) {
+        return
+      }
+      if (formRef === passwordFormRef.value) {
+        submitPassword()
+      } else if (formRef === userFormRef.value) {
+        submitUser()
+      } else {
+        submitOption()
+      }
+    })
+  }
+
+  async function getUserInfo() {
+    const userResp = (await Api.getUser()) as RestResponse<User>
+    handleRestResponse(userResp, (user) => {
+      userForm.username = user.username
+      userForm.email = user.email
+    })
+  }
+
+  async function getOptions() {
+    const optionsResp = (await Api.getOptions()) as RestResponse<Option>
+    handleRestResponse(optionsResp, (option) => {
+      Object.assign(optionForm, option)
+    })
+  }
+
+  onMounted(() => {
+    getUserInfo()
+    getOptions()
   })
 </script>
 

@@ -5,7 +5,7 @@ export interface RestResponse<T> {
   data: T
 }
 
-export interface Pagination<T> {
+export interface Page<T> {
   pageNum: number
   pageSize: number
   total: number
@@ -14,7 +14,7 @@ export interface Pagination<T> {
   list: Array<T>
 }
 
-export interface MediaItem {
+export interface MediaInfo {
   id: number
   name: string
   url: string

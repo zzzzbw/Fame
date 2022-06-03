@@ -33,7 +33,7 @@ const Api = {
   countArticle() {
     return get('/admin/article/count')
   },
-  pageArticle(page: number, limit: number, query: {}) {
+  pageArticle(page: number, limit: number, query: {} = {}) {
     const params = query || { page: page, limit: limit }
     Object.assign(params, query)
     return get('/admin/article', params)

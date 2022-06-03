@@ -179,16 +179,17 @@
   </div>
 </template>
 
-<script lang="ts">
-  import { defineComponent, ref, reactive, onMounted, watch } from 'vue'
+<script setup lang="ts">
+  import { ref, reactive, onMounted, watch } from 'vue'
   import { Edit, InfoFilled, Check, Minus } from '@element-plus/icons-vue'
   import { Api } from '~/api'
-  import { Pagination, RestResponse } from '~/types'
+  import { RestResponse, Page } from '~/types'
   import { getConstValue, getFrontArticleUrl, handleRestResponse } from '~/utils'
   import { ArticleStatus, ArticlePriority } from '~/types'
   import router from '~/router'
   import { ElMessage } from 'element-plus'
   import dayjs from 'dayjs'
+  import Pagination from '~/components/layouts/Pagination.vue'
 
   interface ArticleListItem {
     id: number
@@ -202,91 +203,68 @@
     priority: string
   }
 
-  export default defineComponent({
-    components: { Check, Minus },
-    setup() {
-      const currentPage = ref(1)
-      const total = ref(0)
-      const pageSize = ref(10)
+  const currentPage = ref(1)
+  const total = ref(0)
+  const pageSize = ref(10)
 
-      const tool = reactive({
-        status: '',
-        title: '',
-        priority: '',
-        listShow: undefined,
-        headerShow: undefined
-      })
-      const articleList = reactive<Array<ArticleListItem>>([])
+  const tool = reactive({
+    status: '',
+    title: '',
+    priority: '',
+    listShow: undefined,
+    headerShow: undefined
+  })
+  const articleList = reactive<Array<ArticleListItem>>([])
 
-      function handleNew() {
-        router.push('/article/edit')
+  function handleNew() {
+    router.push('/article/edit')
+  }
+
+  function handleEdit(id: number) {
+    router.push('/article/edit/' + id)
+  }
+
+  async function deleteArticle(id: number) {
+    const resp = (await Api.deleteArticle(id)) as RestResponse<void>
+    handleRestResponse(resp, () => {
+      ElMessage.success('删除成功!')
+      initArticleData()
+    })
+  }
+
+  async function initArticleData() {
+    const resp = (await Api.pageArticle(currentPage.value, pageSize.value, tool)) as RestResponse<
+      Page<ArticleListItem>
+    >
+
+    handleRestResponse(resp, (page) => {
+      total.value = page.total
+      pageSize.value = page.pageSize
+      articleList.splice(0)
+      for (let key in page.list) {
+        let article = page.list[key]
+
+        article.frontUrl = getFrontArticleUrl(article.id)
+        article.publishTime = dayjs(article.publishTime).format('YYYY-MM-DD HH:mm')
+        article.status = getConstValue(article.status, ArticleStatus)
+        article.priority = getConstValue(article.priority, ArticlePriority)
+        articleList.push(article)
       }
+    })
+  }
 
-      function handleEdit(id: number) {
-        router.push('/article/edit/' + id)
-      }
+  watch(
+    () => currentPage.value,
+    () => initArticleData()
+  )
 
-      async function deleteArticle(id: number) {
-        const resp = (await Api.deleteArticle(id)) as RestResponse<void>
-        handleRestResponse(resp, () => {
-          ElMessage.success('删除成功!')
-          initArticleData()
-        })
-      }
+  watch(
+    () => pageSize.value,
+    () => initArticleData()
+  )
 
-      async function initArticleData() {
-        const resp = (await Api.pageArticle(
-          currentPage.value,
-          pageSize.value,
-          tool
-        )) as RestResponse<Pagination<ArticleListItem>>
-
-        handleRestResponse(resp, (page) => {
-          total.value = page.total
-          pageSize.value = page.pageSize
-          articleList.splice(0)
-          for (let key in page.list) {
-            let article = page.list[key]
-
-            article.frontUrl = getFrontArticleUrl(article.id)
-            article.publishTime = dayjs(article.publishTime).format('YYYY-MM-DD HH:mm')
-            article.status = getConstValue(article.status, ArticleStatus)
-            article.priority = getConstValue(article.priority, ArticlePriority)
-            articleList.push(article)
-          }
-        })
-      }
-
-      watch(
-        () => currentPage.value,
-        () => initArticleData()
-      )
-
-      watch(
-        () => pageSize.value,
-        () => initArticleData()
-      )
-
-      onMounted(() => {
-        initArticleData()
-      })
-
-      return {
-        Edit,
-        InfoFilled,
-        ArticleStatus,
-        ArticlePriority,
-        currentPage,
-        total,
-        pageSize,
-        tool,
-        articleList,
-        handleNew,
-        handleEdit,
-        deleteArticle,
-        initArticleData
-      }
-    }
+  onMounted(() => {
+    initArticleData()
   })
 </script>
 
