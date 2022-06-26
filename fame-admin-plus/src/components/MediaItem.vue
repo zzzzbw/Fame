@@ -34,7 +34,7 @@
 <script setup lang="ts">
   import { InfoFilled, DocumentCopy, Document, Delete } from '@element-plus/icons-vue'
   import { copyText, getServerMediaUrl, handleRestResponse } from '~/utils'
-  import { RestResponse } from '~/types'
+  import { RestResponse } from '~/types/common'
   import { ElMessage } from 'element-plus'
   import { Api } from '~/api'
 

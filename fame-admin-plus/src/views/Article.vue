@@ -174,7 +174,7 @@
     ArticleStatus,
     ArticlePriorityEnum,
     ArticlePriority
-  } from '~/types'
+  } from '~/types/common'
   import {
     getFrontArticleUrl,
     getServerMediaUrl,
@@ -188,34 +188,7 @@
   import { AxiosResponse } from 'axios'
   import Pagination from '~/components/layouts/Pagination.vue'
   import MediaItem from '~/components/MediaItem.vue'
-
-  interface Article {
-    id: number | undefined
-    title: string
-    tagIds: Array<number>
-    categoryId: number | undefined
-    content: string
-    listShow: boolean
-    headerShow: boolean
-    status: string
-    priority: number
-    allowComment: boolean
-    publishTime: number
-  }
-
-  interface ArticleResp {
-    id: number
-    title: string
-    tags: Array<Meta>
-    category: { id: number }
-    content: string
-    listShow: boolean
-    headerShow: boolean
-    status: string
-    priority: number
-    allowComment: boolean
-    publishTime: number
-  }
+  import { Article, ArticleResp } from '~/types/article'
 
   interface MediaData {
     currentPage: number

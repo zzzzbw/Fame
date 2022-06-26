@@ -88,10 +88,11 @@
 <script setup lang="ts">
   import { reactive, onMounted } from 'vue'
   import { Api } from '~/api'
-  import { EditMeta, Meta, RestResponse } from '~/types'
+  import { RestResponse } from '~/types/common'
   import { handleRestResponse } from '~/utils'
   import { InfoFilled } from '@element-plus/icons-vue'
   import { ElMessage } from 'element-plus'
+  import { EditMeta, Meta } from '~/types/meta'
 
   const tagList = reactive<Array<Meta>>([])
   const editTag = reactive<EditMeta>({ id: null, name: '' })

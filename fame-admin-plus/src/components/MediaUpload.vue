@@ -41,7 +41,7 @@
 
 <script setup lang="ts">
   import { ref, reactive } from 'vue'
-  import { RestResponse } from '~/types'
+  import { RestResponse } from '~/types/common'
   import { ElMessage, ElUpload } from 'element-plus'
   import { getServerUploadMediaUrl } from '~/utils'
   import { UploadFilled } from '@element-plus/icons-vue'

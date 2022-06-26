@@ -26,14 +26,10 @@
   import { reactive, ref } from 'vue'
   import router from '~/router'
   import { ElMessage, FormInstance, FormRules } from 'element-plus'
-  import { RestResponse } from '~/types'
+  import { RestResponse } from '~/types/common'
   import { Api } from '~/api'
   import { handleRestResponse, removeToken, setToken } from '~/utils'
-
-  interface LoginResult {
-    token: string
-    refreshToken: string
-  }
+  import { LoginResult } from '~/types/user'
 
   const userFormRef = ref<FormInstance>()
 
@@ -60,7 +56,11 @@
         const resp = (await Api.login(userForm)) as RestResponse<LoginResult>
         handleRestResponse(resp, (userForm) => {
           // 存储token
-          setToken(userForm.token, userForm.refreshToken)
+          if (userForm.token && userForm.refreshToken) {
+            setToken(userForm.token, userForm.refreshToken)
+          } else {
+            ElMessage.error('获取登录token异常!')
+          }
         })
         await router.push('/')
         ElMessage.success('登录成功!')

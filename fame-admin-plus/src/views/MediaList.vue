@@ -24,12 +24,13 @@
 
 <script setup lang="ts">
   import { ref, reactive, onMounted, watch } from 'vue'
-  import { RestResponse, Page, MediaInfo } from '~/types'
+  import { RestResponse, Page } from '~/types/common'
   import { getServerMediaUrl, handleRestResponse } from '~/utils'
   import { Api } from '~/api'
   import MediaItem from '~/components/MediaItem.vue'
   import MediaUpload from '~/components/MediaUpload.vue'
   import Pagination from '~/components/layouts/Pagination.vue'
+  import { MediaInfo } from '~/types/media'
 
   const currentPage = ref(1)
   const total = ref(0)

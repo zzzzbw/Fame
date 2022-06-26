@@ -18,7 +18,7 @@
   import { Back as IconBack } from '@element-plus/icons-vue'
   import router from '~/router'
   import { ElMessage } from 'element-plus'
-  import { RestResponse } from '~/types'
+  import { RestResponse } from '~/types/common'
   import { Api } from '~/api'
   import { removeToken } from '~/utils'
 

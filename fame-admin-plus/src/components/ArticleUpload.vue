@@ -26,7 +26,7 @@
 <script setup lang="ts">
   import { ref, reactive } from 'vue'
   import { Api } from '~/api'
-  import { RestResponse } from '~/types'
+  import { RestResponse } from '~/types/common'
   import { handleRestResponse } from '~/utils'
   import { ElMessage } from 'element-plus'
 

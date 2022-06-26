@@ -14,24 +14,11 @@ export interface Page<T> {
   list: Array<T>
 }
 
-export interface MediaInfo {
-  id: number
-  name: string
-  url: string
-  thumbUrl: string
-  suffix: string
-  showUrl: string
-}
-
-export interface EditMeta {
-  id: number | null
-  name: string
-}
-
-export interface Meta {
-  id: number
-  name: string
-  articleInfos: []
+export interface BreadCrumbItem {
+  name?: string
+  title?: string
+  link?: string
+  parent?: string
 }
 
 export enum ArticleStatusEnum {

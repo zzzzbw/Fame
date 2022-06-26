@@ -12,13 +12,7 @@
 <script setup lang="ts">
   import { onMounted, reactive, watch } from 'vue'
   import router from '~/router'
-
-  interface BreadCrumbItem {
-    name: string
-    title: string
-    link: string
-    parent: string
-  }
+  import { BreadCrumbItem } from '~/types/common'
 
   const config = [
     { name: 'ArticleList', title: '文章列表', link: '/article', parent: '' },
@@ -34,10 +28,10 @@
       link: '/article',
       parent: 'ArticleList'
     },
-    { name: 'CommentList', title: '评论列表', link: '', parent: '' },
-    { name: 'MetaList', title: '标签/分类', link: '', parent: '' },
-    { name: 'MediaList', title: '媒体库', link: '', parent: '' },
-    { name: 'Setting', title: '网站设置', link: '', parent: '' }
+    { name: 'CommentList', title: '评论列表' },
+    { name: 'MetaList', title: '标签/分类' },
+    { name: 'MediaList', title: '媒体库' },
+    { name: 'Setting', title: '网站设置' }
   ]
 
   const levelList = reactive<Array<BreadCrumbItem>>([])

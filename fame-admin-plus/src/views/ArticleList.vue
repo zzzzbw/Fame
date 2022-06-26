@@ -183,25 +183,14 @@
   import { ref, reactive, onMounted, watch } from 'vue'
   import { Edit, InfoFilled, Check, Minus } from '@element-plus/icons-vue'
   import { Api } from '~/api'
-  import { RestResponse, Page } from '~/types'
+  import { RestResponse, Page } from '~/types/common'
   import { getConstValue, getFrontArticleUrl, handleRestResponse } from '~/utils'
-  import { ArticleStatus, ArticlePriority } from '~/types'
+  import { ArticleStatus, ArticlePriority } from '~/types/common'
   import router from '~/router'
   import { ElMessage } from 'element-plus'
   import dayjs from 'dayjs'
   import Pagination from '~/components/layouts/Pagination.vue'
-
-  interface ArticleListItem {
-    id: number
-    title: string
-    frontUrl: string
-    publishTime: string
-    category: { name: string }
-    listShow: string
-    headerShow: string
-    status: string
-    priority: string
-  }
+  import { ArticleListItem } from '~/types/article'
 
   const currentPage = ref(1)
   const total = ref(0)
@@ -244,10 +233,10 @@
       for (let key in page.list) {
         let article = page.list[key]
 
-        article.frontUrl = getFrontArticleUrl(article.id)
+        article.frontUrl = getFrontArticleUrl(article.id ?? -1)
         article.publishTime = dayjs(article.publishTime).format('YYYY-MM-DD HH:mm')
-        article.status = getConstValue(article.status, ArticleStatus)
-        article.priority = getConstValue(article.priority, ArticlePriority)
+        article.status = getConstValue(article.status ?? '', ArticleStatus)
+        article.priority = getConstValue(article.priority ?? '', ArticlePriority)
         articleList.push(article)
       }
     })

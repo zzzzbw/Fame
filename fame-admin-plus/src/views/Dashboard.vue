@@ -62,29 +62,20 @@
 <script setup lang="ts">
   import { ref, reactive, onMounted } from 'vue'
   import { Postcard, ChatLineSquare } from '@element-plus/icons-vue'
-  import { RestResponse, Page } from '~/types'
+  import { RestResponse, Page } from '~/types/common'
   import { handleRestResponse } from '~/utils'
   import { Api } from '~/api'
   import axios from 'axios'
-
-  interface Article {
-    id: number
-    title: string
-  }
-
-  interface Comment {
-    id: number
-    name: string
-    content: string
-  }
+  import { BaseArticle } from '~/types/article'
+  import { BaseComment } from '~/types/comment'
 
   const articleCount = ref(0)
   const commentCount = ref(0)
 
-  const articles = reactive<Array<Article>>([])
-  const comments = reactive<Array<Comment>>([])
+  const articles = reactive<Array<BaseArticle>>([])
+  const comments = reactive<Array<BaseComment>>([])
 
-  const initArticleData = (resp: RestResponse<Page<Article>>) => {
+  const initArticleData = (resp: RestResponse<Page<BaseArticle>>) => {
     handleRestResponse(resp, (page) => {
       for (let key in page.list) {
         let article = page.list[key]
@@ -93,12 +84,13 @@
     })
   }
 
-  const initCommentData = (resp: RestResponse<Page<Comment>>) => {
+  const initCommentData = (resp: RestResponse<Page<BaseComment>>) => {
     handleRestResponse(resp, (page) => {
       for (let key in page.list) {
         let comment = page.list[key]
-        if (comment.content.length > 200) {
-          comment.content = comment.content.substring(0, 80) + '...'
+
+        if (comment.content?.length && comment.content.length > 200) {
+          comment.content = comment.content?.substring(0, 80) + '...'
         }
         comments.push(comment)
       }
@@ -122,8 +114,8 @@
       .all([Api.pageArticle(1, 10), Api.pageComment(1, 10), Api.countArticle(), Api.countComment()])
       .then(
         axios.spread((articleData, commentData, articleCount, commentCount) => {
-          initArticleData(articleData as RestResponse<Page<Article>>)
-          initCommentData(commentData as RestResponse<Page<Comment>>)
+          initArticleData(articleData as RestResponse<Page<BaseArticle>>)
+          initCommentData(commentData as RestResponse<Page<BaseComment>>)
           initArticleCount(articleCount as RestResponse<number>)
           initCommentCount(commentCount as RestResponse<number>)
         })

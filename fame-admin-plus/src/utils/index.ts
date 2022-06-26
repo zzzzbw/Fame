@@ -1,4 +1,4 @@
-import { RestResponse } from '~/types'
+import { RestResponse } from '~/types/common'
 import { FRONT_URL, SERVER_URL } from '~/config'
 import { AxiosResponse } from 'axios'
 

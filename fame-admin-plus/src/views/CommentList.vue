@@ -83,40 +83,11 @@
   import { ref, reactive, onMounted, watch } from 'vue'
   import { InfoFilled } from '@element-plus/icons-vue'
   import { ElMessage } from 'element-plus'
-  import { RestResponse, Page } from '~/types'
+  import { RestResponse, Page } from '~/types/common'
   import { getFrontArticleUrl, handleRestResponse } from '~/utils'
   import { Api } from '~/api'
   import Pagination from '~/components/layouts/Pagination.vue'
-
-  interface CommentListItem {
-    id: number
-    name: string
-    content: string
-    email: string
-    created: string
-  }
-
-  interface CommentDetail {
-    id: number
-    name: string
-    content: string
-    email: string
-    created: string
-    website: string
-    agree: number
-    disagree: number
-    ip: string
-    agent: string
-    hasReplay: boolean
-    postUrl?: string
-    replayName?: string
-    replay?: string
-    article?: {
-      id: number
-      title: string
-    }
-    parentComment?: CommentDetail
-  }
+  import { CommentDetail, CommentListItem } from '~/types/comment'
 
   const currentPage = ref(1)
   const total = ref(0)
@@ -159,7 +130,7 @@
     handleRestResponse(resp, (data) => {
       Object.assign(comment, data)
       if (data.article) {
-        comment.postUrl = getFrontArticleUrl(data.article.id)
+        comment.postUrl = getFrontArticleUrl(data.article.id ?? -1)
       }
       if (data.parentComment) {
         comment.hasReplay = true

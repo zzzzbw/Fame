@@ -156,33 +156,11 @@
   import { ref, reactive, onMounted } from 'vue'
   import router from '~/router'
   import { ElMessage, FormInstance, FormRules } from 'element-plus'
-  import { RestResponse } from '~/types'
+  import { RestResponse } from '~/types/common'
   import { handleRestResponse, removeToken } from '~/utils'
   import { Api } from '~/api'
-
-  class User {
-    username = ''
-    email = ''
-  }
-
-  class Option {
-    blog_name = ''
-    blog_website = ''
-    blog_footer = ''
-    summary_flag = ''
-    meta_title = ''
-    meta_description = ''
-    meta_keywords = ''
-    google_site_verification = ''
-    baidu_site_verification = ''
-    google_analytics = ''
-    is_email = false
-    email_username = ''
-    email_password = ''
-    email_host = ''
-    email_port = ''
-    email_subject = ''
-  }
+  import { Option } from '~/types/setting'
+  import { UserInfo } from '~/types/user'
 
   const websiteFormRef = ref<FormInstance>()
   const seoFormRef = ref<FormInstance>()
@@ -190,7 +168,7 @@
   const userFormRef = ref<FormInstance>()
   const passwordFormRef = ref<FormInstance>()
 
-  const userForm = reactive(new User())
+  const userForm = reactive<UserInfo>({ username: '', email: '' })
 
   const passwordForm = reactive({
     oldPassword: '',
@@ -198,7 +176,24 @@
     repeatPassword: ''
   })
 
-  const optionForm = reactive(new Option())
+  const optionForm = reactive<Option>({
+    blog_name: '',
+    blog_website: '',
+    blog_footer: '',
+    summary_flag: '',
+    meta_title: '',
+    meta_description: '',
+    meta_keywords: '',
+    google_site_verification: '',
+    baidu_site_verification: '',
+    google_analytics: '',
+    is_email: false,
+    email_username: '',
+    email_password: '',
+    email_host: '',
+    email_port: '',
+    email_subject: ''
+  })
   const options = optionForm
 
   const websiteRules = reactive<FormRules>({
@@ -249,6 +244,11 @@
   })
 
   async function submitUser() {
+    if (!userForm.username || !userForm.email) {
+      ElMessage.error('用户名邮箱不能为空!')
+      return
+    }
+
     const resp = (await Api.resetUser(userForm.username, userForm.email)) as RestResponse<void>
     handleRestResponse(resp, () => {
       ElMessage.success('更新设置成功，请重新登录!')
@@ -296,7 +296,7 @@
   }
 
   async function getUserInfo() {
-    const userResp = (await Api.getUser()) as RestResponse<User>
+    const userResp = (await Api.getUser()) as RestResponse<UserInfo>
     handleRestResponse(userResp, (user) => {
       userForm.username = user.username
       userForm.email = user.email
