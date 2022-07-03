@@ -63,6 +63,10 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
                 .collect(Collectors.toSet());
         Map<Integer, List<Article>> articleMap = articleTagService.listArticleByTagIds(tagIds, isFront);
 
+        if (CollectionUtils.isEmpty(articleMap)) {
+            return Collections.emptyList();
+        }
+
         return tags.stream()
                 .map(tag -> {
                     TagInfoDto dto = new TagInfoDto();

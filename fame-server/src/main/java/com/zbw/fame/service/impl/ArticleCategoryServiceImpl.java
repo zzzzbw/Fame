@@ -76,6 +76,10 @@ public class ArticleCategoryServiceImpl extends ServiceImpl<ArticleCategoryMappe
                 .stream()
                 .collect(Collectors.toMap(BaseEntity::getId, article -> article, (o1, o2) -> o1));
 
+        if (CollectionUtils.isEmpty(articleMap)) {
+            return Collections.emptyMap();
+        }
+
         return articleCategories
                 .stream()
                 .collect(Collectors.groupingBy(ArticleCategory::getCategoryId,

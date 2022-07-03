@@ -79,6 +79,10 @@ public class ArticleTagServiceImpl extends ServiceImpl<ArticleTagMapper, Article
                 .stream()
                 .collect(Collectors.toMap(BaseEntity::getId, article -> article, (o1, o2) -> o1));
 
+        if (CollectionUtils.isEmpty(articleMap)) {
+            return Collections.emptyMap();
+        }
+
         return articleTags
                 .stream()
                 .collect(Collectors.groupingBy(ArticleTag::getTagId,

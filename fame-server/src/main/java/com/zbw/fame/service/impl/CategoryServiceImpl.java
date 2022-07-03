@@ -77,6 +77,10 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
                 .collect(Collectors.toSet());
 
         Map<Integer, List<Article>> articleMap = articleCategoryService.listArticleByCategoryIds(categoryIds, isFront);
+        if (CollectionUtils.isEmpty(articleMap)) {
+            return Collections.emptyList();
+        }
+
         Map<Integer, List<Category>> childCategoryMap = categories.stream()
                 .filter(category -> null != category.getParentId())
                 .collect(Collectors.groupingBy(Category::getParentId));
