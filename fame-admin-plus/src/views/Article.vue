@@ -87,7 +87,7 @@
                 </el-date-picker>
               </el-form-item>
               <el-form-item>
-                <el-button size="small" @click="showMediaDialog(1)">媒体库</el-button>
+                <el-button size="small" @click="showMediaDialog()">媒体库</el-button>
               </el-form-item>
               <el-form-item>
                 <el-button-group>
@@ -98,7 +98,7 @@
                     <el-button type="primary" size="small" @click="onPublish(articleFormRef)"
                       >发布</el-button
                     >
-                    <el-button v-if="article.id !== ''" type="info" size="small">
+                    <el-button v-if="article.id" type="info" size="small">
                       <a
                         :href="getFrontArticleUrl(article.id)"
                         target="_blank"
@@ -166,8 +166,6 @@
   import { ref, reactive, onMounted, watch } from 'vue'
   import { Api } from '~/api'
   import {
-    MediaInfo,
-    Meta,
     Page,
     RestResponse,
     ArticleStatusEnum,
@@ -189,6 +187,8 @@
   import Pagination from '~/components/layouts/Pagination.vue'
   import MediaItem from '~/components/MediaItem.vue'
   import { Article, ArticleResp } from '~/types/article'
+  import { Meta } from '~/types/meta'
+  import { MediaInfo } from '~/types/media'
 
   interface MediaData {
     currentPage: number

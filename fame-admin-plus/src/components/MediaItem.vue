@@ -1,7 +1,7 @@
 <template>
   <el-card :body-style="{ padding: '0px', textAlign: 'center' }" shadow="always">
-    <el-image :src="mediaVal.showUrl" fit="cover" @click="showDetailDialog(mediaVal.id)"></el-image>
-    <div @click="showDetailDialog(mediaVal.id)">
+    <el-image :src="mediaVal.showUrl" fit="cover" @click="showDetailDialog()"></el-image>
+    <div @click="showDetailDialog()">
       <span class="media-title">{{ mediaVal.name }}</span>
     </div>
     <div style="margin-bottom: 14px">

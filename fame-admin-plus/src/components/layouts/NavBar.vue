@@ -22,6 +22,9 @@
   import { Api } from '~/api'
   import { removeToken } from '~/utils'
 
+  // TODO
+  const collapse = function () {}
+
   const logout = async () => {
     const resp = (await Api.logout()) as RestResponse<void>
     if (resp.success) {

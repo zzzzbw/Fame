@@ -28,7 +28,7 @@
   import { Api } from '~/api'
   import { RestResponse } from '~/types/common'
   import { handleRestResponse } from '~/utils'
-  import { ElMessage } from 'element-plus'
+  import { ElMessage, UploadFile } from 'element-plus'
 
   const props = defineProps({
     articleId: {
@@ -50,7 +50,7 @@
 
   let uploadFile: any
 
-  function onFileChange(file: File) {
+  function onFileChange(file: UploadFile) {
     dialogVisible.value = true
 
     uploadConfirmMsg.push('文件[' + file.name + ']')

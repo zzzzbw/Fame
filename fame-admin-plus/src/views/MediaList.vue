@@ -55,7 +55,6 @@
         }
         mediaList.push(mediaItem)
       }
-      console.log(mediaList)
     })
   }
 

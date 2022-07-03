@@ -9,7 +9,7 @@
       <span v-if="uploadVisible">隐藏</span>
       <span v-else>上传</span>
     </el-button>
-    <el-button v-show="uploadVisible" type="info" size="large" @click="clearUploadFile(uploadRef)">
+    <el-button v-show="uploadVisible" type="info" size="large" @click="clearUploadFile()">
       清空上传列表
     </el-button>
     <el-collapse-transition>
@@ -42,12 +42,12 @@
 <script setup lang="ts">
   import { ref, reactive } from 'vue'
   import { RestResponse } from '~/types/common'
-  import { ElMessage, ElUpload } from 'element-plus'
+  import { ElMessage, UploadFile } from 'element-plus'
   import { getServerUploadMediaUrl } from '~/utils'
   import { UploadFilled } from '@element-plus/icons-vue'
   import dayjs from 'dayjs'
 
-  type ElUploadInstance = InstanceType<typeof ElUpload>
+  import type { UploadInstance } from 'element-plus'
 
   const props = defineProps({
     afterUpload: {
@@ -56,15 +56,15 @@
     }
   })
 
-  const uploadRef = ref<ElUploadInstance>()
+  const uploadRef = ref<UploadInstance>()
 
   const uploadVisible = ref(false)
   const uploadUrl = ref(getServerUploadMediaUrl())
   const uploadHeaders = reactive({ Authorization: 'Bearer ' + localStorage.token })
   const uploadData = reactive({ path: '' })
 
-  function clearUploadFile(uploadRef: InstanceType<typeof ElUpload>) {
-    uploadRef.clearFiles()
+  function clearUploadFile() {
+    uploadRef.value?.clearFiles()
   }
 
   function beforeUpload(file: File) {
@@ -79,7 +79,7 @@
     uploadData.path = dayjs(new Date()).format('YYYY/MM')
   }
 
-  function successUpload(response: RestResponse<void>, file: File) {
+  function successUpload(response: RestResponse<void>, file: UploadFile) {
     if (response.success) {
       ElMessage.success('上传' + file.name + '成功!')
     } else {
@@ -89,7 +89,7 @@
       props.afterUpload(response, file)
     }
   }
-  function errorUpload(err: Error, file: File) {
+  function errorUpload(err: Error, file: UploadFile) {
     ElMessage.error('网络异常,上传' + file.name + '失败!')
     console.log(err)
   }
