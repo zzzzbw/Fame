@@ -58,7 +58,7 @@ services:
     container_name: fame-admin
     build:
       context: ./
-      dockerfile: ./fame-docker/fame-admin/fame-admin-Dockerfile
+      dockerfile: ./fame-docker/fame-admin-plus/fame-admin-Dockerfile
     environment:
       TZ: Asia/Shanghai
     expose:

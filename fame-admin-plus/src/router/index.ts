@@ -29,12 +29,12 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('~/views/ArticleList.vue')
       },
       {
-        path: 'article/edit/:id',
+        path: '/article/edit/:id',
         name: 'ArticleEdit',
         component: () => import('~/views/Article.vue')
       },
       {
-        path: 'article/edit',
+        path: '/article/edit',
         name: 'ArticleNew',
         component: () => import('~/views/Article.vue')
       },
@@ -49,12 +49,12 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('~/views/Meta.vue')
       },
       {
-        path: 'setting',
+        path: '/setting',
         name: 'SettingList',
         component: () => import('~/views/Setting.vue')
       },
       {
-        path: 'media',
+        path: '/media',
         name: 'MediaList',
         component: () => import('~/views/MediaList.vue')
       }
