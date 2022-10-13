@@ -12,6 +12,12 @@
     "lint": "eslint --ext .js,.vue --ignore-path .",
     "precommit": "npm run lint"
   },
+  "config": {
+    "nuxt": {
+      "host": "0.0.0.0",
+      "port": "3000"
+    }
+  },
   "dependencies": {
     "@nuxtjs/feed": "^2.0.0",
     "@nuxtjs/sitemap": "^2.4.0",
