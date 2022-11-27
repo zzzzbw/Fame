@@ -63,7 +63,7 @@ const routes: Array<RouteRecordRaw> = [
 ]
 
 const router = createRouter({
-  history: createWebHistory('/admin'),
+  history: createWebHistory('/admin/'),
   routes
 })
 
