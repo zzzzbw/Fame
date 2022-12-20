@@ -36,7 +36,7 @@
 
 ### 部署方式
 
-请看 [部署文档](https://zzzzbw.github.io/Fame/)
+请看 [部署文档](https://github.com/zzzzbw/Fame/wiki/部署方式)
 
 ### 部分界面
 
