@@ -19,7 +19,7 @@
         <java.version>1.8</java.version>
         <flexmark.version>0.34.58</flexmark.version>
         <mybatis-plus.version>3.4.3.4</mybatis-plus.version>
-        <hutool.version>5.7.16</hutool.version>
+        <hutool.version>5.8.19</hutool.version>
         <jjwt.version>0.11.2</jjwt.version>
         <springfox-swagger.version>3.0.0</springfox-swagger.version>
     </properties>
